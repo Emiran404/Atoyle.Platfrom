@@ -1768,7 +1768,7 @@ const PlatformManagement = () => {
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid #e2e8f0' }}>
             <span style={{ color: '#64748b' }}>Son Güncelleme</span>
-            <span style={{ fontWeight: '500', color: '#1e293b' }}>14.03.2026 - 14 Mart 2026</span>
+            <span style={{ fontWeight: '500', color: '#1e293b' }}>15.03.2026 - 15 Mart 2026</span>
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid #e2e8f0' }}>
             <span style={{ color: '#64748b' }}>Altyapı</span>
