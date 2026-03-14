@@ -1,0 +1,23 @@
+[
+  {
+    "version": "1.0.5",
+    "date": "2026-03-14T17:22:56.302Z",
+    "description": "1.0.5 sürümüne başarıyla güncellendi.",
+    "type": "patch",
+    "status": "installed"
+  },
+  {
+    "version": "1.0.0",
+    "date": "2026-03-10T14:30:00Z",
+    "description": "Platformun ilk kararlı sürümü yayınlandı.",
+    "type": "major",
+    "status": "installed"
+  },
+  {
+    "version": "0.9.5",
+    "date": "2026-02-28T09:15:00Z",
+    "description": "Beta test aşaması tamamlandı, performans iyileştirmeleri yapıldı.",
+    "type": "minor",
+    "status": "installed"
+  }
+]

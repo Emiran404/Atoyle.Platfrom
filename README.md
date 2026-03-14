@@ -41,8 +41,8 @@ PolyOS, eğitim kurumları için tasarlanmış, modern, hızlı ve güvenli bir 
 
 1. **Projeyi klonlayın:**
    ```bash
-   git clone https://github.com/Emiran404/Atolye.Platform.git
-   cd Atolye.Platform
+   git clone https://github.com/Emiran404/Atoyle.Platfrom.git
+   cd sinav-gonderme-platformu
    ```
 
 2. **Bağımlılıkları yükleyin:**

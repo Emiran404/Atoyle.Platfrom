@@ -1,0 +1,23 @@
+{
+  "name": "sinav-platformu-backend",
+  "version": "1.0.5",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js"
+  },
+  "dependencies": {
+    "adm-zip": "^0.5.16",
+    "archiver": "^7.0.1",
+    "check-disk-space": "^3.4.0",
+    "cors": "^2.8.5",
+    "express": "^4.21.0",
+    "extract-zip": "^2.0.1",
+    "fs": "^0.0.1-security",
+    "multer": "^1.4.5-lts.1",
+    "react-dropzone": "^15.0.0",
+    "socket.io": "^4.8.3",
+    "socket.io-client": "^4.8.3"
+  }
+}
