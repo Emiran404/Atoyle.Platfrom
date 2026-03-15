@@ -1,105 +1,141 @@
 # 🎓 PolyOS Sınav Gönderme Platformu
 
-![PolyOS Banner](https://img.shields.io/badge/PolyOS-Exam_Platform-6366f1?style=for-the-badge&logo=react)
-![Version](https://img.shields.io/badge/version-2.0.0-blue?style=for-the-badge)
-![License](https://img.shields.io/badge/license-MIT-green?style=for-the-badge)
+<div align="center">
 
-PolyOS, eğitim kurumları için tasarlanmış, modern, hızlı ve güvenli bir sınav yönetim ve dosya gönderim platformudur. Öğretmenlerin sınav oluşturmasına, öğrencilerin dosyalarını yüklemesine ve sonuçların anlık olarak değerlendirilmesine olanak tanır.
+![PolyOS Banner](https://img.shields.io/badge/PolyOS-Exam_Platform-6366f1?style=for-the-badge&logo=react)
+![Version](https://img.shields.io/badge/version-1.0.0-blue?style=for-the-badge)
+![License](https://img.shields.io/badge/license-MIT-green?style=for-the-badge)
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
+
+**Eğitim kurumları için modern, hızlı ve güvenli sınav yönetim ve dosya gönderim platformu.**
+
+[Özellikler](#-özellikler) • [Ekran Görüntüleri](#-görüntü-galerisi) • [Kurulum](#-kurulum) • [Teknik Detaylar](#-teknik-detaylar)
+
+</div>
 
 ---
 
 ## ✨ Özellikler
 
-### 👨‍🏫 Öğretman Paneli
-- **Gelişmiş Dashboard:** Son aktiviteler, istatistikler ve hızlı işlem menüleri.
-- **Sınav Yönetimi:** Klasik (Dosya yüklemeli) veya Quiz (Çoktan seçmeli) sınavlar oluşturma.
-- **Canlı Takip:** Sınav süresince öğrenci katılımlarını anlık izleme (+30 dk ek süre verme, sınavı erken bitirme).
-- **Notlandırma & Değerlendirme:** Öğrenci yüklemelerini inceleme, geri bildirim verme ve notlandırma.
-- **Not Çıktıları:** Tüm notları sınıflara göre filtreleyip **CSV/Excel** formatında dışa aktarma.
+### 👨‍🏫 Öğretmen Paneli
+*   **Gelişmiş Dashboard:** İstatistik kartları ve anlık aktivite akışı ile sistemi takip edin.
+*   **Sınav Yönetimi:** Kolayca yeni sınavlar oluşturun, süreleri yönetin ve ek süre tanımlayın.
+*   **Akıllı Değerlendirme:** Öğrenci yüklemelerini yan yana (split-view) inceleyin ve anında notlandırın.
+*   **Geri Bildirim:** Öğrencilere özel notlar ve düzeltmeler iletin.
+*   **Güvenli Sıfırlama:** Çift onaylı ve bakım scriptli güvenli sistem sıfırlama mekanizması.
 
 ### 👨‍🎓 Öğrenci Paneli
-- **Kişiselleştirilmiş Ana Sayfa:** Aktif ve yaklaşan sınavları görüntüleme.
-- **Güvenli Dosya Yükleme:** Sürükle-bırak desteği ve dosya boyutu kontrolleri.
-- **Anlık Bildirimler:** Notlar açıklandığında veya yeni sınav duyurulduğunda bildirim alma.
-- **Not Takibi:** Geçmiş sınav sonuçlarını ve hoca geri bildirimlerini inceleme.
+*   **Odaklanmış Arayüz:** Sadece aktif sınavlara ve kendi başarısına odaklanan sade tasarım.
+*   **Sürükle-Bırak:** Gelişmiş dosya yükleme sistemi ile hızlı teslim.
+*   **Dil Desteği:** TR, EN, RU ve DE dillerinde tam uyumlu arayüz.
+*   **Passkey Giriş:** Şifre derdi olmadan biyometrik (parmak izi/yüz tanıma) güvenli giriş.
 
-### 🛡️ Güvenlik & Teknoloji
-- **Passkey Desteği:** Şifresiz, biyometrik giriş imkanı.
-- **Modern UI/UX:** Tailwind CSS ve Lucide simgeleriyle premium tasarım (Glassmorphism & animations).
-- **Zustand State Management:** Hızlı ve ölçeklenebilir durum yönetimi.
-- **Node.js Backend:** Hafif ve hızlı veri işleme.
+---
+
+## 📸 Görüntü Galerisi
+
+<div align="center">
+
+### 🖥️ Öğretmen Dashboard
+![Teacher Dashboard](screenshots/Teacher/Dashboard.png)
+*Modern istatistik kartları ve canlı sistem takibi*
+
+<br/>
+
+### 📝 Sınav Giriş Ekranı
+![Student Page](screenshots/Student/Dashboard.png)
+*Öğrenciler için sade ve anlaşılır sınav katılım arayüzü*
+
+<br/>
+
+### ➕ Sınav Oluşturma Paneli
+![Create Exam](screenshots/Teacher/CreateExam.png)
+*Esnek süre ve soru seçenekleri ile hızlı sınav hazırlama*
+
+<br/>
+
+### 🎓 Notlandırma ve Değerlendirme
+![Grading](screenshots/Teacher/Evaluation.png)
+*Öğrenci dosyalarını inceleme ve anlık geri bildirim ekranı*
+
+<br/>
+
+### 👥 Kullanıcı Yönetimi
+![User Management](screenshots/Teacher/UserManagement.png)
+*Öğrenci ve öğretmen hesaplarını toplu yönetme arayüzü*
+
+<br/>
+
+### 🚩 Öğrenci Sınavı
+![Support](screenshots/Student/Exam.png)
+*Öğrenciler için sade ve anlaşılır sınav arayüzü*
+
+<br/>
+
+### 🔐 Güvenlik ve Ayarlar
+![Security](screenshots/Teacher/Settings.png)
+*Passkey desteği ve gelişmiş güvenlik yapılandırmaları*
+
+</div>
 
 ---
 
 ## 🚀 Kurulum
 
-### Gereksinimler
-- Node.js (v16+)
-- npm veya yarn
+1.  **Projeyi Klonlayın:**
+    ```bash
+    git clone https://github.com/Emiran404/Atoyle.Platfrom.git
+    cd sinav-gonderme-platformu
+    ```
 
-### Adımlar
+2.  **Bağımlılıkları Yükleyin:**
+    ```bash
+    npm install
+    ```
 
-1. **Projeyi klonlayın:**
-   ```bash
-   git clone https://github.com/Emiran404/Atoyle.Platfrom.git
-   cd sinav-gonderme-platformu
-   ```
-
-2. **Bağımlılıkları yükleyin:**
-   ```bash
-   npm install
-   ```
-
-3. **Geliştirme sunucusunu başlatın:**
-   ```bash
-   # Frontend ve Backend'i aynı anda başlatır
-   npm run dev
-   ```
-
-4. **Tarayıcıda açın:**
-   `http://localhost:5173`
-   (Önerimiz: ip adresinizden açın.)
+3.  **Başlatın:**
+    ```bash
+    npm run dev
+    ```
 
 ---
 
-## 🛠️ Kullanılan Teknolojiler
+## 🛠️ Teknik Detaylar
 
 | Alan | Teknoloji |
 | :--- | :--- |
-| **Frontend** | React, Vite, Zustand |
-| **Styling** | Tailwind CSS, Framer Motion |
+| **Frontend** | React 18, Vite, Zustand |
+| **Styling** | Vanilla CSS, Tailwind, Framer Motion |
 | **Icons** | Lucide React |
-| **Backend** | Express.js, Node.js |
-| **Auth** | WebAuthn (Passkeys), JWT |
-| **Data** | JSON tabanlı hafif veritabanı |
+| **Backend** | Node.js, Express.js |
+| **Veri** | JSON tabanlı (Database gerektirmez) |
+| **Bakım** | .bat (Windows) & .sh (Linux/Pardus) |
 
 ---
 
-## 📸 Ekran Görüntüleri
+## 🧹 Bakım ve Temizlik
 
-> [!NOTE]
-> Proje içerisindeki `src/assets/screenshots` klasörüne kendi ekran görüntülerinizi ekleyip yolları buraya güncelleyebilirsiniz.
+Sistem sıfırlama sonrası kilitli dosyalar kalırsa, kök dizindeki şu güçlü araçları kullanabilirsiniz:
 
-- **Öğretmen Dashboard:** Premium görünümlü istatistik kartları ve aktivite akışı.
-- **Değerlendirme Ekranı:** Split-view (yan yana) dosya inceleme ve notlandırma paneli.
-- **Öğrenci Sınav Girişi:** Sade ve odaklanmış sınav arayüzü.
+*   **Windows:** `cleanup_windows.bat`
+*   **Linux/Pardus:** `cleanup_linux.sh`
+
+Bu araçlar otomatik olarak kilitli süreçleri sonlandırır ve sistemi "Fabrika Ayarlarına" döndürür.
 
 ---
 
 ## 📄 Lisans
 
-Bu proje **MIT** lisansı altında lisanslanmıştır. Daha fazla bilgi için [LICENSE](LICENSE) dosyasına göz atın.
+Bu proje **MIT** lisansı altında lisanslanmıştır. Detaylar için [LICENSE](LICENSE) dosyasına bakınız.
 
 ---
 
-## 🤝 Katkıda Bulunma
+<div align="center">
 
-1. Bu depoyu çatallayın (Fork).
-2. Özellik dalınızı oluşturun (`git checkout -b feature/yeniozellik`).
-3. Değişikliklerinizi kaydedin (`git commit -m 'Yeni özellik eklendi'`).
-4. Dalınıza gönderin (`git push origin feature/yeniozellik`).
-5. Bir Çekme İsteği (Pull Request) açın.
+**Geliştiren: Emirhan Gök**  
+Dünya çapında eğitimciler için sevgiyle kodlandı. ❤️
 
----
+[⭐ Bu projeyi beğendiyseniz yıldız vermeyi unutmayın!](https://github.com/Emiran404/Atoyle.Platfrom)
 
-⭐ Bu projeyi beğendiyseniz yıldız vermeyi unutmayın!
+</div>
