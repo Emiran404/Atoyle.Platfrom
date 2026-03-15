@@ -99,7 +99,7 @@
 
 1.  **Projeyi Klonlayın:**
     ```bash
-    git clone https://github.com/Emiran404/Atoyle.Platfrom.git
+    git clone https://github.com/Emiran404/Atolye.Platfrom.git
     cd sinav-gonderme-platformu
     ```
 
@@ -150,6 +150,6 @@ Bu proje **MIT** lisansı altında lisanslanmıştır. Detaylar için [LICENSE](
 **Geliştiren: Emirhan Gök**  
 Coded with love for educators worldwide. ❤️
 
-[⭐ Bu projeyi beğendiyseniz yıldız vermeyi unutmayın!](https://github.com/Emiran404/Atoyle.Platfrom)
+[⭐ Bu projeyi beğendiyseniz yıldız vermeyi unutmayın!](https://github.com/Emiran404/Atolye.Platfrom)
 
 </div>
