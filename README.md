@@ -7,6 +7,11 @@
 ![License](https://img.shields.io/badge/license-MIT-green?style=for-the-badge)
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
+![Express](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
+![Passkey](https://img.shields.io/badge/Passkey-Secure-yellow?style=for-the-badge&logo=fingerprint)
+![I18n](https://img.shields.io/badge/i18n-4_Languages-red?style=for-the-badge&logo=google-translate)
 
 **Eğitim kurumları için modern, hızlı ve güvenli sınav yönetim ve dosya gönderim platformu.**
 
