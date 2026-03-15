@@ -52,8 +52,8 @@ const SystemSetupPopup = () => {
           <div className="flex-1 p-8 md:p-10 flex flex-col justify-between">
               <div>
                   <div className="flex items-center gap-2 mb-4">
-                      <span className="px-2 py-1 bg-[#0ea5e9]/10 text-[#0ea5e9] text-[10px] font-bold uppercase tracking-wider rounded">v2.0 Stable</span>
-                      <span className="px-2 py-1 bg-[#ec5b13]/10 text-[#ec5b13] text-[10px] font-bold uppercase tracking-wider rounded">New Setup</span>
+                      <span className="px-2 py-1 bg-[#0ea5e9]/10 text-[#0ea5e9] text-[10px] font-bold uppercase tracking-wider rounded">v2.1.2 Stable</span>
+                      <span className="px-2 py-1 bg-[#ec5b13]/10 text-[#ec5b13] text-[10px] font-bold uppercase tracking-wider rounded">Yeni Kurulum</span>
                   </div>
                   <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100 mb-4 tracking-tight">
                       PolyOS Exam
@@ -70,17 +70,11 @@ const SystemSetupPopup = () => {
                           className="flex-1 md:flex-none min-w-[180px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-6 bg-gradient-to-r from-[#ec5b13] to-[#ff7e42] text-white text-sm font-bold shadow-lg shadow-[#ec5b13]/30 hover:shadow-[#ec5b13]/40 transition-all active:scale-95">
                           <span className="truncate">Hesabı Oluştur</span>
                       </button>
-                      <div className="flex items-center gap-3">
-                          <a className="w-12 h-12 flex items-center justify-center rounded-lg bg-slate-200/50 dark:bg-slate-800/50 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
-                              href="#" onClick={(e) => e.preventDefault()}>
-                              <Code className="text-slate-700 dark:text-slate-300" size={20} />
-                          </a>
-                          <a className="flex items-center gap-2 px-4 h-12 rounded-lg bg-slate-200/50 dark:bg-slate-800/50 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
-                              href="#" onClick={(e) => e.preventDefault()}>
-                              <Network className="text-slate-700 dark:text-slate-300" size={20} />
-                              <span className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-widest">GitHub</span>
-                          </a>
-                      </div>
+                      <a className="flex items-center gap-2 px-4 h-12 rounded-lg bg-slate-200/50 dark:bg-slate-800/50 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+                          href="https://github.com/Emiran404/Atoyle.Platfrom" target="_blank" rel="noopener noreferrer">
+                          <Network className="text-slate-700 dark:text-slate-300" size={20} />
+                          <span className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-widest">Github</span>
+                      </a>
                   </div>
                   <div className="flex items-center justify-between border-t border-slate-200 dark:border-slate-800 pt-6">
                       <div className="flex items-center gap-2 text-slate-400">

@@ -12,7 +12,8 @@ import {
   ArrowLeft,
   LogOut,
   Award,
-  Target
+  Target,
+  AlertTriangle
 } from 'lucide-react';
 import { t } from '../../utils/i18n';
 import { useAuthStore } from '../../store/authStore';
@@ -24,7 +25,8 @@ const studentMenuItems = [
   { path: '/ogrenci/notlarim', icon: Award, label: 'grades' },
   { path: '/ogrenci/optiklerim', icon: Target, label: 'examOptics' },
   { path: '/ogrenci/bildirimler', icon: Bell, label: 'notifications' },
-  { path: '/ogrenci/ayarlar', icon: Settings, label: 'settings' }
+  { path: '/ogrenci/ayarlar', icon: Settings, label: 'settings' },
+  { path: '/ogrenci/sorun-bildir', icon: AlertTriangle, label: 'reportProblemMenu' }
 ];
 
 const StudentSidebar = () => {

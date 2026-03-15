@@ -3,7 +3,11 @@ import os from 'os';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { exec } from 'child_process';
+import util from 'util';
 import { getActiveSessionCount, getActiveStudentIds, clearUserSessions } from './liveSessions.js';
+
+const execPromise = util.promisify(exec);
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -66,11 +70,18 @@ router.post('/check-update', async (req, res) => {
     const currentVersion = pkg.version;
     
     // GitHub Repo bilgisini package.json'dan al
-    // Örn: "https://github.com/Emiran404/sinav-gonderme-platformu.git"
-    const repoUrl = pkg.repository?.url || '';
-    const repoMatch = repoUrl.match(/github\.com\/([^/]+\/[^/.]+)/);
+    let repoUrl = pkg.repository?.url || '';
+    let repoPath = '';
     
-    if (!repoMatch) {
+    // Hem tam URL hem de sadece path durumlarını yönet
+    const repoMatch = repoUrl.match(/github\.com\/([^/]+\/[^/]+)/);
+    if (repoMatch) {
+      repoPath = repoMatch[1].replace('.git', '').replace(/\/$/, '');
+    } else if (repoUrl.includes('github.com/')) {
+      repoPath = repoUrl.split('github.com/')[1].replace('.git', '').replace(/\/$/, '');
+    }
+    
+    if (!repoPath) {
       return res.json({ 
         success: true, 
         updateAvailable: false, 
@@ -78,8 +89,7 @@ router.post('/check-update', async (req, res) => {
       });
     }
 
-    const repoPath = repoMatch[1];
-    const apiUrl = `https://api.github.com/repos/${repoPath}/releases/latest`;
+    const apiUrl = `https://api.github.com/repos/${repoPath}/releases`;
 
     const response = await fetch(apiUrl, {
       headers: {
@@ -92,17 +102,37 @@ router.post('/check-update', async (req, res) => {
       throw new Error(`GitHub API Hatası: ${response.status}`);
     }
 
-    const latestRelease = await response.json();
+    const releases = await response.json();
+    if (!Array.isArray(releases) || releases.length === 0) {
+      return res.json({ 
+        success: true, 
+        updateAvailable: false, 
+        message: 'Henüz bir sürüm yayınlanmamış.' 
+      });
+    }
+
+    const latestRelease = releases[0]; // En üstteki sürümü al
     const latestVersion = latestRelease.tag_name.replace('v', '');
     
     // Basit versiyon karşılaştırma (örn: 1.0.5 > 1.0.0)
     const isUpdateAvailable = latestVersion !== currentVersion;
 
+    // Özel açıklama ayıklama (descx:xxx)
+    let body = latestRelease.body || '';
+    let customDescription = null;
+    const descMatch = body.match(/descx:(.*)/i);
+    if (descMatch) {
+      customDescription = descMatch[1].trim();
+      // Temizleme: descx satırını body'den kaldır
+      body = body.replace(/descx:.*\n?/i, '').trim();
+    }
+
     res.json({
       success: true,
       updateAvailable: isUpdateAvailable,
       latestVersion: latestVersion,
-      changelog: latestRelease.body ? latestRelease.body.split('\n').filter(line => line.trim()) : ['Detaylı bilgi bulunamadı.'],
+      changelog: body || 'Detaylı bilgi bulunamadı.',
+      customDescription: customDescription,
       releaseDate: latestRelease.published_at,
       url: latestRelease.html_url
     });
@@ -112,33 +142,71 @@ router.post('/check-update', async (req, res) => {
   }
 });
 
-import { exec } from 'child_process';
-import util from 'util';
-const execPromise = util.promisify(exec);
 
 // Güncelleme Yükleme (Gerçek Git Pull Entegrasyonu)
 router.post('/install-update', async (req, res) => {
   try {
-    const { version } = req.body;
+    const { version, description } = req.body;
     
     console.log(`[System] Update started: Pulling version ${version}...`);
     
     // 1. Git Pull yap (Dışarıdan kod çek)
     try {
-      await execPromise('git pull');
-      console.log('[System] git pull successful');
+      // --autostash: Yerel değişiklikleri geçici olarak saklar, pull yapar, sonra geri yükler.
+      // --allow-unrelated-histories: Farklı git geçmişlerini birleştirir.
+      // --no-edit: Merge mesajı sormaz.
+      await execPromise('git pull origin main --allow-unrelated-histories --no-edit --autostash');
+      console.log('[System] git pull with autostash successful');
     } catch (gitError) {
-      console.error('[System] git pull failed:', gitError.message);
-      // Git hatası olsa da devam edebiliriz (belki dosyalar manuel yüklendi)
-      // Ancak gerçek bir senaryoda burada durmak gerekebilir.
+      console.error('[System] git pull failed, trying forced method:', gitError.message);
+      
+      try {
+        // Eğer autostash yetmezse (örn conflict varsa), dosyaları GitHub sürümüne zorla eşitle
+        await execPromise('git fetch origin main');
+        await execPromise('git reset --hard origin/main');
+        console.log('[System] git reset --hard successful');
+      } catch (forceError) {
+        return res.status(500).json({ 
+          success: false, 
+          error: 'Sistem güncellenemedi: Çakışan dosyalar otomatik çözülemedi.',
+          details: forceError.message
+        });
+      }
     }
 
-    // 2. updates.json'a kaydet
+    const rootDir = path.join(__dirname, '../../');
+    const serverDir = path.join(__dirname, '../');
+
+    // 2. Bağımlılıkları yükle (npm install)
+    try {
+      console.log('[System] Installing frontend dependencies...');
+      await execPromise('npm install', { cwd: rootDir });
+      
+      console.log('[System] Installing backend dependencies...');
+      await execPromise('npm install', { cwd: serverDir });
+      
+      console.log('[System] Dependencies installed successfully');
+    } catch (installError) {
+      console.error('[System] Dependency installation failed:', installError.message);
+    }
+
+    // 3. Build al (Sistemi derle)
+    try {
+      console.log('[System] Building project...');
+      await execPromise('npm run build', { cwd: rootDir });
+      console.log('[System] Build successful');
+    } catch (buildError) {
+      console.error('[System] Build failed:', buildError.message);
+      // Not: Build hatası sistemin eski halini bozmaz ama yeni kodlar aktif olmaz. 
+      // Yine de devam edip sürümü güncelleyebiliriz veya burada durup hata dönebiliriz.
+    }
+
+    // 3. updates.json'a kaydet
     const updates = getData('updates');
     const newUpdate = {
       version,
       date: new Date().toISOString(),
-      description: `${version} sürümüne başarıyla güncellendi.`,
+      description: description || `${version} sürümüne başarıyla güncellendi ve derlendi.`,
       type: 'patch',
       status: 'installed'
     };
@@ -146,7 +214,7 @@ router.post('/install-update', async (req, res) => {
     const filePath = path.join(__dirname, '../data', 'updates.json');
     fs.writeFileSync(filePath, JSON.stringify([newUpdate, ...updates], null, 2));
     
-    // 3. package.json sürümünü doğrula (git pull zaten güncellemiş olmalı)
+    // 4. package.json sürümünü doğrula (git pull zaten güncellemiş olmalı)
     const pkgPath = path.join(__dirname, '../../package.json');
     const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf-8'));
     
@@ -265,6 +333,88 @@ router.get('/metrics', (req, res) => {
       latency: parseFloat((Math.random() * 0.2 + 0.1).toFixed(1)) // Realistic local latency (0.1ms - 0.3ms)
     }
   });
+});
+
+
+// Rate limit tracker for reports: { identifier: timestamp }
+const reportRateLimits = new Map();
+
+// POST /api/system/report - Sorun bildir (MEB Engelini aşmak için relay desteğiyle)
+router.post('/report', (req, res) => {
+  try {
+    const { type, subject, message, context } = req.body;
+    const userId = context?.userId || req.ip;
+
+    // Spam Koruması (5 dakikada 1 rapor sınırı)
+    const now = Date.now();
+    const lastReport = reportRateLimits.get(userId);
+    const COOLDOWN = 5 * 60 * 1000; // 5 dakika
+
+    if (lastReport && (now - lastReport < COOLDOWN)) {
+      const remaining = Math.ceil((COOLDOWN - (now - lastReport)) / 1000 / 60);
+      return res.status(429).json({ 
+        success: false, 
+        error: `Çok fazla deneme yaptınız. Lütfen ${remaining} dakika sonra tekrar deneyin.` 
+      });
+    }
+    
+    if (!type || !subject || !message) {
+      return res.status(400).json({ success: false, error: 'Eksik bilgi gönderildi.' });
+    }
+
+    reportRateLimits.set(userId, now);
+
+    const reports = getData('reports');
+    const newReport = {
+      id: Date.now().toString(),
+      type,
+      subject,
+      message,
+      context,
+      date: new Date().toISOString(),
+      status: 'pending'
+    };
+
+    // Yerel yedeğe kaydet
+    const filePath = path.join(__dirname, '../data', 'reports.json');
+    fs.writeFileSync(filePath, JSON.stringify([newReport, ...reports], null, 2));
+
+    // Röle adresine göndermeyi dene (MEB engeli için dış sunucu desteği)
+    const relayUrl = process.env.REPORT_RELAY_URL || 'https://relay.polyos.dev/api/report';
+    const googleSheetsUrl = 'https://script.google.com/macros/s/AKfycbw0eIle96A2-0kUzP7p-w-Od7h4swvteYTjxSSj7XaS2h4Zy9reW8NaWtq7DBFYDVf2/exec';
+    
+    // Arka planda göndermeyi dene, kullanıcıyı bekletme
+    const relays = [
+      fetch(relayUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newReport)
+      })
+    ];
+
+    // Google Sheets Relay (Opsiyonel)
+    if (googleSheetsUrl) {
+      relays.push(
+        fetch(googleSheetsUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newReport)
+        })
+      );
+    }
+
+    Promise.all(relays).catch(err => {
+      console.warn('[System] Report relay failed (expected in some networks):', err.message);
+    });
+
+    res.json({ 
+      success: true, 
+      message: 'Raporunuz iletildi. İnternet erişimi olmasa bile yerel sistemde kayıt altına alındı.' 
+    });
+  } catch (error) {
+    console.error('Report error:', error);
+    res.status(500).json({ success: false, error: 'Rapor gönderilirken hata oluştu.' });
+  }
 });
 
 export default router;

@@ -52,6 +52,7 @@ import {
 import TeacherSchedule from './pages/teacher/Schedule';
 import Scheduler from './pages/teacher/Scheduler';
 import PolyOsLNA from './pages/PolyOsLNA';
+import ReportProblem from './pages/shared/ReportProblem';
 
 function App() {
   const { theme, isAuthenticated, updateActivity, startInactivityTimer } = useAuthStore();
@@ -251,6 +252,14 @@ function App() {
           }
         />
         <Route
+          path="/ogrenci/sorun-bildir"
+          element={
+            <ProtectedRoute userType="student">
+              <ReportProblem />
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="/ogrenci/ders-programi"
           element={
             <ProtectedRoute userType="student">
@@ -413,6 +422,14 @@ function App() {
           element={
             <ProtectedRoute userType="teacher">
               <Scheduler />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/ogretmen/sorun-bildir"
+          element={
+            <ProtectedRoute userType="teacher">
+              <ReportProblem />
             </ProtectedRoute>
           }
         />

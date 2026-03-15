@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Settings, Shield, Users, Lock, Unlock, Save, UserCheck, UserX, Trash2, Mail, BarChart3, HardDrive, FileText, Clock, Download, Database, Key, AlertTriangle, RefreshCcw, CheckCircle2, Info as InfoIcon } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
 import { TeacherLayout } from '../../components/layouts';
 import { useToast } from '../../components/ui/Toast';
 import { Button, ConfirmModal } from '../../components/ui';
@@ -62,29 +63,51 @@ const PlatformManagement = () => {
       isOpen: true,
       title: 'TÜM VERİLERİ SİL?',
       message: '⚠️ DİKKAT: TÜM VERİLER SİLİNECEK!\n\nÖğrenci kayıtları, öğretmen kayıtları, sınavlar ve teslimler dahil tüm veriler kalıcı olarak silinecek.\n\nBu işlem geri alınamaz!\n\nDevam etmek istiyor musunuz?',
-      confirmText: 'Evet, Her Şeyi Sil',
+      confirmText: 'Evet, Devam Et',
       type: 'danger',
-      onConfirm: async () => {
-        try {
-          setSaving(true);
-          const result = await resetAllData();
+      onConfirm: () => {
+        // İkinci onay modalı (Kilitli dosyalar uyarısı) - setTimeout ile gecikme ekliyoruz ki ilk modal kapansın
+        setTimeout(() => {
+          setConfirmModal({
+            isOpen: true,
+            title: '🔐 SON GÜVENLİK ADIMI',
+            message: `⚠️ KRİTİK BİLGİLENDİRME:
 
-          if (result.success === false) {
-            setResetError('Bazı veriler sıfırlanamadı. Lütfen sunucuyu kontrol edin.');
-            toast.error('Bazı veriler sıfırlanamadı. Lütfen sunucuyu kontrol edin.');
-          }
+Sistem sıfırlama işlemi sırasında, bazı dosyalar Windows (OneDrive/Gezgin) veya Vite tarafından "Kilitli" tutulduğu için otomatik silinemeyebilir.
 
-          // Kullanıcıyı logout yap ve ana sayfaya yönlendir
-          setTimeout(() => {
-            window.location.href = '/';
-          }, 500);
-        } catch (error) {
-          console.error('Veri sıfırlama hatası:', error);
-          setResetError('Veri sıfırlama sırasında bir hata oluştu.');
-          toast.error('Veri sıfırlama sırasında bir hata oluştu.');
-        } finally {
-          setSaving(false);
-        }
+Sıfırlama bittikten sonra tam temizlik için:
+• Windows: Kök dizindeki "cleanup_windows.bat" dosyasını çalıştırın.
+• Linux/Pardus: Kök dizindeki "cleanup_linux.sh" scriptini kullanın.
+
+Bu araçlar kilitli süreçleri sonlandırıp tüm verileri güvenle temizleyecektir.
+
+HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`,
+            confirmText: 'Sistemi Sıfırla ve Temizle',
+            type: 'danger',
+            onConfirm: async () => {
+              try {
+                setSaving(true);
+                const result = await resetAllData();
+
+                if (result.success === false) {
+                  setResetError('Bazı veriler sıfırlanamadı. Lütfen sunucuyu kontrol edin.');
+                  toast.error('Bazı veriler sıfırlanamadı. Lütfen sunucuyu kontrol edin.');
+                }
+
+                // Kullanıcıyı logout yap ve ana sayfaya yönlendir
+                setTimeout(() => {
+                  window.location.href = '/';
+                }, 500);
+              } catch (error) {
+                console.error('Veri sıfırlama hatası:', error);
+                setResetError('Veri sıfırlama sırasında bir hata oluştu.');
+                toast.error('Veri sıfırlama sırasında bir hata oluştu.');
+              } finally {
+                setSaving(false);
+              }
+            }
+          });
+        }, 100);
       }
     });
   };
@@ -106,7 +129,7 @@ const PlatformManagement = () => {
       ]);
       const vData = await vRes.json();
       const hData = await hRes.json();
-      
+
       if (vData.success) setCurrentVersion(vData.version);
       if (hData.success) setUpdateHistory(hData.updates);
     } catch (error) {
@@ -136,10 +159,10 @@ const PlatformManagement = () => {
 
   const handleInstallUpdate = async () => {
     if (!availableUpdate) return;
-    
+
     setInstallingUpdate(true);
     setUpdateProgress(0);
-    
+
     // Progress simülasyonu
     const intervals = [
       { p: 20, t: 1000, m: 'Yedek alınıyor...' },
@@ -157,10 +180,13 @@ const PlatformManagement = () => {
       const response = await fetch('/api/system/install-update', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ version: availableUpdate.latestVersion })
+        body: JSON.stringify({
+          version: availableUpdate.latestVersion,
+          description: availableUpdate.customDescription
+        })
       });
       const data = await response.json();
-      
+
       if (data.success) {
         toast.success('Güncelleme başarıyla yüklendi! Sistem yeniden başlatılıyor...');
         setTimeout(() => window.location.reload(), 2000);
@@ -1515,6 +1541,26 @@ const PlatformManagement = () => {
             }}>
               <RefreshCcw size={32} />
             </div>
+            <style>{`
+                .markdown-content ul { padding-left: 20px; list-style-type: disc; margin-bottom: 12px; }
+                .markdown-content li { margin-bottom: 4px; }
+                .markdown-content h1, .markdown-content h2, .markdown-content h3 { 
+                  font-size: 1.1em; 
+                  font-weight: 700; 
+                  margin-top: 12px; 
+                  margin-bottom: 8px;
+                  color: #1e293b;
+                }
+                .markdown-content p { margin-bottom: 8px; }
+                .markdown-content strong { font-weight: 700; color: #1e293b; }
+                .markdown-content code { 
+                  background-color: #f1f5f9; 
+                  padding: 2px 4px; 
+                  border-radius: 4px; 
+                  font-family: monospace;
+                  font-size: 0.9em;
+                }
+              `}</style>
             <div style={{ flex: 1 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
                 <div>
@@ -1542,11 +1588,15 @@ const PlatformManagement = () => {
                 marginBottom: '20px'
               }}>
                 <h4 style={{ fontSize: '14px', fontWeight: '600', color: '#475569', marginBottom: '8px' }}>Neler Değişti?</h4>
-                <ul style={{ paddingLeft: '20px', margin: 0 }}>
-                  {availableUpdate.changelog.map((item, i) => (
-                    <li key={i} style={{ fontSize: '13px', color: '#64748b', marginBottom: '4px' }}>{item}</li>
-                  ))}
-                </ul>
+                <div style={{
+                  fontSize: '13px',
+                  color: '#64748b',
+                  lineHeight: '1.6',
+                  overflowY: 'auto',
+                  maxHeight: '300px'
+                }} className="markdown-content">
+                  <ReactMarkdown>{availableUpdate.changelog}</ReactMarkdown>
+                </div>
               </div>
 
               {installingUpdate ? (
@@ -1650,7 +1700,7 @@ const PlatformManagement = () => {
               💡 Güncelleme Hakkında
             </h3>
             <p style={{ fontSize: '13px', color: '#9a3412', lineHeight: '1.6' }}>
-              Güncelleme işlemi sırasında sistem dosyaları yenilenirken otomatik olarak bir veri yedeği alınır. 
+              Güncelleme işlemi sırasında sistem dosyaları yenilenirken otomatik olarak bir veri yedeği alınır.
               İşlem tamamlandığında platform otomatik olarak yenilenecek ve yeni sürüm aktif olacaktır.
               Önemli güncellemeleri kaçırmamak için düzenli olarak kontrol etmeniz önerilir.
             </p>
@@ -1764,11 +1814,11 @@ const PlatformManagement = () => {
         <div style={{ display: 'grid', gap: '12px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid #e2e8f0' }}>
             <span style={{ color: '#64748b' }}>Platform Versiyonu</span>
-            <span style={{ fontWeight: '500', color: '#1e293b' }}>v2.0 Beta</span>
+            <span style={{ fontWeight: '500', color: '#1e293b' }}>v{currentVersion || '...'}</span>
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid #e2e8f0' }}>
             <span style={{ color: '#64748b' }}>Son Güncelleme</span>
-            <span style={{ fontWeight: '500', color: '#1e293b' }}>15.03.2026 - 15 Mart 2026</span>
+            <span style={{ fontWeight: '500', color: '#1e293b' }}>{updateHistory[0]?.date ? new Date(updateHistory[0].date).toLocaleDateString('tr-TR') : '15.03.2026'}</span>
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid #e2e8f0' }}>
             <span style={{ color: '#64748b' }}>Altyapı</span>

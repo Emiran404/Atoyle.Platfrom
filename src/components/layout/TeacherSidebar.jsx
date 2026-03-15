@@ -17,7 +17,8 @@ import {
   Clock,
   Shield,
   Monitor,
-  UserCheck
+  UserCheck,
+  AlertTriangle
 } from 'lucide-react';
 import { useNotificationStore } from '../../store/notificationStore';
 import { t } from '../../utils/i18n';
@@ -34,7 +35,8 @@ const teacherMenuItems = [
   { path: '/ogretmen/platform-yonetimi', icon: Shield, label: 'platformManagement' },
   { path: '/ogretmen/polyos-oga', icon: UserCheck, label: 'polyosOgaMenu', special: true },
   { path: '/ogretmen/bildirimler', icon: Bell, label: 'notificationsMenu' },
-  { path: '/ogretmen/ayarlar', icon: Settings, label: 'settingsMenu' }
+  { path: '/ogretmen/ayarlar', icon: Settings, label: 'settingsMenu' },
+  { path: '/ogretmen/sorun-bildir', icon: AlertTriangle, label: 'reportProblemMenu' }
 ];
 
 const TeacherSidebar = () => {

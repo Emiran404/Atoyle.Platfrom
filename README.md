@@ -58,6 +58,7 @@ PolyOS, eğitim kurumları için tasarlanmış, modern, hızlı ve güvenli bir 
 
 4. **Tarayıcıda açın:**
    `http://localhost:5173`
+   (Önerimiz: ip adresinizden açın.)
 
 ---
 

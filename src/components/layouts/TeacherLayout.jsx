@@ -18,7 +18,8 @@ import {
   Shield,
   Monitor,
   MonitorPlay,
-  Award
+  Award,
+  AlertTriangle
 } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
 import PasskeyModal from '../ui/PasskeyModal';
@@ -93,6 +94,7 @@ const TeacherLayout = ({ children }) => {
     { icon: Monitor, label: 'Entegre Sistemler', path: '/ogretmen/entegre-sistemler', special: true },
     { icon: Bell, label: 'Bildirimler', path: '/ogretmen/bildirimler' },
     { icon: Settings, label: 'Ayarlar', path: '/ogretmen/ayarlar' },
+    { icon: AlertTriangle, label: 'Sorun Bildir', path: '/ogretmen/sorun-bildir' },
   ];
 
   const handleLogout = () => {

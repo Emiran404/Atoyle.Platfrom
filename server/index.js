@@ -9,11 +9,18 @@
 
 import express from 'express';
 import cors from 'cors';
+import dotenv from 'dotenv';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import fs from 'fs';
 import http from 'http';
 import os from 'os';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// Load .env from root directory
+dotenv.config({ path: join(__dirname, '../.env') });
 
 // Routes
 import authRoutes from './routes/auth.js';
@@ -30,9 +37,6 @@ import backupRoutes from './routes/backup.js';
 import liveSessionsRoutes from './routes/liveSessions.js';
 import systemRoutes from './routes/system.js';
 import { startNotificationWorker } from './workers/notificationWorker.js';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
 const app = express();
 const server = http.createServer(app);
@@ -164,31 +168,67 @@ app.post('/api/reset-all-data', (req, res) => {
 
     // uploads klasörlerini temizle - Klasörü silmek yerine içini boşalt (EBUSY hatasını önlemek için)
     const emptyDir = (dirPath) => {
-      if (fs.existsSync(dirPath)) {
-        const files = fs.readdirSync(dirPath);
-        for (const file of files) {
-          const curPath = join(dirPath, file);
-          try {
-            if (fs.lstatSync(curPath).isDirectory()) {
-              fs.rmSync(curPath, { recursive: true, force: true });
-            } else {
-              fs.unlinkSync(curPath);
+      try {
+        if (fs.existsSync(dirPath)) {
+          const realDirPath = fs.realpathSync(dirPath);
+          console.log(`🧹 Temizleniyor: ${realDirPath}`);
+          const files = fs.readdirSync(realDirPath);
+          
+          for (const file of files) {
+            if (file === '.gitkeep') continue;
+            const curPath = join(realDirPath, file);
+            try {
+              const stats = fs.lstatSync(curPath);
+              if (stats.isDirectory()) {
+                console.log(`📁 Dizin siliniyor: ${curPath}`);
+                // recursive rm with retries for Windows locks (OneDrive/Vite)
+                fs.rmSync(curPath, { 
+                  recursive: true, 
+                  force: true, 
+                  maxRetries: 20, 
+                  retryDelay: 1000 
+                });
+              } else {
+                console.log(`📄 Dosya siliniyor: ${curPath}`);
+                fs.unlinkSync(curPath);
+              }
+              
+              // Windows'ta bazen silindi dese de silinmiyor, kısa bir gecikme sonrası kontrol edelim
+              if (fs.existsSync(curPath)) {
+                console.warn(`⚠️ UYARI: ${file} hala mevcut! Kilitlenmiş olabilir (Vite veya Windows Gezgini açık mı?)`);
+              } else {
+                console.log(`✅ Silindi: ${file}`);
+              }
+            } catch (e) {
+              console.warn(`❌ Silinemedi: ${file} - ${e.code || e.message}`);
+              if (e.code === 'EBUSY' || e.code === 'EPERM') {
+                console.warn(`💡 İpucu: Bu dosya/klasör başka bir program tarafından kullanılıyor olabilir.`);
+              }
             }
-          } catch (e) {
-            console.warn(`Silinemedi: ${curPath}`, e.message);
           }
+          return true;
+        } else {
+          console.log(`ℹ️ Dizin bulunamadı, atlanıyor: ${dirPath}`);
+          return false;
         }
+      } catch (err) {
+        console.error(`❌ Dizin temizleme hatası (${dirPath}):`, err);
+        return false;
       }
     };
 
-    const uploadsDir = join(__dirname, 'uploads');
     const uploadsStudentDir = join(__dirname, '../src/uploads_student');
+    const serverUploadsDir = join(__dirname, 'uploads');
+    const tempDir = join(__dirname, 'temp');
+    const backupsDir = join(__dirname, 'backups');
 
-    emptyDir(uploadsDir);
     emptyDir(uploadsStudentDir);
+    emptyDir(serverUploadsDir);
+    emptyDir(tempDir);
+    emptyDir(backupsDir);
 
-    console.log('✅ Tüm veriler sıfırlandı');
-    res.json({ success: true, message: 'Tüm veriler başarıyla sıfırlandı' });
+    console.log('✅ Tüm veriler ve dosyalar sıfırlandı');
+    res.json({ success: true, message: 'Tüm veriler ve dosyalar başarıyla sıfırlandı' });
   } catch (error) {
     console.error('Veri sıfırlama hatası:', error);
     res.status(500).json({ success: false, error: 'Veri sıfırlama sırasında hata oluştu' });

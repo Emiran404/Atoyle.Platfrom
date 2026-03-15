@@ -7,10 +7,24 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Runtime data
 node_modules
 dist
 dist-ssr
 *.local
+.env
+.env.*
+
+# Student Uploads & Photos
+/src/uploads_student/*
+!/src/uploads_student/.gitkeep
+/public/photos/*
+!/public/photos/.gitkeep
+
+# Server Data (Security Critical)
+/server/data/*.json
+/server/temp/*
+/server/backups/*
 
 # Editor directories and files
 .vscode/*
@@ -22,3 +36,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# PolyOS specific
+Polyos/
+backup/
+*.zip
+*.tar.gz

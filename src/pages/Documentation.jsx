@@ -668,7 +668,7 @@ const Documentation = () => {
               <p style={{ color: '#94a3b8', fontSize: '18px', lineHeight: '1.6' }}>{t.setupDesc}</p>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                 <div style={{ background: 'rgba(255,255,255,0.03)', padding: '16px 20px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', fontFamily: 'monospace', fontSize: '14px', color: '#38bdf8' }}>
-                  git clone https://github.com/polyos/platform
+                  git clone https://github.com/Emiran404/Atoyle.Platfrom.git
                 </div>
                 <div style={{ background: 'rgba(255,255,255,0.03)', padding: '16px 20px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', fontFamily: 'monospace', fontSize: '14px', color: '#38bdf8' }}>
                   ./kurulum.sh
