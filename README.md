@@ -25,7 +25,7 @@
 <p align="center">
   <b>Atölye.Platform, PolyOS tarafından geliştirilen bir üründür.</b>
 </p>
----
+
 
 ## ✨ Özellikler
 
