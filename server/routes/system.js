@@ -62,18 +62,37 @@ router.get('/updates', (req, res) => {
   res.json({ success: true, updates: updates.sort((a, b) => new Date(b.date) - new Date(a.date)) });
 });
 
-// Güncelleme Kontrolü (Gerçek GitHub API Entegrasyonu)
+// Önbellek için değişkenler
+let updateCache = {
+  lastCheck: 0,
+  data: null,
+  error: null
+};
+const CACHE_DURATION = 3600000; // 1 saat
+
+// Güncelleme Kontrolü (Token-free ve Önbellekli)
 router.post('/check-update', async (req, res) => {
   try {
     const pkgPath = path.join(__dirname, '../../package.json');
     const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf-8'));
     const currentVersion = pkg.version;
+    const now = Date.now();
+
+    // Önbellek kontrolü (1 saat)
+    if (updateCache.data && (now - updateCache.lastCheck < CACHE_DURATION) && !req.body.force) {
+      console.log('[System] Returning cached update data');
+      
+      // Önbellekteki veriyi kullan ama updateAvailable durumunu güncel yerel sürüme göre tekrar hesapla
+      const cachedResult = { ...updateCache.data };
+      cachedResult.updateAvailable = cachedResult.latestVersion !== currentVersion;
+      
+      return res.json(cachedResult);
+    }
     
     // GitHub Repo bilgisini package.json'dan al
     let repoUrl = pkg.repository?.url || '';
     let repoPath = '';
     
-    // Hem tam URL hem de sadece path durumlarını yönet
     const repoMatch = repoUrl.match(/github\.com\/([^/]+\/[^/]+)/);
     if (repoMatch) {
       repoPath = repoMatch[1].replace('.git', '').replace(/\/$/, '');
@@ -89,56 +108,100 @@ router.post('/check-update', async (req, res) => {
       });
     }
 
-    const apiUrl = `https://api.github.com/repos/${repoPath}/releases`;
+    const apiUrl = `https://api.github.com/repos/${repoPath}/releases/latest`;
+    const rawPkgUrl = `https://raw.githubusercontent.com/${repoPath}/main/package.json`;
+    
+    // 1. Önce "Tokensiz" (Raw) kontrolü yap - Rate limit derdi yok
+    let latestVersion = null;
+    let changelog = 'Detaylı bilgi için GitHub sayfasına bakın.';
+    let releaseDate = new Date().toISOString();
+    let releaseUrl = `https://github.com/${repoPath}/releases`;
 
-    const response = await fetch(apiUrl, {
-      headers: {
+    try {
+      const rawRes = await fetch(rawPkgUrl);
+      if (rawRes.ok) {
+        const remotePkg = await rawRes.json();
+        latestVersion = remotePkg.version;
+        console.log(`[System] Token-free version check: ${latestVersion}`);
+      }
+    } catch (rawError) {
+      console.warn('[System] Raw version check failed, falling back to API:', rawError.message);
+    }
+
+    // 2. Eğer Raw kontrol başarılıysa ve versiyon farklıysa, detayları API'den (best-effort) almayı dene
+    if (latestVersion && latestVersion !== currentVersion) {
+      try {
+        const headers = {
+          'Accept': 'application/vnd.github.v3+json',
+          'User-Agent': 'PolyOS-Update-System'
+        };
+        if (process.env.GITHUB_TOKEN) headers['Authorization'] = `token ${process.env.GITHUB_TOKEN}`;
+
+        const apiRes = await fetch(apiUrl, { headers });
+        if (apiRes.ok) {
+          const releaseData = await apiRes.json();
+          changelog = releaseData.body || changelog;
+          releaseDate = releaseData.published_at;
+          releaseUrl = releaseData.html_url;
+        }
+      } catch (apiError) {
+        console.warn('[System] API details fetch failed (Rate limit?), using basic info.');
+      }
+    } else if (!latestVersion) {
+      // Raw başarısız olduysa API'yi ana yöntem olarak dene
+      const headers = {
         'Accept': 'application/vnd.github.v3+json',
         'User-Agent': 'PolyOS-Update-System'
+      };
+      if (process.env.GITHUB_TOKEN) headers['Authorization'] = `token ${process.env.GITHUB_TOKEN}`;
+
+      const response = await fetch(apiUrl, { headers });
+      if (!response.ok) {
+        if (response.status === 403 || response.status === 429) {
+          throw new Error('GitHub API bağlantı limiti doldu. Token kullanmıyorsanız lütfen bir saat sonra tekrar deneyin.');
+        }
+        throw new Error(`GitHub API Hatası: ${response.status}`);
       }
-    });
-
-    if (!response.ok) {
-      throw new Error(`GitHub API Hatası: ${response.status}`);
+      const latestRelease = await response.json();
+      latestVersion = latestRelease.tag_name.replace('v', '');
+      changelog = latestRelease.body || changelog;
+      releaseDate = latestRelease.published_at;
+      releaseUrl = latestRelease.html_url;
     }
 
-    const releases = await response.json();
-    if (!Array.isArray(releases) || releases.length === 0) {
-      return res.json({ 
-        success: true, 
-        updateAvailable: false, 
-        message: 'Henüz bir sürüm yayınlanmamış.' 
-      });
-    }
-
-    const latestRelease = releases[0]; // En üstteki sürümü al
-    const latestVersion = latestRelease.tag_name.replace('v', '');
-    
-    // Basit versiyon karşılaştırma (örn: 1.0.5 > 1.0.0)
     const isUpdateAvailable = latestVersion !== currentVersion;
 
     // Özel açıklama ayıklama (descx:xxx)
-    let body = latestRelease.body || '';
+    let body = changelog;
     let customDescription = null;
     const descMatch = body.match(/descx:(.*)/i);
     if (descMatch) {
       customDescription = descMatch[1].trim();
-      // Temizleme: descx satırını body'den kaldır
       body = body.replace(/descx:.*\n?/i, '').trim();
     }
 
-    res.json({
+    const result = {
       success: true,
       updateAvailable: isUpdateAvailable,
       latestVersion: latestVersion,
-      changelog: body || 'Detaylı bilgi bulunamadı.',
+      changelog: body,
       customDescription: customDescription,
-      releaseDate: latestRelease.published_at,
-      url: latestRelease.html_url
-    });
+      releaseDate: releaseDate,
+      url: releaseUrl
+    };
+
+    // Cache'le
+    updateCache = { lastCheck: now, data: result, error: null };
+
+    res.json(result);
   } catch (error) {
     console.error('Update check error:', error);
-    res.status(500).json({ success: false, error: 'GitHub ile bağlantı kurulamadı.' });
+    const isRateLimit = error.message.includes('limiti doldu');
+    const status = isRateLimit ? 429 : 500;
+    const errorMessage = error.message || 'GitHub ile bağlantı kurulamadı.';
+
+    updateCache.error = errorMessage;
+    res.status(status).json({ success: false, error: errorMessage });
   }
 });
 
@@ -152,23 +215,24 @@ router.post('/install-update', async (req, res) => {
     
     // 1. Git Pull yap (Dışarıdan kod çek)
     try {
-      // --autostash: Yerel değişiklikleri geçici olarak saklar, pull yapar, sonra geri yükler.
-      // --allow-unrelated-histories: Farklı git geçmişlerini birleştirir.
-      // --no-edit: Merge mesajı sormaz.
+      // --autostash: Yerel (takip edilen) değişiklikleri saklar
+      // Veri dosyaları gitignore içinde ve untracked olduğu sürece git pull onlara dokunmaz.
       await execPromise('git pull origin main --allow-unrelated-histories --no-edit --autostash');
-      console.log('[System] git pull with autostash successful');
+      console.log('[System] Safe update (git pull) successful');
     } catch (gitError) {
-      console.error('[System] git pull failed, trying forced method:', gitError.message);
+      console.error('[System] git pull failed, trying defensive reset:', gitError.message);
       
       try {
-        // Eğer autostash yetmezse (örn conflict varsa), dosyaları GitHub sürümüne zorla eşitle
+        // Eğer pull başarısız olursa FETCH yap ama CLEAN yapma (untracked/ignored dosyaları koru)
         await execPromise('git fetch origin main');
+        // Reset sadece git tarafından takip edilen dosyaları etkiler.
+        // server/data/*.json ve src/uploads_student/ klasörleri untracked olduğu için güvendedir.
         await execPromise('git reset --hard origin/main');
-        console.log('[System] git reset --hard successful');
+        console.log('[System] Defensive git reset successful (Untracked files preserved)');
       } catch (forceError) {
         return res.status(500).json({ 
           success: false, 
-          error: 'Sistem güncellenemedi: Çakışan dosyalar otomatik çözülemedi.',
+          error: 'Sistem güncellenemedi: Dosya çakışmaları otomatik çözülemedi.',
           details: forceError.message
         });
       }

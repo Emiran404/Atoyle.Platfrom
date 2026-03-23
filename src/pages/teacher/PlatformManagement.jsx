@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Settings, Shield, Users, Lock, Unlock, Save, UserCheck, UserX, Trash2, Mail, BarChart3, HardDrive, FileText, Clock, Download, Database, Key, AlertTriangle, RefreshCcw, CheckCircle2, Info as InfoIcon } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { TeacherLayout } from '../../components/layouts';
@@ -10,9 +11,13 @@ import { t } from '../../utils/i18n';
 
 const PlatformManagement = () => {
   const { toast } = useToast();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [activeTab, setActiveTab] = useState('registration'); // registration, users, bulk, stats, backup, update, reset
+  
+  // URL'den tab parametresini al (varsayılan: registration)
+  const initialTab = searchParams.get('tab') || 'registration';
+  const [activeTab, setActiveTab] = useState(initialTab); // registration, users, bulk, stats, backup, update, reset
 
   // Platform ayarları
   const [registrationEnabled, setRegistrationEnabled] = useState(true);
@@ -117,7 +122,10 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
     loadSettings();
     if (activeTab === 'users') loadUsers();
     if (activeTab === 'stats') loadStats();
-    if (activeTab === 'update') loadUpdateData();
+    if (activeTab === 'update') {
+      loadUpdateData();
+      handleCheckUpdate(); // Otomatik kontrol et
+    }
   }, [activeTab]);
 
   const loadUpdateData = async () => {

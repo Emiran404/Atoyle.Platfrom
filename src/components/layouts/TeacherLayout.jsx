@@ -19,7 +19,9 @@ import {
   Monitor,
   MonitorPlay,
   Award,
-  AlertTriangle
+  AlertTriangle,
+  ArrowUpCircle,
+  AlertCircle
 } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
 import PasskeyModal from '../ui/PasskeyModal';
@@ -31,6 +33,8 @@ const TeacherLayout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showPasskeyModal, setShowPasskeyModal] = useState(false);
+  const [updateAvailable, setUpdateAvailable] = useState(null);
+  const [showUpdateBanner, setShowUpdateBanner] = useState(true);
 
   // Passkey modal kontrolü - giriş yapıldığında göster
   useEffect(() => {
@@ -42,6 +46,37 @@ const TeacherLayout = ({ children }) => {
       }, 1500);
       return () => clearTimeout(timer);
     }
+  }, []);
+  
+  // Güncelleme Kontrolü
+  useEffect(() => {
+    const checkUpdates = async () => {
+      try {
+        const response = await fetch('/api/system/check-update', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ force: false }) // Önbelleği (cache) kullan
+        });
+        const data = await response.json();
+        if (data.success && data.updateAvailable) {
+          setUpdateAvailable(data);
+          
+          // Eğer banner daha önce bu oturumda kapatılmadıysa göster
+          const dismissedVersion = sessionStorage.getItem('update_banner_dismissed');
+          if (dismissedVersion === data.latestVersion) {
+            setShowUpdateBanner(false);
+          }
+        }
+      } catch (error) {
+        console.error('Güncelleme kontrolü başarısız:', error);
+      }
+    };
+
+    checkUpdates();
+    
+    // Her 30 dakikada bir kontrol et
+    const interval = setInterval(checkUpdates, 1800000);
+    return () => clearInterval(interval);
   }, []);
 
   // CSS Animasyonları
@@ -280,6 +315,88 @@ const TeacherLayout = ({ children }) => {
       bottom: 0,
       backgroundColor: 'rgba(0,0,0,0.5)',
       zIndex: 998
+    },
+    updateBanner: {
+      marginBottom: '24px',
+      background: 'linear-gradient(135deg, #0d9488 0%, #3b82f6 100%)',
+      borderRadius: '16px',
+      padding: '16px 24px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      color: '#ffffff',
+      boxShadow: '0 10px 25px -5px rgba(13, 148, 136, 0.4)',
+      border: '1px solid rgba(255, 255, 255, 0.1)',
+      position: 'relative',
+      overflow: 'hidden'
+    },
+    bannerGlow: {
+      position: 'absolute',
+      top: '-50%',
+      left: '-50%',
+      width: '200%',
+      height: '200%',
+      background: 'radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%)',
+      pointerEvents: 'none'
+    },
+    bannerContent: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: '16px',
+      zIndex: 1
+    },
+    bannerIcon: {
+      width: '40px',
+      height: '40px',
+      borderRadius: '12px',
+      backgroundColor: 'rgba(255, 255, 255, 0.2)',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      flexShrink: 0
+    },
+    bannerInfo: {
+      display: 'flex',
+      flexDirection: 'column'
+    },
+    bannerTitle: {
+      fontSize: '15px',
+      fontWeight: '700',
+      marginBottom: '2px'
+    },
+    bannerText: {
+      fontSize: '13px',
+      opacity: 0.9
+    },
+    bannerActions: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: '12px',
+      zIndex: 1
+    },
+    updateBtn: {
+      padding: '10px 20px',
+      backgroundColor: '#ffffff',
+      color: '#0d9488',
+      border: 'none',
+      borderRadius: '10px',
+      fontSize: '13px',
+      fontWeight: '700',
+      cursor: 'pointer',
+      transition: 'all 0.2s',
+      boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+    },
+    closeBannerBtn: {
+      padding: '8px',
+      backgroundColor: 'rgba(255, 255, 255, 0.15)',
+      color: '#ffffff',
+      border: 'none',
+      borderRadius: '8px',
+      cursor: 'pointer',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      transition: 'all 0.2s'
     }
   };
 
@@ -404,6 +521,52 @@ const TeacherLayout = ({ children }) => {
       {/* Main Content */}
       <main className="teacher-main" style={sidebarStyles.main}>
         <div style={sidebarStyles.content}>
+          {/* Sürüm Güncelleme Bildirimi */}
+          {updateAvailable && showUpdateBanner && (
+            <div className="update-banner-anim" style={sidebarStyles.updateBanner}>
+              <div style={sidebarStyles.bannerGlow} />
+              <div style={sidebarStyles.bannerContent}>
+                <div style={sidebarStyles.bannerIcon}>
+                  <ArrowUpCircle size={24} />
+                </div>
+                <div style={sidebarStyles.bannerInfo}>
+                  <div style={sidebarStyles.bannerTitle}>Yeni Sürüm Mevcut! ({updateAvailable.latestVersion})</div>
+                  <div style={sidebarStyles.bannerText}>
+                    Sisteminiz için kritik iyileştirmeler içeren bir güncelleme hazır.
+                  </div>
+                </div>
+              </div>
+              <div style={sidebarStyles.bannerActions}>
+                <button 
+                  style={sidebarStyles.updateBtn}
+                  onClick={() => navigate('/ogretmen/platform-yonetimi?tab=update')}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-2px)';
+                    e.currentTarget.style.boxShadow = '0 6px 15px rgba(0,0,0,0.15)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)';
+                  }}
+                >
+                  Şimdi Güncelle
+                </button>
+                <button 
+                  style={sidebarStyles.closeBannerBtn}
+                  onClick={() => {
+                    setShowUpdateBanner(false);
+                    sessionStorage.setItem('update_banner_dismissed', updateAvailable.latestVersion);
+                  }}
+                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.25)'}
+                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.15)'}
+                  title="Kapat"
+                >
+                  <X size={18} />
+                </button>
+              </div>
+            </div>
+          )}
+
           {children}
         </div>
       </main>
