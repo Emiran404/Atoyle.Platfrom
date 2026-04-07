@@ -3,7 +3,18 @@
 <div align="center">
 
 ![PolyOS Banner](https://img.shields.io/badge/PolyOS-Exam_Platform-6366f1?style=for-the-badge&logo=react)
-![Version](https://img.shields.io/badge/version-2.2.1-blue?style=for-the-badge)
+![Version](https://img.shields.io/badge/version-2.3.0-blue?style=for-the-badge)
+...
+## 📑 Sürüm Geçmişi
+
+### v2.3.0 (7 Nisan 2026) - Akademik Filtreleme & Görsel Yenilikler
+*   **Gelişmiş Filtreleme:** Arşiv ve Değerlendirme sayfalarına sınıf ve kategori bazlı filtreleme sistemi eklendi.
+*   **Modern UI:** Glassmorphism (buzlu cam) efektleri ve yapışkan (sticky) filtre panelleri ile arayüz güncellendi.
+*   **Hata Düzeltmeleri:** Arama motoru çökmeleri ve ikon çakışmaları (padding/appearance) giderildi.
+*   **Veri Yönetimi:** Veri yükleme süreçleri optimize edildi ve öğretmen bazlı sınav listeleme hatası düzeltildi.
+
+### v2.2.1
+*   Sistem genelinde performans iyileştirmeleri ve küçük hata düzeltmeleri.
 ![License](https://img.shields.io/badge/license-MIT-green?style=for-the-badge)
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)

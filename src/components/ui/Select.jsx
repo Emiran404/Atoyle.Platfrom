@@ -9,6 +9,7 @@ const Select = forwardRef(({
   className = '',
   required = false,
   icon: Icon,
+  children,
   ...props
 }, ref) => {
   const containerStyle = {
@@ -44,19 +45,22 @@ const Select = forwardRef(({
   const selectStyle = {
     width: '100%',
     padding: '12px 44px 12px 16px',
-    paddingLeft: Icon ? '44px' : '16px',
+    paddingLeft: Icon ? '48px' : '16px',
+    paddingRight: '44px',
     backgroundColor: '#fff',
     border: error ? '2px solid #ef4444' : '2px solid #e2e8f0',
-    borderRadius: '10px',
+    borderRadius: '12px',
     fontSize: '15px',
-    color: '#0f172a',
+    fontWeight: '500',
+    color: '#334155',
     outline: 'none',
-    transition: 'all 0.2s ease',
+    transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
     cursor: 'pointer',
     appearance: 'none',
     WebkitAppearance: 'none',
     MozAppearance: 'none',
-    boxSizing: 'border-box'
+    boxSizing: 'border-box',
+    boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)'
   };
 
   const chevronStyle = {
@@ -90,7 +94,6 @@ const Select = forwardRef(({
         )}
         <select
           ref={ref}
-          style={selectStyle}
           onFocus={(e) => {
             e.target.style.borderColor = error ? '#ef4444' : '#3b82f6';
             e.target.style.boxShadow = error ? '0 0 0 3px rgba(239,68,68,0.1)' : '0 0 0 3px rgba(59,130,246,0.1)';
@@ -100,9 +103,10 @@ const Select = forwardRef(({
             e.target.style.boxShadow = 'none';
           }}
           {...props}
+          style={{ ...selectStyle, ...props.style }}
         >
-          <option value="" disabled>{placeholder}</option>
-          {options.map((option) => (
+          {!props.value && placeholder && <option value="" disabled>{placeholder}</option>}
+          {children || options.map((option) => (
             <option key={option.value} value={option.value}>
               {option.label}
             </option>

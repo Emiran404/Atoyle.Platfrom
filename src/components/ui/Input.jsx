@@ -102,7 +102,6 @@ const Input = forwardRef(({
         <input
           ref={ref}
           type={isPassword && showPassword ? 'text' : type}
-          style={inputStyle}
           onFocus={(e) => {
             e.target.style.borderColor = error ? '#ef4444' : '#3b82f6';
             e.target.style.boxShadow = error ? '0 0 0 3px rgba(239,68,68,0.1)' : '0 0 0 3px rgba(59,130,246,0.1)';
@@ -112,6 +111,7 @@ const Input = forwardRef(({
             e.target.style.boxShadow = 'none';
           }}
           {...props}
+          style={{ ...inputStyle, ...props.style }}
         />
         {isPassword && (
           <button

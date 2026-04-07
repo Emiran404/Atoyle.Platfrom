@@ -15,13 +15,14 @@ import { useToast } from '../../components/ui/Toast';
 import { useExamStore } from '../../store/examStore';
 import { useSubmissionStore } from '../../store/submissionStore';
 import { useNotificationStore } from '../../store/notificationStore';
+import { useAuthStore, CLASS_LIST } from '../../store/authStore';
 import { formatDate } from '../../utils/dateHelpers';
 import { formatFileSize } from '../../utils/fileHelpers';
 import { submissionApi } from '../../services/api';
 import { t } from '../../utils/i18n';
 import {
   Search, Filter, ArrowLeft, ArrowRight, Download, FileText, Check,
-  X, MessageSquare, AlertTriangle, Clock, Save, Eye, Send, FolderOpen, Copy
+  X, MessageSquare, AlertTriangle, Clock, Save, Eye, Send, FolderOpen, Copy, Users
 } from 'lucide-react';
 
 // Light theme stilleri
@@ -290,6 +291,9 @@ const Evaluate = () => {
   const [feedback, setFeedback] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
+  const [classFilter, setClassFilter] = useState('all');
+  const [typeFilter, setTypeFilter] = useState('all');
+  const [sidebarClassFilter, setSidebarClassFilter] = useState('all');
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   const [showPreviewModal, setShowPreviewModal] = useState(false);
   const [previewFile, setPreviewFile] = useState(null);
@@ -423,10 +427,12 @@ const Evaluate = () => {
   const filteredSubmissions = examSubmissions.filter(s => {
     const matchesSearch = s.studentName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          s.studentNumber?.includes(searchQuery);
-    const matchesFilter = filterStatus === 'all' ||
+    const matchesStatus = filterStatus === 'all' ||
                          (filterStatus === 'graded' && s.status === 'graded') ||
                          (filterStatus === 'ungraded' && s.status !== 'graded');
-    return matchesSearch && matchesFilter;
+    const matchesClass = sidebarClassFilter === 'all' || s.studentClass === sidebarClassFilter;
+    
+    return matchesSearch && matchesStatus && matchesClass;
   });
 
   const handleSelectSubmission = (submission, index) => {
@@ -716,7 +722,18 @@ const Evaluate = () => {
 
   // Sınav seçilmemişse - sınav listesi göster
   if (!examId) {
-    const allExams = (exams || []).sort((a, b) => new Date(b.startDate) - new Date(a.startDate));
+    const allExams = (exams || []).filter(exam => {
+      const title = exam.title || '';
+      const matchesSearch = title.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesClass = classFilter === 'all' || 
+                          (exam.targetType === 'all') ||
+                          (exam.targetClasses && exam.targetClasses.includes(classFilter));
+      const matchesType = typeFilter === 'all' ||
+                         (typeFilter === 'exam' && (exam.type === 'exam' || exam.type === 'final_exam')) ||
+                         (typeFilter === 'assignment' && (exam.type !== 'exam' && exam.type !== 'final_exam' && exam.type !== 'project')) ||
+                         (exam.type === typeFilter);
+      return matchesSearch && matchesClass && matchesType;
+    }).sort((a, b) => new Date(b.startDate) - new Date(a.startDate));
     return (
       <TeacherLayout>
         <div style={{ padding: '24px' }}>
@@ -726,6 +743,117 @@ const Evaluate = () => {
           <p style={{ color: '#64748b', marginBottom: '24px' }}>
             Değerlendirmek istediğiniz sınavı seçin
           </p>
+
+          <div style={{ 
+            backgroundColor: 'rgba(255, 255, 255, 0.8)', 
+            backdropFilter: 'blur(12px)',
+            WebkitBackdropFilter: 'blur(12px)',
+            border: '1px solid rgba(226, 232, 240, 0.8)', 
+            borderRadius: '28px', 
+            padding: '24px', 
+            marginBottom: '32px',
+            boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.02)',
+            transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+            position: 'sticky',
+            top: '0',
+            zIndex: '10'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.boxShadow = '0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 10px 10px -5px rgba(0, 0, 0, 0.03)';
+            e.currentTarget.style.borderColor = 'rgba(59, 130, 246, 0.3)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.boxShadow = '0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.02)';
+            e.currentTarget.style.borderColor = 'rgba(226, 232, 240, 0.8)';
+          }}
+          >
+            <div style={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+              gap: '20px',
+              flexWrap: 'wrap'
+            }}>
+              <div style={{ flex: '1.5', minWidth: '300px' }}>
+                <Input
+                  placeholder="Sınav adı ara..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  icon={Search}
+                  style={{ 
+                    backgroundColor: '#f8fafc',
+                    border: '2px solid #f1f5f9',
+                    height: '52px',
+                    borderRadius: '16px',
+                    fontSize: '15px'
+                  }}
+                />
+              </div>
+              
+              <div style={{ 
+                flex: '1', 
+                display: 'flex', 
+                gap: '12px', 
+                alignItems: 'center',
+                minWidth: '320px'
+              }}>
+                <Select
+                  value={classFilter}
+                  onChange={(e) => setClassFilter(e.target.value)}
+                  icon={Users}
+                  style={{ height: '52px', borderRadius: '16px', border: '2px solid #f1f5f9' }}
+                  placeholder="Seç"
+                >
+                  <option value="all">Tüm Sınıflar</option>
+                  {CLASS_LIST.map(c => <option key={c} value={c}>{c}</option>)}
+                </Select>
+
+                <Select
+                  value={typeFilter}
+                  onChange={(e) => setTypeFilter(e.target.value)}
+                  icon={Filter}
+                  style={{ height: '52px', borderRadius: '16px', border: '2px solid #f1f5f9' }}
+                  placeholder="Kategori"
+                >
+                  <option value="all">Kategoriler</option>
+                  <option value="exam">Sınavlar</option>
+                  <option value="assignment">Ödevler</option>
+                  <option value="project">Projeler</option>
+                </Select>
+
+                {(searchQuery || classFilter !== 'all' || typeFilter !== 'all') && (
+                  <button
+                    onClick={() => {
+                      setSearchQuery('');
+                      setClassFilter('all');
+                      setTypeFilter('all');
+                    }}
+                    style={{
+                      padding: '0 16px',
+                      height: '52px',
+                      borderRadius: '16px',
+                      border: '2px solid #fee2e2',
+                      backgroundColor: '#fef2f2',
+                      color: '#ef4444',
+                      fontWeight: '700',
+                      fontSize: '14px',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s',
+                      whiteSpace: 'nowrap',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '4px'
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#fee2e2'}
+                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#fef2f2'}
+                  >
+                    <X size={18} />
+                    Temizle
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
           
           {allExams.length === 0 ? (
             <div style={{ 
@@ -737,31 +865,29 @@ const Evaluate = () => {
             }}>
               <AlertTriangle style={{ width: '48px', height: '48px', color: '#f59e0b', margin: '0 auto 16px' }} />
               <h3 style={{ fontSize: '18px', fontWeight: '600', color: '#1e293b', marginBottom: '8px' }}>
-                Henüz Sınav Yok
+                Aranan Kriterlere Uygun Sınav Bulunamadı
               </h3>
               <p style={{ color: '#64748b', marginBottom: '16px' }}>
-                Değerlendirme yapabilmek için önce sınav oluşturmanız gerekiyor.
+                Filtreleri temizleyerek veya farklı bir arama yaparak tekrar deneyin.
               </p>
-              <button
-                style={{ ...styles.saveButton, width: 'auto', display: 'inline-flex' }}
-                onClick={() => navigate('/ogretmen/sinav-olustur')}
+              <Button
+                variant="secondary"
+                onClick={() => {
+                  setSearchQuery('');
+                  setClassFilter('all');
+                  setTypeFilter('all');
+                }}
               >
-                Sınav Oluştur
-              </button>
+                Filtreleri Temizle
+              </Button>
             </div>
           ) : (
             <div style={{ display: 'grid', gap: '16px' }}>
               {allExams.map(exam => {
                 const examSubs = submissions.filter(s => s.examId === exam.id && s.status !== 'edit_granted');
-                
-                const getUniqueSubmissionCount = (subs) => {
-                  const uniqueStudents = new Set(subs.map(s => s.studentId));
-                  return uniqueStudents.size;
-                };
-                
-                const uniqueSubmissionCount = getUniqueSubmissionCount(examSubs);
-                const gradedSubs = examSubs.filter(s => s.status === 'graded');
-                const uniqueGradedCount = getUniqueSubmissionCount(gradedSubs);
+                const uniqueStudents = new Set(examSubs.map(s => s.studentId));
+                const submissionCount = uniqueStudents.size;
+                const gradedCount = new Set(examSubs.filter(s => s.status === 'graded').map(s => s.studentId)).size;
                 
                 return (
                   <div
@@ -823,13 +949,13 @@ const Evaluate = () => {
                     <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
                       <div style={{ textAlign: 'center', padding: '0 16px', borderRight: '1px solid #f1f5f9' }}>
                         <p style={{ fontSize: '24px', fontWeight: '900', color: '#1e293b', lineHeight: 1, marginBottom: '4px' }}>
-                          {uniqueSubmissionCount}
+                          {submissionCount}
                         </p>
                         <p style={{ fontSize: '11px', fontWeight: '600', color: '#64748b', textTransform: 'uppercase' }}>Gönderim</p>
                       </div>
                       <div style={{ textAlign: 'center', padding: '0 16px' }}>
                         <p style={{ fontSize: '24px', fontWeight: '900', color: '#10b981', lineHeight: 1, marginBottom: '4px' }}>
-                          {uniqueGradedCount}
+                          {gradedCount}
                         </p>
                         <p style={{ fontSize: '11px', fontWeight: '600', color: '#64748b', textTransform: 'uppercase' }}>Değerlendirildi</p>
                       </div>
@@ -896,26 +1022,41 @@ const Evaluate = () => {
           </div>
 
           {/* Arama & Filtre */}
-          <div style={styles.searchSection}>
-            <div style={{ position: 'relative' }}>
-              <Search style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', width: '16px', height: '16px', color: '#94a3b8' }} />
-              <input
-                type="text"
+          <div style={{ padding: '16px', borderBottom: '1px solid #f1f5f9', backgroundColor: '#f8fafc' }}>
+            <div style={{ marginBottom: '12px' }}>
+              <Input
                 placeholder="Öğrenci ara..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                style={{ ...styles.searchInput, paddingLeft: '36px' }}
+                icon={Search}
+                style={{ height: '40px', borderRadius: '12px', border: '1px solid #e2e8f0' }}
               />
             </div>
-            <select
-              style={styles.filterSelect}
-              value={filterStatus}
-              onChange={(e) => setFilterStatus(e.target.value)}
-            >
-              <option value="all">Tümü</option>
-              <option value="ungraded">Değerlendirilmemiş</option>
-              <option value="graded">Değerlendirilmiş</option>
-            </select>
+            
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <Select
+                value={filterStatus}
+                onChange={(e) => setFilterStatus(e.target.value)}
+                icon={Filter}
+                style={{ height: '40px', borderRadius: '12px', border: '1px solid #e2e8f0', fontSize: '13px' }}
+                placeholder="Durum"
+              >
+                <option value="all">Tüm Durumlar</option>
+                <option value="graded">Puanlanan</option>
+                <option value="ungraded">Puanlanmayan</option>
+              </Select>
+
+              <Select
+                value={sidebarClassFilter}
+                onChange={(e) => setSidebarClassFilter(e.target.value)}
+                icon={Users}
+                style={{ height: '40px', borderRadius: '12px', border: '1px solid #e2e8f0', fontSize: '13px' }}
+                placeholder="Sınıf"
+              >
+                <option value="all">Sınıflar</option>
+                {CLASS_LIST.map(c => <option key={c} value={c}>{c}</option>)}
+              </Select>
+            </div>
           </div>
 
           {/* Gönderim Listesi */}

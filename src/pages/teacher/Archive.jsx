@@ -1,15 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TeacherLayout } from '../../components/layouts';
-import { Button } from '../../components/ui/Button';
-import { Input } from '../../components/ui/Input';
-import { Badge } from '../../components/ui/Badge';
-import { Modal } from '../../components/ui/Modal';
+import { Button, Input, Badge, Modal, Select, ConfirmModal } from '../../components/ui';
 import { useToast } from '../../components/ui/Toast';
 import { useExamStore } from '../../store/examStore';
 import { useSubmissionStore } from '../../store/submissionStore';
-import { useAuthStore } from '../../store/authStore';
-import { ConfirmModal } from '../../components/ui';
+import { useAuthStore, CLASS_LIST } from '../../store/authStore';
 import { formatDate, formatDateTime } from '../../utils/dateHelpers';
 import {
   Search, Filter, Archive as ArchiveIcon, FileText, Users, Calendar,
@@ -346,11 +342,12 @@ const Archive = () => {
   const navigate = useNavigate();
   const { exams, loadExams, deleteExam } = useExamStore();
   const { submissions, loadSubmissions } = useSubmissionStore();
-  const { getAllStudents, loadUsers, students, loadStudents } = useAuthStore();
+  const { user, getAllStudents, loadUsers, students, loadStudents } = useAuthStore();
   const { toast } = useToast();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [typeFilter, setTypeFilter] = useState('all');
+  const [classFilter, setClassFilter] = useState('all');
   const [selectedExam, setSelectedExam] = useState(null);
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [showDownloadModal, setShowDownloadModal] = useState(false);
@@ -380,10 +377,23 @@ const Archive = () => {
   const archivedExams = exams.filter(e => e.status === 'completed' || new Date(e.endDate) < new Date());
 
   const filteredExams = archivedExams.filter(exam => {
-    const matchesSearch = exam.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         exam.description?.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesType = typeFilter === 'all' || exam.type === typeFilter;
-    return matchesSearch && matchesType;
+    const title = exam.title || '';
+    const desc = exam.description || '';
+    const matchesSearch = title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         desc.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    // Tür filtresi (exam ve final_exam'ı "Sınav" olarak birleştir)
+    const matchesType = typeFilter === 'all' || 
+                       (typeFilter === 'exam' && (exam.type === 'exam' || exam.type === 'final_exam')) ||
+                       (typeFilter === 'assignment' && (exam.type !== 'exam' && exam.type !== 'final_exam' && exam.type !== 'project')) ||
+                       (exam.type === typeFilter);
+    
+    // Sınıf filtresi (Hedef sınıflar içinde ara)
+    const matchesClass = classFilter === 'all' || 
+                        (exam.targetType === 'all') ||
+                        (exam.targetClasses && exam.targetClasses.includes(classFilter));
+                        
+    return matchesSearch && matchesType && matchesClass;
   }).sort((a, b) => new Date(b.endDate) - new Date(a.endDate));
 
   const getExamStats = (examId) => {
@@ -1026,49 +1036,121 @@ const Archive = () => {
           </div>
         </div>
 
-        <div style={styles.filterCard}>
-          <div style={styles.filterRow}>
-            <div style={styles.searchContainer}>
-              <Search size={20} style={{ 
-                position: 'absolute', 
-                left: '16px', 
-                top: '50%', 
-                transform: 'translateY(-50%)', 
-                color: '#94a3b8',
-                zIndex: 1
-              }} />
-              <input
-                style={{ 
-                  width: '100%', 
-                  padding: '12px 16px 12px 48px',
-                  backgroundColor: '#f8fafc',
-                  border: '1px solid #e2e8f0', 
-                  borderRadius: '16px', 
-                  outline: 'none',
-                  fontSize: '15px',
-                  fontWeight: '500',
-                  color: '#334155',
-                  transition: 'all 0.2s'
-                }}
-                onFocus={(e) => { e.target.style.borderColor = '#2463eb'; e.target.style.backgroundColor = 'white'; e.target.style.boxShadow = '0 0 0 4px rgba(37, 99, 235, 0.1)'; }}
-                onBlur={(e) => { e.target.style.borderColor = '#e2e8f0'; e.target.style.backgroundColor = '#f8fafc'; e.target.style.boxShadow = 'none'; }}
-                placeholder="Sınav veya ödev ara..."
+        <div style={{
+          backgroundColor: 'rgba(255, 255, 255, 0.8)',
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
+          borderRadius: '28px',
+          padding: '24px',
+          marginBottom: '32px',
+          boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.02)',
+          border: '1px solid rgba(226, 232, 240, 0.8)',
+          transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+          position: 'sticky',
+          top: '0',
+          zIndex: '10'
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.boxShadow = '0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 10px 10px -5px rgba(0, 0, 0, 0.03)';
+          e.currentTarget.style.borderColor = 'rgba(59, 130, 246, 0.3)';
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.boxShadow = '0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.02)';
+          e.currentTarget.style.borderColor = 'rgba(226, 232, 240, 0.8)';
+        }}
+        >
+          <div style={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: '20px',
+            flexWrap: 'wrap'
+          }}>
+            <div style={{ flex: '1.5', minWidth: '300px' }}>
+              <Input
+                placeholder="Sınav adı veya açıklama ile ara..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
+                icon={Search}
+                style={{ 
+                  backgroundColor: '#f8fafc',
+                  border: '2px solid #f1f5f9',
+                  height: '52px',
+                  borderRadius: '16px',
+                  fontSize: '15px'
+                }}
               />
             </div>
+            
+            <div style={{ 
+              flex: '1', 
+              display: 'flex', 
+              gap: '12px', 
+              alignItems: 'center',
+              minWidth: '320px'
+            }}>
+              <Select
+                value={classFilter}
+                onChange={(e) => setClassFilter(e.target.value)}
+                icon={Users}
+                style={{ height: '52px', borderRadius: '16px', border: '2px solid #f1f5f9' }}
+                placeholder="Tüm Sınıflar"
+              >
+                <option value="all">Tüm Sınıflar</option>
+                {CLASS_LIST.map(c => (
+                  <option key={c} value={c}>{c}</option>
+                ))}
+              </Select>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <Filter size={18} style={{ color: '#94a3b8' }} />
-              <select
-                style={styles.select}
+              <Select
                 value={typeFilter}
                 onChange={(e) => setTypeFilter(e.target.value)}
+                icon={Filter}
+                style={{ height: '52px', borderRadius: '16px', border: '2px solid #f1f5f9' }}
+                placeholder="Kategoriler"
               >
-                <option value="all">Tüm Tipler</option>
+                <option value="all">Tüm Kategoriler</option>
                 <option value="exam">Sınavlar</option>
                 <option value="assignment">Ödevler</option>
-              </select>
+                <option value="project">Projeler</option>
+              </Select>
+
+              {(searchQuery || classFilter !== 'all' || typeFilter !== 'all') && (
+                <button
+                  onClick={() => {
+                    setSearchQuery('');
+                    setClassFilter('all');
+                    setTypeFilter('all');
+                  }}
+                  style={{
+                    padding: '0 16px',
+                    height: '52px',
+                    borderRadius: '16px',
+                    border: '2px solid #fee2e2',
+                    backgroundColor: '#fef2f2',
+                    color: '#ef4444',
+                    fontWeight: '600',
+                    fontSize: '14px',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s',
+                    whiteSpace: 'nowrap',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = '#fee2e2';
+                    e.currentTarget.style.transform = 'scale(1.02)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = '#fef2f2';
+                    e.currentTarget.style.transform = 'scale(1)';
+                  }}
+                >
+                  <X size={18} />
+                  Sıfırla
+                </button>
+              )}
             </div>
           </div>
         </div>
