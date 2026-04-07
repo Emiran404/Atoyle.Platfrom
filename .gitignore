@@ -1,0 +1,57 @@
+# Dependency directories
+node_modules/
+**/node_modules/
+client-electron/node_modules/
+server/node_modules/
+
+# Project & Build Artifacts (Excluded)
+dist/
+**/dist/
+client-electron/dist/
+Polyos/
+**/Polyos/
+[bB]ackup/
+**/[bB]ackup/
+build_deb_stage/
+build_client_deb_stage/
+build_deb_tmp/
+downloads/
+**/downloads/
+public/viewer/windows/build/
+
+# Binary & Media (Excluded)
+*.deb
+*.exe
+*.pkg
+*.pkglic
+*.blockmap
+*.zip
+*.tar.gz
+*.pdf
+*.rar
+*.7z
+*.jpg
+*.jpeg
+*.png
+# EXCEPT for essential public assets
+!src/assets/
+!public/ataturk.png
+!public/milli_egitim_bakani_arma.png
+!public/polyos_izma_sirküsü.png
+
+# Local files
+.env
+.env.*
+*.local
+.venv/
+.vscode/
+.idea/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
