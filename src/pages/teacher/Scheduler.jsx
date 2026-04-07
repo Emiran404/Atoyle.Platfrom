@@ -292,13 +292,13 @@ const Scheduler = () => {
                       {getStatusBadge(exam.scheduleStatus)}
                       <span style={{
                         padding: '6px 12px',
-                        backgroundColor: exam.type === 'exam' ? '#fef3c7' : '#f3e8ff',
-                        color: exam.type === 'exam' ? '#92400e' : '#6b21a8',
+                        backgroundColor: (exam.type === 'exam' || exam.type === 'final_exam') ? '#fef3c7' : '#f3e8ff',
+                        color: (exam.type === 'exam' || exam.type === 'final_exam') ? '#92400e' : '#6b21a8',
                         borderRadius: '8px',
                         fontSize: '12px',
                         fontWeight: '600'
                       }}>
-                        {exam.type === 'exam' ? '📝 Sınav' : '📚 Ödev'}
+                        {(exam.type === 'exam' || exam.type === 'final_exam') ? '📝 Sınav' : '📚 Ödev'}
                       </span>
                     </div>
                   </div>

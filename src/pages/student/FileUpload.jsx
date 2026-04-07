@@ -382,7 +382,7 @@ const FileUpload = () => {
         folderPath: `${user.className}/${user.fullName || user.name}-${user.studentNumber}`
       };
 
-      if (selectedExam.requireFileUpload === false && selectedExam.type === 'exam' && classicAnswers.some(a => a.text.trim())) {
+      if (selectedExam.requireFileUpload === false && (selectedExam.type === 'exam' || selectedExam.type === 'final_exam') && classicAnswers.some(a => a.text.trim())) {
         // Classic text submission
         const result = await submitClassic({
           examId,
@@ -1200,7 +1200,7 @@ const FileUpload = () => {
                   <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '24px' }}>
 
                     {/* Left Column - Upload Area / PDF Viewer */}
-                    {selectedExam.requireFileUpload === false && selectedExam.type === 'exam' ? (
+                    {(selectedExam.requireFileUpload === false && (selectedExam.type === 'exam' || selectedExam.type === 'final_exam')) ? (
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', height: '800px' }}>
                         <h3 style={{ fontSize: '18px', fontWeight: '600', color: '#111318' }}>Sınav Dosyası</h3>
                         {selectedExam.questionFileUrl ? (

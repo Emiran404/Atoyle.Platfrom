@@ -241,7 +241,7 @@ const Stats = () => {
   const examTypeDistribution = useMemo(() => {
     const { filteredExams } = filteredData;
     return [
-      { name: 'Sınav', value: filteredExams.filter(e => e.type === 'exam').length },
+      { name: 'Sınav', value: filteredExams.filter(e => e.type === 'exam' || e.type === 'final_exam').length },
       { name: 'Ödev', value: filteredExams.filter(e => e.type === 'homework').length },
       { name: 'Proje', value: filteredExams.filter(e => e.type === 'project').length }
     ].filter(item => item.value > 0);

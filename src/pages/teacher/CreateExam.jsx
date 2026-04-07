@@ -25,6 +25,7 @@ import { useNotificationStore } from '../../store/notificationStore';
 import { ALLOWED_FORMATS } from '../../utils/fileHelpers';
 
 const EXAM_TYPES = [
+  { value: 'final_exam', label: 'Sınav' },
   { value: 'exam', label: 'Klasik Sınav (Dosya)' },
   { value: 'quiz', label: 'Çoktan Seçmeli (Otomatik Notlandırma)' },
   { value: 'homework', label: 'Ödev' },

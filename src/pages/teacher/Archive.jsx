@@ -353,7 +353,6 @@ const Archive = () => {
   const [typeFilter, setTypeFilter] = useState('all');
   const [selectedExam, setSelectedExam] = useState(null);
   const [showDetailModal, setShowDetailModal] = useState(false);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showDownloadModal, setShowDownloadModal] = useState(false);
   const [showClassReportModal, setShowClassReportModal] = useState(false);
   const [showPreviewModal, setShowPreviewModal] = useState(false);
@@ -467,7 +466,7 @@ const Archive = () => {
     
     csvContent += `${exam.title}\n`;
     csvContent += `Tarih: ${formatDate(exam.endDate)}\n`;
-    csvContent += `Tip: ${exam.type === 'exam' ? 'Sınav' : 'Ödev'}\n\n`;
+    csvContent += `Tip: ${(exam.type === 'exam' || exam.type === 'final_exam') ? 'Sınav' : 'Ödev'}\n\n`;
     
     csvContent += `İSTATİSTİKLER\n`;
     csvContent += `Toplam Gönderim,${stats.totalSubmissions}\n`;
@@ -500,7 +499,7 @@ const Archive = () => {
         <table>
           <tr><td colspan="6" style="font-size:18px;font-weight:bold;">${exam.title}</td></tr>
           <tr><td colspan="6">Tarih: ${formatDate(exam.endDate)}</td></tr>
-          <tr><td colspan="6">Tip: ${exam.type === 'exam' ? 'Sınav' : 'Ödev'}</td></tr>
+          <tr><td colspan="6">Tip: ${(exam.type === 'exam' || exam.type === 'final_exam') ? 'Sınav' : 'Ödev'}</td></tr>
           <tr><td colspan="6"></td></tr>
           <tr><td colspan="6" style="font-weight:bold;">İSTATİSTİKLER</td></tr>
           <tr><td>Toplam Gönderim</td><td>${stats.totalSubmissions}</td></tr>
@@ -571,7 +570,7 @@ const Archive = () => {
       doc.setFontSize(11);
       doc.setFont(undefined, 'normal');
       doc.text(`Tarih: ${formatDate(exam.endDate)}`, 14, 30);
-      doc.text(`Tip: ${exam.type === 'exam' ? 'Sinav' : 'Odev'}`, 14, 37);
+      doc.text(`Tip: ${(exam.type === 'exam' || exam.type === 'final_exam') ? 'Sinav' : 'Odev'}`, 14, 37);
       
       // Istatistikler basligi
       doc.setFontSize(13);
@@ -658,25 +657,32 @@ const Archive = () => {
     }
   };
 
-  const handleDelete = async () => {
-    if (selectedExam) {
-      try {
-        const success = await deleteExam(selectedExam.id);
-        if (success) {
-          toast.success('Sınav başarıyla silindi');
-          setShowDeleteModal(false);
-          setSelectedExam(null);
-          // Listeyi yeniden yükle
-          await loadExams();
-          await loadSubmissions();
-        } else {
-          toast.error('Sınav silinemedi');
+  const handleDelete = (exam) => {
+    setConfirmModal({
+      isOpen: true,
+      title: 'Sınavı Sil',
+      message: `"${exam.title}" isimli sınavı ve buna bağlı tüm öğrenci gönderimlerini silmek istediğinize emin misiniz? Bu işlem geri alınamaz.`,
+      confirmText: 'Sınavı Sil',
+      type: 'danger',
+      onConfirm: async () => {
+        try {
+          const success = await deleteExam(exam.id);
+          if (success) {
+            toast.success('Sınav başarıyla silindi');
+            setConfirmModal(prev => ({ ...prev, isOpen: false }));
+            setSelectedExam(null);
+            // Listeyi yeniden yükle
+            await loadExams();
+            await loadSubmissions();
+          } else {
+            toast.error('Sınav silinemedi');
+          }
+        } catch (error) {
+          console.error('Silme hatası:', error);
+          toast.error('Bir hata oluştu: ' + error.message);
         }
-      } catch (error) {
-        console.error('Silme hatası:', error);
-        toast.error('Bir hata oluştu: ' + error.message);
       }
-    }
+    });
   };
 
   const getClassReportData = () => {
@@ -1071,7 +1077,7 @@ const Archive = () => {
           {filteredExams.length > 0 ? (
             filteredExams.map((exam) => {
               const stats = getExamStats(exam.id);
-              const isExam = exam.type === 'exam';
+              const isExam = exam.type === 'exam' || exam.type === 'final_exam';
               const iconColor = isExam ? '#0ea5e9' : '#8b5cf6';
               const iconBg = isExam ? '#f0f9ff' : '#f5f3ff';
               
@@ -1159,7 +1165,7 @@ const Archive = () => {
                         <Download size={20} />
                       </button>
                       <button 
-                        onClick={() => { setSelectedExam(exam); setShowDeleteModal(true); }}
+                        onClick={() => handleDelete(exam)}
                         style={{ ...styles.actionButton('#fef2f2', '#ef4444'), padding: '10px' }}
                         title="Sil"
                       >

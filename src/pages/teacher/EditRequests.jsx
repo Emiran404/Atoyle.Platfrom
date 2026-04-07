@@ -227,8 +227,8 @@ const EditRequests = () => {
                       <div className="flex items-center gap-2 mt-1">
                         <FileText className="w-3 h-3 text-muted-foreground" />
                         <span className="text-sm text-muted-foreground">{request.examTitle}</span>
-                        <Badge variant={request.examType === 'exam' ? 'primary' : 'secondary'} size="sm">
-                          {request.examType === 'exam' ? 'Sınav' : 'Ödev'}
+                        <Badge variant={(request.examType === 'exam' || request.examType === 'final_exam') ? 'primary' : 'secondary'} size="sm">
+                          {(request.examType === 'exam' || request.examType === 'final_exam') ? 'Sınav' : 'Ödev'}
                         </Badge>
                       </div>
                     </div>
@@ -296,8 +296,8 @@ const EditRequests = () => {
                   <FileText className="w-5 h-5 text-primary" />
                   <div>
                     <p className="font-medium text-foreground">{selectedRequest.examTitle}</p>
-                    <Badge variant={selectedRequest.examType === 'exam' ? 'primary' : 'secondary'} size="sm">
-                      {selectedRequest.examType === 'exam' ? 'Sınav' : 'Ödev'}
+                    <Badge variant={(selectedRequest.examType === 'exam' || selectedRequest.examType === 'final_exam') ? 'primary' : 'secondary'} size="sm">
+                      {(selectedRequest.examType === 'exam' || selectedRequest.examType === 'final_exam') ? 'Sınav' : 'Ödev'}
                     </Badge>
                   </div>
                 </div>

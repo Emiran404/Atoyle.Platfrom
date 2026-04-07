@@ -312,8 +312,16 @@ const Evaluate = () => {
   const [allDuplicates, setAllDuplicates] = useState([]);
   const [loadingDuplicates, setLoadingDuplicates] = useState(false);
 
-  // Load data on mount
   useEffect(() => {
+    // Sınav değiştiğinde tüm local state'leri sıfırla (Böylece eski sınavın verileri kalmaz)
+    setCurrentSubmission(null);
+    setExamSubmissions([]);
+    setGrade('');
+    setFeedback('');
+    setDuplicates([]);
+    setCurrentIndex(0);
+    setPreviewFile(null);
+
     const fetchData = async () => {
       await loadExams();
       await loadSubmissions();
@@ -807,7 +815,7 @@ const Evaluate = () => {
                             backgroundColor: '#eff6ff', padding: '4px 10px', borderRadius: '8px',
                             textTransform: 'uppercase', letterSpacing: '0.02em'
                           }}>
-                            {exam.type === 'exam' ? 'Sınav' : 'Ödev'}
+                            {(exam.type === 'exam' || exam.type === 'final_exam') ? 'Sınav' : 'Ödev'}
                           </span>
                         </div>
                       </div>
@@ -878,8 +886,8 @@ const Evaluate = () => {
             </button>
             <h2 style={styles.examTitle}>{selectedExam.title}</h2>
             <div style={styles.badgeRow}>
-              <span style={styles.badge(selectedExam.type === 'exam' ? 'primary' : 'secondary')}>
-                {selectedExam.type === 'exam' ? 'Sınav' : 'Ödev'}
+              <span style={styles.badge((selectedExam.type === 'exam' || selectedExam.type === 'final_exam') ? 'primary' : 'secondary')}>
+                {(selectedExam.type === 'exam' || selectedExam.type === 'final_exam') ? 'Sınav' : 'Ödev'}
               </span>
               <span style={{ fontSize: '13px', color: '#64748b' }}>
                 {gradedCount}/{totalCount} Değerlendirildi

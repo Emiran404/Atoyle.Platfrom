@@ -213,6 +213,7 @@ const ExamEdit = () => {
           maxFileSize: exam.maxFileSize ? Math.round(exam.maxFileSize / (1024 * 1024)) : 10,
           isActive: exam.isActive !== false,
           isQuiz: exam.isQuiz || exam.type === 'quiz',
+          type: exam.type || 'exam',
           autoGrading: exam.autoGrading !== false,
           questions: exam.questions || [],
           questionText: exam.questionText || '',
@@ -466,6 +467,22 @@ const ExamEdit = () => {
               <FileText size={18} color="#3b82f6" />
               Temel Bilgiler
             </h3>
+
+            <div style={styles.formGroup}>
+              <label style={styles.label}>Sınav Tipi</label>
+              <select
+                name="type"
+                value={formData.type}
+                onChange={handleChange}
+                style={styles.input}
+              >
+                <option value="final_exam">Sınav</option>
+                <option value="exam">Klasik Sınav (Dosya)</option>
+                <option value="homework">Ödev</option>
+                <option value="quiz">Çoktan Seçmeli (Otomatik Notlandırma)</option>
+                <option value="project">Proje</option>
+              </select>
+            </div>
 
             <div style={styles.formGroup}>
               <label style={styles.label}>Sınav Adı *</label>
