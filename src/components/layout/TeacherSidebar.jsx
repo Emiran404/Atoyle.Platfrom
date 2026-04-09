@@ -18,8 +18,10 @@ import {
   Shield,
   Monitor,
   UserCheck,
-  AlertTriangle
+  AlertTriangle,
+  ArrowLeft
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { useNotificationStore } from '../../store/notificationStore';
 import { t } from '../../utils/i18n';
 
@@ -40,6 +42,7 @@ const teacherMenuItems = [
 ];
 
 const TeacherSidebar = () => {
+  const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(false);
   const { unreadCount } = useNotificationStore();
 
@@ -103,6 +106,24 @@ const TeacherSidebar = () => {
           </NavLink>
         ))}
       </nav>
+
+      {/* Return to Home Button */}
+      <div className="absolute bottom-16 left-0 w-full px-3">
+        <button
+          onClick={() => navigate('/')}
+          className={`
+            w-full flex items-center gap-3 px-3 py-2.5 rounded-lg
+            transition-all duration-200 group
+            bg-slate-800/50 text-slate-400 hover:bg-blue-600 hover:text-white
+            border border-slate-700/50 hover:border-blue-500
+            ${collapsed ? 'justify-center' : ''}
+          `}
+          title={collapsed ? t('backToHome') : ''}
+        >
+          <ArrowLeft className={`w-5 h-5 flex-shrink-0 transition-transform group-hover:-translate-x-0.5`} />
+          {!collapsed && <span className="text-sm font-medium">{t('backToHome')}</span>}
+        </button>
+      </div>
 
       {/* Collapse Button */}
       <button

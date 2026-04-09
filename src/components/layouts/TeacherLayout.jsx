@@ -21,7 +21,8 @@ import {
   Award,
   AlertTriangle,
   ArrowUpCircle,
-  AlertCircle
+  AlertCircle,
+  ArrowLeft
 } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
 import PasskeyModal from '../ui/PasskeyModal';
@@ -504,8 +505,32 @@ const TeacherLayout = ({ children }) => {
           ))}
         </nav>
 
-        {/* Logout */}
+        {/* Actions Area */}
         <div style={sidebarStyles.logoutSection}>
+          <button
+            style={{
+              ...sidebarStyles.logoutBtn,
+              backgroundColor: '#f1f5f9',
+              color: '#475569',
+              marginBottom: '8px',
+              border: '1px solid #e2e8f0'
+            }}
+            onClick={() => navigate('/')}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = '#0d9488';
+              e.currentTarget.style.color = '#ffffff';
+              e.currentTarget.style.borderColor = '#0d9488';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = '#f1f5f9';
+              e.currentTarget.style.color = '#475569';
+              e.currentTarget.style.borderColor = '#e2e8f0';
+            }}
+          >
+            <ArrowLeft size={20} />
+            <span style={sidebarStyles.navLabel}>Ana Sayfaya Dön</span>
+          </button>
+
           <button
             style={sidebarStyles.logoutBtn}
             onClick={handleLogout}
