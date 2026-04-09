@@ -55,3 +55,6 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
+
+# Server Data (Local files, do NOT push)
+server/data/*.json
