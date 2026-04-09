@@ -3,7 +3,7 @@
 <div align="center">
 
 ![PolyOS Banner](https://img.shields.io/badge/PolyOS-Exam_Platform-6366f1?style=for-the-badge&logo=react)
-![Version](https://img.shields.io/badge/version-2.4.0-blue?style=for-the-badge)
+![Version](https://img.shields.io/badge/version-2.4.5-blue?style=for-the-badge)
 ![License](https://img.shields.io/badge/license-MIT-green?style=for-the-badge)
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
@@ -12,9 +12,9 @@
 ![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
 ![Passkey](https://img.shields.io/badge/Passkey-Secure-yellow?style=for-the-badge&logo=fingerprint)
 ![I18n](https://img.shields.io/badge/i18n-4_Languages-red?style=for-the-badge&logo=google-translate)
-![Repo Size](https://img.shields.io/github/repo-size/Emiran404/Atoyle.Platfrom)
-![Stars](https://img.shields.io/github/stars/Emiran404/Atoyle.Platfrom)
-![Last Commit](https://img.shields.io/github/last-commit/Emiran404/Atoyle.Platfrom)
+![Repo Size](https://img.shields.io/github/repo-size/Emiran404/Atolye.Platform)
+![Stars](https://img.shields.io/github/stars/Emiran404/Atolye.Platform)
+![Last Commit](https://img.shields.io/github/last-commit/Emiran404/Atolye.Platform)
 
 **Eğitim kurumları için modern, hızlı ve güvenli sınav yönetim ve dosya gönderim platformu.**
 
@@ -34,13 +34,9 @@
 Sistemi derlemekle uğraşmadan aşağıdaki hazır paketleri GitHub üzerinden indirerek hemen kullanmaya başlayabilirsiniz:
 
 > [!TIP]
-> **Önemli Not:** Büyük dosya boyutu sınırları nedeniyle, kurulum dosyaları artık doğrudan bu depoda tutulmamaktadır. En güncel sürümleri **[Releases](https://github.com/Emiran404/Atolye.Platfrom/releases)** sayfasından indirebilirsiniz.
-
-| Paket Türü | İşletim Sistemi | Dosya / İndir |
-| :--- | :--- | :--- |
-| **Öğretmen Sunucusu** | Pardus / Linux | [📥 atolye-platform-server.deb](https://github.com/Emiran404/Atolye.Platfrom/releases) |
-| **Masaüstü İstemci** | Windows | [📥 Atolye-Platform-Setup.exe](https://github.com/Emiran404/Atolye.Platfrom/releases) |
-| **Masaüstü İstemci** | Pardus / Linux | [📥 atolye-platform-client.deb](https://github.com/Emiran404/Atolye.Platfrom/releases) |
+| **Öğretmen Sunucusu** | Pardus / Linux | [📥 atolye-platform-server.deb](https://github.com/Emiran404/Atolye.Platform/releases) |
+| **Masaüstü İstemci** | Windows | [📥 Atolye-Platform-Setup.exe](https://github.com/Emiran404/Atolye.Platform/releases) |
+| **Masaüstü İstemci** | Pardus / Linux | [📥 atolye-platform-client.deb](https://github.com/Emiran404/Atolye.Platform/releases) |
 
 ---
 
@@ -184,6 +180,6 @@ Bu proje **MIT** lisansı altında lisanslanmıştır. Detaylar için [LICENSE](
 **Geliştiren: Emirhan Gök**  
 Coded with love for educators worldwide. ❤️
 
-[⭐ Bu projeyi beğendiyseniz yıldız vermeyi unutmayın!](https://github.com/Emiran404/Atolye.Platfrom)
+[⭐ Bu projeyi beğendiyseniz yıldız vermeyi unutmayın!](https://github.com/Emiran404/Atolye.Platform)
 
 </div>

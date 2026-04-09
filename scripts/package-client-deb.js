@@ -22,7 +22,7 @@ function createArHeader(filename, size) {
     buf.write('0'.padEnd(6), 34); // Group ID
     buf.write('100644'.padEnd(8), 40); // Mode
     buf.write(size.toString().padEnd(10), 48); // Size
-    buf.write('` \n', 58); // End
+    buf.write('\x60\x0A', 58); // End signature (`\n)
     return buf;
 }
 
@@ -91,6 +91,15 @@ Categories=Education;
 Terminal=false
 `;
     await fs.writeFile(path.join(appsPath, 'atolye-platform.desktop'), desktopContent);
+
+    // postinst (Kurulum sonrası yetki ve menü yenileme)
+    const postinstContent = `#!/bin/bash
+chmod +x /opt/atolye-client/atolye-platform-client
+update-desktop-database /usr/share/applications || true
+gtk-update-icon-cache /usr/share/icons/hicolor || true
+exit 0
+`;
+    await fs.writeFile(path.join(debianPath, 'postinst'), postinstContent);
 
     // 6. Tarball'ları oluştur
     console.log("🛠️  Tarball'lar hazırlanıyor...");

@@ -22,7 +22,7 @@ function createArHeader(filename, size) {
     buf.write('0'.padEnd(6), 34); // Group ID
     buf.write('100644'.padEnd(8), 40); // Mode
     buf.write(size.toString().padEnd(10), 48); // Size
-    buf.write('` \n', 58); // End
+    buf.write('\x60\x0A', 58); // End signature (`\n)
     return buf;
 }
 
