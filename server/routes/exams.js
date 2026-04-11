@@ -1,10 +1,11 @@
 import express from 'express';
 import { getData, setData, generateId } from '../utils/storage.js';
+import { authenticateToken, authorizeRole } from '../middleware/auth.js';
 
 const router = express.Router();
 
 // Tüm sınavları getir
-router.get('/', (req, res) => {
+router.get('/', authenticateToken, (req, res) => {
   try {
     const { createdBy } = req.query;
     let exams = getData('exams') || [];
@@ -20,7 +21,7 @@ router.get('/', (req, res) => {
 });
 
 // Aktif sınavları getir
-router.get('/active', (req, res) => {
+router.get('/active', authenticateToken, (req, res) => {
   try {
     const exams = getData('exams') || [];
     const now = new Date();
@@ -38,7 +39,7 @@ router.get('/active', (req, res) => {
 });
 
 // Sınıfa göre aktif sınavları getir
-router.get('/active/:className', (req, res) => {
+router.get('/active/:className', authenticateToken, (req, res) => {
   try {
     const { className } = req.params;
     const exams = getData('exams') || [];
@@ -62,7 +63,7 @@ router.get('/active/:className', (req, res) => {
 });
 
 // Tek sınav getir
-router.get('/:id', (req, res) => {
+router.get('/:id', authenticateToken, (req, res) => {
   try {
     const { id } = req.params;
     const exams = getData('exams') || [];
@@ -79,7 +80,7 @@ router.get('/:id', (req, res) => {
 });
 
 // Yeni sınav oluştur
-router.post('/', (req, res) => {
+router.post('/', authenticateToken, authorizeRole('teacher'), (req, res) => {
   try {
     const {
       title,
@@ -136,7 +137,7 @@ router.post('/', (req, res) => {
 });
 
 // Sınav güncelle
-router.put('/:id', (req, res) => {
+router.put('/:id', authenticateToken, authorizeRole('teacher'), (req, res) => {
   try {
     const { id } = req.params;
     const updates = req.body;
@@ -162,7 +163,7 @@ router.put('/:id', (req, res) => {
 });
 
 // Sınav sil
-router.delete('/:id', (req, res) => {
+router.delete('/:id', authenticateToken, authorizeRole('teacher'), (req, res) => {
   try {
     const { id } = req.params;
     const exams = getData('exams') || [];
@@ -180,7 +181,7 @@ router.delete('/:id', (req, res) => {
 });
 
 // Sınavı aktif/pasif yap
-router.patch('/:id/toggle', (req, res) => {
+router.patch('/:id/toggle', authenticateToken, authorizeRole('teacher'), (req, res) => {
   try {
     const { id } = req.params;
     const exams = getData('exams') || [];

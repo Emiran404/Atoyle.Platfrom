@@ -1,13 +1,27 @@
 // API Base URL - Vite proxy kullanıldığı için sadece /api yeterli
 const API_BASE = '/api';
 
-// Generic fetch wrapper
+// Token'ı storage'dan al
+function getAuthToken() {
+  try {
+    const stored = localStorage.getItem('auth-storage') || sessionStorage.getItem('auth-storage');
+    if (stored) {
+      const data = JSON.parse(stored);
+      return data.state?.token || null;
+    }
+  } catch { /* */ }
+  return null;
+}
+
+// Generic fetch wrapper (JWT token otomatik eklenir)
 const fetchApi = async (endpoint, options = {}) => {
   const url = `${API_BASE}${endpoint}`;
+  const token = getAuthToken();
 
   const config = {
     headers: {
       'Content-Type': 'application/json',
+      ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
       ...options.headers,
     },
     ...options,
@@ -22,6 +36,14 @@ const fetchApi = async (endpoint, options = {}) => {
     const response = await fetch(url, config);
     const data = await response.json();
 
+    // Token süresi dolmuşsa otomatik çıkış
+    if (response.status === 401 && data.error?.includes('Oturum süresi doldu')) {
+      localStorage.removeItem('auth-storage');
+      sessionStorage.removeItem('auth-storage');
+      window.location.href = '/';
+      return;
+    }
+
     if (!response.ok) {
       throw new Error(data.error || 'Bir hata oluştu');
     }
@@ -32,6 +54,7 @@ const fetchApi = async (endpoint, options = {}) => {
     throw error;
   }
 };
+
 
 // Auth API
 export const authApi = {

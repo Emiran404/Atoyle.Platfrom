@@ -2,6 +2,8 @@
 import express from 'express';
 import { getData, setData, generateId } from '../utils/storage.js';
 import { hashPassword, verifyPassword } from '../utils/crypto.js';
+import { generateToken } from '../middleware/auth.js';
+import { loginLimiter } from '../middleware/rateLimit.js';
 import base64url from 'base64url';
 import crypto from 'crypto';
 
@@ -17,7 +19,7 @@ const generateStudentFolderPath = (className, fullName, studentNumber) => {
 };
 
 // Öğrenci kayıt
-router.post('/register/student', async (req, res) => {
+router.post('/register/student', loginLimiter, async (req, res) => {
   try {
     const { studentNumber, fullName, className, password } = req.body;
 
@@ -51,14 +53,15 @@ router.post('/register/student', async (req, res) => {
 
     // Şifre olmadan döndür
     const { password: _, ...studentData } = newStudent;
-    res.json({ success: true, user: studentData, userType: 'student' });
+    const token = generateToken({ id: newStudent.id, userType: 'student', studentNumber });
+    res.json({ success: true, user: studentData, userType: 'student', token });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
 });
 
 // Öğrenci giriş
-router.post('/login/student', async (req, res) => {
+router.post('/login/student', loginLimiter, async (req, res) => {
   try {
     const { studentNumber, password } = req.body;
     const clientIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
@@ -106,7 +109,8 @@ router.post('/login/student', async (req, res) => {
     setData('students', updatedStudents);
 
     const { password: _, ...studentData } = student;
-    res.json({ success: true, user: studentData, userType: 'student', clientIp });
+    const token = generateToken({ id: student.id, userType: 'student', studentNumber });
+    res.json({ success: true, user: studentData, userType: 'student', clientIp, token });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
@@ -189,7 +193,7 @@ router.post('/login/enable-student-reset-mode', async (req, res) => {
 });
 
 // Öğretmen giriş
-router.post('/login/teacher', async (req, res) => {
+router.post('/login/teacher', loginLimiter, async (req, res) => {
   try {
     const { email, password, username } = req.body;
 
@@ -227,14 +231,15 @@ router.post('/login/teacher', async (req, res) => {
 
     const { password: _, ...teacherData } = teacher;
     const clientIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
-    res.json({ success: true, user: teacherData, userType: 'teacher', clientIp });
+    const token = generateToken({ id: teacher.id, userType: 'teacher', username: teacher.username });
+    res.json({ success: true, user: teacherData, userType: 'teacher', clientIp, token });
   } catch (error) {
     res.status(500).json({ success: false, error: 'Sunucu hatası: ' + error.message });
   }
 });
 
 // Öğretmen kayıt
-router.post('/register/teacher', async (req, res) => {
+router.post('/register/teacher', loginLimiter, async (req, res) => {
   try {
     const { username, fullName, password, department, email } = req.body;
 
@@ -265,7 +270,8 @@ router.post('/register/teacher', async (req, res) => {
     setData('teachers', teachers);
 
     const { password: _, ...teacherData } = newTeacher;
-    res.json({ success: true, user: teacherData, userType: 'teacher' });
+    const token = generateToken({ id: newTeacher.id, userType: 'teacher', username: newTeacher.username });
+    res.json({ success: true, user: teacherData, userType: 'teacher', token });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
@@ -409,7 +415,8 @@ router.post('/passkey/login', (req, res) => {
 
     const { password: _, ...teacherData } = teacher;
     const clientIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
-    res.json({ success: true, user: teacherData, userType: 'teacher', clientIp });
+    const token = generateToken({ id: teacher.id, userType: 'teacher', username: teacher.username });
+    res.json({ success: true, user: teacherData, userType: 'teacher', clientIp, token });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

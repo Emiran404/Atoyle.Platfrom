@@ -34,6 +34,7 @@ const useAuthStore = create(
       user: null,
       isAuthenticated: false,
       userType: null, // 'student' | 'teacher'
+      token: null, // JWT token
       loginAttempts: {},
       theme: 'light',
       students: [],
@@ -119,6 +120,7 @@ const useAuthStore = create(
               user: response.user,
               isAuthenticated: true,
               userType: 'student',
+              token: response.token,
               lastActivity: Date.now()
             });
 
@@ -164,6 +166,7 @@ const useAuthStore = create(
               user: response.user,
               isAuthenticated: true,
               userType: 'student',
+              token: response.token,
               loginAttempts: restAttempts,
               lastActivity: Date.now()
             });
@@ -218,6 +221,7 @@ const useAuthStore = create(
               user: response.user,
               isAuthenticated: true,
               userType: 'teacher',
+              token: response.token,
               lastActivity: Date.now()
             });
 
@@ -249,6 +253,7 @@ const useAuthStore = create(
               user: response.user,
               isAuthenticated: true,
               userType: 'teacher',
+              token: response.token,
               lastActivity: Date.now()
             });
 
@@ -310,6 +315,7 @@ const useAuthStore = create(
           user: null,
           isAuthenticated: false,
           userType: null,
+          token: null,
           lastActivity: Date.now()
         });
       },

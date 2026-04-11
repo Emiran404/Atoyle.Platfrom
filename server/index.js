@@ -15,6 +15,8 @@ import { dirname, join } from 'path';
 import fs from 'fs';
 import http from 'http';
 import os from 'os';
+import { apiLimiter } from './middleware/rateLimit.js';
+import { authenticateToken, authorizeRole } from './middleware/auth.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -45,11 +47,21 @@ const PORT = process.env.PORT || 3001;
 
 // Middleware
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: function(origin, callback) {
+    // Electron istemcisi (origin yok), localhost dev, ve ağ IP'lerini kabul et
+    if (!origin || origin.startsWith('http://localhost') || origin.startsWith('http://192.168.') || origin.startsWith('http://10.')) {
+      callback(null, true);
+    } else {
+      callback(new Error('CORS policy: Origin not allowed'));
+    }
+  },
   credentials: true
 }));
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+
+// Global Rate Limiter
+app.use('/api/', apiLimiter);
 
 // Uploads klasörü için static serve
 const uploadsPath = join(__dirname, '../src/uploads_student');
@@ -123,27 +135,27 @@ initializeDataFiles();
 startNotificationWorker();
 
 // API Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/exams', examRoutes);
-app.use('/api/submissions', submissionRoutes);
-app.use('/api/uploads', uploadRoutes);
-app.use('/api/notifications', notificationRoutes);
-app.use('/api/schedules', scheduleRoutes);
-app.use('/api/file-manager', fileManagerRoutes);
-app.use('/api/settings', settingsRoutes);
-app.use('/api/users', usersRoutes);
-app.use('/api/stats', statsRoutes);
-app.use('/api/backup', backupRoutes);
-app.use('/api/live-sessions', liveSessionsRoutes);
-app.use('/api/system', systemRoutes);
+app.use('/api/auth', authRoutes); // Public (login/register)
+app.use('/api/exams', examRoutes); // Per-route auth (exams.js içinde)
+app.use('/api/submissions', authenticateToken, submissionRoutes);
+app.use('/api/uploads', authenticateToken, uploadRoutes);
+app.use('/api/notifications', authenticateToken, notificationRoutes);
+app.use('/api/schedules', authenticateToken, scheduleRoutes);
+app.use('/api/file-manager', authenticateToken, authorizeRole('teacher'), fileManagerRoutes);
+app.use('/api/settings', authenticateToken, authorizeRole('teacher'), settingsRoutes);
+app.use('/api/users', authenticateToken, authorizeRole('teacher'), usersRoutes);
+app.use('/api/stats', authenticateToken, statsRoutes);
+app.use('/api/backup', authenticateToken, authorizeRole('teacher'), backupRoutes);
+app.use('/api/live-sessions', authenticateToken, liveSessionsRoutes);
+app.use('/api/system', systemRoutes); // Heartbeat/logout public kalacak
 
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-// Reset all data endpoint
-app.post('/api/reset-all-data', (req, res) => {
+// Reset all data endpoint (Sadece öğretmenler)
+app.post('/api/reset-all-data', authenticateToken, authorizeRole('teacher'), (req, res) => {
   try {
     const dataFiles = [
       'students.json',
