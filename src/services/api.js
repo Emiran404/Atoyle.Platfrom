@@ -36,11 +36,15 @@ const fetchApi = async (endpoint, options = {}) => {
     const response = await fetch(url, config);
     const data = await response.json();
 
-    // Token süresi dolmuşsa otomatik çıkış
-    if (response.status === 401 && data.error?.includes('Oturum süresi doldu')) {
+    // Herhangi bir 401 (Yetkisiz) hatasında oturumu temizle ve login'e at
+    if (response.status === 401) {
+      console.warn('⚠️ Yetkilendirme hatası (401). Oturum temizleniyor...', data.error);
       localStorage.removeItem('auth-storage');
       sessionStorage.removeItem('auth-storage');
-      window.location.href = '/';
+      // Küçük bir gecikme ile yönlendir ki sonsuz döngü olmasın
+      setTimeout(() => {
+        window.location.href = '/';
+      }, 500);
       return;
     }
 
