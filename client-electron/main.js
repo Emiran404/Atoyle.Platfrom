@@ -2,6 +2,7 @@ import { app, BrowserWindow, ipcMain } from 'electron';
 import { Bonjour } from 'bonjour-service';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import os from 'os';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -15,7 +16,7 @@ const bonjour = new Bonjour();
 function createSplash() {
   splashWindow = new BrowserWindow({
     width: 600,
-    height: 450, // Biraz daha geniş ve yüksek (Yeni tasarım için)
+    height: 500,
     transparent: true,
     frame: false,
     alwaysOnTop: true,
@@ -41,7 +42,7 @@ function createMainWindow(url) {
     title: "Atolye Platform",
     autoHideMenuBar: true,
     webPreferences: {
-      nodeIntegration: true, // Hata sayfasında IP girmek için geçici gerekli, React için kısıtlayacağız
+      nodeIntegration: true,
       contextIsolation: false
     }
   });
@@ -51,8 +52,7 @@ function createMainWindow(url) {
   // Sayfa yükleme hatası (Sunucu kapalıyken reload veya drop)
   mainWindow.webContents.on('did-fail-load', (event, errorCode, errorDescription) => {
     console.log(`⚠️ Yükleme Hatası (${errorCode}): ${errorDescription}`);
-    // -105, -102 gibi network hatalarında error.html göster
-    if (errorCode !== -3) { // -3 is user aborted (intentional)
+    if (errorCode !== -3) {
       mainWindow.loadFile('error.html');
     }
   });
@@ -62,103 +62,152 @@ function createMainWindow(url) {
       splashWindow.close();
       splashWindow = null;
     }
-    
-    // Eğer error.html yüklenmemişse göster
-    if (!mainWindow.webContents.getURL().includes('error.html')) {
-      mainWindow.show();
-      mainWindow.maximize();
-    } else {
-      mainWindow.show(); // Hata sayfasını da göster
-    }
+    mainWindow.show();
+    mainWindow.maximize();
   });
 
   mainWindow.on('closed', () => {
     mainWindow = null;
   });
+}
 
-  // MANUEL BAĞLANTI İÇİN IPC DİSTRİBÜTÖRÜ
-  ipcMain.on('manual-connect', (event, host) => {
-    const url = host.startsWith('http') ? host : `http://${host}:3001`;
-    console.log(`🔌 Manuel bağlantı isteği: ${url}`);
-    currentServerUrl = url;
-    isDiscoveryFound = true;
-    
-    if (!mainWindow) {
-      createMainWindow(url);
-    } else {
-      mainWindow.loadURL(url);
+// Yerel alt ağdaki sunucuyu HTTP ile taramayı dener (mDNS'e ihtiyaç duymaz)
+function getLocalSubnets() {
+  const subnets = [];
+  const interfaces = os.networkInterfaces();
+  for (const name of Object.keys(interfaces)) {
+    for (const iface of interfaces[name]) {
+      if (iface.family === 'IPv4' && !iface.internal) {
+        const parts = iface.address.split('.');
+        subnets.push(parts.slice(0, 3).join('.'));
+      }
     }
-
-    // Ekranı anında zorla geçiş yap (Splash'te asılı kalmayı engelle)
-    setTimeout(() => {
-      if (mainWindow) {
-        mainWindow.show();
-        mainWindow.maximize();
-      }
-      if (splashWindow) {
-        splashWindow.close();
-        splashWindow = null;
-      }
-    }, 500); // 500ms geçiş animasyonu payı
-  });
+  }
+  return [...new Set(subnets)];
 }
 
 // mDNS Taraması Başlat (Sürekli Çalışır)
 function startDiscovery() {
-  console.log('🔍 Sunucu aranıyor...');
+  console.log('🔍 [Discovery] mDNS taraması başlatılıyor...');
   const browser = bonjour.find({ type: 'atolye' });
 
   browser.on('up', (service) => {
-    // Sunucunun yayınladığı tüm adresleri dene (Önemli: referrer yerine addresses daha garantidir)
-    const addresses = service.addresses || [service.referer.address];
-    console.log(`🔍 mDNS Servis Bulundu (${service.name}), adresler: ${addresses.join(', ')}`);
+    const addresses = service.addresses || [service.referer?.address].filter(Boolean);
+    console.log(`🔍 [Discovery] mDNS Servis Bulundu (${service.name}), adresler: ${addresses.join(', ')}`);
 
     for (const ip of addresses) {
-      // IPv6 adreslerini şimdilik atla (Genelde sorun çıkarır)
       if (ip.includes(':')) continue;
       
       const url = `http://${ip}:${service.port}`;
       
       if (!isDiscoveryFound || (mainWindow && mainWindow.webContents.getURL().includes('error.html'))) {
-          console.log(`✅ Sunucu Deneniyor: ${url}`);
-          currentServerUrl = url;
-          isDiscoveryFound = true;
-          createMainWindow(url);
-          // 1.0.0'da stop vardı ama resilience için açık bırakıyoruz, ancak createMainWindow içinde kontrol var
-          break;
+        console.log(`✅ [Discovery] Sunucu Bulundu: ${url}`);
+        currentServerUrl = url;
+        isDiscoveryFound = true;
+        connectToServer(url);
+        break;
       }
     }
   });
 
-  // Hata durumunda Periyodik Kontrol (Fallback & Localhost check)
+  // FALLBACK 1: Periyodik localhost + bilinen IP kontrolü
   setInterval(async () => {
     if (!isDiscoveryFound || (mainWindow && mainWindow.webContents.getURL().includes('error.html'))) {
       const targets = ['http://localhost:3001', currentServerUrl].filter(Boolean);
       
       for (const target of targets) {
-        try {
-          const response = await fetch(`${target}/api/system/status`, { signal: AbortSignal.timeout(1000) });
-          if (response.ok) {
-            console.log(`🚀 Sunucu aktif: ${target}`);
-            isDiscoveryFound = true;
-            if (!mainWindow) {
-              createMainWindow(target);
-            } else {
-              mainWindow.loadURL(target);
-            }
-            break;
-          }
-        } catch (e) {
-          // ignore failures
-        }
+        if (await tryConnect(target)) return;
       }
     }
   }, 5000);
+
+  // FALLBACK 2: Alt ağ taraması (mDNS çalışmazsa ağdaki sunucuyu HTTP ile bul)
+  setTimeout(() => {
+    if (!isDiscoveryFound) {
+      console.log('🔎 [Discovery] mDNS 8sn içinde bulamadı, alt ağ taraması başlatılıyor...');
+      scanSubnet();
+    }
+  }, 8000);
+}
+
+async function tryConnect(url) {
+  try {
+    const response = await fetch(`${url}/api/system/status`, { signal: AbortSignal.timeout(1500) });
+    if (response.ok) {
+      console.log(`🚀 [Discovery] Sunucu aktif: ${url}`);
+      currentServerUrl = url;
+      isDiscoveryFound = true;
+      connectToServer(url);
+      return true;
+    }
+  } catch (e) { /* sessizce geç */ }
+  return false;
+}
+
+async function scanSubnet() {
+  const subnets = getLocalSubnets();
+  console.log(`🔎 [Discovery] Taranan alt ağlar: ${subnets.join(', ')}`);
+  
+  for (const subnet of subnets) {
+    // Yaygın sunucu IP'lerini önce dene
+    const priorityHosts = [1, 2, 10, 20, 50, 100, 150, 200, 254];
+    
+    for (const host of priorityHosts) {
+      if (isDiscoveryFound) return;
+      const url = `http://${subnet}.${host}:3001`;
+      if (await tryConnect(url)) return;
+    }
+    
+    // Kalanları 10'ar 10'ar batch halinde tara
+    const remaining = [];
+    for (let i = 1; i <= 254; i++) {
+      if (priorityHosts.includes(i) || isDiscoveryFound) continue;
+      remaining.push(`http://${subnet}.${i}:3001`);
+    }
+    
+    for (let i = 0; i < remaining.length; i += 10) {
+      if (isDiscoveryFound) return;
+      const batch = remaining.slice(i, i + 10);
+      const results = await Promise.all(batch.map(url => tryConnect(url)));
+      if (results.some(r => r)) return;
+    }
+  }
+  
+  console.log('⚠️ [Discovery] Alt ağ taraması tamamlandı, sunucu bulunamadı.');
+}
+
+function connectToServer(url) {
+  if (!mainWindow) {
+    createMainWindow(url);
+  } else {
+    mainWindow.loadURL(url);
+  }
+  
+  // Splash'i kapat
+  setTimeout(() => {
+    if (mainWindow) {
+      mainWindow.show();
+      mainWindow.maximize();
+    }
+    if (splashWindow) {
+      splashWindow.close();
+      splashWindow = null;
+    }
+  }, 500);
 }
 
 app.whenReady().then(() => {
   createSplash();
   startDiscovery();
+
+  // MANUEL BAĞLANTI IPC (Her zaman aktif, splash açıldığı anda hazır)
+  ipcMain.on('manual-connect', (event, host) => {
+    const url = host.startsWith('http') ? host : `http://${host}:3001`;
+    console.log(`🔌 Manuel bağlantı isteği: ${url}`);
+    currentServerUrl = url;
+    isDiscoveryFound = true;
+    connectToServer(url);
+  });
 });
 
 app.on('window-all-closed', () => {
