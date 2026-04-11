@@ -1,5 +1,6 @@
 import { app, BrowserWindow, ipcMain } from 'electron';
 import { Bonjour } from 'bonjour-service';
+import dgram from 'dgram';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import os from 'os';
@@ -12,6 +13,7 @@ let splashWindow;
 let currentServerUrl = null;
 let isDiscoveryFound = false;
 const bonjour = new Bonjour();
+const BROADCAST_PORT = 41234;
 
 function createSplash() {
   splashWindow = new BrowserWindow({
@@ -49,7 +51,6 @@ function createMainWindow(url) {
 
   mainWindow.loadURL(url);
 
-  // Sayfa yükleme hatası (Sunucu kapalıyken reload veya drop)
   mainWindow.webContents.on('did-fail-load', (event, errorCode, errorDescription) => {
     console.log(`⚠️ Yükleme Hatası (${errorCode}): ${errorDescription}`);
     if (errorCode !== -3) {
@@ -71,119 +72,25 @@ function createMainWindow(url) {
   });
 }
 
-// Yerel alt ağdaki sunucuyu HTTP ile taramayı dener (mDNS'e ihtiyaç duymaz)
-function getLocalSubnets() {
-  const subnets = [];
-  const interfaces = os.networkInterfaces();
-  for (const name of Object.keys(interfaces)) {
-    for (const iface of interfaces[name]) {
-      if (iface.family === 'IPv4' && !iface.internal) {
-        const parts = iface.address.split('.');
-        subnets.push(parts.slice(0, 3).join('.'));
-      }
-    }
-  }
-  return [...new Set(subnets)];
-}
-
-// mDNS Taraması Başlat (Sürekli Çalışır)
-function startDiscovery() {
-  console.log('🔍 [Discovery] mDNS taraması başlatılıyor...');
-  const browser = bonjour.find({ type: 'atolye' });
-
-  browser.on('up', (service) => {
-    const addresses = service.addresses || [service.referer?.address].filter(Boolean);
-    console.log(`🔍 [Discovery] mDNS Servis Bulundu (${service.name}), adresler: ${addresses.join(', ')}`);
-
-    for (const ip of addresses) {
-      if (ip.includes(':')) continue;
-      
-      const url = `http://${ip}:${service.port}`;
-      
-      if (!isDiscoveryFound || (mainWindow && mainWindow.webContents.getURL().includes('error.html'))) {
-        console.log(`✅ [Discovery] Sunucu Bulundu: ${url}`);
-        currentServerUrl = url;
-        isDiscoveryFound = true;
-        connectToServer(url);
-        break;
-      }
-    }
-  });
-
-  // FALLBACK 1: Periyodik localhost + bilinen IP kontrolü
-  setInterval(async () => {
-    if (!isDiscoveryFound || (mainWindow && mainWindow.webContents.getURL().includes('error.html'))) {
-      const targets = ['http://localhost:3001', currentServerUrl].filter(Boolean);
-      
-      for (const target of targets) {
-        if (await tryConnect(target)) return;
-      }
-    }
-  }, 5000);
-
-  // FALLBACK 2: Alt ağ taraması (mDNS çalışmazsa ağdaki sunucuyu HTTP ile bul)
-  setTimeout(() => {
-    if (!isDiscoveryFound) {
-      console.log('🔎 [Discovery] mDNS 8sn içinde bulamadı, alt ağ taraması başlatılıyor...');
-      scanSubnet();
-    }
-  }, 8000);
-}
-
-async function tryConnect(url) {
-  try {
-    const response = await fetch(`${url}/api/system/status`, { signal: AbortSignal.timeout(1500) });
-    if (response.ok) {
-      console.log(`🚀 [Discovery] Sunucu aktif: ${url}`);
-      currentServerUrl = url;
-      isDiscoveryFound = true;
-      connectToServer(url);
-      return true;
-    }
-  } catch (e) { /* sessizce geç */ }
-  return false;
-}
-
-async function scanSubnet() {
-  const subnets = getLocalSubnets();
-  console.log(`🔎 [Discovery] Taranan alt ağlar: ${subnets.join(', ')}`);
-  
-  for (const subnet of subnets) {
-    // Yaygın sunucu IP'lerini önce dene
-    const priorityHosts = [1, 2, 10, 20, 50, 100, 150, 200, 254];
-    
-    for (const host of priorityHosts) {
-      if (isDiscoveryFound) return;
-      const url = `http://${subnet}.${host}:3001`;
-      if (await tryConnect(url)) return;
-    }
-    
-    // Kalanları 10'ar 10'ar batch halinde tara
-    const remaining = [];
-    for (let i = 1; i <= 254; i++) {
-      if (priorityHosts.includes(i) || isDiscoveryFound) continue;
-      remaining.push(`http://${subnet}.${i}:3001`);
-    }
-    
-    for (let i = 0; i < remaining.length; i += 10) {
-      if (isDiscoveryFound) return;
-      const batch = remaining.slice(i, i + 10);
-      const results = await Promise.all(batch.map(url => tryConnect(url)));
-      if (results.some(r => r)) return;
-    }
-  }
-  
-  console.log('⚠️ [Discovery] Alt ağ taraması tamamlandı, sunucu bulunamadı.');
-}
-
+// ═══════════════════════════════════════════════════════════════
+// BİRLEŞİK BAĞLANTI FONKSİYONU
+// ═══════════════════════════════════════════════════════════════
 function connectToServer(url) {
+  if (isDiscoveryFound && mainWindow && !mainWindow.webContents.getURL().includes('error.html')) {
+    return; // Zaten bağlıyız, tekrar bağlanma
+  }
+
+  console.log(`🚀 [Connect] Sunucuya bağlanılıyor: ${url}`);
+  currentServerUrl = url;
+  isDiscoveryFound = true;
+
   if (!mainWindow) {
     createMainWindow(url);
   } else {
     mainWindow.loadURL(url);
   }
-  
-  // Splash'i kapat
+
+  // Splash'i zorla kapat
   setTimeout(() => {
     if (mainWindow) {
       mainWindow.show();
@@ -196,18 +103,182 @@ function connectToServer(url) {
   }, 500);
 }
 
+// ═══════════════════════════════════════════════════════════════
+// 1. mDNS KEŞİF (Bonjour)
+// ═══════════════════════════════════════════════════════════════
+function startMDNS() {
+  console.log('🔍 [mDNS] Tarama başlatılıyor...');
+  const browser = bonjour.find({ type: 'atolye' });
+
+  browser.on('up', (service) => {
+    const addresses = service.addresses || [service.referer?.address].filter(Boolean);
+    console.log(`🔍 [mDNS] Servis: ${service.name}, adresler: ${addresses.join(', ')}`);
+
+    for (const ip of addresses) {
+      if (ip.includes(':')) continue;
+      connectToServer(`http://${ip}:${service.port}`);
+      return;
+    }
+
+    // TXT kaydındaki IP'leri de dene
+    if (service.txt?.ips) {
+      const txtIps = service.txt.ips.split(',');
+      for (const ip of txtIps) {
+        if (!ip.includes(':')) {
+          connectToServer(`http://${ip}:${service.port}`);
+          return;
+        }
+      }
+    }
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════
+// 2. UDP BROADCAST DİNLEYİCİ (En hızlı ve güvenilir yöntem)
+// ═══════════════════════════════════════════════════════════════
+function startUDPListener() {
+  try {
+    const socket = dgram.createSocket({ type: 'udp4', reuseAddr: true });
+
+    socket.on('message', (msg, rinfo) => {
+      if (isDiscoveryFound) return;
+      
+      try {
+        const data = JSON.parse(msg.toString());
+        if (data.type === 'atolye-server-beacon') {
+          // Gönderenin IP'sini veya birincil IP'yi kullan
+          const serverIp = data.primary || rinfo.address;
+          const serverPort = data.port || 3001;
+          console.log(`📡 [UDP] Beacon yakalandı! IP: ${serverIp}:${serverPort} (from ${rinfo.address})`);
+          connectToServer(`http://${serverIp}:${serverPort}`);
+        }
+      } catch (e) { /* JSON parse hatası, sessizce geç */ }
+    });
+
+    socket.on('error', (err) => {
+      console.log(`⚠️ [UDP] Dinleyici hatası: ${err.message}`);
+      socket.close();
+    });
+
+    socket.bind(BROADCAST_PORT, () => {
+      console.log(`📡 [UDP] Broadcast dinleyici aktif (port ${BROADCAST_PORT})`);
+    });
+  } catch (e) {
+    console.log(`⚠️ [UDP] Başlatılamadı: ${e.message}`);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════  
+// 3. ALT AĞ HTTP TARAMASI (Son çare fallback)
+// ═══════════════════════════════════════════════════════════════
+function getLocalSubnets() {
+  const subnets = [];
+  const interfaces = os.networkInterfaces();
+  for (const name of Object.keys(interfaces)) {
+    for (const iface of interfaces[name]) {
+      if (iface.family === 'IPv4' && !iface.internal) {
+        subnets.push(iface.address.split('.').slice(0, 3).join('.'));
+      }
+    }
+  }
+  return [...new Set(subnets)];
+}
+
+async function tryHTTP(url) {
+  try {
+    const response = await fetch(`${url}/api/system/status`, { signal: AbortSignal.timeout(800) });
+    if (response.ok) {
+      console.log(`✅ [HTTP] Sunucu bulundu: ${url}`);
+      connectToServer(url);
+      return true;
+    }
+  } catch (e) { /* timeout veya bağlantı hatası */ }
+  return false;
+}
+
+async function scanSubnet() {
+  if (isDiscoveryFound) return;
+  const subnets = getLocalSubnets();
+  console.log(`🔎 [Subnet] Taranıyor: ${subnets.join(', ')}`);
+  
+  // Splash'e durum bildir
+  if (splashWindow) {
+    splashWindow.webContents.send('discovery-status', 'AĞ TARANIYOR...');
+  }
+
+  for (const subnet of subnets) {
+    if (isDiscoveryFound) return;
+    
+    // Yaygın sunucu IP'leri önce
+    const priority = [1, 2, 5, 10, 15, 20, 25, 30, 50, 100, 150, 200, 254];
+    for (const host of priority) {
+      if (isDiscoveryFound) return;
+      if (await tryHTTP(`http://${subnet}.${host}:3001`)) return;
+    }
+
+    // Kalanları 15'erli gruplar halinde tara
+    const rest = [];
+    for (let i = 1; i <= 254; i++) {
+      if (!priority.includes(i)) rest.push(i);
+    }
+    
+    for (let i = 0; i < rest.length; i += 15) {
+      if (isDiscoveryFound) return;
+      const batch = rest.slice(i, i + 15);
+      await Promise.all(batch.map(h => tryHTTP(`http://${subnet}.${h}:3001`)));
+    }
+  }
+
+  if (!isDiscoveryFound) {
+    console.log('⚠️ [Subnet] Tarama tamamlandı, sunucu bulunamadı.');
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// BAŞLATMA
+// ═══════════════════════════════════════════════════════════════
+function startDiscovery() {
+  // Katman 1: mDNS (anında)
+  startMDNS();
+  
+  // Katman 2: UDP Broadcast Dinleyici (anında, en güvenilir)
+  startUDPListener();
+  
+  // Katman 3: Periyodik localhost kontrolü (her 3 saniyede)
+  setInterval(async () => {
+    if (!isDiscoveryFound || (mainWindow && mainWindow.webContents.getURL().includes('error.html'))) {
+      const targets = ['http://localhost:3001', currentServerUrl].filter(Boolean);
+      for (const t of targets) {
+        if (await tryHTTP(t)) return;
+      }
+    }
+  }, 3000);
+
+  // Katman 4: Alt ağ taraması (5 saniye sonra, mDNS/UDP bulamazsa)
+  setTimeout(() => {
+    if (!isDiscoveryFound) {
+      scanSubnet();
+    }
+  }, 5000);
+}
+
 app.whenReady().then(() => {
   createSplash();
   startDiscovery();
 
-  // MANUEL BAĞLANTI IPC (Her zaman aktif, splash açıldığı anda hazır)
+  // MANUEL BAĞLANTI IPC (Her zaman aktif)
   ipcMain.on('manual-connect', (event, host) => {
     const url = host.startsWith('http') ? host : `http://${host}:3001`;
-    console.log(`🔌 Manuel bağlantı isteği: ${url}`);
-    currentServerUrl = url;
-    isDiscoveryFound = true;
+    console.log(`🔌 Manuel bağlantı: ${url}`);
     connectToServer(url);
   });
+
+  // Splash'e 5 saniye sonra manuel butonu göster sinyali
+  setTimeout(() => {
+    if (splashWindow && !isDiscoveryFound) {
+      splashWindow.webContents.send('show-manual');
+    }
+  }, 5000);
 });
 
 app.on('window-all-closed', () => {
