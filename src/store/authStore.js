@@ -451,6 +451,7 @@ const useAuthStore = create(
         user: state.user,
         isAuthenticated: state.isAuthenticated,
         userType: state.userType,
+        token: state.token,
         theme: state.theme,
         lastActivity: state.lastActivity,
         language: state.language
