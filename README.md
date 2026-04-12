@@ -196,7 +196,7 @@ npm run preview:full
 ```
 
 > [!WARNING]
-> **Windows kullanıcıları:** `kurulum.sh` yerine doğrudan `npm run install:all` ve `npm run dev` komutlarını kullanın.
+> **Windows kullanıcıları:** `kurulum.sh` yerine doğrudan `npm run install:all` ve `npm run build` komutlarını kullanın.
 
 ---
 
