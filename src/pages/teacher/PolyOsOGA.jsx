@@ -286,8 +286,8 @@ const PolyOsOGA = () => {
                                             <p className="text-[10px] text-slate-400 font-mono">SHA-256 GÜVENLİ</p>
                                         </div>
                                         <button onClick={() => setWithPwd(p => !p)}
-                                            className={`relative w-9 h-5 rounded-xl transition-colors ${withPwd ? 'bg-blue-600' : 'bg-slate-300'}`}>
-                                            <span className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white shadow transition-transform ${withPwd ? 'translate-x-4' : 'translate-x-0'}`} />
+                                            className={`relative w-9 h-5 rounded-full transition-colors ${withPwd ? 'bg-blue-600' : 'bg-slate-300'}`}>
+                                            <span className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform ${withPwd ? 'translate-x-4' : 'translate-x-0'}`} />
                                         </button>
                                     </div>
 

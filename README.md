@@ -1,7 +1,7 @@
 <div align="center">
 
 <!-- HEADER BANNER -->
-![Atolye.Platform Banner](https://camo.githubusercontent.com/383b91998d6c9664260e17c337980f97bcfc164ae9809c20bd5c16b0ee2ca809/68747470733a2f2f62616e6e65722d6170692d616e642d776562736974652d70726f64756374696f6e2d366463642e75702e7261696c7761792e6170702f62616e6e65723f6865616465723d2532312535426e6f6465646f746a732535442b41742543332542366c79652e506c6174666f726d267375626865616465723d25323125354276697465253544412543332541372543342542316b2b6b61796e616b6c2543342542312b6269722b732543342542316e61762b672543332542366e6465726d652b76652b652543342539466974696d2b792543332542366e6574696d2b706c6174666f726d752662673d303030303030303026636f6c6f723d46464646464626737562686561646572636f6c6f723d46464646464626686561646572666f6e743d526f626f746f26737562686561646572666f6e743d4f70656e2b53616e7326737570706f72743d66616c7365)
+![Atolye.Platform Banner](https://camo.githubusercontent.com/383b91998d6c9664260e17c337980f97bcfc164ae9809c20bd5c16b0ee2ca809/68747470733a2f2f62616e6e65722d6170692d616e642d776562736974652d70726f64756374696f6e2d366463642e75702e7261696c7761792e6170702f62616e6e65723f6865616465723d2532312535426e6f6465646f746a732535442b41742543332542366l79652e506c6174666f726d267375626865616465723d25323125354276697465253544412543332541372543342542316b2b6b61796e616b6c2543342542312b6269722b732543342542316e61762b672543332542366n6465726d652b76652b652543342539466974696d2b792543332542366n6574696d2b706c6174666f726d752662673d303030303030303026636f6c6f723d46464646464626737562686561646572636f6c6f723d46464646464626686561646572666f6e743d526f626f746f26737562686561646572666f6e743d4f70656e2b53616e7326737570706f72743d66616c7365)
 
 # 🎓 Atölye.Platform
 
@@ -10,7 +10,7 @@
 <br/>
 
 <!-- CORE BADGES -->
-[![Version](https://img.shields.io/badge/Versiyon-3.5.0-6366f1?style=for-the-badge)](https://github.com/Emiran404/Atolye.Platform/releases)
+[![Version](https://img.shields.io/badge/Versiyon-3.5.1-6366f1?style=for-the-badge)](https://github.com/Emiran404/Atolye.Platform/releases)
 [![License](https://img.shields.io/badge/Lisans-MIT-10b981?style=for-the-badge)](LICENSE)
 [![Platform](https://img.shields.io/badge/Platform-Pardus_%7C_Windows-ef4444?style=for-the-badge)](https://github.com/Emiran404/Atolye.Platform)
 
@@ -95,6 +95,7 @@ Derleme yapmadan, aşağıdaki hazır paketlerle saniyeler içinde kurulum yapı
 - 📤 **Sürükle-Bırak Yükleme** — Gelişmiş dosya yükleme ile hızlı teslim
 - 📋 **Sınav Geçmişi** — Geçmiş notlar ve geri bildirimleri görüntüleme
 - 🔔 **Anlık Bildirimler** — Socket.io ile gerçek zamanlı uyarılar
+- 🔐 **Passkey Girişi** — Şifresiz, biyometrik kimlik doğrulama
 - 🌍 **4 Dil Desteği** — Türkçe, İngilizce, Almanca ve Rusça
 
 </td>
@@ -110,6 +111,7 @@ Derleme yapmadan, aşağıdaki hazır paketlerle saniyeler içinde kurulum yapı
 | **📡 mDNS Auto-Discovery** | İstemciler sunucuyu ağda otomatik keşfeder — IP girmeye gerek yok |
 | **🛡️ Kod Karıştırma** | Production build'de JavaScript Obfuscation ile kaynak kodu koruması |
 | **🔒 JWT Authentication** | Her API çağrısında token bazlı yetkilendirme |
+| **⏱️ Rate Limiting** | Brute-force ve DDoS koruması |
 
 ---
 
@@ -159,8 +161,8 @@ Derleme yapmadan, aşağıdaki hazır paketlerle saniyeler içinde kurulum yapı
 | **Node.js** | v18.0.0+ |
 | **npm** | v9.0.0+ |
 | **İşletim Sistemi** | Pardus 21+ / Debian 11+ / Windows 10+ |
-| **RAM** | 2+ GB (Sunucu) |
-| **Disk** | 500+ MB boş alan |
+| **RAM** | 2 GB (Sunucu) |
+| **Disk** | 500 MB boş alan |
 
 ### Hızlı Başlangıç (Linux / Pardus)
 
@@ -188,15 +190,18 @@ cd Atolye.Platform
 # 2. Bağımlılıkları yükleyin (frontend + backend)
 npm run install:all
 
-# 4. Production build
-npm run build
+# 3. .env dosyasını yapılandırın
+cp .env.example .env
 
-# 5. Çalıştır
-npm run preview:full 
+# 4. Geliştirme modunda başlatın
+npm run dev
+
+# 5. Production build
+npm run build
 ```
 
 > [!WARNING]
-> **Windows kullanıcıları:** `kurulum.sh` yerine doğrudan `npm run install:all` ve `npm run build` komutlarını kullanın.
+> **Windows kullanıcıları:** `kurulum.sh` yerine doğrudan `npm run install:all` ve `npm run dev` komutlarını kullanın.
 
 ---
 
@@ -253,8 +258,9 @@ Atölye.Platform/
 - [x] ~~mDNS otomatik sunucu keşfi~~
 - [x] ~~Windows (.exe) ve Linux (.deb) paketleri~~
 - [x] ~~Cinematic UI ve Glassmorphism tasarım~~
-- [X] ~~Çoklu öğretmen desteği ve rol yönetimi~~
+- [x] ~~Çoklu öğretmen desteği ve rol yönetimi~~
 - [ ] LiderAhenk tam entegrasyon (LDAP kullanıcı senkronizasyonu)
+- [ ] Otomatik sınav değerlendirme (OGA modülü)
 - [ ] Docker konteyner desteği
 - [ ] Progressive Web App (PWA) desteği
 

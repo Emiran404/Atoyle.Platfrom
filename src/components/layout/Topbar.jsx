@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Bell, LogOut, User, Sun, Moon, Settings, Check, ArrowRight } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
-import { useNotificationStore, showPushNotification } from '../../store/notificationStore';
+import { useNotificationStore } from '../../store/notificationStore';
 import { useToast } from '../ui/Toast';
 import { t } from '../../utils/i18n';
 import { formatRelativeTime } from '../../utils/dateHelpers';
@@ -13,41 +13,8 @@ const Topbar = () => {
   const { notifications, unreadCount, loadNotifications, markAsRead, markAllAsRead, pushEnabled } = useNotificationStore();
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [showNotificationMenu, setShowNotificationMenu] = useState(false);
-  const prevUnreadCountRef = useRef(0);
 
   const { toast } = useToast();
-
-  // Polling for notifications
-  useEffect(() => {
-    if (user?.id) {
-      loadNotifications(userType, user.id);
-      const intervalId = setInterval(() => {
-        loadNotifications(userType, user.id);
-      }, 30000); // 30 seconds
-      return () => clearInterval(intervalId);
-    }
-  }, [user, userType, loadNotifications]);
-
-  // Check for new notifications to fire Push API and Toast
-  useEffect(() => {
-    if (unreadCount > prevUnreadCountRef.current) {
-      const topUnreadTitle = notifications?.filter(n => !n.isRead)?.[0]?.title || t('notification');
-      
-      // In-app Toast Notification
-      toast.info(topUnreadTitle, { 
-        description: t('unreadNotificationsCount') + ': ' + unreadCount 
-      });
-
-      // Browser Push Notification
-      if (pushEnabled) {
-        showPushNotification(topUnreadTitle, {
-          body: t('unreadNotificationsCount') + ': ' + unreadCount,
-          tag: 'new-notification',
-        });
-      }
-    }
-    prevUnreadCountRef.current = unreadCount;
-  }, [unreadCount, pushEnabled, notifications]);
 
   const handleLogout = () => {
     navigate('/login');

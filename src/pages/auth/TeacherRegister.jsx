@@ -85,8 +85,14 @@ const TeacherRegister = () => {
     try {
       const result = await registerTeacher(formData);
       if (result.success) {
-        toast.success('Kayıt başarılı! Yönlendiriliyorsunuz...');
-        setTimeout(() => navigate('/ogretmen/panel'), 1000);
+        if (result.firstTeacherInSystem) {
+          toast.success('Sistem Otomatikman güvenliğiniz için öğretmen kayıtlarını kapatmıştır. Daha fazla ayrıntı için Platform Yönetimi sayfasına girin.', {
+            duration: 8000
+          });
+        } else {
+          toast.success('Kayıt başarılı! Yönlendiriliyorsunuz...');
+        }
+        setTimeout(() => navigate('/ogretmen/panel'), 1500);
       } else {
         toast.error(result.error);
       }

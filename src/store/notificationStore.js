@@ -77,6 +77,14 @@ const useNotificationStore = create((set, get) => ({
 
   // Push notification'ı etkinleştir
   enablePushNotifications: async () => {
+    // Tarayıcı bazlı kontrol
+    if (typeof Notification === 'undefined') return false;
+    
+    if (Notification.permission === 'granted') {
+      set({ pushEnabled: true });
+      return true;
+    }
+
     const granted = await requestNotificationPermission();
     set({ pushEnabled: granted });
     return granted;

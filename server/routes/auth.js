@@ -350,6 +350,7 @@ router.post('/register/teacher', loginLimiter, async (req, res) => {
     }
 
     const hashedPassword = hashPassword(password, username);
+    const isFirstTeacher = teachers.length === 0;
 
     const newTeacher = {
       id: generateId(),
@@ -365,9 +366,23 @@ router.post('/register/teacher', loginLimiter, async (req, res) => {
     teachers.push(newTeacher);
     setData('teachers', teachers);
 
+    // İlk kayıt ise öğretmen kayıtlarını otomatik kapat
+    if (isFirstTeacher) {
+      const settings = getData('settings') || {};
+      settings.teacherRegistrationEnabled = false;
+      setData('settings', settings);
+      console.log('🛡️ İlk öğretmen kaydı yapıldı. Güvenlik için öğretmen kayıtları otomatik olarak kapatıldı.');
+    }
+
     const { password: _, ...teacherData } = newTeacher;
     const token = generateToken({ id: newTeacher.id, userType: 'teacher', username: newTeacher.username });
-    res.json({ success: true, user: teacherData, userType: 'teacher', token });
+    res.json({ 
+      success: true, 
+      user: teacherData, 
+      userType: 'teacher', 
+      token,
+      firstTeacherInSystem: isFirstTeacher 
+    });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }

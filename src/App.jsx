@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { ToastContainer } from './components/ui/Toast';
 import { useNotificationStore } from './store/notificationStore';
+import { useNotificationListener } from './hooks/useNotificationListener';
 import { useAuthStore } from './store/authStore';
 import { initializeDemoData } from './utils/initData';
 import ConnectionStatusOverlay from './components/ConnectionStatusOverlay';
@@ -68,6 +69,9 @@ function App() {
     logout,
     loadClasses 
   } = useAuthStore();
+
+  // Bildirim Dinleyicisi - Global olarak çalışır
+  useNotificationListener();
 
   // JWT token'sız eski oturumları otomatik temizle
   useEffect(() => {

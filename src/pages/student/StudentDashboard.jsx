@@ -14,6 +14,7 @@ import { formatDateTime, calculateCountdown, getRelativeTime } from '../../utils
 import NotificationPermissionPopup from '../../components/NotificationPermissionPopup';
 import { OnboardingTour, LanguageSwitcher } from '../../components/ui';
 import { t, languages } from '../../utils/i18n';
+import { getNotificationTranslation } from '../../utils/notificationHelpers';
 
 const StudentDashboard = () => {
   const navigate = useNavigate();
@@ -101,55 +102,8 @@ const StudentDashboard = () => {
     setLanguage(lowerLang);
   }, [setLanguage]);
 
-  // Bildirim çevirisi için yardımcı fonksiyon
-  const getNotificationTranslation = (notif) => {
-    // Sınav başlığını mesajdan çıkar
-    let examTitle = '';
-    if (notif.message && notif.message.includes(' sınavı')) {
-      examTitle = notif.message.split(' sınavı')[0];
-    } else if (notif.message && notif.message.includes(' için')) {
-      examTitle = notif.message.split(' için')[0];
-    }
+  // getNotificationTranslation helper is now imported from utils
 
-    switch (notif.type) {
-      case 'new_exam':
-        return {
-          title: t('notifNewExam'),
-          message: `${examTitle} ${t('notifNewExamMsg')}`
-        };
-      case 'edit_granted':
-        return {
-          title: t('notifEditGranted'),
-          message: t('notifEditGrantedMsg').replace('{exam}', examTitle)
-        };
-      case 'grade_published':
-        const grade = notif.message?.match(/\d+$/)?.[0] || '';
-        return {
-          title: t('notifGradePublished'),
-          message: t('notifGradePublishedMsg').replace('{exam}', examTitle).replace('{grade}', grade)
-        };
-      case 'exam_started':
-        return {
-          title: t('notifExamStarted'),
-          message: `${examTitle} ${t('notifExamStartedMsg')}`
-        };
-      case 'exam_reminder':
-        return {
-          title: t('notifExamReminder30'),
-          message: `${examTitle} ${t('notifExamReminder30Msg')}`
-        };
-      case 'exam_ended':
-        return {
-          title: t('notifExamEnded'),
-          message: `${examTitle} ${t('notifExamEndedMsg')}`
-        };
-      default:
-        return {
-          title: notif.title,
-          message: notif.message
-        };
-    }
-  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -191,8 +145,6 @@ const StudentDashboard = () => {
         await loadSubmissions();
         const userSubmissions = getStudentSubmissions(user.id);
         setSubmissions(userSubmissions);
-
-        await loadNotifications('student', user.id);
       } catch (error) {
         console.error('Error loading data:', error);
       } finally {

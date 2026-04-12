@@ -117,5 +117,5 @@ export const startNotificationWorker = () => {
         } catch (error) {
             console.error('Bildirim Servisi Hatası:', error);
         }
-    }, 60000); // 1 minute
+    }, 30000); // 30 seconds
 };
