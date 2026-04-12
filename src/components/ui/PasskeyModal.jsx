@@ -3,7 +3,6 @@ import { Shield, Key, Fingerprint, X, Settings } from 'lucide-react';
 
 const PasskeyModal = ({ isOpen, onClose, userName, onGoToSettings }) => {
   const [isVisible, setIsVisible] = useState(false);
-  const [dontShowAgain, setDontShowAgain] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
@@ -14,9 +13,7 @@ const PasskeyModal = ({ isOpen, onClose, userName, onGoToSettings }) => {
   }, [isOpen]);
 
   const handleClose = () => {
-    if (dontShowAgain) {
-      localStorage.setItem('passkey_modal_dismissed', 'true');
-    }
+    localStorage.setItem('passkey_modal_dismissed', 'true');
     setIsVisible(false);
     setTimeout(onClose, 300);
   };
@@ -161,23 +158,6 @@ const PasskeyModal = ({ isOpen, onClose, userName, onGoToSettings }) => {
       color: '#64748b',
       lineHeight: '1.5'
     },
-    checkbox: {
-      display: 'flex',
-      alignItems: 'center',
-      gap: '10px',
-      marginBottom: '24px',
-      cursor: 'pointer'
-    },
-    checkboxInput: {
-      width: '20px',
-      height: '20px',
-      accentColor: '#0d9488',
-      cursor: 'pointer'
-    },
-    checkboxLabel: {
-      fontSize: '14px',
-      color: '#64748b'
-    },
     buttonGroup: {
       display: 'flex',
       gap: '12px',
@@ -264,16 +244,6 @@ const PasskeyModal = ({ isOpen, onClose, userName, onGoToSettings }) => {
               </div>
             </div>
           </div>
-
-          <label style={modalStyles.checkbox} onClick={(e) => { e.stopPropagation(); setDontShowAgain(!dontShowAgain); }}>
-            <input
-              type="checkbox"
-              style={modalStyles.checkboxInput}
-              checked={dontShowAgain}
-              readOnly
-            />
-            <span style={modalStyles.checkboxLabel}>Bu mesajı bir daha gösterme</span>
-          </label>
 
           <div style={modalStyles.buttonGroup}>
             <button

@@ -5,7 +5,7 @@ import { Select } from '../../components/ui/Select';
 import { Badge } from '../../components/ui/Badge';
 import { useExamStore } from '../../store/examStore';
 import { useSubmissionStore } from '../../store/submissionStore';
-import { useAuthStore, CLASS_LIST } from '../../store/authStore';
+import { useAuthStore } from '../../store/authStore';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
   PieChart, Pie, Cell
@@ -61,7 +61,7 @@ const COLORS = ['#0d9488', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'
 const Stats = () => {
   const { exams, loadExams } = useExamStore();
   const { submissions, loadSubmissions } = useSubmissionStore();
-  const { user, getAllStudents, loadUsers } = useAuthStore();
+  const { user, getAllStudents, loadStudents, classes } = useAuthStore();
   const students = useMemo(() => getAllStudents(), [getAllStudents]);
 
   const [timeRange, setTimeRange] = useState('all');
@@ -74,7 +74,7 @@ const Stats = () => {
       setLoading(true);
       await loadExams(user?.id);
       await loadSubmissions();
-      await loadUsers();
+      await loadStudents();
       setLoading(false);
     };
     fetchData();
@@ -83,7 +83,7 @@ const Stats = () => {
     const refreshInterval = setInterval(() => {
       loadExams(user?.id);
       loadSubmissions();
-      loadUsers();
+      loadStudents();
     }, 15000);
 
     return () => clearInterval(refreshInterval);
@@ -193,7 +193,8 @@ const Stats = () => {
       return Object.values(grouped);
     };
 
-    return CLASS_LIST.map(className => {
+    return classes.map(cls => {
+      const className = typeof cls === 'string' ? cls : cls.name;
       const classStudents = students.filter(s => s.className === className);
       const classSubmissions = filteredSubmissions.filter(s =>
         s.className === className || s.studentClass === className
@@ -281,7 +282,10 @@ const Stats = () => {
 
   const classOptions = [
     { value: 'all', label: 'Tüm Sınıflar' },
-    ...CLASS_LIST.map(c => ({ value: c, label: c }))
+    ...classes.map(cls => {
+      const className = typeof cls === 'string' ? cls : cls.name;
+      return { value: className, label: className };
+    })
   ];
 
   const timeOptions = [

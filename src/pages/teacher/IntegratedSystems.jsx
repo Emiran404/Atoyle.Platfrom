@@ -1,5 +1,5 @@
 import React from 'react';
-import { Network, Monitor, ArrowRight, ExternalLink, ShieldCheck, Activity, UserCheck, Users } from 'lucide-react';
+import { Network, Monitor, ArrowRight, ExternalLink, ShieldCheck, Activity, UserCheck, Users, Key } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { TeacherLayout } from '../../components/layouts';
 
@@ -64,7 +64,6 @@ const IntegratedSystems = () => {
                         </div>
                     </div>
 
-                    {/* PolyOS OGA Card */}
                     <div
                         className="group relative bg-white border border-slate-200 rounded-2xl p-6 shadow-sm hover:shadow-xl hover:border-purple-500/50 transition-all duration-300 overflow-hidden flex flex-col h-full cursor-pointer"
                         onClick={() => navigate('/ogretmen/polyos-oga')}
@@ -106,6 +105,50 @@ const IntegratedSystems = () => {
                                 Aktarım Yönetimi <ArrowRight size={16} />
                             </span>
                             <ExternalLink size={18} className="text-slate-300 group-hover:text-purple-400 transition-colors" />
+                        </div>
+                    </div>
+
+                    {/* LiderAhenk SSO Card */}
+                    <div
+                        className="group relative bg-white border border-slate-200 rounded-2xl p-6 shadow-sm hover:shadow-xl hover:border-orange-500/50 transition-all duration-300 overflow-hidden flex flex-col h-full cursor-pointer"
+                        onClick={() => navigate('/ogretmen/liderahenk')}
+                    >
+                        {/* Background decoration */}
+                        <div className="absolute -right-20 -top-20 w-40 h-40 bg-orange-500/5 rounded-full blur-3xl group-hover:bg-orange-500/10 transition-colors"></div>
+
+                        <div className="flex items-center justify-between mb-6 relative z-10">
+                            <div className="w-14 h-14 rounded-xl bg-orange-50 border border-orange-100 flex items-center justify-center text-orange-600 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300 shadow-inner">
+                                <Key size={28} />
+                            </div>
+                            <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-slate-50 border border-slate-200 text-slate-500">
+                                <span className="text-xs font-bold tracking-wide uppercase">Yapılandır</span>
+                            </div>
+                        </div>
+
+                        <div className="relative z-10 flex-1">
+                            <h3 className="text-xl font-bold text-slate-800 mb-1 group-hover:text-orange-600 transition-colors">LiderAhenk SSO</h3>
+                            <p className="text-xs font-semibold text-orange-500 mb-3 uppercase tracking-wider">Merkezi Kimlik Doğrulama</p>
+                            <p className="text-slate-500 text-sm leading-relaxed mb-6">
+                                Kurumunuzdaki LiderAhenk (LDAP) sunucusunu bağlayarak öğrencilerin ve öğretmenlerin tek şifre ile giriş yapmasını sağlayın.
+                            </p>
+
+                            <div className="grid grid-cols-2 gap-3 mb-8">
+                                <div className="flex items-center gap-2 text-xs font-medium text-slate-600 bg-slate-50 p-2 rounded-lg border border-slate-100">
+                                    <ShieldCheck size={14} className="text-orange-500" />
+                                    <span>Giriş Güvenliği</span>
+                                </div>
+                                <div className="flex items-center gap-2 text-xs font-medium text-slate-600 bg-slate-50 p-2 rounded-lg border border-slate-100">
+                                    <Network size={14} className="text-orange-500" />
+                                    <span>Dizin Entegrasyonu</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="relative z-10 pt-4 border-t border-slate-100 flex items-center justify-between mt-auto">
+                            <span className="text-sm font-semibold text-orange-600 flex items-center gap-1 group-hover:gap-2 transition-all">
+                                Ayarlara Git <ArrowRight size={16} />
+                            </span>
+                            <ExternalLink size={18} className="text-slate-300 group-hover:text-orange-400 transition-colors" />
                         </div>
                     </div>
 

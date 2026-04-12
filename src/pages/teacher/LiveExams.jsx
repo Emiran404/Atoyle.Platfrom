@@ -3,6 +3,7 @@ import { TeacherLayout } from '../../components/layouts';
 import { ConfirmModal } from '../../components/ui';
 import { useExamStore } from '../../store/examStore';
 import { useLiveSessionStore } from '../../store/liveSessionStore';
+import { useAuthStore } from '../../store/authStore';
 import { Activity, AlertTriangle, MonitorPlay, Users, Clock, ShieldAlert, XCircle } from 'lucide-react';
 import { formatDateTime } from '../../utils/dateHelpers';
 
@@ -103,6 +104,7 @@ const styles = {
 };
 
 const LiveExams = () => {
+    const { user } = useAuthStore();
     const { getActiveExams, loadExams } = useExamStore();
     const { loadExamSessions, sessions, cancelSession } = useLiveSessionStore();
     const [activeExamsList, setActiveExamsList] = useState([]);

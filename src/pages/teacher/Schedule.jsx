@@ -5,13 +5,15 @@ import { Modal } from '../../components/ui/Modal';
 import { ConfirmModal } from '../../components/ui';
 import { useToast } from '../../components/ui/Toast';
 import { Calendar, Plus, Edit, Trash2, Clock, BookOpen } from 'lucide-react';
-import { CLASS_LIST } from '../../store/authStore';
+import { useAuthStore } from '../../store/authStore';
 import { scheduleApi } from '../../services/api';
 
 const Schedule = () => {
   const { toast } = useToast();
+  const { classes } = useAuthStore();
+  const defaultClass = classes.length > 0 ? (typeof classes[0] === 'string' ? classes[0] : classes[0].name) : '9-A';
   const [schedules, setSchedules] = useState([]);
-  const [selectedClass, setSelectedClass] = useState('9-A');
+  const [selectedClass, setSelectedClass] = useState(defaultClass);
   const [showModal, setShowModal] = useState(false);
   const [editingSchedule, setEditingSchedule] = useState(null);
   
@@ -25,7 +27,7 @@ const Schedule = () => {
   });
   
   const [formData, setFormData] = useState({
-    className: '9-A',
+    className: defaultClass,
     day: 'Pazartesi',
     period: '1',
     subject: '',
@@ -341,9 +343,10 @@ const Schedule = () => {
               onChange={(e) => setSelectedClass(e.target.value)}
               style={styles.select}
             >
-              {CLASS_LIST.map(cls => (
-                <option key={cls} value={cls}>{cls} Sınıfı</option>
-              ))}
+              {classes.map(cls => {
+                const className = typeof cls === 'string' ? cls : cls.name;
+                return <option key={className} value={className}>{className} Sınıfı</option>;
+              })}
             </select>
             <Button onClick={() => setShowModal(true)}>
               <Plus size={18} style={{ marginRight: '8px' }} />
@@ -449,9 +452,10 @@ const Schedule = () => {
               onChange={(e) => setFormData({ ...formData, className: e.target.value })}
               style={styles.input}
             >
-              {CLASS_LIST.map(cls => (
-                <option key={cls} value={cls}>{cls}</option>
-              ))}
+              {classes.map(cls => {
+                const className = typeof cls === 'string' ? cls : cls.name;
+                return <option key={className} value={className}>{className}</option>;
+              })}
             </select>
 
             <label style={styles.label}>Gün</label>

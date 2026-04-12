@@ -121,25 +121,32 @@ router.delete('/:id', authorizeRole('teacher'), (req, res) => {
     res.status(500).json({ success: false, error: error.message });
   }
 });
-// Toplu bildirim gönder
+// Toplu bildirim gönder (İsimlendirme veya ID listesi ile)
 router.post('/bulk', authorizeRole('teacher'), (req, res) => {
   try {
-    const { target, title, message } = req.body;
+    const { target, targetType, targetIds, title, message, relatedId } = req.body;
     const notifications = getData('notifications') || [];
     const students = getData('students') || [];
     const teachers = getData('teachers') || [];
 
     let recipients = [];
     
-    if (target === 'all-students') {
-      recipients = students.map(s => ({ type: 'student', id: s.id }));
-    } else if (target === 'all-teachers') {
-      recipients = teachers.map(t => ({ type: 'teacher', id: t.id }));
-    } else if (target.startsWith('class-')) {
-      const className = target.replace('class-', '');
-      recipients = students
-        .filter(s => s.className === className)
-        .map(s => ({ type: 'student', id: s.id }));
+    // 1. Explicit ID listesi verilmişse (Modern format)
+    if (Array.isArray(targetIds)) {
+      recipients = targetIds.map(id => ({ type: targetType || 'student', id }));
+    } 
+    // 2. Target string verilmişse (Legacy format)
+    else if (typeof target === 'string') {
+      if (target === 'all-students') {
+        recipients = students.map(s => ({ type: 'student', id: s.id }));
+      } else if (target === 'all-teachers') {
+        recipients = teachers.map(t => ({ type: 'teacher', id: t.id }));
+      } else if (target.startsWith('class-')) {
+        const className = target.replace('class-', '');
+        recipients = students
+          .filter(s => s.className === className)
+          .map(s => ({ type: 'student', id: s.id }));
+      }
     }
 
     const newNotifications = recipients.map(recipient => ({
@@ -149,7 +156,7 @@ router.post('/bulk', authorizeRole('teacher'), (req, res) => {
       type: 'info',
       targetType: recipient.type,
       targetId: recipient.id,
-      relatedId: null,
+      relatedId: relatedId || null,
       isRead: false,
       createdAt: new Date().toISOString()
     }));

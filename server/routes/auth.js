@@ -6,11 +6,12 @@ import { generateToken } from '../middleware/auth.js';
 import { loginLimiter } from '../middleware/rateLimit.js';
 import base64url from 'base64url';
 import crypto from 'crypto';
+import { authenticateLDAP, updateLDAPPassword } from '../utils/ldap.js';
 
 const router = express.Router();
 
-// Sınıf listesi
-const CLASS_LIST = ['9-A', '9-B', '10-A', '10-B', '11-A', '11-B', '12-A', '12-B'];
+// Dinamik Sınıf listesini al
+const getClasses = () => getData('classes') || ['9-A', '9-B', '10-A', '10-B', '11-A', '11-B', '12-A', '12-B'];
 
 // Öğrenci klasör yolu oluştur
 const generateStudentFolderPath = (className, fullName, studentNumber) => {
@@ -71,45 +72,91 @@ router.post('/login/student', loginLimiter, async (req, res) => {
     }
 
     const students = getData('students') || [];
-    const student = students.find(s => s.studentNumber === studentNumber);
-
-    if (!student) {
-      return res.status(401).json({ success: false, error: 'Bu okul numarası kayıtlı değil! Lütfen kayıt olun.' });
-    }
-
+    let currentStudent = students.find(s => s.studentNumber === studentNumber);
     const settings = getData('settings') || {};
-    const globalResetActive = settings.passwordChangeModeExpiresAt && new Date(settings.passwordChangeModeExpiresAt) > new Date();
-    const studentResetActive = student.passwordChangeModeExpiresAt && new Date(student.passwordChangeModeExpiresAt) > new Date();
 
-    if (globalResetActive || studentResetActive) {
-      return res.json({ success: true, action: 'reset_password_required', studentNumber: student.studentNumber });
-    }
+    // Eğer öğrenci yoksa ve LDAP aktifse JIT Provisioning dene
+    if (!currentStudent) {
+      if (settings.liderAhenk?.enabled) {
+        try {
+          const ldapUser = await authenticateLDAP(settings.liderAhenk, studentNumber, password);
+          if (ldapUser) {
+            const fullName = ldapUser.fullName || studentNumber;
+            const className = 'SSO-İçe Aktarılan';
+            const folderPath = generateStudentFolderPath(className, fullName, studentNumber);
+            
+            currentStudent = {
+              id: generateId(),
+              studentNumber,
+              fullName,
+              className,
+              password: hashPassword(crypto.randomBytes(16).toString('hex'), studentNumber),
+              folderPath,
+              createdAt: new Date().toISOString(),
+              lastLogin: null,
+              ipHistory: [],
+              isLdapUser: true
+            };
+            
+            students.push(currentStudent);
+            setData('students', students);
+            console.log(`[LDAP] JIT Provisioning success: Student ${studentNumber} created.`);
+          } else {
+            return res.status(401).json({ success: false, error: 'Hesap bulunamadı ve LDAP doğrulaması başarısız.' });
+          }
+        } catch (ldapError) {
+          return res.status(401).json({ success: false, error: 'LDAP Giriş Hatası: ' + ldapError.message });
+        }
+      } else {
+        return res.status(401).json({ success: false, error: 'Bu okul numarası kayıtlı değil!' });
+      }
+    } else {
+      // Yerel kullanıcı varsa hibrit kontrol
+      const globalResetActive = settings.passwordChangeModeExpiresAt && new Date(settings.passwordChangeModeExpiresAt) > new Date();
+      const studentResetActive = currentStudent.passwordChangeModeExpiresAt && new Date(currentStudent.passwordChangeModeExpiresAt) > new Date();
 
-    const isValid = verifyPassword(password, student.password, studentNumber);
+      if (globalResetActive || studentResetActive) {
+        return res.json({ success: true, action: 'reset_password_required', studentNumber: currentStudent.studentNumber });
+      }
 
-    if (!isValid) {
-      return res.status(401).json({ success: false, error: 'Hatalı şifre! Lütfen tekrar deneyin.' });
+      const isValid = verifyPassword(password, currentStudent.password, studentNumber);
+
+      if (settings.liderAhenk?.enabled) {
+        try {
+          const ldapUser = await authenticateLDAP(settings.liderAhenk, studentNumber, password);
+          if (ldapUser) {
+            currentStudent.fullName = ldapUser.fullName || currentStudent.fullName;
+            currentStudent.email = ldapUser.email || currentStudent.email;
+          }
+        } catch (ldapError) {
+          if (!isValid) {
+            return res.status(401).json({ success: false, error: 'Hatalı şifre! (LDAP Hatası: ' + ldapError.message + ')' });
+          }
+        }
+      } else if (!isValid) {
+        return res.status(401).json({ success: false, error: 'Hatalı şifre!' });
+      }
     }
 
     // Suspended kontrolü
-    if (student.suspended) {
-      return res.status(403).json({ success: false, error: 'Hesabınız askıya alınmış. Lütfen yönetici ile iletişime geçin.' });
+    if (currentStudent.suspended) {
+      return res.status(403).json({ success: false, error: 'Hesabınız askıya alınmış.' });
     }
 
     // IP ve son giriş güncelle
-    student.ipHistory.push({
+    currentStudent.ipHistory.push({
       ip: clientIp,
       date: new Date().toISOString()
     });
-    student.lastLogin = new Date().toISOString();
+    currentStudent.lastLogin = new Date().toISOString();
 
-    const updatedStudents = students.map(s =>
-      s.studentNumber === studentNumber ? student : s
+    const updatedStudents = getData('students').map(s =>
+      s.studentNumber === studentNumber ? currentStudent : s
     );
     setData('students', updatedStudents);
 
-    const { password: _, ...studentData } = student;
-    const token = generateToken({ id: student.id, userType: 'student', studentNumber });
+    const { password: _, ...studentData } = currentStudent;
+    const token = generateToken({ id: currentStudent.id, userType: 'student', studentNumber });
     res.json({ success: true, user: studentData, userType: 'student', clientIp, token });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
@@ -142,6 +189,15 @@ router.post('/login/student-reset', async (req, res) => {
     }
 
     student.password = hashPassword(newPassword, studentNumber);
+
+    // LiderAhenk şifresini de güncelle (Opsiyonel hook)
+    if (settings.liderAhenk && settings.liderAhenk.enabled) {
+      try {
+        await updateLDAPPassword(settings.liderAhenk, studentNumber, newPassword);
+      } catch (ldapErr) {
+        console.warn(`LiderAhenk şifre senkronizasyon uyarısı (${studentNumber}):`, ldapErr.message);
+      }
+    }
 
     // İşlem başarılı olduktan sonra kişisel modu kaldır.
     student.passwordChangeModeExpiresAt = null;
@@ -205,33 +261,73 @@ router.post('/login/teacher', loginLimiter, async (req, res) => {
     }
 
     const teachers = getData('teachers') || [];
-    // username veya email ile ara
-    const teacher = teachers.find(t => t.username === loginId || t.email === loginId);
+    let currentTeacher = teachers.find(t => t.username === loginId || t.email === loginId);
+    const settings = getData('settings') || {};
 
-    if (!teacher) {
-      return res.status(401).json({ success: false, error: 'Kullanıcı bulunamadı! Lütfen kayıt olun.' });
-    }
+    // Eğer öğretmen yoksa ve LDAP aktifse JIT Provisioning dene
+    if (!currentTeacher) {
+      if (settings.liderAhenk?.enabled) {
+        try {
+          const ldapUser = await authenticateLDAP(settings.liderAhenk, loginId, password);
+          if (ldapUser) {
+            const teachersList = getData('teachers') || [];
+            currentTeacher = {
+              id: generateId(),
+              username: loginId,
+              email: ldapUser.email || null,
+              fullName: ldapUser.fullName || loginId,
+              department: 'LDAP-Aktarılan',
+              password: hashPassword(crypto.randomBytes(16).toString('hex'), loginId),
+              createdAt: new Date().toISOString(),
+              lastLogin: null,
+              isLdapUser: true
+            };
+            teachersList.push(currentTeacher);
+            setData('teachers', teachersList);
+            console.log(`[LDAP] JIT Provisioning success: Teacher ${loginId} created.`);
+          } else {
+            return res.status(401).json({ success: false, error: 'Hesap bulunamadı ve LDAP doğrulaması başarısız.' });
+          }
+        } catch (ldapError) {
+          return res.status(401).json({ success: false, error: 'LDAP Giriş Hatası: ' + ldapError.message });
+        }
+      } else {
+        return res.status(401).json({ success: false, error: 'Bu kullanıcı kayıtlı değil!' });
+      }
+    } else {
+      // Yerel kullanıcı varsa hibrit kontrol
+      const salt = currentTeacher.username || currentTeacher.email;
+      const isValid = verifyPassword(password, currentTeacher.password, salt);
 
-    // Şifre doğrulama - username veya email ile
-    const salt = teacher.username || teacher.email;
-    const isValid = verifyPassword(password, teacher.password, salt);
-
-    if (!isValid) {
-      return res.status(401).json({ success: false, error: 'Hatalı şifre! Lütfen tekrar deneyin.' });
+      if (settings.liderAhenk?.enabled) {
+        try {
+          const ldapUser = await authenticateLDAP(settings.liderAhenk, currentTeacher.username, password);
+          if (ldapUser) {
+            currentTeacher.fullName = ldapUser.fullName || currentTeacher.fullName;
+            currentTeacher.email = ldapUser.email || currentTeacher.email;
+          }
+        } catch (ldapError) {
+          if (!isValid) {
+            return res.status(401).json({ success: false, error: 'Hatalı şifre! (LDAP Hatası: ' + ldapError.message + ')' });
+          }
+        }
+      } else if (!isValid) {
+        return res.status(401).json({ success: false, error: 'Hatalı şifre!' });
+      }
     }
 
     // Suspended kontrolü
-    if (teacher.suspended) {
-      return res.status(403).json({ success: false, error: 'Hesabınız askıya alınmış. Lütfen yönetici ile iletişime geçin.' });
+    if (currentTeacher.suspended) {
+      return res.status(403).json({ success: false, error: 'Hesabınız askıya alınmış.' });
     }
 
-    teacher.lastLogin = new Date().toISOString();
-    const updatedTeachers = teachers.map(t => (t.username === loginId || t.email === loginId) ? teacher : t);
+    currentTeacher.lastLogin = new Date().toISOString();
+    const updatedTeachers = getData('teachers').map(t => t.id === currentTeacher.id ? currentTeacher : t);
     setData('teachers', updatedTeachers);
 
-    const { password: _, ...teacherData } = teacher;
+    const { password: _, ...teacherData } = currentTeacher;
     const clientIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
-    const token = generateToken({ id: teacher.id, userType: 'teacher', username: teacher.username });
+    const token = generateToken({ id: currentTeacher.id, userType: 'teacher', username: currentTeacher.username });
     res.json({ success: true, user: teacherData, userType: 'teacher', clientIp, token });
   } catch (error) {
     res.status(500).json({ success: false, error: 'Sunucu hatası: ' + error.message });
@@ -291,7 +387,7 @@ router.get('/students', (req, res) => {
 
 // Sınıf listesi
 router.get('/classes', (req, res) => {
-  res.json({ success: true, classes: CLASS_LIST });
+  res.json({ success: true, classes: getClasses() });
 });
 
 // Passkey (WebAuthn) Endpoints
@@ -376,6 +472,16 @@ router.post('/change-student-password', async (req, res) => {
     // Yeni şifreyi hash'le
     const hashedPassword = hashPassword(newPassword, studentNumber);
     students[studentIndex].password = hashedPassword;
+
+    // Yönetici/Öğretmen şifreyi değiştirdiğinde LiderAhenk'e de yansıt
+    const settings = getData('settings') || {};
+    if (settings.liderAhenk && settings.liderAhenk.enabled) {
+      try {
+        await updateLDAPPassword(settings.liderAhenk, studentNumber, newPassword);
+      } catch (ldapErr) {
+        console.warn(`Admin LDAP şifre senkronizasyon uyarısı (${studentNumber}):`, ldapErr.message);
+      }
+    }
 
     setData('students', students);
 

@@ -48,7 +48,8 @@ import {
   IntegratedSystems,
   PolyOsOGA,
   LiveExams,
-  Grades as TeacherGrades
+  Grades as TeacherGrades,
+  LiderAhenkSettings
 } from './pages/teacher';
 import TeacherSchedule from './pages/teacher/Schedule';
 import Scheduler from './pages/teacher/Scheduler';
@@ -56,20 +57,37 @@ import PolyOsLNA from './pages/PolyOsLNA';
 import ReportProblem from './pages/shared/ReportProblem';
 
 function App() {
-  const { theme, isAuthenticated, updateActivity, startInactivityTimer, isServerOnline, setServerOnline, token, logout } = useAuthStore();
+  const { 
+    theme, 
+    isAuthenticated, 
+    updateActivity, 
+    startInactivityTimer, 
+    isServerOnline, 
+    setServerOnline, 
+    token, 
+    logout,
+    loadClasses 
+  } = useAuthStore();
 
   // JWT token'sız eski oturumları otomatik temizle
   useEffect(() => {
+    // Sadece state storage'dan yüklendikten (rehydrate) sonra kontrol et
+    // Zustand persist ile state'in hazır olduğunu isAuthenticated true olup 
+    // token'ın boş kalmasından anlayabiliriz.
     if (isAuthenticated && !token) {
-      console.warn('⚠️ Eski oturum tespit edildi (token yok). Otomatik çıkış yapılıyor...');
-      logout();
-      window.location.href = '/';
+      const stored = localStorage.getItem('auth-storage') || sessionStorage.getItem('auth-storage');
+      if (stored && JSON.parse(stored).state?.token === undefined) {
+        console.warn('⚠️ Eski oturum tespit edildi (token yok). Otomatik çıkış yapılıyor...');
+        logout();
+        window.location.href = '/';
+      }
     }
   }, [isAuthenticated, token]);
 
-  // Initialize demo data
+  // Initialize data
   useEffect(() => {
     initializeDemoData();
+    loadClasses(); // Dinamik sınıfları yükle
   }, []);
 
   // Aktivite izleyici - mouse ve keyboard hareketlerini yakala
@@ -421,7 +439,11 @@ function App() {
         />
         <Route
           path="/ogretmen/entegre-sistemler"
-          element={<Navigate to="/ogretmen/polyos-oga" replace />}
+          element={
+            <ProtectedRoute userType="teacher">
+              <IntegratedSystems />
+            </ProtectedRoute>
+          }
         />
         <Route
           path="/ogretmen/ders-programi"
@@ -436,6 +458,14 @@ function App() {
           element={
             <ProtectedRoute userType="teacher">
               <PolyOsOGA />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/ogretmen/liderahenk"
+          element={
+            <ProtectedRoute userType="teacher">
+              <LiderAhenkSettings />
             </ProtectedRoute>
           }
         />

@@ -1,5 +1,6 @@
 import express from 'express';
 import { authenticateToken, authorizeRole } from '../middleware/auth.js';
+import { getData } from '../utils/storage.js';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -26,7 +27,7 @@ const loadSettings = () => {
   return {
     registrationEnabled: true,
     teacherRegistrationEnabled: true,
-    allowedClasses: [
+    allowedClasses: getData('classes') || [
       "9-A", "9-B", "9-C", "9-D", "9-E", "9-F",
       "10-A", "10-B", "10-C", "10-D", "10-E", "10-F",
       "11-A", "11-B", "11-C", "11-D", "11-E", "11-F",
@@ -56,8 +57,8 @@ router.get('/', (req, res) => {
   }
 });
 
-// POST /api/settings - Ayarları güncelle
-router.post('/', (req, res) => {
+// POST /api/settings - Ayarları güncelle (Sadece Öğretmenler)
+router.post('/', authenticateToken, authorizeRole('teacher'), (req, res) => {
   try {
     const { registrationEnabled, teacherRegistrationEnabled, allowedClasses, ogsEnabled, ogsClasses, passwordChangeModeExpiresAt } = req.body;
 

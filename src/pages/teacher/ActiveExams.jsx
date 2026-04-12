@@ -289,7 +289,7 @@ const ActiveExams = () => {
   const navigate = useNavigate();
   const { loadExams, getActiveExams, getUpcomingExams, deleteExam, endExam, extendExamTime } = useExamStore();
   const { getExamSubmissions, loadSubmissions } = useSubmissionStore();
-  const { getAllStudents, loadStudents } = useAuthStore();
+  const { user, getAllStudents, loadStudents } = useAuthStore();
 
   const [exams, setExams] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -318,7 +318,7 @@ const ActiveExams = () => {
   const loadData = async () => {
     await loadStudents(); // Öğrencileri yükle
     await loadSubmissions(); // Gönderimleri yükle
-    const loadedExams = await loadExams();
+    const loadedExams = await loadExams(user?.id);
 
     // Aktif ve yaklaşan sınavları filtrele
     const now = new Date();

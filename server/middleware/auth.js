@@ -10,7 +10,8 @@ import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 
 // JWT Secret Key - .env'den al veya güvenli rastgele üret
-const JWT_SECRET = process.env.JWT_SECRET || crypto.randomBytes(64).toString('hex');
+// ÖNEMLİ: ESM hoisting nedeniyle process.env'yi fonksiyon içinde kontrol ediyoruz
+const getJwtSecret = () => process.env.JWT_SECRET || 'teknofest-default-secret-key-2026';
 const JWT_EXPIRY = '24h'; // Token süresi
 
 /**
@@ -19,7 +20,7 @@ const JWT_EXPIRY = '24h'; // Token süresi
  * @returns {string} JWT token
  */
 export function generateToken(payload) {
-  return jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRY });
+  return jwt.sign(payload, getJwtSecret(), { expiresIn: JWT_EXPIRY });
 }
 
 /**
@@ -39,7 +40,7 @@ export function authenticateToken(req, res, next) {
   }
 
   try {
-    const decoded = jwt.verify(token, JWT_SECRET);
+    const decoded = jwt.verify(token, getJwtSecret());
     req.user = decoded; // { id, userType, fullName, ... }
     next();
   } catch (err) {
@@ -94,7 +95,7 @@ export function optionalAuth(req, res, next) {
 
   if (token) {
     try {
-      req.user = jwt.verify(token, JWT_SECRET);
+      req.user = jwt.verify(token, getJwtSecret());
     } catch (err) {
       // Token geçersiz ama zorunlu değil, devam et
       req.user = null;

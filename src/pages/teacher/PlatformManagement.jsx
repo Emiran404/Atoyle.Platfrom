@@ -5,9 +5,18 @@ import ReactMarkdown from 'react-markdown';
 import { TeacherLayout } from '../../components/layouts';
 import { useToast } from '../../components/ui/Toast';
 import { Button, ConfirmModal } from '../../components/ui';
-import { CLASS_LIST } from '../../store/authStore';
+import { useAuthStore } from '../../store/authStore';
 import { resetAllData } from '../../utils/initData';
 import { t } from '../../utils/i18n';
+import { 
+  settingsApi, 
+  userApi, 
+  systemApi, 
+  statsApi, 
+  notificationApi, 
+  backupApi,
+  classApi
+} from '../../services/api';
 
 const PlatformManagement = () => {
   const { toast } = useToast();
@@ -23,6 +32,10 @@ const PlatformManagement = () => {
   const [registrationEnabled, setRegistrationEnabled] = useState(true);
   const [teacherRegistrationEnabled, setTeacherRegistrationEnabled] = useState(true);
   const [allowedClasses, setAllowedClasses] = useState([]);
+  const [classes, setClasses] = useState([]);
+  const [newClassName, setNewClassName] = useState('');
+  const [editingClass, setEditingClass] = useState(null);
+  const [newNameForEdit, setNewNameForEdit] = useState('');
 
   // Kullanıcı yönetimi
   const [students, setStudents] = useState([]);
@@ -121,6 +134,7 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
   useEffect(() => {
     loadSettings();
     if (activeTab === 'users') loadUsers();
+    if (activeTab === 'classes' || activeTab === 'registration') loadClasses();
     if (activeTab === 'stats') loadStats();
     if (activeTab === 'update') {
       loadUpdateData();
@@ -131,15 +145,11 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
   const loadUpdateData = async () => {
     setLoading(true);
     try {
-      const [vRes, hRes] = await Promise.all([
-        fetch('/api/system/version'),
-        fetch('/api/system/updates')
-      ]);
-      const vData = await vRes.json();
-      const hData = await hRes.json();
+      const vData = await systemApi.getVersion();
+      const hData = await systemApi.getUpdates();
 
-      if (vData.success) setCurrentVersion(vData.version);
-      if (hData.success) setUpdateHistory(hData.updates);
+      if (vData?.success) setCurrentVersion(vData.version);
+      if (hData?.success) setUpdateHistory(hData.updates);
     } catch (error) {
       console.error('Güncelleme verileri yüklenemedi:', error);
     }
@@ -150,19 +160,13 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
     setCheckingUpdate(true);
     setAvailableUpdate(null);
     try {
-      const response = await fetch('/api/system/check-update', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ force: true })
-      });
-      const data = await response.json();
+      const data = await systemApi.checkUpdate(true);
       
       // Sürüm bilgisini de tazeleyelim
-      const vRes = await fetch('/api/system/version');
-      const vData = await vRes.json();
-      if (vData.success) setCurrentVersion(vData.version);
+      const vData = await systemApi.getVersion();
+      if (vData?.success) setCurrentVersion(vData.version);
 
-      if (data.success && data.updateAvailable) {
+      if (data?.success && data.updateAvailable) {
         setAvailableUpdate(data);
         toast.info(`Yeni bir güncelleme bulundu: v${data.latestVersion}`);
       } else {
@@ -195,17 +199,12 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
     }
 
     try {
-      const response = await fetch('/api/system/install-update', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          version: availableUpdate.latestVersion,
-          description: availableUpdate.customDescription
-        })
-      });
-      const data = await response.json();
+      const data = await systemApi.installUpdate(
+        availableUpdate.latestVersion,
+        availableUpdate.customDescription
+      );
 
-      if (data.success) {
+      if (data?.success) {
         toast.success('Güncelleme başarıyla yüklendi! Sistem yeniden başlatılıyor...');
         setTimeout(() => window.location.reload(), 2000);
       } else {
@@ -221,9 +220,8 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
   const loadSettings = async () => {
     setLoading(true);
     try {
-      const response = await fetch('/api/settings');
-      const data = await response.json();
-      if (data.success) {
+      const data = await settingsApi.get();
+      if (data?.success && data.settings) {
         setRegistrationEnabled(data.settings.registrationEnabled || false);
         setTeacherRegistrationEnabled(data.settings.teacherRegistrationEnabled !== false);
         setAllowedClasses(data.settings.allowedClasses || []);
@@ -243,14 +241,8 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
         allowedClasses: newSettings.allowedClasses !== undefined ? newSettings.allowedClasses : allowedClasses
       };
 
-      const response = await fetch('/api/settings', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(settingsToSave)
-      });
-
-      const data = await response.json();
-      if (data.success) {
+      const data = await settingsApi.update(settingsToSave);
+      if (data?.success) {
         toast.success('Ayarlar kaydedildi');
       } else {
         toast.error('Ayarlar kaydedilemedi');
@@ -284,8 +276,10 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
   };
 
   const selectAllClasses = async () => {
-    setAllowedClasses([...CLASS_LIST]);
-    await handleSaveSettings({ allowedClasses: [...CLASS_LIST] });
+    // Tüm dinamik sınıfları seç
+    const allClassNames = classes.map(c => typeof c === 'string' ? c : c.name);
+    setAllowedClasses(allClassNames);
+    await handleSaveSettings({ allowedClasses: allClassNames });
   };
 
   const deselectAllClasses = async () => {
@@ -296,15 +290,11 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
   // Kullanıcı yönetimi fonksiyonları
   const loadUsers = async () => {
     try {
-      const [studentsRes, teachersRes] = await Promise.all([
-        fetch('/api/users/students'),
-        fetch('/api/users/teachers')
-      ]);
-      const studentsData = await studentsRes.json();
-      const teachersData = await teachersRes.json();
+      const studentsData = await userApi.getStudents();
+      const teachersData = await userApi.getTeachers();
 
-      if (studentsData.success) setStudents(studentsData.students);
-      if (teachersData.success) setTeachers(teachersData.teachers);
+      if (studentsData?.success) setStudents(studentsData.students);
+      if (teachersData?.success) setTeachers(teachersData.teachers);
     } catch (error) {
       console.error('Kullanıcılar yüklenemedi:', error);
     }
@@ -319,14 +309,8 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
       type: 'danger',
       onConfirm: async () => {
         try {
-          const response = await fetch(`/api/users/${userId}`, {
-            method: 'DELETE',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ userType })
-          });
-
-          const data = await response.json();
-          if (data.success) {
+          const data = await userApi.delete(userId, userType);
+          if (data?.success) {
             toast.success('Kullanıcı silindi');
             loadUsers();
           } else {
@@ -341,17 +325,9 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
 
   const handleToggleSuspend = async (userId, userType, currentStatus) => {
     try {
-      const response = await fetch(`/api/users/${userId}/suspend`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          userType,
-          suspended: !currentStatus
-        })
-      });
+      const data = await userApi.suspend(userId, userType, !currentStatus);
 
-      const data = await response.json();
-      if (data.success) {
+      if (data?.success) {
         toast.success(currentStatus ? 'Kullanıcı aktif edildi' : 'Kullanıcı askıya alındı');
         loadUsers();
       } else {
@@ -365,9 +341,8 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
   // İstatistik yükleme
   const loadStats = async () => {
     try {
-      const response = await fetch('/api/stats');
-      const data = await response.json();
-      if (data.success) {
+      const data = await statsApi.get();
+      if (data?.success) {
         setStats(data.stats);
       }
     } catch (error) {
@@ -378,14 +353,8 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
   // Toplu bildirim gönderme
   const handleSendBulkNotification = async (target, title, message) => {
     try {
-      const response = await fetch('/api/notifications/bulk', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ target, title, message })
-      });
-
-      const data = await response.json();
-      if (data.success) {
+      const data = await notificationApi.createBulk({ target, title, message });
+      if (data?.success) {
         toast.success(`${data.count} kullanıcıya bildirim gönderildi`);
       } else {
         toast.error('Bildirim gönderilemedi');
@@ -399,18 +368,14 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
   const handleBackupData = async () => {
     setBackupInProgress(true);
     try {
-      // Backend'den gerçek verileri al
-      const response = await fetch('/api/backup');
-      const data = await response.json();
+      const data = await backupApi.get();
 
-      if (!data.success) {
+      if (!data?.success) {
         toast.error('Yedekleme başarısız');
         return;
       }
 
       const backupData = data.backup;
-
-      // JSON dosyası oluştur
       const jsonString = JSON.stringify(backupData, null, 2);
       const blob = new Blob([jsonString], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
@@ -464,6 +429,82 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
     }
   };
 
+  // Sınıf yönetimi fonksiyonları
+  const loadClasses = async () => {
+    setLoading(true);
+    try {
+      const data = await classApi.getAll();
+      if (data?.success) setClasses(data.classes);
+    } catch (error) {
+      console.error('Sınıflar yüklenemedi:', error);
+    }
+    setLoading(false);
+  };
+
+  const handleAddClass = async () => {
+    if (!newClassName.trim()) return;
+    setSaving(true);
+    try {
+      const data = await classApi.add(newClassName.trim());
+      if (data?.success) {
+        toast.success(`Sınıf eklendi: ${newClassName}`);
+        setNewClassName('');
+        loadClasses();
+        loadSettings(); // allowedClasses listesini de güncellemek için
+      } else {
+        toast.error(data.error || 'Sınıf eklenemedi');
+      }
+    } catch (error) {
+      toast.error('Bağlantı hatası');
+    }
+    setSaving(false);
+  };
+
+  const handleDeleteClass = (className) => {
+    setConfirmModal({
+      isOpen: true,
+      title: 'Sınıfı Sil',
+      message: `${className} sınıfını silmek istediğinizden emin misiniz? Bu sınıfa kayıtlı öğrenciler artık "Sınıf Silindi" olarak görünecektir.`,
+      confirmText: 'Sil',
+      type: 'danger',
+      onConfirm: async () => {
+        try {
+          const data = await classApi.delete(className);
+          if (data?.success) {
+            toast.success('Sınıf silindi');
+            loadClasses();
+            loadSettings();
+            if (activeTab === 'users') loadUsers(); // Öğrenci isimleri güncellenmiş olabilir
+          } else {
+            toast.error('Sınıf silinemedi');
+          }
+        } catch (error) {
+          toast.error('Bir hata oluştu');
+        }
+      }
+    });
+  };
+
+  const handleUpdateClass = async () => {
+    if (!editingClass || !newNameForEdit.trim()) return;
+    setSaving(true);
+    try {
+      const data = await classApi.update(editingClass, newNameForEdit.trim());
+      if (data?.success) {
+        toast.success('Sınıf güncellendi');
+        setEditingClass(null);
+        setNewNameForEdit('');
+        loadClasses();
+        loadSettings();
+      } else {
+        toast.error(data.error || 'Güncelleme başarısız');
+      }
+    } catch (error) {
+      toast.error('Bağlantı hatası');
+    }
+    setSaving(false);
+  };
+
   const handleRestoreData = async (event) => {
     const file = event.target.files[0];
     if (!file) return;
@@ -476,69 +517,29 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
       type: 'warning',
       onConfirm: async () => {
         try {
-          // ZIP dosyası mı JSON mu kontrol et
           const isZip = file.name.endsWith('.zip');
+          let result;
 
           if (isZip) {
-            // ZIP dosyası - multipart/form-data ile gönder
-            const formData = new FormData();
-            formData.append('backup', file);
-
             toast.info('ZIP dosyası yükleniyor ve geri yükleniyor...');
-
-            const response = await fetch('/api/backup/restore-zip', {
-              method: 'POST',
-              body: formData
-            });
-
-            if (!response.ok) {
-              let errorMsg = 'Sunucu hatası';
-              try {
-                const result = await response.json();
-                errorMsg = result.error || errorMsg;
-              } catch (e) {
-                errorMsg = `HTTP ${response.status}: ${response.statusText}`;
-              }
-              toast.error('Geri yükleme başarısız: ' + errorMsg);
-              return;
-            }
-
-            const result = await response.json();
-
-            if (result.success) {
-              toast.success('ZIP yedeği başarıyla geri yüklendi! Sayfa yenileniyor...');
-              setTimeout(() => {
-                window.location.reload();
-              }, 2000);
-            } else {
-              toast.error('Geri yükleme başarısız: ' + (result.error || 'Bilinmeyen hata'));
-            }
+            result = await backupApi.restoreZip(file);
           } else {
-            // JSON dosyası - mevcut yöntem
             const text = await file.text();
             const backupData = JSON.parse(text);
 
             if (!backupData.data) {
               throw new Error('Geçersiz yedek dosyası');
             }
+            result = await backupApi.restore(backupData.data);
+          }
 
-            // Backend'e gönder
-            const response = await fetch('/api/backup/restore', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ data: backupData.data })
-            });
-
-            const result = await response.json();
-
-            if (result.success) {
-              toast.success('Yedek başarıyla geri yüklendi! Sayfa yenileniyor...');
-              setTimeout(() => {
-                window.location.reload();
-              }, 2000);
-            } else {
-              toast.error('Geri yükleme başarısız');
-            }
+          if (result?.success) {
+            toast.success('Yedek başarıyla geri yüklendi! Sayfa yenileniyor...');
+            setTimeout(() => {
+              window.location.reload();
+            }, 2000);
+          } else {
+            toast.error('Geri yükleme başarısız: ' + (result?.error || 'Bilinmeyen hata'));
           }
         } catch (error) {
           console.error('Geri yükleme hatası:', error);
@@ -671,7 +672,8 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
           </div>
 
           <div style={styles.classGrid}>
-            {CLASS_LIST.map((className) => {
+            {classes.map((c) => {
+              const className = typeof c === 'string' ? c : c.name;
               const isSelected = allowedClasses.includes(className);
               return (
                 <div
@@ -736,10 +738,9 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
     // İlk yüklemede ve 1 saniyede bir kalan süreyi kontrol et
     const checkPasswordModeStatus = async () => {
       try {
-        const response = await fetch('/api/settings');
-        const data = await response.json();
+        const data = await settingsApi.get();
 
-        if (data.success && data.settings?.passwordChangeModeExpiresAt) {
+        if (data?.success && data.settings?.passwordChangeModeExpiresAt) {
           const expiresAt = new Date(data.settings.passwordChangeModeExpiresAt).getTime();
           const now = Date.now();
 
@@ -783,21 +784,17 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
 
   const handleTogglePasswordChangeMode = async () => {
     try {
-      const currentSettingsRes = await fetch('/api/settings');
-      const currentSettings = await currentSettingsRes.json();
+      const data = await settingsApi.get();
+      const currentSettings = data?.settings || {};
 
-      let updateRes;
+      let result;
       if (passwordChangeModeRemaining !== null) {
         // İptal et
-        updateRes = await fetch('/api/settings', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            ...currentSettings,
-            passwordChangeModeExpiresAt: null
-          })
+        result = await settingsApi.update({
+          ...currentSettings,
+          passwordChangeModeExpiresAt: null
         });
-        if (updateRes.ok) {
+        if (result?.success) {
           setPasswordChangeModeRemaining(null);
           toast.success('Şifre Değiştirme Modu iptal edildi.');
         } else {
@@ -806,15 +803,11 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
       } else {
         // Aktif et
         const expiresAt = new Date(Date.now() + 10 * 60000).toISOString();
-        updateRes = await fetch('/api/settings', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            ...currentSettings,
-            passwordChangeModeExpiresAt: expiresAt
-          })
+        result = await settingsApi.update({
+          ...currentSettings,
+          passwordChangeModeExpiresAt: expiresAt
         });
-        if (updateRes.ok) {
+        if (result?.success) {
           setPasswordChangeModeRemaining(600); // 10 dakika = 600 saniye
           toast.success('Öğrenci Şifre Değiştirme Modu 10 dakikalığına aktif edildi!');
         } else {
@@ -1489,6 +1482,146 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
     </>
   );
 
+  const renderClassesTab = () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+      {/* Sınıf Ekleme */}
+      <div style={styles.card}>
+        <div style={styles.cardHeader}>
+          <Users size={24} style={{ color: '#0ea5e9' }} />
+          <h2 style={styles.cardTitle}>Yeni Sınıf Ekle</h2>
+        </div>
+        <div style={{ display: 'flex', gap: '12px' }}>
+          <input
+            type="text"
+            placeholder="Sınıf Adı (Örn: 11-B)"
+            value={newClassName}
+            onChange={(e) => setNewClassName(e.target.value)}
+            style={{
+              flex: 1,
+              padding: '12px 16px',
+              border: '2px solid #e2e8f0',
+              borderRadius: '12px',
+              outline: 'none',
+              fontSize: '14px'
+            }}
+            onKeyPress={(e) => e.key === 'Enter' && handleAddClass()}
+          />
+          <Button
+            onClick={handleAddClass}
+            disabled={saving || !newClassName.trim()}
+          >
+            Sınıfı Oluştur
+          </Button>
+        </div>
+      </div>
+
+      {/* Sınıf Listesi */}
+      <div style={styles.card}>
+        <div style={{ ...styles.cardHeader, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+            <Database size={24} style={{ color: '#10b981' }} />
+            <h2 style={styles.cardTitle}>Mevcut Sınıflar ({classes.length})</h2>
+          </div>
+          <span style={{ fontSize: '12px', color: '#64748b' }}>Alfabetik Siralı</span>
+        </div>
+
+        {classes.length === 0 ? (
+          <div style={{ textAlign: 'center', padding: '40px', color: '#64748b' }}>
+            <Users size={40} style={{ margin: '0 auto 12px', opacity: 0.3 }} />
+            <p>Henüz tanımlanmış bir sınıf yok.</p>
+          </div>
+        ) : (
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+              <thead>
+                <tr style={{ borderBottom: '2px solid #e2e8f0' }}>
+                  <th style={{ textAlign: 'left', padding: '16px', fontSize: '13px', color: '#64748b', fontWeight: '700' }}>Sınıf Adı</th>
+                  <th style={{ textAlign: 'right', padding: '16px', fontSize: '13px', color: '#64748b', fontWeight: '700' }}>İşlemler</th>
+                </tr>
+              </thead>
+              <tbody>
+                {classes.map((cls, index) => {
+                  const className = typeof cls === 'string' ? cls : cls.name;
+                  return (
+                    <tr key={index} style={{ borderBottom: '1px solid #f1f5f9', transition: 'background-color 0.2s' }}>
+                      <td style={{ padding: '16px' }}>
+                        {editingClass === className ? (
+                          <div style={{ display: 'flex', gap: '8px' }}>
+                            <input
+                              type="text"
+                              value={newNameForEdit}
+                              onChange={(e) => setNewNameForEdit(e.target.value)}
+                              style={{
+                                padding: '8px 12px',
+                                border: '2px solid #3b82f6',
+                                borderRadius: '8px',
+                                fontSize: '14px',
+                                width: '120px'
+                              }}
+                              autoFocus
+                            />
+                            <button
+                              onClick={handleUpdateClass}
+                              style={{ padding: '8px 12px', backgroundColor: '#3b82f6', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer' }}
+                            >
+                              Kaydet
+                            </button>
+                            <button
+                              onClick={() => { setEditingClass(null); setNewNameForEdit(''); }}
+                              style={{ padding: '8px 12px', backgroundColor: '#f1f5f9', color: '#64748b', border: 'none', borderRadius: '8px', cursor: 'pointer' }}
+                            >
+                              İptal
+                            </button>
+                          </div>
+                        ) : (
+                          <span style={{ fontWeight: '600', color: '#1e293b' }}>{className}</span>
+                        )}
+                      </td>
+                      <td style={{ padding: '16px', textAlign: 'right' }}>
+                        <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
+                          <button
+                            onClick={() => { setEditingClass(className); setNewNameForEdit(className); }}
+                            title="Düzenle"
+                            style={{
+                               padding: '8px',
+                               borderRadius: '8px',
+                               border: 'none',
+                               backgroundColor: '#f1f5f9',
+                               color: '#64748b',
+                               cursor: 'pointer',
+                               transition: 'all 0.2s'
+                            }}
+                          >
+                            <RefreshCcw size={16} />
+                          </button>
+                          <button
+                            onClick={() => handleDeleteClass(className)}
+                            title="Sil"
+                            style={{
+                               padding: '8px',
+                               borderRadius: '8px',
+                               border: 'none',
+                               backgroundColor: '#fee2e2',
+                               color: '#ef4444',
+                               cursor: 'pointer',
+                               transition: 'all 0.2s'
+                            }}
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+
   const renderUpdateTab = () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
       {/* Mevcut Durum */}
@@ -2058,6 +2191,16 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
             Kayıt Kontrolü
           </button>
           <button
+            style={styles.tab(activeTab === 'classes')}
+            onClick={() => {
+              setActiveTab('classes');
+              setSearchParams({ tab: 'classes' });
+            }}
+          >
+            <Database size={18} />
+            Sınıf Yönetimi
+          </button>
+          <button
             style={styles.tab(activeTab === 'users')}
             onClick={() => setActiveTab('users')}
           >
@@ -2103,6 +2246,7 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
 
         {/* Tab Content */}
         {activeTab === 'registration' && renderRegistrationTab()}
+        {activeTab === 'classes' && renderClassesTab()}
         {activeTab === 'users' && renderUsersTab()}
         {activeTab === 'bulk' && renderBulkTab()}
         {activeTab === 'stats' && renderStatsTab()}

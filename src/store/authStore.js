@@ -1,15 +1,9 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
-import { authApi, userApi } from '../services/api';
+import { persist, createJSONStorage } from 'zustand/middleware';
+import { authApi, userApi, classApi } from '../services/api';
 import { getCurrentLanguage, changeLanguage as i18nChangeLanguage } from '../utils/i18n';
 
-// Sınıf listesi
-export const CLASS_LIST = [
-  '9-A', '9-B', '9-C', '9-D', '9-E', '9-F',
-  '10-A', '10-B', '10-C', '10-D', '10-E', '10-F',
-  '11-A', '11-B', '11-C', '11-D', '11-E', '11-F',
-  '12-A', '12-B', '12-C', '12-D', '12-E', '12-F'
-];
+
 
 // İnaktivite süresi (30 dakika = 30 * 60 * 1000 ms)
 const INACTIVITY_TIMEOUT = 30 * 60 * 1000;
@@ -42,6 +36,7 @@ const useAuthStore = create(
       inactivityTimer: null,
       language: getCurrentLanguage(),
       isServerOnline: true,
+      classes: [], // Dinamik sınıf listesi
 
       // Sunucu durumunu güncelle
       setServerOnline: (status) => {
@@ -262,7 +257,7 @@ const useAuthStore = create(
 
             return { success: true, user: response.user };
           }
-          return { success: false, error: response.error };
+          return { success: false, error: response?.error || 'Giriş başarısız!' };
         } catch (error) {
           return { success: false, error: error.message || 'Giriş başarısız!' };
         }
@@ -374,6 +369,22 @@ const useAuthStore = create(
         }
       },
 
+      // Sınıfları yükle - Backend API (async)
+      loadClasses: async () => {
+        try {
+          const response = await classApi.getAll();
+          if (response.success) {
+            set({ classes: response.classes });
+            return response.classes;
+          }
+          return [];
+        } catch (error) {
+          console.error('Sınıflar yüklenemedi:', error);
+          // Hata durumunda statik listeyi geçici olarak kullanabiliriz
+          return [];
+        }
+      },
+
       // Tüm öğretmenleri getir
       getAllTeachers: () => {
         return [];
@@ -420,25 +431,30 @@ const useAuthStore = create(
     }),
     {
       name: 'auth-storage',
-      storage: {
+      storage: createJSONStorage(() => ({
         getItem: (name) => {
-          // Her iki storage'ı kontrol et
           const fromLocal = localStorage.getItem(name);
           const fromSession = sessionStorage.getItem(name);
           return fromLocal || fromSession;
         },
         setItem: (name, value) => {
-          // userType'a göre storage seç
+          // value zaten JSON string olarak gelir (createJSONStorage sayesinde)
           try {
             const data = JSON.parse(value);
-            if (data.state?.userType === 'teacher') {
+            const userType = data.state?.userType;
+            
+            if (userType === 'teacher') {
               localStorage.setItem(name, value);
               sessionStorage.removeItem(name);
-            } else {
+            } else if (userType === 'student') {
               sessionStorage.setItem(name, value);
               localStorage.removeItem(name);
+            } else {
+              // Varsayılan (henüz giriş yapılmamışsa)
+              sessionStorage.setItem(name, value);
             }
-          } catch {
+          } catch (e) {
+            console.warn('Storage setItem parse error:', e);
             sessionStorage.setItem(name, value);
           }
         },
@@ -446,7 +462,7 @@ const useAuthStore = create(
           localStorage.removeItem(name);
           sessionStorage.removeItem(name);
         }
-      },
+      })),
       partialize: (state) => ({
         user: state.user,
         isAuthenticated: state.isAuthenticated,
@@ -454,7 +470,8 @@ const useAuthStore = create(
         token: state.token,
         theme: state.theme,
         lastActivity: state.lastActivity,
-        language: state.language
+        language: state.language,
+        classes: state.classes
       })
     }
   )

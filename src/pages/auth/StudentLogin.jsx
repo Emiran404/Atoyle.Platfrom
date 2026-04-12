@@ -57,7 +57,7 @@ const StudentLogin = () => {
     toast.info('Şifreniz sıfırlanıyor...');
     try {
       const result = await resetStudentPassword(formData.studentNumber, resetData.newPassword);
-      if (result.success) {
+      if (result && result.success) {
         toast.success(result.message || 'Şifreniz başarıyla değişti, giriş yapabilirsiniz.');
         setResetMode(false);
         setFormData(prev => ({ ...prev, password: '' }));
@@ -87,7 +87,7 @@ const StudentLogin = () => {
         formData.rememberMe
       );
 
-      if (result.success) {
+      if (result && result.success) {
         if (result.action === 'reset_password_required') {
           toast.warning('Şifre değiştirme modu aktif! Lütfen yeni şifre belirleyin.', { autoClose: 5000 });
           setResetMode(true);

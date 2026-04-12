@@ -160,7 +160,7 @@ const ExamEdit = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { loadExams, getExam, updateExam } = useExamStore();
-  const { loadStudents, students } = useAuthStore();
+  const { user, loadStudents, students } = useAuthStore();
 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);

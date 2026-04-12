@@ -4,7 +4,6 @@ import { GraduationCap, User, Lock, Hash, ArrowLeft, AlertTriangle, ShieldAlert 
 import { Button, Input, Select } from '../../components/ui';
 import { useToast } from '../../components/ui/Toast';
 import { useAuthStore } from '../../store/authStore';
-import { CLASS_LIST } from '../../data/classes';
 import { checkPasswordStrength } from '../../utils/crypto';
 
 const StudentRegister = () => {

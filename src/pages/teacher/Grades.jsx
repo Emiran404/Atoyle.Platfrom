@@ -15,7 +15,7 @@ import {
   Download
 } from 'lucide-react';
 import { TeacherLayout } from '../../components/layouts';
-import { useAuthStore, CLASS_LIST } from '../../store/authStore';
+import { useAuthStore } from '../../store/authStore';
 import { useExamStore } from '../../store/examStore';
 import { useSubmissionStore } from '../../store/submissionStore';
 import { formatDateTime } from '../../utils/dateHelpers';
@@ -28,6 +28,7 @@ const Grades = () => {
   const submissions = useSubmissionStore(state => state.submissions);
   const loadSubmissions = useSubmissionStore(state => state.loadSubmissions);
   const user = useAuthStore(state => state.user);
+  const classes = useAuthStore(state => state.classes);
 
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -230,9 +231,10 @@ const Grades = () => {
               }}
             >
               <option value="all">Tüm Sınıflar</option>
-              {CLASS_LIST.map(c => (
-                <option key={c} value={c}>{c}</option>
-              ))}
+              {classes.map(cls => {
+                const className = typeof cls === 'string' ? cls : cls.name;
+                return <option key={className} value={className}>{className}</option>;
+              })}
             </select>
           </div>
 

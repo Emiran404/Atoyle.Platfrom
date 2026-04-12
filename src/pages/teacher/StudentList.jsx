@@ -1,12 +1,13 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TeacherLayout } from '../../components/layouts';
 import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
 import { Badge } from '../../components/ui/Badge';
 import { Modal } from '../../components/ui/Modal';
 import { useToast } from '../../components/ui/Toast';
-import { useAuthStore, CLASS_LIST } from '../../store/authStore';
+import { useAuthStore } from '../../store/authStore';
 import { useSubmissionStore } from '../../store/submissionStore';
+import { settingsApi } from '../../services/api';
 import { formatDate } from '../../utils/dateHelpers';
 import {
   Search, Filter, User, Folder, Calendar, Eye,
@@ -321,7 +322,7 @@ const styles = {
 };
 
 const StudentList = () => {
-  const { loadStudents, students } = useAuthStore();
+  const { user, loadStudents, students, classes } = useAuthStore();
   const { submissions, loadSubmissions } = useSubmissionStore();
   const { toast } = useToast();
 
@@ -453,8 +454,7 @@ const StudentList = () => {
     // İlk yüklemede ve 1 saniyede bir kalan süreyi kontrol et
     const checkPasswordModeStatus = async () => {
       try {
-        const response = await fetch('/api/settings');
-        const data = await response.json();
+        const data = await settingsApi.get();
 
         if (data.success && data.settings?.passwordChangeModeExpiresAt) {
           const expiresAt = new Date(data.settings.passwordChangeModeExpiresAt).getTime();
@@ -498,21 +498,17 @@ const StudentList = () => {
 
   const handleTogglePasswordChangeMode = async () => {
     try {
-      const currentSettingsRes = await fetch('/api/settings');
-      const currentSettings = await currentSettingsRes.json();
+      const data = await settingsApi.get();
+      const currentSettings = data.settings || {};
 
       let updateRes;
       if (passwordChangeModeRemaining !== null) {
         // İptal et
-        updateRes = await fetch('/api/settings', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            ...currentSettings,
-            passwordChangeModeExpiresAt: null
-          })
+        updateRes = await settingsApi.update({
+          ...currentSettings,
+          passwordChangeModeExpiresAt: null
         });
-        if (updateRes.ok) {
+        if (updateRes.success) {
           setPasswordChangeModeRemaining(null);
           toast.success('Şifre Değiştirme Modu iptal edildi.');
         } else {
@@ -521,15 +517,11 @@ const StudentList = () => {
       } else {
         // Aktif et
         const expiresAt = new Date(Date.now() + 10 * 60000).toISOString();
-        updateRes = await fetch('/api/settings', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            ...currentSettings,
-            passwordChangeModeExpiresAt: expiresAt
-          })
+        updateRes = await settingsApi.update({
+          ...currentSettings,
+          passwordChangeModeExpiresAt: expiresAt
         });
-        if (updateRes.ok) {
+        if (updateRes.success) {
           setPasswordChangeModeRemaining(600); // 10 dakika = 600 saniye
           toast.success('Öğrenci Şifre Değiştirme Modu 10 dakikalığına aktif edildi!');
         } else {
@@ -594,7 +586,8 @@ const StudentList = () => {
     );
   };
 
-  const classStats = CLASS_LIST.map(className => {
+  const classStats = classes.map(cls => {
+    const className = typeof cls === 'string' ? cls : cls.name;
     const classStudents = students.filter(s => s.className === className);
     return {
       name: className,
@@ -725,9 +718,10 @@ const StudentList = () => {
                 onChange={(e) => setClassFilter(e.target.value)}
               >
                 <option value="all">Tüm Sınıflar</option>
-                {CLASS_LIST.map(c => (
-                  <option key={c} value={c}>{c}</option>
-                ))}
+                {classes.map(cls => {
+                  const className = typeof cls === 'string' ? cls : cls.name;
+                  return <option key={className} value={className}>{className}</option>;
+                })}
               </select>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -780,9 +774,8 @@ const StudentList = () => {
                     const isExpanded = expandedRows.includes(student.id);
 
                     return (
-                      <>
+                      <React.Fragment key={student.id}>
                         <tr
-                          key={student.id}
                           style={styles.tr}
                           onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f8fafc'}
                           onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
@@ -872,7 +865,7 @@ const StudentList = () => {
                             </td>
                           </tr>
                         )}
-                      </>
+                      </React.Fragment>
                     );
                   })}
                 </tbody>

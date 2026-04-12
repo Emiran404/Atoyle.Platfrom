@@ -89,15 +89,7 @@ const Documentation = () => {
       ataturk: 'Mustafa Kemal Atatürk',
       ataturkQuote1: 'Bütün Ümidim',
       ataturkQuote2: 'Gençliktedir',
-      platform: 'Platform',
-      resources: 'Kaynaklar',
-      contact: 'İletişim',
-      documentationLink: 'Dokümantasyon',
-      labRules: 'Laboratuvar Kuralları',
-      systemStatus: 'Sistem Durumu',
-      allRightsReserved: 'Tüm hakları saklıdır.',
       polyosExpansion: 'Pardus Okul Laboratuvar Yönetim ve Ödev Sistemi',
-      labRulesNav: 'Laboratuvar Kuralları',
       poweredBy1: 'Atölye.Platform bir ',
       poweredBy2: ' ürünüdür.',
       pardusIntegrated: 'Pardus Eğitim Eko-sistemi ile tam entegre çalışır.'
@@ -152,7 +144,6 @@ const Documentation = () => {
       ataturkQuote1: 'All My Hope',
       ataturkQuote2: 'Is In Youth',
       polyosExpansion: 'Pardus School Laboratory Management and Homework System',
-      labRulesNav: 'Lab Rules',
       poweredBy1: 'Atölye.Platform is a ',
       poweredBy2: ' product.',
       pardusIntegrated: 'Fully integrated with the Pardus Education Ecosystem.'

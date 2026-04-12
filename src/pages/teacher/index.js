@@ -11,6 +11,7 @@ export { default as TeacherNotifications } from './TeacherNotifications';
 export { default as TeacherSettings } from './TeacherSettings';
 export { default as PlatformManagement } from './PlatformManagement';
 export { default as IntegratedSystems } from './IntegratedSystems';
+export { default as LiderAhenkSettings } from './LiderAhenkSettings';
 export { default as PolyOsOGA } from './PolyOsOGA';
 export { default as LiveExams } from './LiveExams';
 export { default as Grades } from './Grades';

@@ -223,7 +223,7 @@ const TeacherLogin = () => {
     toast.info('Giriş yapılıyor...');
     try {
       const result = await loginTeacher(formData.username, formData.password);
-      if (result.success) {
+      if (result && result.success) {
         toast.success('Giriş başarılı! Yönlendiriliyorsunuz...');
         
         // Giriş bildirimi oluştur

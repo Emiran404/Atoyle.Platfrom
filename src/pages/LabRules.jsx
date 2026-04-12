@@ -75,7 +75,6 @@ const LabRules = () => {
       contactInstructor: 'Öğretmene Ulaşın',
       platform: 'PLATFORM',
       resources: 'KAYNAKLAR',
-      contact: 'İletişim',
       labRules: 'Laboratuvar Kuralları',
       systemStatus: 'Sistem Durumu',
       documentation: 'Dokümantasyon',

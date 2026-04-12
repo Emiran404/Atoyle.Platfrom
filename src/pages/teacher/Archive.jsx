@@ -5,7 +5,7 @@ import { Button, Input, Badge, Modal, Select, ConfirmModal } from '../../compone
 import { useToast } from '../../components/ui/Toast';
 import { useExamStore } from '../../store/examStore';
 import { useSubmissionStore } from '../../store/submissionStore';
-import { useAuthStore, CLASS_LIST } from '../../store/authStore';
+import { useAuthStore } from '../../store/authStore';
 import { formatDate, formatDateTime } from '../../utils/dateHelpers';
 import {
   Search, Filter, Archive as ArchiveIcon, FileText, Users, Calendar,
@@ -342,7 +342,7 @@ const Archive = () => {
   const navigate = useNavigate();
   const { exams, loadExams, deleteExam } = useExamStore();
   const { submissions, loadSubmissions } = useSubmissionStore();
-  const { user, getAllStudents, loadUsers, students, loadStudents } = useAuthStore();
+  const { user, getAllStudents, loadStudents, students, classes } = useAuthStore();
   const { toast } = useToast();
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -367,14 +367,22 @@ const Archive = () => {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      await loadExams(user?.id);
+      if (user?.id) {
+        await loadExams(user.id);
+      } else {
+        await loadExams();
+      }
       await loadSubmissions();
+      await loadStudents();
+      if (typeof useAuthStore.getState().loadClasses === 'function') {
+        await useAuthStore.getState().loadClasses();
+      }
       setLoading(false);
     };
     fetchData();
-  }, []);
+  }, [user?.id, loadExams, loadSubmissions, loadStudents]);
 
-  const archivedExams = exams.filter(e => e.status === 'completed' || new Date(e.endDate) < new Date());
+  const archivedExams = exams.filter(e => e.status === 'completed' || e.isActive === false || new Date(e.endDate) < new Date());
 
   const filteredExams = archivedExams.filter(exam => {
     const title = exam.title || '';
@@ -981,7 +989,7 @@ const Archive = () => {
   const totalSubmissions = archivedExams.reduce((acc, e) => acc + getExamStats(e.id).totalSubmissions, 0);
 
   // Available classes for dropdown
-  const availableClasses = [...new Set((students && students.length > 0 ? students : (typeof getAllStudents === 'function' ? getAllStudents() : [])).map(s => s.className).filter(Boolean))].sort();
+  const availableClasses = classes.map(cls => typeof cls === 'string' ? cls : cls.name).sort();
 
   return (
     <TeacherLayout>
@@ -1097,9 +1105,10 @@ const Archive = () => {
                 placeholder="Tüm Sınıflar"
               >
                 <option value="all">Tüm Sınıflar</option>
-                {CLASS_LIST.map(c => (
-                  <option key={c} value={c}>{c}</option>
-                ))}
+                {classes.map(cls => {
+                  const className = typeof cls === 'string' ? cls : cls.name;
+                  return <option key={className} value={className}>{className}</option>;
+                })}
               </Select>
 
               <Select

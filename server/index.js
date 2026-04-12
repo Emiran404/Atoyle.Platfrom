@@ -7,9 +7,9 @@
  * Licensed under the MIT License
  */
 
+import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
-import dotenv from 'dotenv';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import fs from 'fs';
@@ -21,8 +21,8 @@ import { authenticateToken, authorizeRole } from './middleware/auth.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-// Load .env from root directory
-dotenv.config({ path: join(__dirname, '../.env') });
+// Load .env from root directory (Already handled by import 'dotenv/config' at top)
+// dotenv.config({ path: join(__dirname, '../.env') });
 
 // Routes
 import authRoutes from './routes/auth.js';
@@ -38,6 +38,8 @@ import statsRoutes from './routes/stats.js';
 import backupRoutes from './routes/backup.js';
 import liveSessionsRoutes from './routes/liveSessions.js';
 import systemRoutes from './routes/system.js';
+import liderAhenkRoutes from './routes/liderahenk.js';
+import classesRoutes from './routes/classes.js';
 import { startNotificationWorker } from './workers/notificationWorker.js';
 import { startDiscovery } from './utils/discovery.js';
 
@@ -117,13 +119,24 @@ const initializeDataFiles = () => {
     'exams.json',
     'submissions.json',
     'notifications.json',
-    'schedules.json'
+    'schedules.json',
+    'classes.json'
   ];
 
   dataFiles.forEach(file => {
     const filePath = join(dataPath, file);
     if (!fs.existsSync(filePath)) {
-      fs.writeFileSync(filePath, JSON.stringify([], null, 2), 'utf-8');
+      if (file === 'classes.json') {
+        const defaultClasses = [
+          "9-A", "9-B", "9-C", "9-D", "9-E", "9-F",
+          "10-A", "10-B", "10-C", "10-D", "10-E", "10-F",
+          "11-A", "11-B", "11-C", "11-D", "11-E", "11-F",
+          "12-A", "12-B", "12-C", "12-D", "12-E", "12-F"
+        ];
+        fs.writeFileSync(filePath, JSON.stringify(defaultClasses, null, 2), 'utf-8');
+      } else {
+        fs.writeFileSync(filePath, JSON.stringify([], null, 2), 'utf-8');
+      }
       console.log(`📄 ${file} oluşturuldu`);
     }
   });
@@ -142,12 +155,14 @@ app.use('/api/uploads', authenticateToken, uploadRoutes);
 app.use('/api/notifications', authenticateToken, notificationRoutes);
 app.use('/api/schedules', authenticateToken, scheduleRoutes);
 app.use('/api/file-manager', authenticateToken, authorizeRole('teacher'), fileManagerRoutes);
-app.use('/api/settings', authenticateToken, authorizeRole('teacher'), settingsRoutes);
+app.use('/api/settings', settingsRoutes);
 app.use('/api/users', authenticateToken, authorizeRole('teacher'), usersRoutes);
 app.use('/api/stats', authenticateToken, statsRoutes);
 app.use('/api/backup', authenticateToken, authorizeRole('teacher'), backupRoutes);
 app.use('/api/live-sessions', authenticateToken, liveSessionsRoutes);
 app.use('/api/system', systemRoutes); // Heartbeat/logout public kalacak
+app.use('/api/liderahenk', liderAhenkRoutes);
+app.use('/api/classes', classesRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
@@ -163,13 +178,24 @@ app.post('/api/reset-all-data', authenticateToken, authorizeRole('teacher'), (re
       'exams.json',
       'submissions.json',
       'notifications.json',
-      'schedules.json'
+      'schedules.json',
+      'classes.json'
     ];
 
     // Tüm data dosyalarını boş array ile yeniden oluştur
     dataFiles.forEach(file => {
       const filePath = join(dataPath, file);
-      fs.writeFileSync(filePath, JSON.stringify([], null, 2), 'utf-8');
+      if (file === 'classes.json') {
+        const defaultClasses = [
+          "9-A", "9-B", "9-C", "9-D", "9-E", "9-F",
+          "10-A", "10-B", "10-C", "10-D", "10-E", "10-F",
+          "11-A", "11-B", "11-C", "11-D", "11-E", "11-F",
+          "12-A", "12-B", "12-C", "12-D", "12-E", "12-F"
+        ];
+        fs.writeFileSync(filePath, JSON.stringify(defaultClasses, null, 2), 'utf-8');
+      } else {
+        fs.writeFileSync(filePath, JSON.stringify([], null, 2), 'utf-8');
+      }
     });
 
     // ayarları da sıfırla

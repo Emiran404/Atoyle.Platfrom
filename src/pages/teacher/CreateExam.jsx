@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   ChevronLeft,
@@ -19,7 +19,7 @@ import {
 } from 'lucide-react';
 import { TeacherLayout } from '../../components/layouts';
 import { useToast } from '../../components/ui/Toast';
-import { useAuthStore, CLASS_LIST } from '../../store/authStore';
+import { useAuthStore } from '../../store/authStore';
 import { useExamStore } from '../../store/examStore';
 import { useNotificationStore } from '../../store/notificationStore';
 import { ALLOWED_FORMATS } from '../../utils/fileHelpers';
@@ -306,7 +306,7 @@ const styles = {
 const CreateExam = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { user, getAllStudents, students } = useAuthStore();
+  const { user, getAllStudents, students, loadStudents, classes } = useAuthStore();
   const { createExam, updateExam } = useExamStore();
   const { createExamNotification } = useNotificationStore();
 
@@ -326,7 +326,6 @@ const CreateExam = () => {
     duration: 60,
     allowedFormats: ['pdf'],
     maxFileSize: 10,
-    maxFileSize: 10,
     multipleFiles: false,
     maxFileCount: 1,
     questionText: '',
@@ -345,6 +344,10 @@ const CreateExam = () => {
     preventLeaveFullScreen: false,
     disableShortcuts: false
   });
+
+  useEffect(() => {
+    loadStudents();
+  }, []);
 
   const steps = [
     { number: 1, title: 'Temel Bilgiler', icon: FileText },
@@ -1223,7 +1226,7 @@ const CreateExam = () => {
                   <div style={{ display: 'flex', gap: '8px' }}>
                     <button
                       type="button"
-                      onClick={() => handleChange('targetClasses', [...CLASS_LIST])}
+                      onClick={() => handleChange('targetClasses', classes.map(c => typeof c === 'string' ? c : c.name))}
                       style={{
                         padding: '4px 8px',
                         fontSize: '12px',
@@ -1254,25 +1257,28 @@ const CreateExam = () => {
                   </div>
                 </div>
                 <div style={styles.classGrid}>
-                  {CLASS_LIST.map((className) => (
-                    <label
-                      key={className}
-                      style={styles.checkboxOption(formData.targetClasses.includes(className))}
-                    >
-                      <input
-                        type="checkbox"
-                        checked={formData.targetClasses.includes(className)}
-                        onChange={(e) => {
-                          const classes = e.target.checked
-                              ? [...formData.targetClasses, className]
-                              : formData.targetClasses.filter(c => c !== className);
-                          handleChange('targetClasses', classes);
-                        }}
-                        style={styles.checkbox}
-                      />
-                      <span style={{ color: '#1e293b', fontWeight: '500' }}>{className}</span>
-                    </label>
-                  ))}
+                  {classes.map((cls) => {
+                    const className = typeof cls === 'string' ? cls : cls.name;
+                    return (
+                      <label
+                        key={className}
+                        style={styles.checkboxOption(formData.targetClasses.includes(className))}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={formData.targetClasses.includes(className)}
+                          onChange={(e) => {
+                            const selected = e.target.checked
+                                ? [...formData.targetClasses, className]
+                                : formData.targetClasses.filter(c => c !== className);
+                            handleChange('targetClasses', selected);
+                          }}
+                          style={styles.checkbox}
+                        />
+                        <span style={{ color: '#1e293b', fontWeight: '500' }}>{className}</span>
+                      </label>
+                    );
+                  })}
                 </div>
               </div>
             )}
@@ -1287,9 +1293,10 @@ const CreateExam = () => {
                     onChange={(e) => setStudentClassFilter(e.target.value)}
                   >
                     <option value="">Tüm Sınıflar</option>
-                    {CLASS_LIST.map(c => (
-                      <option key={c} value={c}>{c}</option>
-                    ))}
+                    {classes.map(cls => {
+                      const className = typeof cls === 'string' ? cls : cls.name;
+                      return <option key={className} value={className}>{className}</option>;
+                    })}
                   </select>
                 </div>
 

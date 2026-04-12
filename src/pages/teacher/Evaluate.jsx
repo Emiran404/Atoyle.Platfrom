@@ -11,11 +11,11 @@ import {
   Select,
   Textarea
 } from '../../components/ui';
-import { useToast } from '../../components/ui/Toast';
+import { useAuthStore } from '../../store/authStore';
 import { useExamStore } from '../../store/examStore';
 import { useSubmissionStore } from '../../store/submissionStore';
 import { useNotificationStore } from '../../store/notificationStore';
-import { useAuthStore, CLASS_LIST } from '../../store/authStore';
+import { useToast } from '../../components/ui/Toast';
 import { formatDate } from '../../utils/dateHelpers';
 import { formatFileSize } from '../../utils/fileHelpers';
 import { submissionApi } from '../../services/api';
@@ -280,6 +280,7 @@ const Evaluate = () => {
   const { exams, loadExams } = useExamStore();
   const { submissions, loadSubmissions, gradeSubmission, respondToEditRequest } = useSubmissionStore();
   const { createNotification } = useNotificationStore();
+  const { classes } = useAuthStore();
   const toast = useToast();
 
   const [selectedExam, setSelectedExam] = useState(null);
@@ -796,7 +797,10 @@ const Evaluate = () => {
                   placeholder="Seç"
                 >
                   <option value="all">Tüm Sınıflar</option>
-                  {CLASS_LIST.map(c => <option key={c} value={c}>{c}</option>)}
+                  {classes.map(cls => {
+                    const className = typeof cls === 'string' ? cls : cls.name;
+                    return <option key={className} value={className}>{className}</option>;
+                  })}
                 </Select>
 
                 <Select
@@ -1045,7 +1049,10 @@ const Evaluate = () => {
                 placeholder="Sınıf"
               >
                 <option value="all">Sınıflar</option>
-                {CLASS_LIST.map(c => <option key={c} value={c}>{c}</option>)}
+                {classes.map(cls => {
+                  const className = typeof cls === 'string' ? cls : cls.name;
+                  return <option key={className} value={className}>{className}</option>;
+                })}
               </Select>
             </div>
           </div>
