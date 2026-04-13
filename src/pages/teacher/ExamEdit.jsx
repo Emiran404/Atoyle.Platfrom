@@ -13,12 +13,16 @@ import {
   Trash2,
   Bell,
   Upload,
-  Download
+  Download,
+  Eye
 } from 'lucide-react';
 import { TeacherLayout } from '../../components/layouts';
 import { useExamStore } from '../../store/examStore';
 import { useAuthStore } from '../../store/authStore';
 import { useToast } from '../../components/ui/Toast';
+import { uploadApi } from '../../services/api';
+import { FileViewerModal } from '../../components/ui';
+import { ALLOWED_FORMATS } from '../../utils/fileHelpers';
 
 const styles = {
   container: {
@@ -177,17 +181,19 @@ const ExamEdit = () => {
     isQuiz: false,
     autoGrading: true,
     questions: [],
+    allowedFormats: ['pdf', 'image'],
     questionText: '',
     requireFileUpload: true,
     questionFileUrl: null,
-    sendNotification: false,
     notifyOnStart: false,
     notifyBefore30: false,
-    notifyBefore5: false
+    notifyBefore5: false,
+    questionFile: null,
+    originalFileName: '',
+    isViewerOpen: false
   });
 
   const availableClasses = ['10-A', '10-B', '11-A', '11-B', '12-A', '12-B'];
-  const fileTypes = ['.pdf', '.doc', '.docx', '.jpg', '.png'];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -210,6 +216,9 @@ const ExamEdit = () => {
           targetType: targetType,
           targetClasses: exam.targetClasses || [],
           allowedFileTypes: exam.allowedFileTypes || ['.pdf'],
+          allowedFormats: Object.keys(ALLOWED_FORMATS).filter(key => 
+            ALLOWED_FORMATS[key].extensions.some(ext => (exam.allowedFileTypes || []).includes(ext))
+          ),
           maxFileSize: exam.maxFileSize ? Math.round(exam.maxFileSize / (1024 * 1024)) : 10,
           isActive: exam.isActive !== false,
           isQuiz: exam.isQuiz || exam.type === 'quiz',
@@ -219,10 +228,11 @@ const ExamEdit = () => {
           questionText: exam.questionText || '',
           requireFileUpload: exam.requireFileUpload !== false,
           questionFileUrl: exam.questionFileUrl || null,
-          sendNotification: exam.sendNotification || false,
           notifyOnStart: exam.notifyOnStart || false,
           notifyBefore30: exam.notifyBefore30 || false,
-          notifyBefore5: exam.notifyBefore5 || false
+          notifyBefore5: exam.notifyBefore5 || false,
+          originalFileName: exam.originalFileName || '',
+          questionFile: null
         });
       } else {
         toast.error('Sınav bulunamadı');
@@ -260,12 +270,12 @@ const ExamEdit = () => {
     }));
   };
 
-  const toggleFileType = (type) => {
+  const toggleFormat = (key) => {
     setFormData(prev => ({
       ...prev,
-      allowedFileTypes: prev.allowedFileTypes.includes(type)
-        ? prev.allowedFileTypes.filter(t => t !== type)
-        : [...prev.allowedFileTypes, type]
+      allowedFormats: prev.allowedFormats.includes(key)
+        ? prev.allowedFormats.filter(k => k !== key)
+        : [...prev.allowedFormats, key]
     }));
   };
 
@@ -279,6 +289,22 @@ const ExamEdit = () => {
       points: 10
     };
     handleChange({ target: { name: 'questions', value: [...formData.questions, newQuestion] } });
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setFormData(prev => ({ ...prev, questionFile: file }));
+    }
+  };
+
+  const handleRemoveFile = () => {
+    setFormData(prev => ({
+      ...prev,
+      questionFile: null,
+      questionFileUrl: null,
+      originalFileName: ''
+    }));
   };
 
   const updateQuestion = (id, field, value) => {
@@ -398,8 +424,12 @@ const ExamEdit = () => {
         finalTargetClasses = availableClasses;
       }
 
-      const result = await updateExam(examId, {
+      // Map format categories to extensions
+      const finalAllowedFileTypes = formData.allowedFormats.flatMap(key => ALLOWED_FORMATS[key]?.extensions || []);
+
+      const updateData = {
         ...formData,
+        allowedFileTypes: finalAllowedFileTypes,
         maxFileSize: formData.maxFileSize * 1024 * 1024,
         targetClasses: finalTargetClasses,
         startDate: new Date(formData.startDate).toISOString(),
@@ -411,7 +441,29 @@ const ExamEdit = () => {
         notifyOnStart: formData.sendNotification ? formData.notifyOnStart : false,
         notifyBefore30: formData.sendNotification ? formData.notifyBefore30 : false,
         notifyBefore5: formData.sendNotification ? formData.notifyBefore5 : false
-      });
+      };
+
+      // Eğer yeni bir dosya seçildiyse önce onu yükle
+      if (formData.questionFile) {
+        try {
+          const formDataPayload = new FormData();
+          formDataPayload.append('file', formData.questionFile);
+          formDataPayload.append('folderPath', 'exams');
+          formDataPayload.append('examId', examId);
+          formDataPayload.append('studentId', 'teacher');
+
+          const uploadResponse = await uploadApi.upload(formDataPayload);
+          if (uploadResponse.success) {
+            updateData.questionFileUrl = uploadResponse.file.filePath;
+            updateData.originalFileName = formData.questionFile.name;
+          }
+        } catch (uploadError) {
+          console.error('Soru dosyası yükleme hatası:', uploadError);
+          toast.error('Soru dosyası yüklenemedi. Diğer değişiklikler kaydediliyor.');
+        }
+      }
+
+      const result = await updateExam(examId, updateData);
 
       if (result) {
         toast.success('Sınav güncellendi');
@@ -819,22 +871,114 @@ const ExamEdit = () => {
                 </h4>
 
                 <div style={styles.formGroup}>
-                  <label style={styles.label}>Soru Metni</label>
-                  <textarea
-                    name="questionText"
-                    value={formData.questionText}
-                    onChange={handleChange}
-                    style={styles.textarea}
-                    placeholder="Öğrencilerin cevaplaması gereken soruyu veya yönergeyi buraya yazabilirsiniz..."
-                    rows={4}
-                  />
-                </div>
+                  <label style={styles.label}>Soru Dosyası (PDF veya Resim)</label>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                    {/* Mevcut veya seçili dosya gösterimi */}
+                    {(formData.questionFileUrl || formData.questionFile) && (
+                      <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        padding: '12px 16px',
+                        backgroundColor: '#f0f9ff',
+                        borderRadius: '10px',
+                        border: '1px solid #bae6fd'
+                      }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                          <div style={{
+                            width: '36px',
+                            height: '36px',
+                            backgroundColor: '#e0f2fe',
+                            borderRadius: '8px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            color: '#0369a1'
+                          }}>
+                            <FileText size={20} />
+                          </div>
+                          <div>
+                            <div style={{ fontSize: '14px', fontWeight: '500', color: '#0c4a6e' }}>
+                              {formData.questionFile ? formData.questionFile.name : (formData.originalFileName || 'Soru Dosyası')}
+                            </div>
+                            <div style={{ fontSize: '12px', color: '#0369a1' }}>
+                              {formData.questionFile ? 'Yüklenmeye hazır' : (
+                                <button
+                                  type="button"
+                                  onClick={() => setFormData(prev => ({ ...prev, isViewerOpen: true }))}
+                                  style={{ color: '#0284c7', textDecoration: 'none', background: 'none', border: 'none', padding: 0, cursor: 'pointer', fontSize: '12px' }}
+                                >
+                                  Görüntüle
+                                </button>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                        <div style={{ display: 'flex', gap: '8px' }}>
+                          <button
+                            type="button"
+                            onClick={handleRemoveFile}
+                            style={{
+                              padding: '8px',
+                              backgroundColor: 'transparent',
+                              color: '#ef4444',
+                              border: 'none',
+                              borderRadius: '8px',
+                              cursor: 'pointer',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center'
+                            }}
+                            title="Dosyayı Kaldır"
+                          >
+                            <Trash2 size={18} />
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                    
+                    <FileViewerModal 
+                      isOpen={formData.isViewerOpen}
+                      onClose={() => setFormData(prev => ({ ...prev, isViewerOpen: false }))}
+                      fileUrl={formData.questionFileUrl}
+                      fileName={formData.originalFileName || 'Soru Dosyası'}
+                    />
 
-                {formData.questionFileUrl && (
-                  <div style={{ fontSize: '13px', color: '#0ea5e9', marginBottom: '8px' }}>
-                    Mevcut Soru Dosyası: <a href={formData.questionFileUrl} target="_blank" rel="noopener noreferrer">Görüntüle</a>
+                    {/* Dosya Seçme Alanı */}
+                    {!formData.questionFile && (
+                      <label style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '10px',
+                        padding: '16px',
+                        backgroundColor: '#ffffff',
+                        border: '2px dashed #e2e8f0',
+                        borderRadius: '12px',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s',
+                        color: '#64748b'
+                      }}
+                        onMouseOver={(e) => { e.currentTarget.style.borderColor = '#3b82f6'; e.currentTarget.style.color = '#3b82f6'; }}
+                        onMouseOut={(e) => { e.currentTarget.style.borderColor = '#e2e8f0'; e.currentTarget.style.color = '#64748b'; }}
+                      >
+                        <Upload size={20} />
+                        <div style={{ textAlign: 'center' }}>
+                          <span style={{ fontSize: '14px', fontWeight: '500', display: 'block' }}>
+                            {formData.questionFileUrl ? 'Dosyayı Değiştir' : 'Dosya Yükle'}
+                          </span>
+                          <span style={{ fontSize: '12px' }}>PDF, JPG, PNG (Maks. 10MB)</span>
+                        </div>
+                        <input
+                          type="file"
+                          accept=".pdf,image/*"
+                          onChange={handleFileChange}
+                          style={{ display: 'none' }}
+                        />
+                      </label>
+                    )}
                   </div>
-                )}
+                </div>
               </div>
 
               <div style={{ backgroundColor: '#f0fdfa', padding: '16px', borderRadius: '12px', border: '1px solid #ccfbf1', marginBottom: '24px' }}>
@@ -855,24 +999,32 @@ const ExamEdit = () => {
               {formData.requireFileUpload && (
                 <>
                   <div style={styles.formGroup}>
-                    <label style={styles.label}>İzin Verilen Dosya Türleri</label>
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
-                      {fileTypes.map(type => (
+                    <label style={styles.label}>İzin Verilen Formatlar</label>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: '10px' }}>
+                      {Object.entries(ALLOWED_FORMATS).map(([key, format]) => (
                         <div
-                          key={type}
+                          key={key}
                           style={{
                             ...styles.checkbox,
-                            ...(formData.allowedFileTypes.includes(type) ? styles.checkboxActive : {})
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '10px',
+                            padding: '10px 12px',
+                            backgroundColor: formData.allowedFormats.includes(key) ? '#f0fdfa' : '#f8fafc',
+                            border: `1px solid ${formData.allowedFormats.includes(key) ? '#0d9488' : '#e2e8f0'}`,
+                            borderRadius: '10px',
+                            cursor: 'pointer',
+                            transition: 'all 0.2s'
                           }}
-                          onClick={() => toggleFileType(type)}
+                          onClick={() => toggleFormat(key)}
                         >
                           <input
                             type="checkbox"
-                            checked={formData.allowedFileTypes.includes(type)}
+                            checked={formData.allowedFormats.includes(key)}
                             onChange={() => { }}
-                            style={{ accentColor: '#3b82f6' }}
+                            style={{ accentColor: '#0d9488', width: '16px', height: '16px' }}
                           />
-                          <span style={{ fontSize: '14px', color: '#1e293b' }}>{type}</span>
+                          <span style={{ fontSize: '13px', fontWeight: '500', color: '#1e293b' }}>{format.label}</span>
                         </div>
                       ))}
                     </div>

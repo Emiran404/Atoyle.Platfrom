@@ -19,7 +19,8 @@ import {
   ArrowRight,
   School,
   BadgeCheck,
-  Plus
+  Plus,
+  Eye
 } from 'lucide-react';
 import { StudentSidebar } from '../../components/layout';
 import { useToast } from '../../components/ui/Toast';
@@ -30,6 +31,8 @@ import { formatFileSize, isValidFileType, isFileSizeValid } from '../../utils/fi
 import { hashFile } from '../../utils/crypto';
 import { formatDateTime } from '../../utils/dateHelpers';
 import { t } from '../../utils/i18n';
+import { uploadApi } from '../../services/api';
+import { FileViewerModal } from '../../components/ui';
 
 const FileUpload = () => {
   const [searchParams] = useSearchParams();
@@ -50,6 +53,21 @@ const FileUpload = () => {
     return expiresAt > new Date();
   };
 
+  // Soru dosyası URL'sini güvenli bir şekilde formatla
+  const getQuestionFileUrl = (url) => {
+    if (!url) return '';
+    // Eğer zaten tam bir URL ise (http ile başlıyorsa) direkt döndür
+    if (url.startsWith('http')) return url;
+    
+    // Path temizleme: ters slaşları düzelt, baştaki slaşı kaldır
+    const cleanPath = url.replace(/\\/g, '/').replace(/^\//, '');
+    
+    // Eğer başında uploads/ varsa onu kaldırıp view endpoint'ine ekleyelim
+    const finalPath = cleanPath.startsWith('uploads/') ? cleanPath.replace('uploads/', '') : cleanPath;
+    
+    return uploadApi.getViewUrl(finalPath);
+  };
+
   const [files, setFiles] = useState([]);
   const [fileHashes, setFileHashes] = useState([]);
   const [isDragging, setIsDragging] = useState(false);
@@ -62,6 +80,7 @@ const FileUpload = () => {
   const [examEndCheckInterval, setExamEndCheckInterval] = useState(null);
   const [classicAnswers, setClassicAnswers] = useState([{ id: 1, text: '' }]);
   const [isPaused, setIsPaused] = useState(false);
+  const [isViewerOpen, setIsViewerOpen] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -1124,26 +1143,37 @@ const FileUpload = () => {
                             <div style={{ fontSize: '14px', fontWeight: '600', color: '#166534' }}>Soru Dosyası</div>
                             <div style={{ fontSize: '12px', color: '#15803d' }}>Öğretmeniniz tarafından yüklenmiş ek dosya.</div>
                           </div>
-                          <a
-                            href={selectedExam.questionFileUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
+                          <button
+                            type="button"
+                            onClick={() => setIsViewerOpen(true)}
                             style={{
                               padding: '8px 16px',
                               backgroundColor: '#16a34a',
                               color: 'white',
-                              textDecoration: 'none',
+                              border: 'none',
                               borderRadius: '8px',
                               fontSize: '13px',
-                              fontWeight: '600'
+                              fontWeight: '600',
+                              cursor: 'pointer',
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '8px'
                             }}
                           >
+                            <Eye size={16} />
                             Görüntüle / İndir
-                          </a>
+                          </button>
                         </div>
                       )}
                     </div>
                   )}
+
+                  <FileViewerModal 
+                    isOpen={isViewerOpen}
+                    onClose={() => setIsViewerOpen(false)}
+                    fileUrl={getQuestionFileUrl(selectedExam.questionFileUrl)}
+                    fileName={selectedExam.originalFileName || 'Soru Dosyası'}
+                  />
 
                   {/* Edit Request Active Alert */}
                   {currentSubmission && hasApprovedEditRequest(currentSubmission) && (
@@ -1205,7 +1235,7 @@ const FileUpload = () => {
                         <h3 style={{ fontSize: '18px', fontWeight: '600', color: '#111318' }}>Sınav Dosyası</h3>
                         {selectedExam.questionFileUrl ? (
                           <iframe
-                            src={selectedExam.questionFileUrl ? "/" + selectedExam.questionFileUrl.split('\\').join('/').split('/').filter(Boolean).join('/') : ""}
+                            src={getQuestionFileUrl(selectedExam.questionFileUrl)}
                             title="Sınav Soruları"
                             style={{ width: '100%', height: '100%', border: '1px solid #e2e8f0', borderRadius: '12px', backgroundColor: '#f8fafc' }}
                           />

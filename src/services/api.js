@@ -280,23 +280,22 @@ export const submissionApi = {
 
 // Upload API
 export const uploadApi = {
-  upload: async (file, folderPath, examId, studentId) => {
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('folderPath', folderPath);
-    formData.append('examId', examId);
-    formData.append('studentId', studentId);
-
-    const response = await fetch(`${API_BASE}/uploads`, {
-      method: 'POST',
-      body: formData,
-    });
-
-    const data = await response.json();
-    if (!response.ok) {
-      throw new Error(data.error || 'Dosya yüklenemedi');
+  upload: (fileOrFormData, folderPath, examId, studentId) => {
+    let finalFormData;
+    if (fileOrFormData instanceof FormData) {
+      finalFormData = fileOrFormData;
+    } else {
+      finalFormData = new FormData();
+      finalFormData.append('file', fileOrFormData);
+      finalFormData.append('folderPath', folderPath);
+      finalFormData.append('examId', examId);
+      finalFormData.append('studentId', studentId);
     }
-    return data;
+
+    return fetchApi('/uploads', {
+      method: 'POST',
+      body: finalFormData,
+    });
   },
   getDownloadUrl: (filePath) => `${API_BASE}/uploads/download/${filePath}`,
   getViewUrl: (filePath) => `${API_BASE}/uploads/view/${filePath}`,

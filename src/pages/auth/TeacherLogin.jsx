@@ -8,6 +8,7 @@ import { useAuthStore } from '../../store/authStore';
 import { useNotificationStore } from '../../store/notificationStore';
 import { authApi } from '../../services/api';
 import { t } from '../../utils/i18n';
+import { canUsePasskey } from '../../utils/platform';
 
 
 const TeacherLogin = () => {
@@ -21,8 +22,7 @@ const TeacherLogin = () => {
     rememberMe: false
   });
   const [errors, setErrors] = useState({});
-  const [activeTab, setActiveTab] = useState('passkey');
-  const [enterCount, setEnterCount] = useState(0);
+  const [activeTab, setActiveTab] = useState(canUsePasskey() ? 'passkey' : 'password');
   const [mnComboPressed, setMnComboPressed] = useState(false);
   const [hasPasskey, setHasPasskey] = useState(false);
 
@@ -78,11 +78,7 @@ const TeacherLogin = () => {
   // Parolayla aç için enter tuşu kontrolü
   const handlePasswordKeyDown = (e) => {
     if (activeTab === 'password' && e.key === 'Enter') {
-      setEnterCount((prev) => prev + 1);
-      if (enterCount + 1 >= 3) {
-        handleSubmit(e);
-        setEnterCount(0);
-      }
+      handleSubmit(e);
     }
   };
 
@@ -356,20 +352,37 @@ const TeacherLogin = () => {
           <div style={{ display: 'flex', gap: '8px', marginBottom: '24px' }}>
             <button
               type="button"
-              onClick={() => setActiveTab('passkey')}
+              onClick={() => {
+                if (canUsePasskey()) {
+                  setActiveTab('passkey');
+                } else {
+                  toast.warning('Passkey bu platformda kullanılamaz.');
+                }
+              }}
               style={{
                 flex: 1,
                 padding: '12px',
                 borderRadius: '10px',
                 border: activeTab === 'passkey' ? '2px solid #6366f1' : '2px solid #e2e8f0',
-                background: activeTab === 'passkey' ? 'linear-gradient(135deg, #6366f1 0%, #a855f7 100%)' : '#f8fafc',
-                color: activeTab === 'passkey' ? '#fff' : '#6366f1',
+                background: !canUsePasskey()
+                  ? '#f1f5f9'
+                  : activeTab === 'passkey'
+                    ? 'linear-gradient(135deg, #6366f1 0%, #a855f7 100%)'
+                    : '#f8fafc',
+                color: !canUsePasskey() ? '#94a3b8' : activeTab === 'passkey' ? '#fff' : '#6366f1',
                 fontWeight: '600',
-                cursor: 'pointer',
-                transition: 'all 0.2s'
+                cursor: canUsePasskey() ? 'pointer' : 'not-allowed',
+                transition: 'all 0.2s',
+                opacity: canUsePasskey() ? 1 : 0.7,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '4px'
               }}
+              disabled={!canUsePasskey()}
             >
-              Passkey ile Giriş
+              {canUsePasskey() ? 'Passkey ile Giriş' : 'Kullanılamaz'} 
+              {!canUsePasskey() && <Lock size={14} />}
             </button>
             <button
               type="button"
@@ -421,21 +434,25 @@ const TeacherLogin = () => {
                   width: '100%',
                   padding: '14px',
                   borderRadius: '10px',
-                  background: 'linear-gradient(135deg, #6366f1 0%, #a855f7 100%)',
-                  color: '#fff',
+                  background: canUsePasskey() 
+                    ? 'linear-gradient(135deg, #6366f1 0%, #a855f7 100%)'
+                    : '#e2e8f0',
+                  color: canUsePasskey() ? '#fff' : '#94a3b8',
                   fontWeight: '600',
                   fontSize: '16px',
                   border: 'none',
-                  cursor: 'pointer',
-                  boxShadow: '0 4px 14px rgba(99,102,241,0.15)',
+                  cursor: canUsePasskey() ? 'pointer' : 'not-allowed',
+                  boxShadow: canUsePasskey() ? '0 4px 14px rgba(99,102,241,0.15)' : 'none',
                   marginTop: '8px'
                 }}
-                disabled={loading}
+                disabled={loading || !canUsePasskey()}
               >
-                Passkey ile Giriş Yap
+                {canUsePasskey() ? 'Passkey ile Giriş Yap' : 'Platform Desteklenmiyor'}
               </button>
               <p style={{ fontSize: '13px', color: '#64748b', textAlign: 'center', marginTop: '8px' }}>
-                Windows Hello, Linux (Pardus) ve MacOS ile uyumlu.
+                {canUsePasskey() 
+                  ? 'Windows Hello, Linux (Pardus) ve MacOS ile uyumlu.' 
+                  : 'Passkey şu an sadece Windows platformunda desteklenmektedir.'}
               </p>
             </div>
           )}
@@ -517,7 +534,7 @@ const TeacherLogin = () => {
                   Parolayla Aç
                 </button>
                 <p style={{ fontSize: '13px', color: '#64748b', textAlign: 'center', marginTop: '8px' }}>
-                  3 kere Enter tuşuna basınca giriş yapılır.
+                  Giriş yapmak için bilgileri girip Enter tuşuna basın.
                 </p>
               </div>
             </form>
