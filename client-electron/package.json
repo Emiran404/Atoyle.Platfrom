@@ -1,6 +1,6 @@
 {
   "name": "atolye-platform-client",
-  "version": "3.5.0",
+  "version": "3.7.0",
   "type": "module",
   "description": "Atolye Platform Smart Client with Auto-Discovery",
   "main": "main.js",

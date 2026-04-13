@@ -97,6 +97,7 @@ function connectToServer(url) {
       mainWindow.maximize();
     }
     if (splashWindow) {
+      splashWindow.webContents.send('discovery-status', 'BAĞLANDI');
       splashWindow.close();
       splashWindow = null;
     }
@@ -131,22 +132,38 @@ function startMDNS() {
   console.log('🔍 [mDNS] Tarama başlatılıyor...');
   const browser = bonjour.find({ type: 'atolye' });
 
-  browser.on('up', (service) => {
+  browser.on('up', async (service) => {
     if (isDiscoveryFound) return;
+    
+    // mDNS servisi bulundu, log gönder
+    if (splashWindow) {
+      splashWindow.webContents.send('discovery-status', `mDNS: ${service.name}`);
+    }
+
     const addresses = service.addresses || [service.referer?.address].filter(Boolean);
     console.log(`🔍 [mDNS] Servis: ${service.name}, adresler: ${addresses.join(', ')}`);
 
+    // 1. Önce doğrudan adresleri dene
     for (const ip of addresses) {
       if (ip.includes(':')) continue;
-      connectToServer(`http://${ip}:${service.port}`);
-      return;
+      console.log(`🔍 [mDNS] IP kontrol ediliyor: ${ip}`);
+      if (await httpProbe(ip, service.port)) {
+        console.log(`✅ [mDNS] Doğrulandı: ${ip}`);
+        connectToServer(`http://${ip}:${service.port}`);
+        return;
+      }
     }
 
+    // 2. TXT kaydındaki IP'leri dene (eğer adresler listesinde yoksa)
     if (service.txt?.ips) {
       for (const ip of service.txt.ips.split(',')) {
-        if (!ip.includes(':')) {
-          connectToServer(`http://${ip}:${service.port}`);
-          return;
+        if (!ip.includes(':') && !addresses.includes(ip)) {
+          console.log(`🔍 [mDNS] TXT IP kontrol ediliyor: ${ip}`);
+          if (await httpProbe(ip, service.port)) {
+            console.log(`✅ [mDNS] Doğrulandı: ${ip}`);
+            connectToServer(`http://${ip}:${service.port}`);
+            return;
+          }
         }
       }
     }
@@ -160,15 +177,23 @@ function startUDPListener() {
   try {
     const socket = dgram.createSocket({ type: 'udp4', reuseAddr: true });
 
-    socket.on('message', (msg, rinfo) => {
+    socket.on('message', async (msg, rinfo) => {
       if (isDiscoveryFound) return;
       try {
         const data = JSON.parse(msg.toString());
         if (data.type === 'atolye-server-beacon') {
           const serverIp = data.primary || rinfo.address;
           const serverPort = data.port || SERVER_PORT;
-          console.log(`📡 [UDP] Beacon! IP: ${serverIp}:${serverPort}`);
-          connectToServer(`http://${serverIp}:${serverPort}`);
+          console.log(`📡 [UDP] Beacon alındı: ${serverIp}:${serverPort}`);
+          
+          if (splashWindow) {
+            splashWindow.webContents.send('discovery-status', 'UDP SİNYALİ ALINDI...');
+          }
+
+          if (await httpProbe(serverIp, serverPort)) {
+            console.log(`✅ [UDP] Sunucu doğrulandı: ${serverIp}`);
+            connectToServer(`http://${serverIp}:${serverPort}`);
+          }
         }
       } catch (e) { /* parse hatası */ }
     });

@@ -9,7 +9,7 @@
 <br/>
 
 <!-- CORE BADGES -->
-[![Version](https://img.shields.io/badge/Versiyon-3.5.1-6366f1?style=for-the-badge)](https://github.com/Emiran404/Atolye.Platform/releases)
+[![Version](https://img.shields.io/badge/Versiyon-3.7.0-6366f1?style=for-the-badge)](https://github.com/Emiran404/Atolye.Platform/releases)
 [![License](https://img.shields.io/badge/Lisans-MIT-10b981?style=for-the-badge)](LICENSE)
 [![Platform](https://img.shields.io/badge/Platform-Pardus_%7C_Windows-ef4444?style=for-the-badge)](https://github.com/Emiran404/Atolye.Platform)
 
@@ -111,6 +111,7 @@ Derleme yapmadan, aşağıdaki hazır paketlerle saniyeler içinde kurulum yapı
 | **🛡️ Kod Karıştırma** | Production build'de JavaScript Obfuscation ile kaynak kodu koruması |
 | **🔒 JWT Authentication** | Her API çağrısında token bazlı yetkilendirme |
 | **⏱️ Rate Limiting** | Brute-force ve DDoS koruması |
+| **📑 Güvenli PDF/Resim** | Kimlik doğrulamalı ve korumalı dosya izleyici (v3.7.0) |
 
 ---
 
@@ -135,12 +136,10 @@ Derleme yapmadan, aşağıdaki hazır paketlerle saniyeler içinde kurulum yapı
 | ![Settings](screenshots/Teacher/Settings.png) | |
 | *Passkey, güvenlik ve platform ayarları* | |
 
-### Öğrenci Paneli
-
-| Öğrenci Dashboard | Sınav Ekranı |
-| :---: | :---: |
-| ![StudentDashboard](screenshots/Student/Dashboard.png) | ![StudentExam](screenshots/Student/Exam.png) |
-| *Sade ve odaklanmış öğrenci portalı* | *Dosya yükleme ve sınav teslim arayüzü* |
+| Öğrenci Dashboard | Sınav Ekranı | Soru Görüntüleyici |
+| :---: | :---: | :---: |
+| ![StudentDashboard](screenshots/Student/Dashboard.png) | ![StudentExam](screenshots/Student/Exam.png) | ![FileViewer](screenshots/Global/FileViewerModal.png) |
+| *Sade ve odaklanmış öğrenci portalı* | *Dosya yükleme ve sınav teslim arayüzü* | *Güvenli ve şık dosya izleme modalı* |
 
 ### Ana Sayfa
 

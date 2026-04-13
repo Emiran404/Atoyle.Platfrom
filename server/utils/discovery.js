@@ -44,7 +44,7 @@ function startUDPBroadcast(port) {
     ips: allIps,
     primary: mainIp,
     hostname: os.hostname(),
-    version: '2.5.5',
+    version: '3.7.0',
     ts: Date.now()
   });
 
@@ -85,7 +85,7 @@ export const startDiscovery = (port = 3001) => {
       port: port,
       host: `${hostname}.local`,
       txt: {
-        version: '2.5.5',
+        version: '3.7.0',
         id: 'atolye-master',
         ips: allIps.join(','),
         primary: mainIp,
@@ -93,7 +93,7 @@ export const startDiscovery = (port = 3001) => {
       }
     });
 
-    console.log(`[Discovery] mDNS yayını v2.5.5 başlatıldı (${hostname}.local)`);
+    console.log(`[Discovery] mDNS yayını v3.7.0 başlatıldı (${hostname}.local)`);
     console.log(`[Discovery] Birincil IP: ${mainIp} | Tüm IP'ler: ${allIps.join(', ')}`);
 
     service.on('up', () => {
