@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Shield, Key, Fingerprint, X, Settings } from 'lucide-react';
+import { canUsePasskey } from '../../utils/platform';
 
 const PasskeyModal = ({ isOpen, onClose, userName, onGoToSettings }) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -27,7 +28,8 @@ const PasskeyModal = ({ isOpen, onClose, userName, onGoToSettings }) => {
     }, 300);
   };
 
-  if (!isOpen) return null;
+  // Platform desteği yoksa hiç gösterilme
+  if (!isOpen || !canUsePasskey()) return null;
 
   const modalStyles = {
     overlay: {

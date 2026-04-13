@@ -26,6 +26,7 @@ import {
 } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
 import PasskeyModal from '../ui/PasskeyModal';
+import { canUsePasskey } from '../../utils/platform';
 
 const TeacherLayout = ({ children }) => {
   const navigate = useNavigate();
@@ -39,6 +40,9 @@ const TeacherLayout = ({ children }) => {
 
   // Passkey modal kontrolü - giriş yapıldığında göster
   useEffect(() => {
+    // Sadece desteklenen platformlarda (Windows) göster
+    if (!canUsePasskey()) return;
+
     const passkeyDismissed = localStorage.getItem('passkey_modal_dismissed');
     if (!passkeyDismissed) {
       // Kısa bir gecikme ile modal göster (sayfa yüklendikten sonra)

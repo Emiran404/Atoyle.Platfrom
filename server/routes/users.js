@@ -195,7 +195,7 @@ router.patch('/:id/update', (req, res) => {
       if (index === -1) return res.status(404).json({ success: false, error: 'Öğrenci bulunamadı' });
       
       // Sadece belirli alanların güncellenmesine izin ver
-      const allowedUpdates = ['fullName', 'notificationSettings'];
+      const allowedUpdates = ['fullName', 'notificationSettings', 'courses'];
       Object.keys(updates).forEach(key => {
         if (allowedUpdates.includes(key)) {
           if (key === 'notificationSettings') {
@@ -219,7 +219,7 @@ router.patch('/:id/update', (req, res) => {
       const index = teachers.findIndex(t => t.id === id);
       if (index === -1) return res.status(404).json({ success: false, error: 'Öğretmen bulunamadı' });
 
-      const allowedUpdates = ['fullName', 'department', 'notificationSettings'];
+      const allowedUpdates = ['fullName', 'department', 'notificationSettings', 'courses'];
       Object.keys(updates).forEach(key => {
         if (allowedUpdates.includes(key)) {
           if (key === 'notificationSettings') {

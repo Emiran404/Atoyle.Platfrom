@@ -23,6 +23,7 @@ import { useAuthStore } from '../../store/authStore';
 import { useExamStore } from '../../store/examStore';
 import { useNotificationStore } from '../../store/notificationStore';
 import { ALLOWED_FORMATS } from '../../utils/fileHelpers';
+import { uploadApi } from '../../services/api';
 
 const EXAM_TYPES = [
   { value: 'final_exam', label: 'Sınav' },
@@ -314,7 +315,7 @@ const CreateExam = () => {
   const [studentClassFilter, setStudentClassFilter] = useState('');
   const [formData, setFormData] = useState({
     title: '',
-    type: 'exam',
+    type: 'final_exam',
     department: user?.department || '',
     description: '',
     instructions: '',
@@ -324,8 +325,8 @@ const CreateExam = () => {
     endDate: '',
     endTime: '',
     duration: 60,
-    allowedFormats: ['pdf'],
-    maxFileSize: 10,
+    allowedFormats: ['pdf', 'image'],
+    maxFileSize: 35,
     multipleFiles: false,
     maxFileCount: 1,
     questionText: '',
@@ -519,14 +520,13 @@ const CreateExam = () => {
         formDataPayload.append('examId', exam.id);
         formDataPayload.append('studentId', 'teacher');
 
-        const response = await fetch('/api/uploads', {
-          method: 'POST',
-          body: formDataPayload,
-        });
-
-        const uploadData = await response.json();
-        if (uploadData.success) {
-          await updateExam(exam.id, { questionFileUrl: uploadData.file.filePath, originalFileName: formData.questionFile.name });
+        const response = await uploadApi.upload(formDataPayload);
+        
+        if (response.success) {
+          await updateExam(exam.id, { 
+            questionFileUrl: response.file.filePath, 
+            originalFileName: formData.questionFile.name 
+          });
         }
       } catch (err) {
         console.error('Soru dosyası yükleme hatası:', err);
@@ -546,7 +546,7 @@ const CreateExam = () => {
         targetStudentIds = students
           .filter(s => formData.targetClasses.includes(s.className))
           .map(s => s.id);
-      } else if (formData.targetType === 'custom') {
+      } else if (formData.targetType === 'student') {
         // Özel seçili öğrenciler
         targetStudentIds = formData.targetStudents;
       }
@@ -704,13 +704,48 @@ const CreateExam = () => {
 
             <div style={styles.formGroup}>
               <label style={styles.label}>Ders/Bölüm</label>
-              <input
-                type="text"
-                style={styles.input}
-                value={formData.department}
-                onChange={(e) => handleChange('department', e.target.value)}
-                placeholder="Örn: Siber Güvenlik"
-              />
+              <div style={{ position: 'relative' }}>
+                <input
+                  type="text"
+                  style={styles.input}
+                  value={formData.department}
+                  onChange={(e) => handleChange('department', e.target.value)}
+                  placeholder="Örn: Siber Güvenlik"
+                  list="teacher-courses"
+                />
+                <datalist id="teacher-courses">
+                  {user?.courses?.map((course, index) => (
+                    <option key={index} value={course} />
+                  ))}
+                </datalist>
+                {user?.courses?.length > 0 && (
+                  <div style={{ 
+                    marginTop: '8px', 
+                    display: 'flex', 
+                    gap: '6px', 
+                    flexWrap: 'wrap' 
+                  }}>
+                    {user.courses.slice(0, 5).map((course, index) => (
+                      <button
+                        key={index}
+                        type="button"
+                        onClick={() => handleChange('department', course)}
+                        style={{
+                          padding: '4px 10px',
+                          fontSize: '12px',
+                          backgroundColor: formData.department === course ? '#0d9488' : '#f1f5f9',
+                          color: formData.department === course ? 'white' : '#475569',
+                          border: '1px solid #e2e8f0',
+                          borderRadius: '6px',
+                          cursor: 'pointer'
+                        }}
+                      >
+                        {course}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
 
             <div style={styles.formGroup}>
@@ -1392,42 +1427,43 @@ const CreateExam = () => {
         return (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
             {/* Güvenlik Ayarları */}
-            <div>
-              <h4 style={{ fontSize: '15px', fontWeight: '600', color: '#1e293b', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ color: '#ef4444' }}>🛡️</span>
-                Sınav Güvenliği (Anti-Cheat)
-              </h4>
+            {formData.type === 'quiz' && (
+              <div>
+                <h4 style={{ fontSize: '15px', fontWeight: '600', color: '#1e293b', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <span style={{ color: '#ef4444' }}>🛡️</span>
+                  Sınav Güvenliği (Anti-Cheat)
+                </h4>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                <label style={styles.radioOption(formData.preventLeaveFullScreen)}>
-                  <input
-                    type="checkbox"
-                    checked={formData.preventLeaveFullScreen}
-                    onChange={(e) => handleChange('preventLeaveFullScreen', e.target.checked)}
-                    style={styles.checkbox}
-                  />
-                  <div style={styles.radioLabel}>
-                    <div style={styles.radioTitle}>Tam Ekrandan Çıkışı Engelle</div>
-                    <div style={styles.radioDesc}>Öğrenci sınavdayken tam ekrandan çıkarsa sınavı kilitlenebilir.</div>
-                  </div>
-                </label>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                  <label style={styles.radioOption(formData.preventLeaveFullScreen)}>
+                    <input
+                      type="checkbox"
+                      checked={formData.preventLeaveFullScreen}
+                      onChange={(e) => handleChange('preventLeaveFullScreen', e.target.checked)}
+                      style={styles.checkbox}
+                    />
+                    <div style={styles.radioLabel}>
+                      <div style={styles.radioTitle}>Tam Ekrandan Çıkışı Engelle</div>
+                      <div style={styles.radioDesc}>Öğrenci sınavdayken tam ekrandan çıkarsa sınavı kilitlenebilir.</div>
+                    </div>
+                  </label>
 
-                <label style={styles.radioOption(formData.disableShortcuts)}>
-                  <input
-                    type="checkbox"
-                    checked={formData.disableShortcuts}
-                    onChange={(e) => handleChange('disableShortcuts', e.target.checked)}
-                    style={styles.checkbox}
-                  />
-                  <div style={styles.radioLabel}>
-                    <div style={styles.radioTitle}>Sekme Değiştirmeyi Algıla & Kısayolları Kapat</div>
-                    <div style={styles.radioDesc}>Kopyalama (Ctrl+C vb.) ve başka sekmeye geçişler (Alt+Tab) kısıtlanır, algılanırsa uyarılır.</div>
-                  </div>
-                </label>
+                  <label style={styles.radioOption(formData.disableShortcuts)}>
+                    <input
+                      type="checkbox"
+                      checked={formData.disableShortcuts}
+                      onChange={(e) => handleChange('disableShortcuts', e.target.checked)}
+                      style={styles.checkbox}
+                    />
+                    <div style={styles.radioLabel}>
+                      <div style={styles.radioTitle}>Sekme Değiştirmeyi Algıla & Kısayolları Kapat</div>
+                      <div style={styles.radioDesc}>Kopyalama (Ctrl+C vb.) ve başka sekmeye geçişler (Alt+Tab) kısıtlanır, algılanırsa uyarılır.</div>
+                    </div>
+                  </label>
+                </div>
+                <hr style={{ borderTop: '1px solid #e2e8f0', margin: '24px 0' }} />
               </div>
-            </div>
-
-            <hr style={{ borderTop: '1px solid #e2e8f0', margin: 0 }} />
+            )}
 
             {/* Bildirim Ayarları */}
             <div>

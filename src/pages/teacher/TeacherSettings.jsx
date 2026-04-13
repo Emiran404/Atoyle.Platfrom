@@ -7,10 +7,11 @@ import { authApi } from '../../services/api';
 import { hashPassword, verifyPassword } from '../../utils/crypto';
 import {
   User, Lock, Bell, Shield, Eye, EyeOff, Save, AlertTriangle,
-  CheckCircle, Moon, Sun, Monitor, Settings, Database, RefreshCw, Trash2, X, Globe, Key, Printer, Copy, Download
+  CheckCircle, Moon, Sun, Monitor, Settings, Database, RefreshCw, Trash2, X, Globe, Key, Printer, Copy, Download, Plus, BookOpen
 } from 'lucide-react';
 import { resetAllData } from '../../utils/initData';
 import { t, languages } from '../../utils/i18n';
+import { canUsePasskey } from '../../utils/platform';
 
 const styles = {
   container: { display: 'flex', flexDirection: 'column', gap: '24px' },
@@ -131,6 +132,8 @@ const TeacherSettings = () => {
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [submissionAlerts, setSubmissionAlerts] = useState(user?.notificationSettings?.submissionAlerts ?? true);
   const [loginAlerts, setLoginAlerts] = useState(user?.notificationSettings?.loginAlerts ?? true);
+  const [courses, setCourses] = useState(user?.courses || []);
+  const [newCourse, setNewCourse] = useState('');
   const [saving, setSaving] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
@@ -342,6 +345,7 @@ const TeacherSettings = () => {
     { id: 'security', label: 'Güvenlik', icon: Lock },
     { id: 'passkey', label: 'Passkey', icon: Shield },
     { id: 'recovery', label: 'Kurtarma Anahtarı', icon: Key },
+    { id: 'courses', label: 'Derslerim / Bölümlerim', icon: BookOpen },
     { id: 'notifications', label: t('notifications'), icon: Bell }
   ];
 
@@ -410,6 +414,31 @@ const TeacherSettings = () => {
       setShowSuccessModal(true);
       setSaving(false);
     }, 500);
+  };
+
+  const updateCourseList = async (updatedCourses) => {
+    setCourses(updatedCourses);
+    try {
+      await updateProfile({ courses: updatedCourses });
+    } catch (err) {
+      toast.error('Giriş kaydedilirken bir hata oluştu.');
+    }
+  };
+
+  const handleAddCourse = () => {
+    if (!newCourse.trim()) return;
+    if (courses.includes(newCourse.trim())) {
+      toast.error('Bu ders zaten eklenmiş.');
+      return;
+    }
+    const updatedCourses = [...courses, newCourse.trim()];
+    updateCourseList(updatedCourses);
+    setNewCourse('');
+  };
+
+  const handleRemoveCourse = (courseToRemove) => {
+    const updatedCourses = courses.filter(c => c !== courseToRemove);
+    updateCourseList(updatedCourses);
   };
 
 
@@ -546,7 +575,9 @@ const TeacherSettings = () => {
                   fontSize: '15px',
                   lineHeight: '1.6'
                 }}>
-                  Hesabınızı passkey ile koruyun. Windows Hello, Linux (Pardus) ve MacOS ile uyumlu.
+                  {canUsePasskey() 
+                    ? 'Hesabınızı passkey ile koruyun. Windows Hello, Linux (Pardus) ve MacOS ile uyumlu.'
+                    : 'Passkey şu an sadece Windows platformunda desteklenmektedir.'}
                 </div>
 
                 {/* Durum Kartı */}
@@ -596,45 +627,45 @@ const TeacherSettings = () => {
                 <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
                   <button
                     onClick={handleSetupPasskey}
-                    disabled={user?.passkeyEnabled || saving}
+                    disabled={user?.passkeyEnabled || saving || !canUsePasskey()}
                     style={{
                       flex: 1,
                       minWidth: '200px',
                       padding: '16px 24px',
                       borderRadius: '14px',
                       border: 'none',
-                      background: user?.passkeyEnabled
+                      background: (user?.passkeyEnabled || !canUsePasskey())
                         ? 'linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%)'
                         : 'linear-gradient(135deg, #0d9488 0%, #0f766e 100%)',
-                      color: user?.passkeyEnabled ? '#94a3b8' : '#ffffff',
+                      color: (user?.passkeyEnabled || !canUsePasskey()) ? '#94a3b8' : '#ffffff',
                       fontSize: '15px',
                       fontWeight: '600',
-                      cursor: user?.passkeyEnabled || saving ? 'not-allowed' : 'pointer',
+                      cursor: (user?.passkeyEnabled || saving || !canUsePasskey()) ? 'not-allowed' : 'pointer',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       gap: '10px',
                       transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                      boxShadow: user?.passkeyEnabled
+                      boxShadow: (user?.passkeyEnabled || !canUsePasskey())
                         ? 'none'
                         : '0 4px 14px rgba(13, 148, 136, 0.3)',
                       transform: 'translateY(0)'
                     }}
                     onMouseEnter={(e) => {
-                      if (!user?.passkeyEnabled && !saving) {
+                      if (!user?.passkeyEnabled && !saving && canUsePasskey()) {
                         e.currentTarget.style.transform = 'translateY(-2px)';
                         e.currentTarget.style.boxShadow = '0 8px 20px rgba(13, 148, 136, 0.4)';
                       }
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.transform = 'translateY(0)';
-                      e.currentTarget.style.boxShadow = user?.passkeyEnabled
+                      e.currentTarget.style.boxShadow = (user?.passkeyEnabled || !canUsePasskey())
                         ? 'none'
                         : '0 4px 14px rgba(13, 148, 136, 0.3)';
                     }}
                   >
-                    <Shield size={18} />
-                    <span>Passkey Kur</span>
+                    {canUsePasskey() ? <Shield size={18} /> : <Lock size={18} />}
+                    <span>{canUsePasskey() ? 'Passkey Kur' : 'Kullanılamaz'}</span>
                   </button>
 
                   <button
@@ -803,6 +834,106 @@ const TeacherSettings = () => {
                     <Bell size={16} style={{ marginRight: '8px' }} />
                     Tercihleri Kaydet
                   </Button>
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'courses' && (
+              <div style={styles.card}>
+                <h2 style={styles.cardTitle}>Derslerim ve Bölümlerim</h2>
+                <p style={{ ...styles.hint, marginBottom: '20px', fontSize: '14px' }}>
+                  Buraya eklediğiniz dersler, sınav oluştururken hızlıca seçebilmeniz için karşınıza çıkacaktır.
+                </p>
+
+                <div style={{ display: 'flex', gap: '8px', marginBottom: '24px' }}>
+                  <div style={{ flex: 1 }}>
+                    <Input 
+                      value={newCourse} 
+                      onChange={(e) => setNewCourse(e.target.value)} 
+                      placeholder="Yeni ders veya bölüm adı (örn: Matematik 101)" 
+                      onKeyPress={(e) => e.key === 'Enter' && handleAddCourse()}
+                    />
+                  </div>
+                  <Button onClick={handleAddCourse} type="secondary">
+                    <Plus size={18} />
+                    Ekle
+                  </Button>
+                </div>
+
+                <div style={{ 
+                  display: 'flex', 
+                  flexDirection: 'column', 
+                  gap: '8px',
+                  maxHeight: '400px',
+                  overflowY: 'auto',
+                  padding: '4px'
+                }}>
+                  {courses.length === 0 ? (
+                    <div style={{ 
+                      textAlign: 'center', 
+                      padding: '40px 20px', 
+                      backgroundColor: '#f8fafc', 
+                      borderRadius: '12px',
+                      border: '1px dashed #cbd5e1',
+                      color: '#64748b'
+                    }}>
+                      <BookOpen size={32} style={{ marginBottom: '12px', opacity: 0.5 }} />
+                      <p>Henüz ders eklenmemiş.</p>
+                    </div>
+                  ) : (
+                    courses.map((course, index) => (
+                      <div 
+                        key={index} 
+                        style={{ 
+                          display: 'flex', 
+                          alignItems: 'center', 
+                          justifyContent: 'space-between',
+                          padding: '12px 16px',
+                          backgroundColor: '#f8fafc',
+                          borderRadius: '10px',
+                          border: '1px solid #e2e8f0',
+                          transition: 'all 0.2s'
+                        }}
+                      >
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                          <div style={{ 
+                            width: '32px', 
+                            height: '32px', 
+                            borderRadius: '8px', 
+                            backgroundColor: '#e0f2f1', 
+                            color: '#0d9488',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            fontSize: '14px',
+                            fontWeight: 'bold'
+                          }}>
+                            {index + 1}
+                          </div>
+                          <span style={{ fontWeight: '500', color: '#1e293b' }}>{course}</span>
+                        </div>
+                        <button 
+                          onClick={() => handleRemoveCourse(course)}
+                          style={{ 
+                            background: 'none', 
+                            border: 'none', 
+                            color: '#ef4444', 
+                            cursor: 'pointer',
+                            padding: '4px',
+                            borderRadius: '6px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            transition: 'background-color 0.2s'
+                          }}
+                          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#fee2e2'}
+                          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                        >
+                          <Trash2 size={18} />
+                        </button>
+                      </div>
+                    ))
+                  )}
                 </div>
               </div>
             )}

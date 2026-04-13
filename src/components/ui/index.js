@@ -10,3 +10,4 @@ export { OnboardingTour } from './OnboardingTour';
 export { Spinner, LoadingScreen, LoadingOverlay, Skeleton, Loading } from './Loading';
 export { Textarea } from './Textarea';
 export { default as LanguageSwitcher } from './LanguageSwitcher';
+export { FileViewerModal } from './FileViewerModal';

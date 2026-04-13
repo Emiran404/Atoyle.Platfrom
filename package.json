@@ -1,6 +1,6 @@
 {
   "name": "sinav-gonderme-platformu",
-  "version": "3.5.1",
+  "version": "3.7.0",
   "description": "Modern exam and assignment management platform for Alanya Mesleki ve Teknik Anadolu Lisesi",
   "author": "Emirhan Gök <https://github.com/Emiran404>",
   "license": "MIT",
@@ -8,7 +8,7 @@
     "type": "git",
     "url": "https://github.com/Emiran404/Atolye.Platform.git"
   },
-  "notes": "## 📥 İndir (v3.5.1 Hazır Paketler)\n![Version](https://img.shields.io/badge/version-3.5.1-blue?style=for-the-badge)",
+  "notes": "## 📥 İndir (v3.7.0 Hazır Paketler)\n![Version](https://img.shields.io/badge/version-3.7.0-blue?style=for-the-badge)",
   "keywords": [
     "exam-platform",
     "education",
@@ -21,13 +21,13 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\"",
+    "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\" \"node scripts/multi-port-bridge.js 80 5173\"",
     "dev:frontend": "vite",
     "dev:backend": "cd server && npm run dev",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "preview:full": "concurrently \"npm run preview\" \"npm run dev:backend\"",
+    "preview:full": "concurrently \"npm run preview\" \"npm run dev:backend\" \"node scripts/multi-port-bridge.js 80 4173\"",
     "package:client": "cd client-electron && npm run build:linux-dir && cd .. && node scripts/package-client-deb.js",
     "install:all": "npm install && cd server && npm install",
     "package:server": "node scripts/package-deb.js"

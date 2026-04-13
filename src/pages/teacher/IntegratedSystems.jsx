@@ -1,10 +1,41 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Network, Monitor, ArrowRight, ExternalLink, ShieldCheck, Activity, UserCheck, Users, Key } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { TeacherLayout } from '../../components/layouts';
+import { liderAhenkApi, settingsApi } from '../../services/api';
 
 const IntegratedSystems = () => {
     const navigate = useNavigate();
+    const [liderAhenkActive, setLiderAhenkActive] = useState(false);
+
+    useEffect(() => {
+        const checkStatus = async () => {
+            try {
+                // Cache bust ekleyerek güncel veriyi zorlayalım
+                const res = await liderAhenkApi.getSettings();
+                
+                if (res && res.success && res.settings) {
+                    const isEnabled = res.settings.enabled === true || res.settings.enabled === 'true';
+                    console.log('[LiderAhenk Check] Primary API:', isEnabled, res.settings);
+                    setLiderAhenkActive(isEnabled);
+                } else {
+                    // Fallback to general settings
+                    const sRes = await settingsApi.get();
+                    if (sRes && sRes.success && sRes.settings?.liderAhenk) {
+                        const isEnabled = sRes.settings.liderAhenk.enabled === true || sRes.settings.liderAhenk.enabled === 'true';
+                        console.log('[LiderAhenk Check] Fallback API:', isEnabled);
+                        setLiderAhenkActive(isEnabled);
+                    }
+                }
+            } catch (err) {
+                console.error('[LiderAhenk Check] Error:', err);
+            }
+        };
+
+        checkStatus();
+        const timer = setInterval(checkStatus, 2000); // 2 saniyeye düşürelim
+        return () => clearInterval(timer);
+    }, []);
 
     return (
         <TeacherLayout>
@@ -120,9 +151,16 @@ const IntegratedSystems = () => {
                             <div className="w-14 h-14 rounded-xl bg-orange-50 border border-orange-100 flex items-center justify-center text-orange-600 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300 shadow-inner">
                                 <Key size={28} />
                             </div>
-                            <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-slate-50 border border-slate-200 text-slate-500">
-                                <span className="text-xs font-bold tracking-wide uppercase">Yapılandır</span>
-                            </div>
+                            {liderAhenkActive ? (
+                                <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-100 text-emerald-600">
+                                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                                    <span className="text-xs font-bold tracking-wide">AKTİF</span>
+                                </div>
+                            ) : (
+                                <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-slate-50 border border-slate-200 text-slate-500">
+                                    <span className="text-xs font-bold tracking-wide uppercase">Yapılandır</span>
+                                </div>
+                            )}
                         </div>
 
                         <div className="relative z-10 flex-1">
