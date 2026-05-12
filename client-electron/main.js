@@ -19,10 +19,12 @@ const SERVER_PORT = 3001;
 
 function createSplash() {
   splashWindow = new BrowserWindow({
-    width: 600,
-    height: 500,
-    transparent: true,
+    width: 500,
+    height: 450,
+    transparent: process.platform !== 'linux',
+    backgroundColor: '#faf8ff',
     frame: false,
+    resizable: false,
     alwaysOnTop: true,
     webPreferences: {
       nodeIntegration: true,

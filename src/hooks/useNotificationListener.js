@@ -11,14 +11,14 @@ import { getNotificationTranslation } from '../utils/notificationHelpers';
  */
 export const useNotificationListener = () => {
   const { user, userType, isAuthenticated } = useAuthStore();
-  const { 
-    notifications, 
-    unreadCount, 
-    loadNotifications, 
+  const {
+    notifications,
+    unreadCount,
+    loadNotifications,
     pushEnabled,
-    enablePushNotifications 
+    enablePushNotifications
   } = useNotificationStore();
-  
+
   const { toast } = useToast();
   const prevUnreadCountRef = useRef(0);
   const lastProcessedNotifIdRef = useRef(null);
@@ -50,7 +50,7 @@ export const useNotificationListener = () => {
 
     // Set polling interval (15 seconds for more responsive "live" feel)
     const intervalId = setInterval(fetchNotifications, 15000);
-    
+
     return () => clearInterval(intervalId);
   }, [isAuthenticated, user, userType, loadNotifications]);
 
@@ -63,27 +63,27 @@ export const useNotificationListener = () => {
 
     // Determine the latest unread notification
     const unreadNotifications = notifications.filter(n => !n.isRead);
-    
+
     if (unreadNotifications.length > 0) {
       const latestNotif = unreadNotifications[0];
-      
+
       // Fire notification if unread count increased OR it's a new ID we haven't processed
-      const isNewNotification = 
-        unreadCount > prevUnreadCountRef.current || 
+      const isNewNotification =
+        unreadCount > prevUnreadCountRef.current ||
         (latestNotif.id !== lastProcessedNotifIdRef.current);
 
       if (isNewNotification) {
         // Update refs immediately to prevent double firing
         lastProcessedNotifIdRef.current = latestNotif.id;
-        
+
         // Translate notification
         const { title, message } = getNotificationTranslation(latestNotif);
-        
+
         // In-app Toast Notification
-        toast.info(title, { 
-          description: message.length > 80 
-            ? message.substring(0, 80) + '...' 
-            : message 
+        toast.info(title, {
+          description: message.length > 80
+            ? message.substring(0, 80) + '...'
+            : message
         });
 
         // Browser Push Notification

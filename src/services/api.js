@@ -4,17 +4,19 @@ const API_BASE = '/api';
 // Token'ı storage'dan al
 function getAuthToken() {
   try {
-    const teacherStored = localStorage.getItem('auth-storage');
-    const studentStored = sessionStorage.getItem('auth-storage');
-    const stored = teacherStored || studentStored;
+    const local = localStorage.getItem('auth-storage');
+    const session = sessionStorage.getItem('auth-storage');
     
-    // String olup olmadığını ve geçerli JSON olup olmadığını kontrol et
-    if (stored && typeof stored === 'string' && stored.startsWith('{')) {
-      const data = JSON.parse(stored);
-      const token = data.state?.token;
-      if (token) return token;
-    } else if (stored && stored === '[object Object]') {
-      console.warn('⚠️ Storage corruption detected: [object Object]');
+    // Check both for an active session with a token
+    for (const stored of [session, local]) {
+      if (stored && typeof stored === 'string' && stored.startsWith('{')) {
+        try {
+          const data = JSON.parse(stored);
+          if (data.state?.isAuthenticated && data.state?.token) {
+            return data.state.token;
+          }
+        } catch (e) {}
+      }
     }
   } catch (error) {
     console.warn('Token reading error:', error);
@@ -49,12 +51,11 @@ const fetchApi = async (endpoint, options = {}) => {
     if (response.status === 401) {
       console.warn('⚠️ Yetkilendirme hatası (401). Oturum temizleniyor...', data.error || 'Oturum geçersiz');
       
+      // Sadece state storage'dan yüklendikten (rehydrate) sonra kontrol et
       if (data.error && !data.error.includes('bulunamadı') && !data.error.includes('şifre')) {
         localStorage.removeItem('auth-storage');
         sessionStorage.removeItem('auth-storage');
-        setTimeout(() => {
-          window.location.href = '/';
-        }, 1500);
+        window.location.href = '/';
       }
       
       return { success: false, error: data.error || 'Yetkilendirme hatası (401)' };

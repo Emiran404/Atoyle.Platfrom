@@ -161,7 +161,10 @@ const TeacherLogin = () => {
         useAuthStore.setState({
           user: result.user,
           userType: 'teacher',
-          isAuthenticated: true
+          isAuthenticated: true,
+          token: result.token,
+          rememberMe: formData.rememberMe,
+          lastActivity: Date.now()
         });
 
         // Giriş bildirimi oluştur
@@ -218,7 +221,7 @@ const TeacherLogin = () => {
     setLoading(true);
     toast.info('Giriş yapılıyor...');
     try {
-      const result = await loginTeacher(formData.username, formData.password);
+      const result = await loginTeacher(formData.username, formData.password, formData.rememberMe);
       if (result && result.success) {
         toast.success('Giriş başarılı! Yönlendiriliyorsunuz...');
         
@@ -427,6 +430,17 @@ const TeacherLogin = () => {
                 error={errors.username}
                 required
               />
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+                  <input
+                    type="checkbox"
+                    checked={formData.rememberMe}
+                    onChange={(e) => handleChange('rememberMe', e.target.checked)}
+                    style={{ width: '16px', height: '16px', accentColor: '#6366f1' }}
+                  />
+                  <span style={{ fontSize: '14px', color: '#64748b' }}>Beni hatırla</span>
+                </label>
+              </div>
               <button
                 type="button"
                 onClick={handlePasskeyLogin}

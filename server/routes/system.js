@@ -147,7 +147,6 @@ router.post('/check-update', async (req, res) => {
       if (rawRes.ok) {
         const remotePkg = await rawRes.json();
         latestVersion = remotePkg.version;
-        console.log(`[System] Token-free version check: ${latestVersion}`);
       }
     } catch (rawError) {
       console.warn('[System] Raw version check failed, falling back to API:', rawError.message);

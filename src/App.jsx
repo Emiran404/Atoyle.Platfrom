@@ -73,18 +73,21 @@ function App() {
   // Bildirim Dinleyicisi - Global olarak çalışır
   useNotificationListener();
 
-  // JWT token'sız eski oturumları otomatik temizle
+  // Oturum geçerliliğini kontrol et
   useEffect(() => {
     // Sadece state storage'dan yüklendikten (rehydrate) sonra kontrol et
-    // Zustand persist ile state'in hazır olduğunu isAuthenticated true olup 
-    // token'ın boş kalmasından anlayabiliriz.
     if (isAuthenticated && !token) {
-      const stored = localStorage.getItem('auth-storage') || sessionStorage.getItem('auth-storage');
-      if (stored && JSON.parse(stored).state?.token === undefined) {
-        console.warn('⚠️ Eski oturum tespit edildi (token yok). Otomatik çıkış yapılıyor...');
-        logout();
-        window.location.href = '/';
-      }
+      // Rehydration sırasında token geçici olarak null görünebilir.
+      // 2 saniye bekleyip hala yoksa çıkış yaptıralım.
+      const timer = setTimeout(() => {
+        const latestState = useAuthStore.getState();
+        if (latestState.isAuthenticated && !latestState.token) {
+          console.warn('⚠️ Oturum doğrulanamadı (token kayıp). Otomatik çıkış yapılıyor...');
+          logout();
+          window.location.href = '/';
+        }
+      }, 2000);
+      return () => clearTimeout(timer);
     }
   }, [isAuthenticated, token]);
 

@@ -34,6 +34,7 @@ const useAuthStore = create(
       students: [],
       lastActivity: Date.now(),
       inactivityTimer: null,
+      rememberMe: false,
       language: getCurrentLanguage(),
       isServerOnline: true,
       classes: [], // Dinamik sınıf listesi
@@ -52,8 +53,8 @@ const useAuthStore = create(
 
       // İnaktivite kontrolü
       checkInactivity: () => {
-        const { lastActivity, isAuthenticated, logout } = get();
-        if (!isAuthenticated) return;
+        const { lastActivity, isAuthenticated, logout, rememberMe } = get();
+        if (!isAuthenticated || rememberMe) return; // Beni hatırla seçiliyse inaktivite kontrolü yapma
 
         const timeSinceLastActivity = Date.now() - lastActivity;
         if (timeSinceLastActivity > INACTIVITY_TIMEOUT) {
@@ -116,7 +117,8 @@ const useAuthStore = create(
               isAuthenticated: true,
               userType: 'student',
               token: response.token,
-              lastActivity: Date.now()
+              lastActivity: Date.now(),
+              rememberMe: studentData.rememberMe || false
             });
 
             // İnaktivite timer'ı başlat
@@ -163,7 +165,8 @@ const useAuthStore = create(
               userType: 'student',
               token: response.token,
               loginAttempts: restAttempts,
-              lastActivity: Date.now()
+              lastActivity: Date.now(),
+              rememberMe: rememberMe
             });
 
             // İnaktivite timer'ı başlat
@@ -217,7 +220,8 @@ const useAuthStore = create(
               isAuthenticated: true,
               userType: 'teacher',
               token: response.token,
-              lastActivity: Date.now()
+              lastActivity: Date.now(),
+              rememberMe: teacherData.rememberMe || false
             });
 
             // İnaktivite timer'ı başlat
@@ -232,7 +236,7 @@ const useAuthStore = create(
       },
 
       // Öğretmen giriş - Backend API
-      loginTeacher: async (username, password) => {
+      loginTeacher: async (username, password, rememberMe = false) => {
         try {
           const response = await authApi.loginTeacher(username, password);
           if (response.success) {
@@ -249,7 +253,8 @@ const useAuthStore = create(
               isAuthenticated: true,
               userType: 'teacher',
               token: response.token,
-              lastActivity: Date.now()
+              lastActivity: Date.now(),
+              rememberMe: rememberMe
             });
 
             // İnaktivite timer'ı başlat
@@ -311,7 +316,8 @@ const useAuthStore = create(
           isAuthenticated: false,
           userType: null,
           token: null,
-          lastActivity: Date.now()
+          lastActivity: Date.now(),
+          rememberMe: false
         });
       },
 
@@ -433,25 +439,39 @@ const useAuthStore = create(
       name: 'auth-storage',
       storage: createJSONStorage(() => ({
         getItem: (name) => {
-          const fromLocal = localStorage.getItem(name);
-          const fromSession = sessionStorage.getItem(name);
-          return fromLocal || fromSession;
+          const local = localStorage.getItem(name);
+          const session = sessionStorage.getItem(name);
+          
+          if (!local && !session) return null;
+          
+          // Eğer her iki tarafta da veri varsa, "isAuthenticated" olanı tercih et
+          try {
+            if (session) {
+              const sData = JSON.parse(session);
+              if (sData.state?.isAuthenticated) return session;
+            }
+            if (local) {
+              const lData = JSON.parse(local);
+              if (lData.state?.isAuthenticated) return local;
+            }
+          } catch (e) {}
+          
+          return local || session;
         },
         setItem: (name, value) => {
           // value zaten JSON string olarak gelir (createJSONStorage sayesinde)
           try {
             const data = JSON.parse(value);
+            const rememberMe = data.state?.rememberMe;
             const userType = data.state?.userType;
             
-            if (userType === 'teacher') {
+            // "Beni Hatırla" seçiliyse veya kullanıcı öğretmense (varsayılan) localStorage kullan
+            if (rememberMe || userType === 'teacher') {
               localStorage.setItem(name, value);
               sessionStorage.removeItem(name);
-            } else if (userType === 'student') {
+            } else {
               sessionStorage.setItem(name, value);
               localStorage.removeItem(name);
-            } else {
-              // Varsayılan (henüz giriş yapılmamışsa)
-              sessionStorage.setItem(name, value);
             }
           } catch (e) {
             console.warn('Storage setItem parse error:', e);
@@ -470,6 +490,7 @@ const useAuthStore = create(
         token: state.token,
         theme: state.theme,
         lastActivity: state.lastActivity,
+        rememberMe: state.rememberMe,
         language: state.language,
         classes: state.classes
       })
