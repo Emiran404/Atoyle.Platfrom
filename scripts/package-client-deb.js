@@ -61,10 +61,22 @@ async function build() {
     console.log("📂 İstemci dosyaları kopyalanıyor...");
     await fs.copy(clientDist, optPath);
 
-    // İkon kopyala
-    const logoSrc = path.join(root, 'public', 'polyos_izma_sirküsü.png');
+    // İkon kopyala - Windows'daki gibi varsayılan Electron ikonu olsun
+    let logoSrc = path.join(root, 'client-electron', 'node_modules', 'app-builder-lib', 'templates', 'icons', 'electron-linux', '512x512.png');
+    
+    // Eğer 512x512 yoksa 256x256 dene
+    if (!await fs.pathExists(logoSrc)) {
+      logoSrc = path.join(root, 'client-electron', 'node_modules', 'app-builder-lib', 'templates', 'icons', 'electron-linux', '256x256.png');
+    }
+
     if (await fs.pathExists(logoSrc)) {
       await fs.copy(logoSrc, path.join(iconsPath, 'atolye-platform.png'));
+    } else {
+      // Fallback: Eskisi kalsın veya boş geç
+      const oldLogo = path.join(root, 'public', 'polyos_izma_sirküsü.png');
+      if (await fs.pathExists(oldLogo)) {
+        await fs.copy(oldLogo, path.join(iconsPath, 'atolye-platform.png'));
+      }
     }
 
     // 5. Meta verileri oluştur
