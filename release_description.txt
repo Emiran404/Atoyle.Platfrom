@@ -4,10 +4,13 @@ Bu güncelleme, platform genelinde yedekleme sistemindeki kritik bir yetkilendir
 
 Hata Düzeltmeleri ve İyileştirmeler:
 - Fotoğraflı Yedekleme Düzeltildi: Fotoğraflarla yedek indirme (ZIP) işlemi sırasında Authorization (JWT) token başlığının gönderilmemesinden kaynaklanan yedekleme başarısız hatası çözüldü.
-- Öğretmen Paneli Güvenliği Artırıldı: Öğrencilerin şifrelerini değiştirme ve şifre sıfırlama modunu aktifleştirme uç noktaları backend tarafında JWT doğrulaması ve öğretmen rolü kontrolü ile tamamen güvence altına alındı.
+- Öğretmen Paneli Güvenliği Artırıldı: Öğrencilerin şifrelerini değiştirme ve şifre sıfırlama modunu aktifleştirme uç noktaları backend tarafında JWT doğrulaması ve öğretmen rolü kontrolü ile tamamen güvence altına olunmuştur.
 - İstek Yetkilendirmeleri: Sistem sıfırlama ve öğrenci işlem günlüklerini çekme istekleri tamamen yetkilendirildi.
 - Oturum Süresi Sınırlandırması: Öğrenci oturumlarının süresi güvenlik amacıyla tam olarak 30 dakika ile sınırlandırıldı. Öğrenciler için "Beni Hatırla" seçeneği devredışı bırakıldı; öğretmenlerde ise bu seçenek 1 hafta (7 gün) boyunca oturumu açık tutmaya devam edecektir.
-- İstatistik Paneli Optimizasyonu: Öğretmen istatistikler sayfasında yer alan daire grafiklerinin (PieChart) yüklenme esnasında boş çıkması/gecikmesi sorunu giderildi. Ayrıca panele Kayıtlı Öğrenci Sayısı, Değerlendirme Bekleyen Sınavlar, En Başarılı Sınıf ve Katılım Oranı olmak üzere 4 yeni metrik eklenerek toplam metrik sayısı 8'e çıkarıldı.
+- İstatistik Paneli Geliştirmeleri ve Optimizasyonu: 
+  - Öğretmen istatistikler sayfasındaki daire grafiklerinin (PieChart) yüklenme gecikmelerinde boş görünmesi sorunu giderildi.
+  - Panel genelindeki metrik kartları sayısı 4'ten 8'e çıkarıldı (Kayıtlı Öğrenci Sayısı, Değerlendirme Bekleyen Sınavlar, En Başarılı Sınıf ve Katılım Oranı eklendi).
+  - İstatistik paneline **Sınav Başarı Ortalamaları (BarChart)** ve **Günlük Gönderim Trendi (LineChart)** olmak üzere iki yeni performans analiz grafiği eklendi.
 - Mimari Uyumluluk ve Paketleme: İstemci ve sunucu paketleme scriptleri güncellenerek Linux (deb - arm64/amd64) ve Windows (exe - arm64/x64) mimarileri için kurulum paketleri derlendi.
 
-descx: Yedekleme hatası düzeltildi, öğrenci oturumları 30 dk ile sınırlandırıldı ve istatistik paneli optimize edildi.
+descx: Yedekleme hatası düzeltildi, öğrenci oturumları 30 dk ile sınırlandırıldı ve istatistik paneline yeni grafikler/metrikler eklendi.

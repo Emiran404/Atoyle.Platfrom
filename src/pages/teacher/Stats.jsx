@@ -8,7 +8,7 @@ import { useSubmissionStore } from '../../store/submissionStore';
 import { useAuthStore } from '../../store/authStore';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
-  PieChart, Pie, Cell
+  PieChart, Pie, Cell, LineChart, Line
 } from 'recharts';
 import {
   TrendingUp, TrendingDown, Users, FileText, CheckCircle, Clock,
@@ -289,6 +289,71 @@ const Stats = () => {
     ].filter(item => item.value > 0);
   }, [filteredData]);
 
+  const examPerformanceStats = useMemo(() => {
+    const { filteredExams, filteredSubmissions } = filteredData;
+    
+    return filteredExams.map(exam => {
+      const examSubs = filteredSubmissions.filter(s => s.examId === exam.id);
+      
+      const getUniqueSubmissions = (subs) => {
+        const grouped = {};
+        subs.forEach(sub => {
+          const key = `${sub.examId}-${sub.studentId}`;
+          if (!grouped[key] || (sub.grade !== null && sub.grade !== undefined)) {
+            grouped[key] = sub;
+          }
+        });
+        return Object.values(grouped);
+      };
+      
+      const uniqueSubs = getUniqueSubmissions(examSubs);
+      const gradedSubs = uniqueSubs.filter(s => s.grade !== null && s.grade !== undefined);
+      
+      const avgGrade = gradedSubs.length > 0
+        ? Math.round(gradedSubs.reduce((sum, s) => sum + s.grade, 0) / gradedSubs.length)
+        : 0;
+        
+      return {
+        name: exam.title.length > 12 ? exam.title.substring(0, 12) + '...' : exam.title,
+        fullName: exam.title,
+        'Ortalama Not': avgGrade,
+        'Teslim Sayısı': uniqueSubs.length
+      };
+    }).filter(item => item['Teslim Sayısı'] > 0 || item['Ortalama Not'] > 0);
+  }, [filteredData]);
+
+  const submissionTimelineStats = useMemo(() => {
+    const { filteredSubmissions } = filteredData;
+    const dailyCounts = {};
+    const today = new Date();
+    
+    let daysToInclude = 10;
+    if (timeRange === 'week') daysToInclude = 7;
+    else if (timeRange === 'month') daysToInclude = 30;
+    else if (timeRange === 'semester') daysToInclude = 60;
+    
+    for (let i = daysToInclude - 1; i >= 0; i--) {
+      const d = new Date();
+      d.setDate(today.getDate() - i);
+      const dateStr = d.toLocaleDateString('tr-TR', { day: '2-digit', month: '2-digit' });
+      dailyCounts[dateStr] = 0;
+    }
+    
+    filteredSubmissions.forEach(sub => {
+      if (sub.submittedAt) {
+        const dateStr = new Date(sub.submittedAt).toLocaleDateString('tr-TR', { day: '2-digit', month: '2-digit' });
+        if (dateStr in dailyCounts) {
+          dailyCounts[dateStr]++;
+        }
+      }
+    });
+    
+    return Object.entries(dailyCounts).map(([date, count]) => ({
+      Tarih: date,
+      'Gönderim Adedi': count
+    }));
+  }, [filteredData, timeRange]);
+
   const classOptions = [
     { value: 'all', label: 'Tüm Sınıflar' },
     ...classes.map(cls => {
@@ -567,6 +632,51 @@ const Stats = () => {
                   </Bar>
                 </BarChart>
               </ResponsiveContainer>
+            </div>
+          </div>
+
+          <div style={styles.chartCard}>
+            <h3 style={styles.chartTitle}>Sınav Başarı Ortalamaları</h3>
+            <div style={{ height: '280px' }}>
+              {examPerformanceStats.length > 0 ? (
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={examPerformanceStats}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                    <XAxis dataKey="name" stroke="#64748b" fontSize={11} />
+                    <YAxis stroke="#64748b" fontSize={12} domain={[0, 100]} />
+                    <Tooltip content={<CustomTooltip />} />
+                    <Legend />
+                    <Bar dataKey="Ortalama Not" name="Ortalama Not" fill="#8b5cf6" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="Teslim Sayısı" name="Teslim Sayısı" fill="#ec4899" radius={[4, 4, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              ) : (
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', color: '#64748b', fontSize: '14px' }}>
+                  Veri bulunamadı
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div style={styles.chartCard}>
+            <h3 style={styles.chartTitle}>Günlük Gönderim Trendi</h3>
+            <div style={{ height: '280px' }}>
+              {submissionTimelineStats.length > 0 ? (
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={submissionTimelineStats}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                    <XAxis dataKey="Tarih" stroke="#64748b" fontSize={11} />
+                    <YAxis stroke="#64748b" fontSize={12} allowDecimals={false} />
+                    <Tooltip content={<CustomTooltip />} />
+                    <Legend />
+                    <Line type="monotone" dataKey="Gönderim Adedi" name="Gönderim Adedi" stroke="#f59e0b" strokeWidth={3} activeDot={{ r: 8 }} />
+                  </LineChart>
+                </ResponsiveContainer>
+              ) : (
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', color: '#64748b', fontSize: '14px' }}>
+                  Veri bulunamadı
+                </div>
+              )}
             </div>
           </div>
         </div>
