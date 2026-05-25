@@ -402,7 +402,12 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
       toast.info('Fotoğraflarla yedekleme hazırlanıyor... Bu biraz zaman alabilir.');
 
       // Backend'den ZIP olarak indir
-      const response = await fetch('/api/backup/with-photos');
+      const token = useAuthStore.getState().token;
+      const response = await fetch('/api/backup/with-photos', {
+        headers: {
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+        }
+      });
 
       if (!response.ok) {
         toast.error('Yedekleme başarısız');

@@ -1,4 +1,5 @@
 import { setData, getData } from './storage';
+import { useAuthStore } from '../store/authStore';
 
 // Verileri temizle - tüm localStorage'ı sıfırla
 export const clearAllData = () => {
@@ -36,10 +37,12 @@ export const initializeDemoData = initializeEmptyData;
 export const resetAllData = async () => {
   try {
     // Sunucudaki verileri sıfırla
+    const token = useAuthStore.getState().token;
     const response = await fetch('/api/reset-all-data', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        ...(token ? { 'Authorization': `Bearer ${token}` } : {})
       }
     });
     

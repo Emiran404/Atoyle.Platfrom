@@ -21,7 +21,7 @@ import { authenticateToken, authorizeRole } from './middleware/auth.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-// Load .env from root directory (Already handled by import 'dotenv/config' at top)
+// Load .env from root directory (Already handled by import 'dotenv/config' at top) - Trigger Reload
 // dotenv.config({ path: join(__dirname, '../.env') });
 
 // Routes

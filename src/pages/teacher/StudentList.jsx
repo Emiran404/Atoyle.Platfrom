@@ -358,7 +358,12 @@ const StudentList = () => {
       const fetchLogs = async () => {
         setLoadingLogs(true);
         try {
-          const response = await fetch(`/api/users/students/${selectedStudent.id}/logs`);
+          const token = useAuthStore.getState().token;
+          const response = await fetch(`/api/users/students/${selectedStudent.id}/logs`, {
+            headers: {
+              ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+            }
+          });
           const data = await response.json();
           if (data.success) {
             setStudentLogs(data.logs || []);
@@ -423,9 +428,13 @@ const StudentList = () => {
     }
 
     try {
+      const token = useAuthStore.getState().token;
       const response = await fetch('/api/auth/change-student-password', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+        },
         body: JSON.stringify({
           studentId: selectedStudent.id,
           studentNumber: selectedStudent.studentNumber,
@@ -536,9 +545,13 @@ const StudentList = () => {
   const handleEnableIndividualPasswordChangeMode = async () => {
     try {
       if (!selectedStudent) return;
+      const token = useAuthStore.getState().token;
       const response = await fetch('/api/auth/login/enable-student-reset-mode', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+        },
         body: JSON.stringify({ studentId: selectedStudent.id })
       });
 

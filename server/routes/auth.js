@@ -2,7 +2,7 @@
 import express from 'express';
 import { getData, setData, generateId } from '../utils/storage.js';
 import { hashPassword, verifyPassword } from '../utils/crypto.js';
-import { generateToken } from '../middleware/auth.js';
+import { generateToken, authenticateToken, authorizeRole } from '../middleware/auth.js';
 import { loginLimiter } from '../middleware/rateLimit.js';
 import base64url from 'base64url';
 import crypto from 'crypto';
@@ -220,7 +220,7 @@ router.post('/login/student-reset', async (req, res) => {
 });
 
 // Belirli bir öğrenci için şifre sıfırlama modunu aktif et
-router.post('/login/enable-student-reset-mode', async (req, res) => {
+router.post('/login/enable-student-reset-mode', authenticateToken, authorizeRole('teacher'), async (req, res) => {
   try {
     const { studentId } = req.body;
 
@@ -465,7 +465,7 @@ router.post('/passkey/login-challenge', (req, res) => {
 });
 
 // Öğrenci şifre değiştirme (Öğretmen tarafından)
-router.post('/change-student-password', async (req, res) => {
+router.post('/change-student-password', authenticateToken, authorizeRole('teacher'), async (req, res) => {
   try {
     const { studentId, studentNumber, newPassword } = req.body;
 
