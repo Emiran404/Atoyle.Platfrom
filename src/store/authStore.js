@@ -238,7 +238,7 @@ const useAuthStore = create(
       // Öğretmen giriş - Backend API
       loginTeacher: async (username, password, rememberMe = false) => {
         try {
-          const response = await authApi.loginTeacher(username, password);
+          const response = await authApi.loginTeacher(username, password, rememberMe);
           if (response.success) {
             // Suspended kontrolü
             if (response.user.suspended) {

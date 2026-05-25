@@ -99,10 +99,10 @@ export const authApi = {
       body: JSON.stringify(data),
     }),
 
-  loginTeacher: (username, password) =>
+  loginTeacher: (username, password, rememberMe = false) =>
     fetchApi('/auth/login/teacher', {
       method: 'POST',
-      body: JSON.stringify({ username, password }),
+      body: JSON.stringify({ username, password, rememberMe }),
     }),
 
   getStudents: () => fetchApi('/auth/students'),
@@ -126,10 +126,10 @@ export const authApi = {
       body: JSON.stringify({ username }),
     }),
 
-  passkeyLogin: (username, credentialId, authenticatorData, clientDataJSON, signature) =>
+  passkeyLogin: (username, credentialId, authenticatorData, clientDataJSON, signature, rememberMe = false) =>
     fetchApi('/auth/passkey/login', {
       method: 'POST',
-      body: JSON.stringify({ username, credentialId, authenticatorData, clientDataJSON, signature }),
+      body: JSON.stringify({ username, credentialId, authenticatorData, clientDataJSON, signature, rememberMe }),
     }),
 
   generateRecoveryKey: (username) =>

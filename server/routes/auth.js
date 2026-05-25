@@ -251,7 +251,7 @@ router.post('/login/enable-student-reset-mode', authenticateToken, authorizeRole
 // Öğretmen giriş
 router.post('/login/teacher', loginLimiter, async (req, res) => {
   try {
-    const { email, password, username } = req.body;
+    const { email, password, username, rememberMe } = req.body;
 
     // username veya email ile giriş yapılabilir
     const loginId = username || email;
@@ -327,7 +327,10 @@ router.post('/login/teacher', loginLimiter, async (req, res) => {
 
     const { password: _, ...teacherData } = currentTeacher;
     const clientIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
-    const token = generateToken({ id: currentTeacher.id, userType: 'teacher', username: currentTeacher.username });
+    const token = generateToken(
+      { id: currentTeacher.id, userType: 'teacher', username: currentTeacher.username },
+      rememberMe ? '7d' : '24h'
+    );
     res.json({ success: true, user: teacherData, userType: 'teacher', clientIp, token });
   } catch (error) {
     res.status(500).json({ success: false, error: 'Sunucu hatası: ' + error.message });
@@ -509,7 +512,7 @@ router.post('/change-student-password', authenticateToken, authorizeRole('teache
 // Passkey ile giriş doğrulama
 router.post('/passkey/login', (req, res) => {
   try {
-    const { username, credentialId, authenticatorData, clientDataJSON, signature } = req.body;
+    const { username, credentialId, authenticatorData, clientDataJSON, signature, rememberMe } = req.body;
 
     if (!username || !credentialId || !authenticatorData || !clientDataJSON || !signature) {
       return res.status(400).json({ error: 'Eksik veri!' });
@@ -536,7 +539,10 @@ router.post('/passkey/login', (req, res) => {
 
     const { password: _, ...teacherData } = teacher;
     const clientIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
-    const token = generateToken({ id: teacher.id, userType: 'teacher', username: teacher.username });
+    const token = generateToken(
+      { id: teacher.id, userType: 'teacher', username: teacher.username },
+      rememberMe ? '7d' : '24h'
+    );
     res.json({ success: true, user: teacherData, userType: 'teacher', clientIp, token });
   } catch (error) {
     res.status(500).json({ error: error.message });

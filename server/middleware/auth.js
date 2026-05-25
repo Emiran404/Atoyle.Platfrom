@@ -19,8 +19,8 @@ const JWT_EXPIRY = '24h'; // Token süresi
  * @param {Object} payload - Token içeriği (userId, userType, vb.)
  * @returns {string} JWT token
  */
-export function generateToken(payload) {
-  return jwt.sign(payload, getJwtSecret(), { expiresIn: JWT_EXPIRY });
+export function generateToken(payload, expiresIn = JWT_EXPIRY) {
+  return jwt.sign(payload, getJwtSecret(), { expiresIn });
 }
 
 /**

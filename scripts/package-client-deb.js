@@ -29,14 +29,26 @@ function createArHeader(filename, size) {
 async function build() {
   console.log(`📦 ${PKG_NAME} v${VERSION} Paketleniyor (Manual Ar Mode)...`);
 
-  const clientDist = path.join(root, 'client-electron', 'dist', 'linux-unpacked');
+  let clientDist = path.join(root, 'client-electron', 'dist', 'linux-unpacked');
+  let architecture = 'amd64'; // Default
 
   try {
-    // 1. Önce Electron Linux-unpacked var mı kontrol et
+    // 1. Önce Electron Linux-unpacked var mı kontrol et (arm64, x64 veya generic)
     if (!await fs.pathExists(clientDist)) {
-      console.error("❌ Hata: 'client-electron/dist/linux-unpacked' bulunamadı.");
-      console.log("💡 Önce şunu çalıştırın: cd client-electron && npm run build:linux-dir");
-      process.exit(1);
+      const armDist = path.join(root, 'client-electron', 'dist', 'linux-arm64-unpacked');
+      const x64Dist = path.join(root, 'client-electron', 'dist', 'linux-x64-unpacked');
+      
+      if (await fs.pathExists(armDist)) {
+        clientDist = armDist;
+        architecture = 'arm64';
+      } else if (await fs.pathExists(x64Dist)) {
+        clientDist = x64Dist;
+        architecture = 'amd64';
+      } else {
+        console.error("❌ Hata: 'client-electron/dist/linux-unpacked' veya mimariye özel unpacked klasörü bulunamadı.");
+        console.log("💡 Önce şunu çalıştırın: cd client-electron && npm run build:linux-dir");
+        process.exit(1);
+      }
     }
 
     // 2. Sahneyi temizle
@@ -87,7 +99,7 @@ async function build() {
 Version: ${VERSION}
 Section: utils
 Priority: optional
-Architecture: amd64
+Architecture: ${architecture}
 Maintainer: Emirhan Gok <emirhangok@example.com>
 Description: Atolye Platform Smart Client for students and teachers.
 `;
@@ -144,7 +156,7 @@ exit 0
 
     // 7. Final .deb (ar) paketini birleştir
     console.log("🎁 .deb arşivi birleştiriliyor...");
-    const dest = path.join(root, `${PKG_NAME}_${VERSION}_amd64.deb`);
+    const dest = path.join(root, `${PKG_NAME}_${VERSION}_${architecture}.deb`);
     
     const controlBuffer = await fs.readFile(controlTar);
     const dataBuffer = await fs.readFile(dataTar);

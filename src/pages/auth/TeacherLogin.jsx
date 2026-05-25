@@ -153,7 +153,14 @@ const TeacherLogin = () => {
       const signature = btoa(String.fromCharCode(...new Uint8Array(assertion.response.signature)));
       const credId = btoa(String.fromCharCode(...new Uint8Array(assertion.rawId)));
 
-      const result = await authApi.passkeyLogin(formData.username, credId, authenticatorData, clientDataJSON, signature);
+      const result = await authApi.passkeyLogin(
+        formData.username, 
+        credId, 
+        authenticatorData, 
+        clientDataJSON, 
+        signature,
+        formData.rememberMe
+      );
 
       if (result.success) {
         toast.success('Passkey ile giriş başarılı!');
