@@ -837,60 +837,60 @@ const Archive = () => {
     const reportDate = formatDateTime(new Date());
 
     return `
-      <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 30px; background: white; color: #0f172a; width: 1000px; margin: 0 auto; border: 2px solid #1e293b; position: relative;">
+      <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 20px 24px; background: white; color: #0f172a; width: 1000px; margin: 0 auto; border: 2px solid #1e293b; position: relative;">
         <!-- Digital Stamp (Kaşe Altta) -->
-        <div style="position: absolute; bottom: 40px; left: 70px; border: 3px double #0f172a; color: #0f172a; border-radius: 50%; width: 140px; height: 140px; display: flex; align-items: center; justify-content: center; transform: rotate(-12deg); opacity: 0.3; pointer-events: none; z-index: 9;">
-          <div style="text-align: center; border: 1px solid #0f172a; border-radius: 50%; width: 120px; height: 120px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-            <div style="font-size: 14px; font-weight: bold; letter-spacing: 2px; text-transform: uppercase;">PolyOS</div>
-            <div style="font-size: 10px; font-weight: bold; margin: 6px 0; border-top: 1px dashed #0f172a; border-bottom: 1px dashed #0f172a; padding: 3px 0; width: 90%;">RESMİ SİSTEM</div>
-            <div style="font-size: 14px; font-weight: bold; letter-spacing: 2px; text-transform: uppercase;">İMZASI</div>
+        <div style="position: absolute; bottom: 30px; left: 70px; border: 3px double #0f172a; color: #0f172a; border-radius: 50%; width: 130px; height: 130px; display: flex; align-items: center; justify-content: center; transform: rotate(-12deg); opacity: 0.3; pointer-events: none; z-index: 9;">
+          <div style="text-align: center; border: 1px solid #0f172a; border-radius: 50%; width: 110px; height: 110px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+            <div style="font-size: 13px; font-weight: bold; letter-spacing: 2px; text-transform: uppercase;">PolyOS</div>
+            <div style="font-size: 9px; font-weight: bold; margin: 4px 0; border-top: 1px dashed #0f172a; border-bottom: 1px dashed #0f172a; padding: 2px 0; width: 90%;">RESMİ SİSTEM</div>
+            <div style="font-size: 13px; font-weight: bold; letter-spacing: 2px; text-transform: uppercase;">İMZASI</div>
           </div>
         </div>
 
         <!-- Digital Signature Image (Kaşenin Üstünde) -->
-        <div style="position: absolute; bottom: 75px; left: 45px; transform: rotate(-5deg); opacity: 0.9; pointer-events: none; z-index: 10;">
-          <img src="/polyos_izma_sirküsü.png" style="width: 150px; height: auto;" alt="PolyOS Imza" />
+        <div style="position: absolute; bottom: 60px; left: 45px; transform: rotate(-5deg); opacity: 0.9; pointer-events: none; z-index: 10;">
+          <img src="/polyos_izma_sirküsü.png" style="width: 140px; height: auto;" alt="PolyOS Imza" />
         </div>
         
         <!-- Başlık Alanı -->
-        <div style="display: flex; align-items: center; justify-content: center; border-bottom: 3px double #1e293b; padding-bottom: 15px; margin-bottom: 20px; position: relative;">
-          <img src="/milli_egitim_bakani_arma.png" style="position: absolute; left: 10px; top: -10px; width: 120px; height: auto;" alt="MEB Logo" />
+        <div style="display: flex; align-items: center; justify-content: center; border-bottom: 3px double #1e293b; padding-bottom: 10px; margin-bottom: 15px; position: relative;">
+          <img src="/milli_egitim_bakani_arma.png" style="position: absolute; left: 10px; top: -5px; width: 100px; height: auto;" alt="MEB Logo" />
           <div style="text-align: center;">
-            <p style="font-size: 14px; font-weight: bold; margin: 0; color: #475569; text-transform: uppercase;">PolyOS Eğitim Platformu</p>
-            <h1 style="font-size: 26px; font-weight: 800; margin: 10px 0 5px 0; letter-spacing: 1px;">DÖNEM SONU SINIF RAPORU</h1>
-            <p style="font-size: 12px; color: #64748b; margin: 0;">Bu belge sistem tarafından otomatik olarak oluşturulmuştur.</p>
+            <p style="font-size: 13px; font-weight: bold; margin: 0; color: #475569; text-transform: uppercase;">PolyOS Eğitim Platformu</p>
+            <h1 style="font-size: 22px; font-weight: 800; margin: 6px 0 3px 0; letter-spacing: 1px;">DÖNEM SONU SINIF RAPORU</h1>
+            <p style="font-size: 11px; color: #64748b; margin: 0;">Bu belge sistem tarafından otomatik olarak oluşturulmuştur.</p>
           </div>
         </div>
 
         <!-- Bilgi Paneli -->
-        <div style="display: flex; justify-content: space-between; margin-bottom: 30px; padding: 10px 20px; background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 20px; padding: 8px 16px; background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;">
           <div>
-            <p style="margin: 0; font-size: 14px;"><strong>Sınıf:</strong> ${selectedClassForReport === 'all' ? 'Tüm Okul' : selectedClassForReport}</p>
-            <p style="margin: 5px 0 0 0; font-size: 14px;"><strong>Öğrenci Sayısı:</strong> ${rows.length}</p>
+            <p style="margin: 0; font-size: 13px;"><strong>Sınıf:</strong> ${selectedClassForReport === 'all' ? 'Tüm Okul' : selectedClassForReport}</p>
+            <p style="margin: 4px 0 0 0; font-size: 13px;"><strong>Öğrenci Sayısı:</strong> ${rows.length}</p>
           </div>
           <div style="text-align: right;">
-            <p style="margin: 0; font-size: 14px;"><strong>Rapor Tarihi:</strong> ${reportDate}</p>
-            <p style="margin: 5px 0 0 0; font-size: 14px; color: #ef4444; font-weight: bold;">"G" : Sınava veya Ödeve Girmedi</p>
+            <p style="margin: 0; font-size: 13px;"><strong>Rapor Tarihi:</strong> ${reportDate}</p>
+            <p style="margin: 4px 0 0 0; font-size: 13px; color: #ef4444; font-weight: bold;">"G" : Sınava veya Ödeve Girmedi</p>
           </div>
         </div>
 
         <!-- Puan Tablosu -->
-        <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
+        <table style="width: 100%; border-collapse: collapse; font-size: 11px;">
           <thead>
             <tr>
-              <th style="border: 1px solid #cbd5e1; padding: 8px; background-color: #f1f5f9; text-align: center; width: 45px;">Ogr. No</th>
-              <th style="border: 1px solid #cbd5e1; padding: 8px; background-color: #f1f5f9; text-align: left; width: 140px;">Ad Soyad</th>
-              <th style="border: 1px solid #cbd5e1; padding: 8px; background-color: #f1f5f9; text-align: center; width: 40px;">Sınıf</th>
+              <th style="border: 1px solid #cbd5e1; padding: 6px; background-color: #f1f5f9; text-align: center; width: 45px;">Ogr. No</th>
+              <th style="border: 1px solid #cbd5e1; padding: 6px; background-color: #f1f5f9; text-align: left; width: 140px;">Ad Soyad</th>
+              <th style="border: 1px solid #cbd5e1; padding: 6px; background-color: #f1f5f9; text-align: center; width: 40px;">Sınıf</th>
               ${reportExams.map(e => `
-                <th style="border: 1px solid #cbd5e1; background-color: #f1f5f9; position: relative; height: 160px; min-width: 40px;">
-                  <div style="position: absolute; bottom: 15px; left: 50%; width: 12px; margin-left: -6px;">
-                    <span style="display: inline-block; transform: rotate(-90deg); transform-origin: left bottom; white-space: nowrap; font-size: 11px; font-weight: bold; color: #334155;">
+                <th style="border: 1px solid #cbd5e1; background-color: #f1f5f9; position: relative; height: 120px; min-width: 40px;">
+                  <div style="position: absolute; bottom: 10px; left: 50%; width: 12px; margin-left: -6px;">
+                    <span style="display: inline-block; transform: rotate(-90deg); transform-origin: left bottom; white-space: nowrap; font-size: 10px; font-weight: bold; color: #334155;">
                       ${e.title}
                     </span>
                   </div>
                 </th>
               `).join('')}
-              <th style="border: 1px solid #cbd5e1; padding: 8px; background-color: #e2e8f0; text-align: center; width: 40px; font-weight: 800; font-size: 12px;">ORT.</th>
+              <th style="border: 1px solid #cbd5e1; padding: 6px; background-color: #e2e8f0; text-align: center; width: 40px; font-weight: 800; font-size: 11px;">ORT.</th>
             </tr>
           </thead>
           <tbody>
@@ -917,7 +917,7 @@ const Archive = () => {
                   colorStyles = 'color: #1e293b; font-weight: bold;';
                 }
 
-                return `<td style="border: 1px solid #cbd5e1; padding: 8px; text-align: center; ${colorStyles}">${grade}</td>`;
+                return `<td style="border: 1px solid #cbd5e1; padding: 6px; text-align: center; ${colorStyles}">${grade}</td>`;
               }).join('');
 
               const avg = validExamCount > 0 ? Math.round(totalScore / validExamCount) : 'G';
@@ -927,11 +927,11 @@ const Archive = () => {
 
               return `
                 <tr style="background-color: ${bgColor}; page-break-inside: avoid;">
-                  <td style="border: 1px solid #cbd5e1; padding: 8px; text-align: center; font-weight: bold; color: #475569;">${r.studentNumber}</td>
-                  <td style="border: 1px solid #cbd5e1; padding: 8px; text-align: left; font-weight: 600;">${r.studentName}</td>
-                  <td style="border: 1px solid #cbd5e1; padding: 8px; text-align: center; color: #475569;">${r.studentClass}</td>
+                  <td style="border: 1px solid #cbd5e1; padding: 6px; text-align: center; font-weight: bold; color: #475569;">${r.studentNumber}</td>
+                  <td style="border: 1px solid #cbd5e1; padding: 6px; text-align: left; font-weight: 600;">${r.studentName}</td>
+                  <td style="border: 1px solid #cbd5e1; padding: 6px; text-align: center; color: #475569;">${r.studentClass}</td>
                   ${examCols}
-                  <td style="border: 1px solid #94a3b8; padding: 8px; text-align: center; background-color: #f1f5f9; font-weight: 800; color: ${avgColor}; font-size: 13px;">${avg}</td>
+                  <td style="border: 1px solid #94a3b8; padding: 6px; text-align: center; background-color: #f1f5f9; font-weight: 800; color: ${avgColor}; font-size: 12px;">${avg}</td>
                 </tr>
               `;
             }).join('')}
@@ -939,11 +939,11 @@ const Archive = () => {
         </table>
 
         <!-- İmza Alanı -->
-        <div style="margin-top: 50px; display: flex; justify-content: flex-end; padding-right: 50px; position: relative;">
+        <div style="margin-top: 25px; display: flex; justify-content: flex-end; padding-right: 50px; position: relative;">
           <div style="text-align: center;">
-            <p style="margin: 0; font-size: 14px;"><strong>Onaylayan</strong></p>
-            <br><br>
-            <p style="margin: 0; font-size: 14px; border-top: 1px solid #cbd5e1; padding-top: 5px; width: 150px;">Okul Müdürü / Öğretmen</p>
+            <p style="margin: 0; font-size: 13px;"><strong>Onaylayan</strong></p>
+            <br>
+            <p style="margin: 0; font-size: 13px; border-top: 1px solid #cbd5e1; padding-top: 4px; width: 150px;">Okul Müdürü / Öğretmen</p>
           </div>
         </div>
         
@@ -963,7 +963,7 @@ const Archive = () => {
 
       // html2pdf Konfigürasyonu
       const opt = {
-        margin:       0.5,
+        margin:       0.3,
         filename:     `Sinif_Raporu_${selectedClassForReport}_${Date.now()}.pdf`,
         image:        { type: 'jpeg', quality: 0.98 },
         html2canvas:  { scale: 2, useCORS: true },

@@ -11,6 +11,7 @@ Hata Düzeltmeleri ve İyileştirmeler:
   - Öğretmen istatistikler sayfasındaki daire grafiklerinin (PieChart) yüklenme gecikmelerinde boş görünmesi sorunu giderildi.
   - Panel genelindeki metrik kartları sayısı 4'ten 8'e çıkarıldı (Kayıtlı Öğrenci Sayısı, Değerlendirme Bekleyen Sınavlar, En Başarılı Sınıf ve Katılım Oranı eklendi).
   - İstatistik paneline **Sınav Başarı Ortalamaları (BarChart)** ve **Günlük Gönderim Trendi (LineChart)** olmak üzere iki yeni performans analiz grafiği eklendi.
+- Sınıf Raporu PDF Yerleşimi İyileştirildi: Sınıf bazlı PDF rapor çıktısının dikey/yatay boşlukları, yazı boyutları ve tablo dolguları sıkıştırılarak, sınıf raporlarının tek bir sayfaya sığması sağlandı ve gereksiz sayfa bölünmeleri giderildi.
 - Mimari Uyumluluk ve Paketleme: İstemci ve sunucu paketleme scriptleri güncellenerek Linux (deb - arm64/amd64) ve Windows (exe - arm64/x64) mimarileri için kurulum paketleri derlendi.
 
-descx: Yedekleme hatası düzeltildi, öğrenci oturumları 30 dk ile sınırlandırıldı ve istatistik paneline yeni grafikler/metrikler eklendi.
+descx: Yedekleme hatası düzeltildi, öğrenci oturumları 30 dk ile sınırlandırıldı, istatistik paneline yeni grafikler eklendi ve sınıf PDF rapor yerleşimi sıkıştırıldı.
