@@ -54,7 +54,7 @@ router.post('/register/student', loginLimiter, async (req, res) => {
 
     // Şifre olmadan döndür
     const { password: _, ...studentData } = newStudent;
-    const token = generateToken({ id: newStudent.id, userType: 'student', studentNumber });
+    const token = generateToken({ id: newStudent.id, userType: 'student', studentNumber }, '30m');
     res.json({ success: true, user: studentData, userType: 'student', token });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
@@ -156,7 +156,7 @@ router.post('/login/student', loginLimiter, async (req, res) => {
     setData('students', updatedStudents);
 
     const { password: _, ...studentData } = currentStudent;
-    const token = generateToken({ id: currentStudent.id, userType: 'student', studentNumber });
+    const token = generateToken({ id: currentStudent.id, userType: 'student', studentNumber }, '30m');
     res.json({ success: true, user: studentData, userType: 'student', clientIp, token });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });

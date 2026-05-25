@@ -175,7 +175,10 @@ const Stats = () => {
       ? Math.round((allGrades.filter(g => g >= 50).length / allGrades.length) * 100)
       : 0;
 
-    return { totalExams, activeExams, totalSubmissions, gradedSubmissions, lateSubmissions, averageGrade, passRate };
+    const pendingGrades = totalSubmissions - gradedSubmissions;
+    const avgSubmissionsPerExam = totalExams > 0 ? (totalSubmissions / totalExams).toFixed(1) : 0;
+
+    return { totalExams, activeExams, totalSubmissions, gradedSubmissions, lateSubmissions, averageGrade, passRate, pendingGrades, avgSubmissionsPerExam };
   }, [filteredData]);
 
   const classStats = useMemo(() => {
@@ -212,6 +215,12 @@ const Stats = () => {
       };
     }).filter(stat => selectedClass === 'all' || stat.name === selectedClass);
   }, [students, filteredData, selectedClass]);
+
+  const bestClass = useMemo(() => {
+    if (classStats.length === 0) return null;
+    const sorted = [...classStats].sort((a, b) => b.average - a.average);
+    return sorted[0] && sorted[0].average > 0 ? sorted[0] : null;
+  }, [classStats]);
 
   const gradeDistribution = useMemo(() => {
     const { filteredSubmissions } = filteredData;
@@ -356,6 +365,19 @@ const Stats = () => {
     return null;
   };
 
+  if (loading) {
+    return (
+      <TeacherLayout>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '400px' }}>
+          <div style={{ textAlign: 'center' }}>
+            <p style={{ fontSize: '18px', fontWeight: '500', color: '#1e293b', marginBottom: '8px' }}>Veriler Yükleniyor...</p>
+            <p style={{ fontSize: '14px', color: '#64748b' }}>İstatistikler hesaplanıyor, lütfen bekleyin.</p>
+          </div>
+        </div>
+      </TeacherLayout>
+    );
+  }
+
   return (
     <TeacherLayout>
       <div style={styles.container}>
@@ -445,6 +467,70 @@ const Stats = () => {
               </div>
             </div>
           </div>
+
+          <div style={styles.statCard}>
+            <div style={styles.statRow}>
+              <div>
+                <p style={styles.statLabel}>Kayıtlı Öğrenciler</p>
+                <p style={styles.statValue}>{students.length}</p>
+                <div style={styles.statExtra}>
+                  <span style={{ color: '#64748b' }}>Sistemdeki toplam kayıt</span>
+                </div>
+              </div>
+              <div style={styles.iconBox('#e0f2fe')}>
+                <Users size={24} style={{ color: '#0284c7' }} />
+              </div>
+            </div>
+          </div>
+
+          <div style={styles.statCard}>
+            <div style={styles.statRow}>
+              <div>
+                <p style={styles.statLabel}>Okunacak Kağıtlar</p>
+                <p style={styles.statValue}>{generalStats.pendingGrades}</p>
+                <div style={styles.statExtra}>
+                  <span style={{ color: '#64748b' }}>Değerlendirme bekleyen</span>
+                </div>
+              </div>
+              <div style={styles.iconBox('#fff7ed')}>
+                <Clock size={24} style={{ color: '#ea580c' }} />
+              </div>
+            </div>
+          </div>
+
+          <div style={styles.statCard}>
+            <div style={styles.statRow}>
+              <div>
+                <p style={styles.statLabel}>En Başarılı Sınıf</p>
+                <p style={styles.statValue}>{bestClass ? bestClass.name : '-'}</p>
+                <div style={styles.statExtra}>
+                  <span style={{ color: '#64748b' }}>Ortalama: {bestClass ? bestClass.average : 0} Puan</span>
+                </div>
+              </div>
+              <div style={styles.iconBox('#faf5ff')}>
+                <Award size={24} style={{ color: '#9333ea' }} />
+              </div>
+            </div>
+          </div>
+
+          <div style={styles.statCard}>
+            <div style={styles.statRow}>
+              <div>
+                <p style={styles.statLabel}>Katılım Oranı</p>
+                <p style={styles.statValue}>
+                  {students.length > 0 && generalStats.totalExams > 0
+                    ? `%${Math.round((generalStats.totalSubmissions / (students.length * generalStats.totalExams)) * 100)}`
+                    : '%0'}
+                </p>
+                <div style={styles.statExtra}>
+                  <span style={{ color: '#64748b' }}>Sınav başına {generalStats.avgSubmissionsPerExam} teslim</span>
+                </div>
+              </div>
+              <div style={styles.iconBox('#fcfdf2')}>
+                <TrendingUp size={24} style={{ color: '#16a34a' }} />
+              </div>
+            </div>
+          </div>
         </div>
 
         <div style={styles.chartGrid}>
@@ -488,70 +574,82 @@ const Stats = () => {
         <div style={styles.pieGrid}>
           <div style={styles.chartCard}>
             <h3 style={styles.chartTitle}>Sınav/Ödev Dağılımı</h3>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
-              <div style={{ height: '180px', width: '180px' }}>
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      data={examTypeDistribution}
-                      cx="50%"
-                      cy="50%"
-                      innerRadius={50}
-                      outerRadius={70}
-                      paddingAngle={5}
-                      dataKey="value"
-                    >
-                      {examTypeDistribution.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={COLORS[index]} />
-                      ))}
-                    </Pie>
-                  </PieChart>
-                </ResponsiveContainer>
+            {examTypeDistribution.length > 0 ? (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
+                <div style={{ height: '180px', width: '180px' }}>
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={examTypeDistribution}
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={50}
+                        outerRadius={70}
+                        paddingAngle={5}
+                        dataKey="value"
+                      >
+                        {examTypeDistribution.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                        ))}
+                      </Pie>
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
+                <div>
+                  {examTypeDistribution.map((item, index) => (
+                    <div key={item.name} style={styles.legendItem}>
+                      <span style={styles.legendDot(COLORS[index % COLORS.length])} />
+                      <span style={styles.legendLabel}>{item.name}</span>
+                      <span style={styles.legendValue}>{item.value}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
-              <div>
-                {examTypeDistribution.map((item, index) => (
-                  <div key={item.name} style={styles.legendItem}>
-                    <span style={styles.legendDot(COLORS[index])} />
-                    <span style={styles.legendLabel}>{item.name}</span>
-                    <span style={styles.legendValue}>{item.value}</span>
-                  </div>
-                ))}
+            ) : (
+              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '180px', color: '#64748b', fontSize: '14px' }}>
+                Veri bulunamadı
               </div>
-            </div>
+            )}
           </div>
 
           <div style={styles.chartCard}>
             <h3 style={styles.chartTitle}>Gönderim Durumu</h3>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
-              <div style={{ height: '180px', width: '180px' }}>
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      data={submissionStatus}
-                      cx="50%"
-                      cy="50%"
-                      innerRadius={50}
-                      outerRadius={70}
-                      paddingAngle={5}
-                      dataKey="value"
-                    >
-                      {submissionStatus.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={COLORS[index]} />
-                      ))}
-                    </Pie>
-                  </PieChart>
-                </ResponsiveContainer>
+            {submissionStatus.length > 0 ? (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
+                <div style={{ height: '180px', width: '180px' }}>
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={submissionStatus}
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={50}
+                        outerRadius={70}
+                        paddingAngle={5}
+                        dataKey="value"
+                      >
+                        {submissionStatus.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                        ))}
+                      </Pie>
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
+                <div>
+                  {submissionStatus.map((item, index) => (
+                    <div key={item.name} style={styles.legendItem}>
+                      <span style={styles.legendDot(COLORS[index % COLORS.length])} />
+                      <span style={styles.legendLabel}>{item.name}</span>
+                      <span style={styles.legendValue}>{item.value}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
-              <div>
-                {submissionStatus.map((item, index) => (
-                  <div key={item.name} style={styles.legendItem}>
-                    <span style={styles.legendDot(COLORS[index])} />
-                    <span style={styles.legendLabel}>{item.name}</span>
-                    <span style={styles.legendValue}>{item.value}</span>
-                  </div>
-                ))}
+            ) : (
+              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '180px', color: '#64748b', fontSize: '14px' }}>
+                Veri bulunamadı
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>
