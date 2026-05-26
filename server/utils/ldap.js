@@ -14,8 +14,8 @@ export const authenticateLDAP = (config, username, password) => {
     // Client oluştur
     const client = ldap.createClient({
       url: url || 'ldap://localhost:389',
-      timeout: 5000,
-      connectTimeout: 10000
+      timeout: 3000,
+      connectTimeout: 3000
     });
 
     client.on('error', (err) => {

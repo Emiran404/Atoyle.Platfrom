@@ -164,20 +164,48 @@ router.post('/login/student', loginLimiter, async (req, res) => {
 
       const isValid = verifyPassword(password, currentStudent.password, studentNumber);
 
-      if (settings.liderAhenk?.enabled) {
-        try {
-          const ldapUser = await authenticateLDAP(settings.liderAhenk, studentNumber, password);
-          if (ldapUser) {
-            currentStudent.fullName = ldapUser.fullName || currentStudent.fullName;
-            currentStudent.email = ldapUser.email || currentStudent.email;
-          }
-        } catch (ldapError) {
-          if (!isValid) {
+      if (isValid) {
+        // Yerel şifre doğruysa hemen girişe izin ver, LDAP senkronizasyonunu arka planda yap
+        if (settings.liderAhenk?.enabled) {
+          authenticateLDAP(settings.liderAhenk, studentNumber, password)
+            .then(ldapUser => {
+              if (ldapUser) {
+                const studentsList = getData('students') || [];
+                const updated = studentsList.map(s => {
+                  if (s.id === currentStudent.id) {
+                    return {
+                      ...s,
+                      fullName: ldapUser.fullName || s.fullName,
+                      email: ldapUser.email || s.email
+                    };
+                  }
+                  return s;
+                });
+                setData('students', updated);
+              }
+            })
+            .catch(() => {});
+        }
+      } else {
+        // Yerel şifre yanlışsa LDAP ile doğrulamayı dene (şifre LDAP'ta güncellenmiş olabilir)
+        if (settings.liderAhenk?.enabled) {
+          try {
+            const ldapUser = await authenticateLDAP(settings.liderAhenk, studentNumber, password);
+            if (ldapUser) {
+              currentStudent.password = hashPassword(password, studentNumber);
+              currentStudent.fullName = ldapUser.fullName || currentStudent.fullName;
+              currentStudent.email = ldapUser.email || currentStudent.email;
+              const updatedStudents = getData('students').map(s => s.id === currentStudent.id ? currentStudent : s);
+              setData('students', updatedStudents);
+            } else {
+              return res.status(401).json({ success: false, error: 'Hatalı şifre!' });
+            }
+          } catch (ldapError) {
             return res.status(401).json({ success: false, error: 'Hatalı şifre! (LDAP Hatası: ' + ldapError.message + ')' });
           }
+        } else {
+          return res.status(401).json({ success: false, error: 'Hatalı şifre!' });
         }
-      } else if (!isValid) {
-        return res.status(401).json({ success: false, error: 'Hatalı şifre!' });
       }
     }
 
@@ -343,20 +371,48 @@ router.post('/login/teacher', loginLimiter, async (req, res) => {
       const salt = currentTeacher.username || currentTeacher.email;
       const isValid = verifyPassword(password, currentTeacher.password, salt);
 
-      if (settings.liderAhenk?.enabled) {
-        try {
-          const ldapUser = await authenticateLDAP(settings.liderAhenk, currentTeacher.username, password);
-          if (ldapUser) {
-            currentTeacher.fullName = ldapUser.fullName || currentTeacher.fullName;
-            currentTeacher.email = ldapUser.email || currentTeacher.email;
-          }
-        } catch (ldapError) {
-          if (!isValid) {
+      if (isValid) {
+        // Yerel şifre doğruysa hemen girişe izin ver, LDAP senkronizasyonunu arka planda yap
+        if (settings.liderAhenk?.enabled) {
+          authenticateLDAP(settings.liderAhenk, currentTeacher.username, password)
+            .then(ldapUser => {
+              if (ldapUser) {
+                const teachersList = getData('teachers') || [];
+                const updated = teachersList.map(t => {
+                  if (t.id === currentTeacher.id) {
+                    return {
+                      ...t,
+                      fullName: ldapUser.fullName || t.fullName,
+                      email: ldapUser.email || t.email
+                    };
+                  }
+                  return t;
+                });
+                setData('teachers', updated);
+              }
+            })
+            .catch(() => {});
+        }
+      } else {
+        // Yerel şifre yanlışsa LDAP ile doğrulamayı dene (şifre LDAP'ta güncellenmiş olabilir)
+        if (settings.liderAhenk?.enabled) {
+          try {
+            const ldapUser = await authenticateLDAP(settings.liderAhenk, currentTeacher.username, password);
+            if (ldapUser) {
+              currentTeacher.password = hashPassword(password, salt);
+              currentTeacher.fullName = ldapUser.fullName || currentTeacher.fullName;
+              currentTeacher.email = ldapUser.email || currentTeacher.email;
+              const updatedTeachers = getData('teachers').map(t => t.id === currentTeacher.id ? currentTeacher : t);
+              setData('teachers', updatedTeachers);
+            } else {
+              return res.status(401).json({ success: false, error: 'Hatalı şifre!' });
+            }
+          } catch (ldapError) {
             return res.status(401).json({ success: false, error: 'Hatalı şifre! (LDAP Hatası: ' + ldapError.message + ')' });
           }
+        } else {
+          return res.status(401).json({ success: false, error: 'Hatalı şifre!' });
         }
-      } else if (!isValid) {
-        return res.status(401).json({ success: false, error: 'Hatalı şifre!' });
       }
     }
 
