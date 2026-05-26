@@ -48,7 +48,14 @@ async function build() {
 
     // 3. Dosyaları kopyala
     console.log("📂 Kaynak kodlar kopyalanıyor...");
-    await fs.copy(path.join(root, 'server'), path.join(optPath, 'server'));
+    await fs.copy(path.join(root, 'server'), path.join(optPath, 'server'), {
+      filter: (src) => {
+        const relative = path.relative(path.join(root, 'server'), src);
+        return !relative.startsWith('temp') && 
+               !relative.startsWith('backups') && 
+               !relative.startsWith('data/'); // Exclude developer databases/files
+      }
+    });
     await fs.copy(path.join(root, 'src'), path.join(optPath, 'src'));
     await fs.copy(path.join(root, 'dist'), path.join(optPath, 'dist')); // Frontend dist dahil
     await fs.copy(path.join(root, 'package.json'), path.join(optPath, 'package.json'));
