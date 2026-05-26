@@ -1,10 +1,13 @@
 🚀 Atolye Platform v4.0.0 - Sürüm Açıklaması
 
-Bu güncelleme, platform genelinde Yüksek Güvenlikli Sınav (Anti-Cheat / Kiosk) modunu getirmekte, Electron entegrasyonunu sağlamakta, sunucu bağlantısı koptuğunda gösterilen ekranı optimize etmekte ve performans iyileştirmeleri barındırmaktadır.
+Bu güncelleme, platform genelinde Yüksek Güvenlikli Sınav (Anti-Cheat / Kiosk) modunu getirmekte, Electron entegrasyonunu sağlamakta, sunucu bağlantısı koptuğunda gösterilen ekranı optimize etmekte ve MEB engeline yönelik çevrimdışı kurulum desteği barındırmaktadır.
 
 Hata Düzeltmeleri ve Yeni Özellikler:
 - Sınav Güvenliği (Anti-Cheat Entegrasyonu): Sınavlar için öğretmenler tarafından isteğe bağlı olarak aktifleştirilebilen yüksek güvenlikli Kiosk modu eklendi. Sınav sadece Electron masaüstü istemcisi ile açılabilir. DevTools engellenir ve öğrencinin Alt+Tab / ekran odağı kaybetme durumları anlık olarak öğretmene raporlanır.
 - Sunucu Bağlantısı Arayüzü: Bağlantı koptuğunda beliren ekranın yüklenme ikonu sadeleştirildi, çakışan ekstra SVG çizgileri kaldırıldı.
+- Çevrimdışı (Offline) Kurulum ve Paketleme Desteği: MEB internet kısıtlaması olan okullar için bağımlılıkların (`node_modules`) ve derlenmiş arayüzün (`dist`) yer aldığı zip paketi hazırlama desteği (`npm run package:offline`) eklendi.
+- Akıllı Kurulum Betikleri: `kurulum.sh` ve `kurulum.bat` güncellenerek çevrimdışı modda yerel zip paketini otomatik algılama ve bulamadığında GitHub Releases üzerinden otomatik indirip kurma yeteneği kazandırıldı.
+- Çevrimdışı Başlatma: `baslat-offline.sh` ve `baslat-offline.bat` betikleri eklenerek sistemin tek tıkla çalıştırılması sağlandı.
 - Kararlılık & Derleme: Frontend ve backend servislerinin en güncel Vite ve Node.js sürümleriyle hatasız bir şekilde derlenmesi sağlandı.
 
-descx: Anti-Cheat Kiosk modu entegre edildi, bağlantı koptu arayüzü iyileştirildi, sürüm 4.0.0 olarak güncellendi.
+descx: Anti-Cheat Kiosk modu ve MEB engeli için Çevrimdışı (Offline) Kurulum desteği entegre edildi, sürüm 4.0.0 olarak güncellendi.

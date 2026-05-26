@@ -57,9 +57,9 @@ if "!install_mode!"=="2" (
     
     if not defined ZIP_FILE (
         echo [!] Cevrimdishi paket yerelde bulunamadi.
-        echo GithHub Releases uzerinden otomatik indiriliyor (v3.9.0)...
+        echo GithHub Releases uzerinden otomatik indiriliyor (v4.0.0)...
         
-        set "VERSION=3.9.0"
+        set "VERSION=4.0.0"
         set "DOWNLOAD_URL=https://github.com/Emiran404/Atolye.Platform/releases/download/v!VERSION!/atolye-platform-offline_v!VERSION!.zip"
         set "ZIP_FILE=atolye-platform-offline_v!VERSION!.zip"
         

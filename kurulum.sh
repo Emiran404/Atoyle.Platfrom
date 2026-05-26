@@ -61,9 +61,9 @@ if [ "$INSTALL_MODE" = "2" ]; then
     
     if [ -z "$ZIP_FILE" ]; then
         echo "[!] Çevrimdışı paket yerelde bulunamadı."
-        echo "🌐 GitHub Releases üzerinden otomatik indiriliyor (v3.9.0)..."
+        echo "🌐 GitHub Releases üzerinden otomatik indiriliyor (v4.0.0)..."
         
-        VERSION="3.9.0"
+        VERSION="4.0.0"
         DOWNLOAD_URL="https://github.com/Emiran404/Atolye.Platform/releases/download/v$VERSION/atolye-platform-offline_v$VERSION.zip"
         ZIP_FILE="atolye-platform-offline_v$VERSION.zip"
         
