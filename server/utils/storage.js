@@ -7,54 +7,40 @@ const __dirname = dirname(__filename);
 const dataPath = join(__dirname, '../data');
 
 let db = null;
-let useFallback = false;
+let useFallback = true; // Varsayılan olarak JSON modunda başlatılır
+let sqliteDriver = null;
 
-// SQLite veritabanı başlatmayı dene
+// Node.js SQLite native sürücüsünü yüklemeyi dene
 try {
   const { DatabaseSync } = await import('node:sqlite');
-  const dbPath = join(dataPath, 'atolye.db');
-  db = new DatabaseSync(dbPath);
-  
-  // Performans için WAL (Write-Ahead Logging) modunu aktif et
-  db.exec('PRAGMA journal_mode = WAL');
-  
-  // Ana depolama tablosunu oluştur
-  db.exec(`
-    CREATE TABLE IF NOT EXISTS collections (
-      key TEXT PRIMARY KEY,
-      value TEXT
-    )
-  `);
-  
-  console.log('💾 SQLite veritabanı aktif edildi: atolye.db');
-  
-  // Göç daha önce yapılmışsa kalan JSON dosyalarını temizle
-  try {
-    const row = db.prepare("SELECT value FROM collections WHERE key = 'settings'").get();
-    if (row && row.value) {
-      const settings = JSON.parse(row.value);
-      if (settings.dbMigrated === true) {
-        const keys = ['classes', 'exams', 'notifications', 'reports', 'schedules', 'settings', 'students', 'submissions', 'teachers', 'updates'];
-        keys.forEach(key => {
-          const jsonFilePath = join(dataPath, `${key}.json`);
-          if (fs.existsSync(jsonFilePath)) {
-            fs.unlinkSync(jsonFilePath);
-            console.log(`🗑️ [Başlangıç Temizliği] Silindi: ${key}.json`);
-          }
-        });
-      }
-    }
-  } catch (cleanErr) {
-    // sessiz geç
-  }
+  sqliteDriver = DatabaseSync;
 } catch (error) {
-  console.warn('⚠️ [Veritabanı Uyarısı] SQLite native modülü yüklenemedi. JSON depolama moduna geri dönülüyor.');
-  console.warn('Detay:', error.message);
-  useFallback = true;
+  console.warn('⚠️ [Veritabanı Uyarısı] SQLite native modülü (node:sqlite) yüklenemedi. Sadece JSON depolama modu kullanılabilir.');
 }
 
+// SQLite bağlantısını kuran yardımcı fonksiyon
+const initializeSqliteConnection = () => {
+  if (!sqliteDriver) return false;
+  try {
+    const dbPath = join(dataPath, 'atolye.db');
+    db = new sqliteDriver(dbPath);
+    db.exec('PRAGMA journal_mode = WAL');
+    db.exec(`
+      CREATE TABLE IF NOT EXISTS collections (
+        key TEXT PRIMARY KEY,
+        value TEXT
+      )
+    `);
+    return true;
+  } catch (err) {
+    console.error('SQLite bağlantısı başlatılamadı:', err.message);
+    db = null;
+    return false;
+  }
+};
+
 // JSON dosyalarından veri oku (Fallback için)
-const getJsonData = (key) => {
+function getJsonData(key) {
   const filePath = join(dataPath, `${key}.json`);
   try {
     if (fs.existsSync(filePath)) {
@@ -69,10 +55,10 @@ const getJsonData = (key) => {
     console.error(`Error reading JSON ${key}:`, error);
     return null;
   }
-};
+}
 
 // JSON dosyalarına atomik veri yaz (Sadece fallback durumunda kullanılır)
-const setJsonData = (key, data) => {
+function setJsonData(key, data) {
   const filePath = join(dataPath, `${key}.json`);
   const tmpPath = `${filePath}.tmp`;
   try {
@@ -86,7 +72,45 @@ const setJsonData = (key, data) => {
     }
     return false;
   }
-};
+}
+
+// Başlangıçta göç (migration) yapılıp yapılmadığını kontrol et
+let dbMigrated = false;
+
+// Sadece JSON ayarlarından kontrol et. Fresh kurulumda settings.json henüz
+// oluşmadığı veya dbMigrated=true olmadığı için otomatik olarak JSON modunda başlayacaktır.
+const settingsJson = getJsonData('settings');
+if (settingsJson && settingsJson.dbMigrated === true) {
+  dbMigrated = true;
+}
+
+// Göç durumuna göre modu seç
+if (dbMigrated) {
+  const success = initializeSqliteConnection();
+  if (success) {
+    useFallback = false;
+    console.log('💾 SQLite veritabanı aktif edildi (Göç tamamlanmış): atolye.db');
+    
+    // Temizlik: Kalan JSON dosyaları varsa sil (settings.json hariç)
+    try {
+      const keys = ['classes', 'exams', 'notifications', 'reports', 'schedules', 'settings', 'students', 'submissions', 'teachers', 'updates'];
+      keys.forEach(key => {
+        if (key === 'settings') return; // settings.json dosyasını silmiyoruz
+        const jsonFilePath = join(dataPath, `${key}.json`);
+        if (fs.existsSync(jsonFilePath)) {
+          fs.unlinkSync(jsonFilePath);
+          console.log(`🗑️ [Başlangıç Temizliği] Silindi: ${key}.json`);
+        }
+      });
+    } catch (_) {}
+  } else {
+    useFallback = true;
+    console.log('📂 JSON depolama modunda başlatıldı (SQLite yüklenemedi).');
+  }
+} else {
+  useFallback = true;
+  console.log('📂 JSON depolama modunda başlatıldı (Veritabanı göçü henüz yapılmamış).');
+}
 
 // Veritabanı Okuma API'si
 export const getData = (key) => {
@@ -141,15 +165,23 @@ export const getDbStatus = () => {
   const settings = getData('settings') || {};
   const isMigrated = settings.dbMigrated === true;
   return {
-    dbType: db ? 'sqlite' : 'json',
+    dbType: sqliteDriver ? 'sqlite' : 'json',
     isMigrated
   };
 };
 
 // JSON verilerini SQLite veritabanına aktarma sihirbazı tetikleyicisi
 export const runMigration = () => {
+  if (!sqliteDriver) {
+    throw new Error('SQLite sürücüsü (node:sqlite) başlatılamadı veya bu Node.js sürümünde mevcut değil.');
+  }
+
+  // SQLite bağlantısını kur (açık değilse)
   if (!db) {
-    throw new Error('SQLite sürücüsü (node:sqlite) başlatılamadı.');
+    const success = initializeSqliteConnection();
+    if (!success) {
+      throw new Error('SQLite veritabanı bağlantısı oluşturulamadı.');
+    }
   }
 
   const keys = ['classes', 'exams', 'notifications', 'reports', 'schedules', 'settings', 'students', 'submissions', 'teachers', 'updates'];
@@ -168,9 +200,11 @@ export const runMigration = () => {
           .run(key, JSON.stringify(parsed));
         migratedAny = true;
         
-        // Göç tamamlandıktan sonra JSON dosyasını sistemden sil
-        fs.unlinkSync(jsonFilePath);
-        console.log(`🗑️ [Göç] Silindi: ${key}.json`);
+        // Göç tamamlandıktan sonra JSON dosyasını sistemden sil (settings.json hariç)
+        if (key !== 'settings') {
+          fs.unlinkSync(jsonFilePath);
+          console.log(`🗑️ [Göç] Silindi: ${key}.json`);
+        }
       } catch (err) {
         console.error(`Migration error for ${key}:`, err.message);
       }
@@ -178,12 +212,18 @@ export const runMigration = () => {
   });
 
   // Göçün tamamlandığını settings dosyasına yaz
-  const settings = getData('settings') || {};
+  const settings = getJsonData('settings') || getData('settings') || {};
   settings.dbMigrated = true;
 
   // SQLite veritabanına kaydet
   db.prepare('INSERT OR REPLACE INTO collections (key, value) VALUES (?, ?)')
     .run('settings', JSON.stringify(settings));
+
+  // settings.json dosyasına da yaz ki başlangıçta göç edildiği anlaşılsın
+  setJsonData('settings', settings);
+
+  // Fallback modundan çıkıp tamamen SQLite moduna geç
+  useFallback = false;
 
   console.log('✅ [Göç Sihirbazı] JSON verileri SQLite veritabanına aktarıldı ve JSON dosyaları temizlendi.');
   return true;
