@@ -28,6 +28,9 @@ export const runAutoBackup = async () => {
     const submissions = getData('submissions') || [];
     const notifications = getData('notifications') || [];
     const schedules = getData('schedules') || [];
+    const classes = getData('classes') || [];
+    const reports = getData('reports') || [];
+    const settingsData = getData('settings') || {};
 
     const backupData = {
       timestamp: new Date().toISOString(),
@@ -39,7 +42,10 @@ export const runAutoBackup = async () => {
         exams,
         submissions,
         notifications,
-        schedules
+        schedules,
+        classes,
+        reports,
+        settings: settingsData
       }
     };
 

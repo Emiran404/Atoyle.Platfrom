@@ -30,6 +30,9 @@ router.get('/', (req, res) => {
     const submissions = getData('submissions') || [];
     const notifications = getData('notifications') || [];
     const schedules = getData('schedules') || [];
+    const classes = getData('classes') || [];
+    const reports = getData('reports') || [];
+    const settings = getData('settings') || {};
 
     const backupData = {
       timestamp: new Date().toISOString(),
@@ -40,7 +43,10 @@ router.get('/', (req, res) => {
         exams,
         submissions,
         notifications,
-        schedules
+        schedules,
+        classes,
+        reports,
+        settings
       }
     };
 
@@ -61,6 +67,9 @@ router.get('/with-photos', async (req, res) => {
     const submissions = getData('submissions') || [];
     const notifications = getData('notifications') || [];
     const schedules = getData('schedules') || [];
+    const classes = getData('classes') || [];
+    const reports = getData('reports') || [];
+    const settings = getData('settings') || {};
 
     const backupData = {
       timestamp: new Date().toISOString(),
@@ -72,7 +81,10 @@ router.get('/with-photos', async (req, res) => {
         exams,
         submissions,
         notifications,
-        schedules
+        schedules,
+        classes,
+        reports,
+        settings
       }
     };
 
@@ -150,6 +162,19 @@ router.post('/restore', (req, res) => {
     if (data.schedules) {
       setData('schedules', data.schedules);
     }
+    if (data.classes) {
+      setData('classes', data.classes);
+    }
+    if (data.reports) {
+      setData('reports', data.reports);
+    }
+    if (data.settings) {
+      const currentSettings = getData('settings') || {};
+      setData('settings', {
+        ...data.settings,
+        dbMigrated: currentSettings.dbMigrated === true
+      });
+    }
 
     res.json({ success: true, message: 'Veriler başarıyla geri yüklendi' });
   } catch (error) {
@@ -220,6 +245,19 @@ router.post('/restore-zip', upload.single('backup'), async (req, res) => {
     }
     if (backupData.data.schedules) {
       setData('schedules', backupData.data.schedules);
+    }
+    if (backupData.data.classes) {
+      setData('classes', backupData.data.classes);
+    }
+    if (backupData.data.reports) {
+      setData('reports', backupData.data.reports);
+    }
+    if (backupData.data.settings) {
+      const currentSettings = getData('settings') || {};
+      setData('settings', {
+        ...backupData.data.settings,
+        dbMigrated: currentSettings.dbMigrated === true
+      });
     }
 
     // Fotoğrafları geri yükle (varsa)
@@ -400,6 +438,15 @@ router.post('/restore-local/:fileName', authenticateToken, authorizeRole('teache
       if (backupData.data.submissions) setData('submissions', backupData.data.submissions);
       if (backupData.data.notifications) setData('notifications', backupData.data.notifications);
       if (backupData.data.schedules) setData('schedules', backupData.data.schedules);
+      if (backupData.data.classes) setData('classes', backupData.data.classes);
+      if (backupData.data.reports) setData('reports', backupData.data.reports);
+      if (backupData.data.settings) {
+        const currentSettings = getData('settings') || {};
+        setData('settings', {
+          ...backupData.data.settings,
+          dbMigrated: currentSettings.dbMigrated === true
+        });
+      }
 
       const uploadsStudentSrc = path.join(extractDir, 'uploads_student');
       const uploadsSrc = path.join(extractDir, 'uploads');
@@ -431,6 +478,15 @@ router.post('/restore-local/:fileName', authenticateToken, authorizeRole('teache
       if (data.submissions) setData('submissions', data.submissions);
       if (data.notifications) setData('notifications', data.notifications);
       if (data.schedules) setData('schedules', data.schedules);
+      if (data.classes) setData('classes', data.classes);
+      if (data.reports) setData('reports', data.reports);
+      if (data.settings) {
+        const currentSettings = getData('settings') || {};
+        setData('settings', {
+          ...data.settings,
+          dbMigrated: currentSettings.dbMigrated === true
+        });
+      }
     }
 
     res.json({ success: true, message: 'Yedek başarıyla geri yüklendi' });
