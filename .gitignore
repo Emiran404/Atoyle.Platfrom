@@ -61,3 +61,13 @@ lerna-debug.log*
 
 # Server Data (Local files, do NOT push)
 server/data/*.json
+
+# System Files
+.DS_Store
+**/.DS_Store
+Thumbs.db
+
+# Vite / Rollup temporary config timestamps
+vite.config.js.timestamp-*
+*.mjs.timestamp-*
+*.js.timestamp-*
