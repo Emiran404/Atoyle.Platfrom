@@ -1,5 +1,5 @@
 import express from 'express';
-import { getData } from '../utils/storage.js';
+import { getData, setData } from '../utils/storage.js';
 import { authenticateToken, authorizeRole } from '../middleware/auth.js';
 import fs from 'fs';
 import fsPromises from 'fs/promises';
@@ -131,26 +131,24 @@ router.post('/restore', (req, res) => {
       return res.status(400).json({ success: false, error: 'Geçersiz yedek dosyası' });
     }
 
-    // Data dosyalarını güncelle
-    const dataPath = path.join(__dirname, '..', 'data');
-    
+    // Veritabanını/dosyaları güncelle
     if (data.students) {
-      fs.writeFileSync(path.join(dataPath, 'students.json'), JSON.stringify(data.students, null, 2));
+      setData('students', data.students);
     }
     if (data.teachers) {
-      fs.writeFileSync(path.join(dataPath, 'teachers.json'), JSON.stringify(data.teachers, null, 2));
+      setData('teachers', data.teachers);
     }
     if (data.exams) {
-      fs.writeFileSync(path.join(dataPath, 'exams.json'), JSON.stringify(data.exams, null, 2));
+      setData('exams', data.exams);
     }
     if (data.submissions) {
-      fs.writeFileSync(path.join(dataPath, 'submissions.json'), JSON.stringify(data.submissions, null, 2));
+      setData('submissions', data.submissions);
     }
     if (data.notifications) {
-      fs.writeFileSync(path.join(dataPath, 'notifications.json'), JSON.stringify(data.notifications, null, 2));
+      setData('notifications', data.notifications);
     }
     if (data.schedules) {
-      fs.writeFileSync(path.join(dataPath, 'schedules.json'), JSON.stringify(data.schedules, null, 2));
+      setData('schedules', data.schedules);
     }
 
     res.json({ success: true, message: 'Veriler başarıyla geri yüklendi' });
@@ -204,26 +202,24 @@ router.post('/restore-zip', upload.single('backup'), async (req, res) => {
       throw new Error('Geçersiz yedek dosyası');
     }
 
-    // Data dosyalarını güncelle
-    const dataPath = path.join(__dirname, '..', 'data');
-    
+    // Veritabanını/dosyaları güncelle
     if (backupData.data.students) {
-      fs.writeFileSync(path.join(dataPath, 'students.json'), JSON.stringify(backupData.data.students, null, 2));
+      setData('students', backupData.data.students);
     }
     if (backupData.data.teachers) {
-      fs.writeFileSync(path.join(dataPath, 'teachers.json'), JSON.stringify(backupData.data.teachers, null, 2));
+      setData('teachers', backupData.data.teachers);
     }
     if (backupData.data.exams) {
-      fs.writeFileSync(path.join(dataPath, 'exams.json'), JSON.stringify(backupData.data.exams, null, 2));
+      setData('exams', backupData.data.exams);
     }
     if (backupData.data.submissions) {
-      fs.writeFileSync(path.join(dataPath, 'submissions.json'), JSON.stringify(backupData.data.submissions, null, 2));
+      setData('submissions', backupData.data.submissions);
     }
     if (backupData.data.notifications) {
-      fs.writeFileSync(path.join(dataPath, 'notifications.json'), JSON.stringify(backupData.data.notifications, null, 2));
+      setData('notifications', backupData.data.notifications);
     }
     if (backupData.data.schedules) {
-      fs.writeFileSync(path.join(dataPath, 'schedules.json'), JSON.stringify(backupData.data.schedules, null, 2));
+      setData('schedules', backupData.data.schedules);
     }
 
     // Fotoğrafları geri yükle (varsa)

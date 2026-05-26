@@ -42,7 +42,7 @@ import liderAhenkRoutes from './routes/liderahenk.js';
 import classesRoutes from './routes/classes.js';
 import { startNotificationWorker } from './workers/notificationWorker.js';
 import { startDiscovery } from './utils/discovery.js';
-import { getDbStatus } from './utils/storage.js';
+import { getDbStatus, setData } from './utils/storage.js';
 
 const app = express();
 const server = http.createServer(app);
@@ -212,45 +212,29 @@ app.get('/api/health', (req, res) => {
 // Reset all data endpoint (Sadece öğretmenler)
 app.post('/api/reset-all-data', authenticateToken, authorizeRole('teacher'), (req, res) => {
   try {
-    const dataFiles = [
-      'students.json',
-      'teachers.json',
-      'exams.json',
-      'submissions.json',
-      'notifications.json',
-      'schedules.json',
-      'classes.json'
+    const defaultClasses = [
+      "9-A", "9-B", "9-C", "9-D", "9-E", "9-F",
+      "10-A", "10-B", "10-C", "10-D", "10-E", "10-F",
+      "11-A", "11-B", "11-C", "11-D", "11-E", "11-F",
+      "12-A", "12-B", "12-C", "12-D", "12-E", "12-F"
     ];
 
-    // Tüm data dosyalarını boş array ile yeniden oluştur
-    dataFiles.forEach(file => {
-      const filePath = join(dataPath, file);
-      if (file === 'classes.json') {
-        const defaultClasses = [
-          "9-A", "9-B", "9-C", "9-D", "9-E", "9-F",
-          "10-A", "10-B", "10-C", "10-D", "10-E", "10-F",
-          "11-A", "11-B", "11-C", "11-D", "11-E", "11-F",
-          "12-A", "12-B", "12-C", "12-D", "12-E", "12-F"
-        ];
-        fs.writeFileSync(filePath, JSON.stringify(defaultClasses, null, 2), 'utf-8');
-      } else {
-        fs.writeFileSync(filePath, JSON.stringify([], null, 2), 'utf-8');
-      }
-    });
+    // Veritabanını/dosyaları sıfırla
+    setData('students', []);
+    setData('teachers', []);
+    setData('exams', []);
+    setData('submissions', []);
+    setData('notifications', []);
+    setData('schedules', []);
+    setData('classes', defaultClasses);
 
     // ayarları da sıfırla
     const defaultSettings = {
       registrationEnabled: true,
       teacherRegistrationEnabled: true,
-      allowedClasses: [
-        '9-A', '9-B', '9-C', '9-D', '9-E', '9-F',
-        '10-A', '10-B', '10-C', '10-D', '10-E', '10-F',
-        '11-A', '11-B', '11-C', '11-D', '11-E', '11-F',
-        '12-A', '12-B', '12-C', '12-D', '12-E', '12-F'
-      ]
+      allowedClasses: defaultClasses
     };
-    const settingsPath = join(dataPath, 'settings.json');
-    fs.writeFileSync(settingsPath, JSON.stringify(defaultSettings, null, 2), 'utf-8');
+    setData('settings', defaultSettings);
 
     // uploads klasörlerini temizle - Klasörü silmek yerine içini boşalt (EBUSY hatasını önlemek için)
     const emptyDir = (dirPath) => {

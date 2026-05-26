@@ -9,7 +9,7 @@
 <br/>
 
 <!-- CORE BADGES -->
-[![Version](https://img.shields.io/badge/Versiyon-3.7.0-6366f1?style=for-the-badge)](https://github.com/Emiran404/Atolye.Platform/releases)
+[![Version](https://img.shields.io/badge/Versiyon-4.0.0-6366f1?style=for-the-badge)](https://github.com/Emiran404/Atolye.Platform/releases)
 [![License](https://img.shields.io/badge/Lisans-MIT-10b981?style=for-the-badge)](LICENSE)
 [![Platform](https://img.shields.io/badge/Platform-Pardus_%7C_Windows-ef4444?style=for-the-badge)](https://github.com/Emiran404/Atolye.Platform)
 
@@ -111,7 +111,8 @@ Derleme yapmadan, aşağıdaki hazır paketlerle saniyeler içinde kurulum yapı
 | **🛡️ Kod Karıştırma** | Production build'de JavaScript Obfuscation ile kaynak kodu koruması |
 | **🔒 JWT Authentication** | Her API çağrısında token bazlı yetkilendirme |
 | **⏱️ Rate Limiting** | Brute-force ve DDoS koruması |
-| **📑 Güvenli PDF/Resim** | Kimlik doğrulamalı ve korumalı dosya izleyici (v3.7.0) |
+| **📑 Güvenli PDF/Resim** | Kimlik doğrulamalı ve korumalı dosya izleyici (v4.0.0) |
+| **💾 SQLite Veritabanı** | Yerleşik `node:sqlite` veritabanı (SQLite native modülü yoksa otomatik JSON fallback desteği) |
 
 ---
 
@@ -219,7 +220,7 @@ Atölye.Platform/
 ├── 📂 server/                 # Node.js / Express Backend
 │   ├── routes/                # REST API endpoint'leri
 │   ├── middleware/             # Auth, rate-limit, CORS
-│   ├── data/                  # JSON veri dosyaları (DB gerektirmez)
+│   ├── data/                  # SQLite Veritabanı ve JSON dosyaları
 │   └── utils/                 # LDAP, dosya işlemleri
 ├── 📂 client-electron/        # Electron masaüstü istemcisi
 ├── 📂 scripts/                # .deb paketleme scriptleri
@@ -241,7 +242,7 @@ Atölye.Platform/
 | **Masaüstü** | Electron + Electron-Builder | 30.x |
 | **Keşif** | Bonjour (mDNS) | 1.x |
 | **Auth** | JSON Web Token + WebAuthn | — |
-| **Veri** | JSON tabanlı (DB gerektirmez) | — |
+| **Veri** | Yerleşik SQLite (`node:sqlite`) / JSON Fallback | — |
 | **Grafikler** | Recharts | 3.x |
 
 </div>

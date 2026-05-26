@@ -1,6 +1,6 @@
 import express from 'express';
 import { authenticateToken, authorizeRole } from '../middleware/auth.js';
-import { getData, getDbStatus, runMigration } from '../utils/storage.js';
+import { getData, setData, getDbStatus, runMigration } from '../utils/storage.js';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
