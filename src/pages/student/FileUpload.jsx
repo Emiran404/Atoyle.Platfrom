@@ -150,81 +150,122 @@ const FileUpload = () => {
   useEffect(() => {
     if (!selectedExam || currentSubmission?.isLocked) return;
 
-    const handleContextMenu = (e) => {
-      if (selectedExam.disableShortcuts) {
-        e.preventDefault();
-        toast.error('Sağ tık bu sınavda engellenmiştir.');
-      }
-    };
+    // Electron ortamında mıyız?
+    const isElectron = window && window.process && window.process.type === 'renderer';
 
-    const handleCopy = (e) => {
-      if (selectedExam.disableShortcuts) {
-        e.preventDefault();
-        toast.error('Kopyalama bu sınavda engellenmiştir.');
-      }
-    };
-
-    const handleVisibilityChange = () => {
-      if (selectedExam.disableShortcuts && document.hidden && !currentSubmission?.isLocked) {
-        toast.error('Sınav ekranından ayrıldınız! Lütfen sınavınıza odaklanın!', { duration: 5000 });
-      }
-    };
-
-    const handleBlur = () => {
-      if (selectedExam.disableShortcuts && !currentSubmission?.isLocked) {
-        toast.warning('Dikkatiniz dağıldı! Lütfen sınav ekranına geri dönün.');
-      }
-    };
-
-    const handleKeyDown = (e) => {
-      if (selectedExam.disableShortcuts) {
-        // F1-F12 keys, Alt, Tab, Meta, Ctrl+C/V
-        if (
-          e.key === 'F11' ||
-          e.key === 'F12' ||
-          (e.altKey && e.key === 'Tab') ||
-          (e.altKey && e.key === 'F4') ||
-          e.metaKey ||
-          (e.ctrlKey && (e.key === 'c' || e.key === 'v' || e.key === 'p'))
-        ) {
-          e.preventDefault();
-          toast.error('Bu kısayol işlemi sınav sırasında engellenmiştir.');
-        }
-      }
-    };
-
-    const handleFullscreenChange = async () => {
-      if (selectedExam.preventLeaveFullScreen && !document.fullscreenElement && !currentSubmission?.isLocked) {
-        toast.error('Sınav sırasında tam ekrandan çıkmak yasaktır! Lütfen tekrar tam ekrana dönün.', { duration: 6000 });
-        setIsPaused(true);
-      }
-    };
-
-    // Event Listenere'ları ekle
-    document.addEventListener('contextmenu', handleContextMenu);
-    document.addEventListener('copy', handleCopy);
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-    window.addEventListener('blur', handleBlur);
-    document.addEventListener('keydown', handleKeyDown);
-    document.addEventListener('fullscreenchange', handleFullscreenChange);
-
-    // Tam ekrana zorla (eğer açık ve destekleniyorsa)
-    if (selectedExam.preventLeaveFullScreen && !document.fullscreenElement) {
-      try {
-        document.documentElement.requestFullscreen().catch((err) => {
-          console.log('Otomatik tam ekran engellendi, kullanıcı etkileşimi bekleniyor:', err);
+    if (selectedExam.antiCheatEnabled) {
+      if (!isElectron) {
+        // Electron haricindeyse uyarı ver ve sınav arayüzünü engelle
+        toast.error('Bu sınav yüksek güvenlik (Anti-Cheat) gerektiriyor! Lütfen sınava yerel masaüstü uygulaması (Atolye Platform) ile girin!', {
+          duration: 99999
         });
-      } catch (e) { }
-    }
+        setIsPaused(true);
+        return;
+      }
 
-    return () => {
-      document.removeEventListener('contextmenu', handleContextMenu);
-      document.removeEventListener('copy', handleCopy);
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
-      window.removeEventListener('blur', handleBlur);
-      document.removeEventListener('keydown', handleKeyDown);
-      document.removeEventListener('fullscreenchange', handleFullscreenChange);
-    };
+      // Electron içindeyse kiosk modu etkinleştir
+      try {
+        const { ipcRenderer } = window.require('electron');
+        ipcRenderer.send('enable-anti-cheat');
+
+        const handleBlurDetected = async () => {
+          toast.error('Pencere odağını kaybettiniz! Bu durum öğretmene raporlandı.', { duration: 5000 });
+          // Sunucuya odak kaybı bildir
+          try {
+            await fetch('/api/submissions/focus-violation', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ examId: selectedExam.id, studentId: user?.id })
+            });
+          } catch (err) {
+            console.error('Focus violation notify error:', err);
+          }
+        };
+
+        ipcRenderer.on('anti-cheat-blur-detected', handleBlurDetected);
+
+        return () => {
+          ipcRenderer.removeListener('anti-cheat-blur-detected', handleBlurDetected);
+          ipcRenderer.send('disable-anti-cheat');
+        };
+      } catch (err) {
+        console.error('Electron IPC Anti-Cheat Init Error:', err);
+      }
+    } else {
+      // Geriye dönük veya normal sınavlar için standart kısayol & tam ekran kontrolleri
+      const handleContextMenu = (e) => {
+        if (selectedExam.disableShortcuts) {
+          e.preventDefault();
+          toast.error('Sağ tık bu sınavda engellenmiştir.');
+        }
+      };
+
+      const handleCopy = (e) => {
+        if (selectedExam.disableShortcuts) {
+          e.preventDefault();
+          toast.error('Kopyalama bu sınavda engellenmiştir.');
+        }
+      };
+
+      const handleVisibilityChange = () => {
+        if (selectedExam.disableShortcuts && document.hidden && !currentSubmission?.isLocked) {
+          toast.error('Sınav ekranından ayrıldınız! Lütfen sınavınıza odaklanın!', { duration: 5000 });
+        }
+      };
+
+      const handleBlur = () => {
+        if (selectedExam.disableShortcuts && !currentSubmission?.isLocked) {
+          toast.warning('Dikkatiniz dağıldı! Lütfen sınav ekranına geri dönün.');
+        }
+      };
+
+      const handleKeyDown = (e) => {
+        if (selectedExam.disableShortcuts) {
+          if (
+            e.key === 'F11' ||
+            e.key === 'F12' ||
+            (e.altKey && e.key === 'Tab') ||
+            (e.altKey && e.key === 'F4') ||
+            e.metaKey ||
+            (e.ctrlKey && (e.key === 'c' || e.key === 'v' || e.key === 'p'))
+          ) {
+            e.preventDefault();
+            toast.error('Bu kısayol işlemi sınav sırasında engellenmiştir.');
+          }
+        }
+      };
+
+      const handleFullscreenChange = async () => {
+        if (selectedExam.preventLeaveFullScreen && !document.fullscreenElement && !currentSubmission?.isLocked) {
+          toast.error('Sınav sırasında tam ekrandan çıkmak yasaktır! Lütfen tekrar tam ekrana dönün.', { duration: 6000 });
+          setIsPaused(true);
+        }
+      };
+
+      document.addEventListener('contextmenu', handleContextMenu);
+      document.addEventListener('copy', handleCopy);
+      document.addEventListener('visibilitychange', handleVisibilityChange);
+      window.addEventListener('blur', handleBlur);
+      document.addEventListener('keydown', handleKeyDown);
+      document.addEventListener('fullscreenchange', handleFullscreenChange);
+
+      if (selectedExam.preventLeaveFullScreen && !document.fullscreenElement) {
+        try {
+          document.documentElement.requestFullscreen().catch((err) => {
+            console.log('Otomatik tam ekran engellendi, kullanıcı etkileşimi bekleniyor:', err);
+          });
+        } catch (e) { }
+      }
+
+      return () => {
+        document.removeEventListener('contextmenu', handleContextMenu);
+        document.removeEventListener('copy', handleCopy);
+        document.removeEventListener('visibilitychange', handleVisibilityChange);
+        window.removeEventListener('blur', handleBlur);
+        document.removeEventListener('keydown', handleKeyDown);
+        document.removeEventListener('fullscreenchange', handleFullscreenChange);
+      };
+    }
   }, [selectedExam, currentSubmission?.isLocked]);
 
   const handleAutoLock = async () => {
@@ -275,11 +316,45 @@ const FileUpload = () => {
     setIsDragging(false);
   }, []);
 
-  const handleDrop = useCallback((e) => {
+  const handleDrop = useCallback(async (e) => {
     e.preventDefault();
     setIsDragging(false);
 
-    const droppedFiles = Array.from(e.dataTransfer.files);
+    const items = e.dataTransfer.items;
+    const droppedFiles = [];
+
+    const traverseFileTree = async (item) => {
+      return new Promise((resolve) => {
+        if (item.isFile) {
+          item.file(file => {
+            droppedFiles.push(file);
+            resolve();
+          });
+        } else if (item.isDirectory) {
+          const dirReader = item.createReader();
+          dirReader.readEntries(async entries => {
+            for (let i = 0; i < entries.length; i++) {
+              await traverseFileTree(entries[i]);
+            }
+            resolve();
+          });
+        } else {
+          resolve();
+        }
+      });
+    };
+
+    if (items) {
+      for (let i = 0; i < items.length; i++) {
+        const item = items[i].webkitGetAsEntry();
+        if (item) {
+          await traverseFileTree(item);
+        }
+      }
+    } else {
+      droppedFiles.push(...Array.from(e.dataTransfer.files));
+    }
+
     if (droppedFiles.length > 0) {
       processFiles(droppedFiles);
     }
@@ -301,8 +376,8 @@ const FileUpload = () => {
     const allowedFormats = selectedExam.allowedFileTypes || ['.pdf'];
     const cleanFormats = allowedFormats.map(f => f.replace('.', '').toLowerCase());
     const maxSize = selectedExam.maxFileSize || 10;
-    const allowMultiple = selectedExam.multipleFiles || false;
     const maxFileCount = selectedExam.maxFileCount || 1;
+    const allowMultiple = selectedExam.multipleFiles || maxFileCount > 1;
 
     const validFiles = [];
 
@@ -1273,7 +1348,7 @@ const FileUpload = () => {
                               type="file"
                               onChange={handleFileSelect}
                               accept={(selectedExam.allowedFileTypes || ['.pdf']).join(',')}
-                              multiple={selectedExam.multipleFiles || false}
+                              multiple={selectedExam.multipleFiles || (selectedExam.maxFileCount || 1) > 1}
                               style={{
                                 position: 'absolute',
                                 inset: 0,

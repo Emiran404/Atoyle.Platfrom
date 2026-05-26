@@ -838,19 +838,6 @@ const Archive = () => {
 
     return `
       <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 20px 24px; background: white; color: #0f172a; width: 1000px; margin: 0 auto; border: 2px solid #1e293b; position: relative;">
-        <!-- Digital Stamp (Kaşe Altta) -->
-        <div style="position: absolute; bottom: 30px; left: 70px; border: 3px double #0f172a; color: #0f172a; border-radius: 50%; width: 130px; height: 130px; display: flex; align-items: center; justify-content: center; transform: rotate(-12deg); opacity: 0.3; pointer-events: none; z-index: 9;">
-          <div style="text-align: center; border: 1px solid #0f172a; border-radius: 50%; width: 110px; height: 110px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-            <div style="font-size: 13px; font-weight: bold; letter-spacing: 2px; text-transform: uppercase;">PolyOS</div>
-            <div style="font-size: 9px; font-weight: bold; margin: 4px 0; border-top: 1px dashed #0f172a; border-bottom: 1px dashed #0f172a; padding: 2px 0; width: 90%;">RESMİ SİSTEM</div>
-            <div style="font-size: 13px; font-weight: bold; letter-spacing: 2px; text-transform: uppercase;">İMZASI</div>
-          </div>
-        </div>
-
-        <!-- Digital Signature Image (Kaşenin Üstünde) -->
-        <div style="position: absolute; bottom: 60px; left: 45px; transform: rotate(-5deg); opacity: 0.9; pointer-events: none; z-index: 10;">
-          <img src="/polyos_izma_sirküsü.png" style="width: 140px; height: auto;" alt="PolyOS Imza" />
-        </div>
         
         <!-- Başlık Alanı -->
         <div style="display: flex; align-items: center; justify-content: center; border-bottom: 3px double #1e293b; padding-bottom: 10px; margin-bottom: 15px; position: relative;">
@@ -938,12 +925,30 @@ const Archive = () => {
           </tbody>
         </table>
 
-        <!-- İmza Alanı -->
-        <div style="margin-top: 25px; display: flex; justify-content: flex-end; padding-right: 50px; position: relative;">
-          <div style="text-align: center;">
+        <!-- İmza & Onay Alanı (Kaşe ve İmzalar Flow İçinde) -->
+        <div style="margin-top: 20px; display: flex; justify-content: space-between; align-items: flex-end; padding: 0 40px; position: relative; page-break-inside: avoid;">
+          <!-- Sol Taraf: Dijital Kaşe ve İmza -->
+          <div style="position: relative; width: 220px; height: 120px;">
+            <!-- Digital Stamp (Kaşe) -->
+            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-12deg); border: 3px double #0f172a; color: #0f172a; border-radius: 50%; width: 110px; height: 110px; display: flex; align-items: center; justify-content: center; opacity: 0.35; pointer-events: none; z-index: 9;">
+              <div style="text-align: center; border: 1px solid #0f172a; border-radius: 50%; width: 95px; height: 95px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                <div style="font-size: 11px; font-weight: bold; letter-spacing: 2px; text-transform: uppercase;">PolyOS</div>
+                <div style="font-size: 8px; font-weight: bold; margin: 3px 0; border-top: 1px dashed #0f172a; border-bottom: 1px dashed #0f172a; padding: 2px 0; width: 90%;">RESMİ SİSTEM</div>
+                <div style="font-size: 11px; font-weight: bold; letter-spacing: 2px; text-transform: uppercase;">İMZASI</div>
+              </div>
+            </div>
+
+            <!-- Digital Signature Image (Kaşenin Üstünde) -->
+            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-5deg); opacity: 0.9; pointer-events: none; z-index: 10; display: flex; align-items: center; justify-content: center;">
+              <img src="/polyos_izma_sirküsü.png" style="width: 130px; height: auto;" alt="PolyOS Imza" />
+            </div>
+          </div>
+
+          <!-- Sağ Taraf: Onaylayan -->
+          <div style="text-align: center; width: 200px; margin-bottom: 5px;">
             <p style="margin: 0; font-size: 13px;"><strong>Onaylayan</strong></p>
             <br>
-            <p style="margin: 0; font-size: 13px; border-top: 1px solid #cbd5e1; padding-top: 4px; width: 150px;">Okul Müdürü / Öğretmen</p>
+            <p style="margin: 0; font-size: 13px; border-top: 1px solid #cbd5e1; padding-top: 4px;">Okul Müdürü / Öğretmen</p>
           </div>
         </div>
         

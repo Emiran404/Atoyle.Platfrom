@@ -315,7 +315,7 @@ const Evaluate = () => {
   // Kopya tespit sistemi
   const [duplicates, setDuplicates] = useState([]);
   const [allDuplicates, setAllDuplicates] = useState([]);
-  const [loadingDuplicates, setLoadingDuplicates] = useState(false);
+  const [_loadingDuplicates, setLoadingDuplicates] = useState(false);
 
   useEffect(() => {
     // Sınav değiştiğinde tüm local state'leri sıfırla (Böylece eski sınavın verileri kalmaz)
@@ -381,6 +381,12 @@ const Evaluate = () => {
               gradedAt: sub.gradedAt,
               gradedBy: sub.gradedBy,
               isLocked: sub.isLocked,
+              type: sub.type,
+              answers: sub.answers,
+              earnedPoints: sub.earnedPoints,
+              totalPoints: sub.totalPoints,
+              editRequests: sub.editRequests,
+              isLate: sub.isLate,
               files: []
             };
           }
@@ -1113,6 +1119,31 @@ const Evaluate = () => {
                           <Copy size={14} />
                         </div>
                       )}
+
+                      {/* Odak Kaybı İhlal Göstergesi */}
+                      {submission.focusViolationCount > 0 && (
+                        <div 
+                          title={`Odak kaybı ihlali: ${submission.focusViolationCount} kez`}
+                          style={{
+                            minWidth: '24px',
+                            height: '24px',
+                            padding: '0 4px',
+                            backgroundColor: '#fef2f2',
+                            border: '1px solid #ef4444',
+                            borderRadius: '12px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            color: '#ef4444',
+                            fontSize: '11px',
+                            fontWeight: 'bold',
+                            gap: '2px'
+                          }}
+                        >
+                          <span>⚠️</span>
+                          <span>{submission.focusViolationCount}</span>
+                        </div>
+                      )}
                       
                       {submission.status === 'graded' ? (
                         <div style={{ textAlign: 'center' }}>
@@ -1241,16 +1272,166 @@ const Evaluate = () => {
                     </div>
                   )}
                   
-                  <div style={styles.previewCard}>
-                    <div style={styles.previewHeader}>
-                      <h3 style={styles.previewTitle}>Gönderilen Dosya</h3>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <FolderOpen style={{ width: '16px', height: '16px', color: '#3b82f6' }} />
-                        <span style={{ fontSize: '13px', color: '#3b82f6' }}>
-                          {currentSubmission.folderPath}
-                        </span>
+                  {selectedExam.isQuiz || selectedExam.type === 'quiz' ? (
+                    <div style={styles.previewCard}>
+                      <div style={styles.previewHeader}>
+                        <h3 style={styles.previewTitle}>Quiz Cevapları</h3>
+                        {/* Toplam skor özeti */}
+                        {(() => {
+                          const totalQ = selectedExam.questions?.length || 0;
+                          const correctCount = selectedExam.questions?.filter((q) => {
+                            const sa = currentSubmission.answers?.find(a => String(a.questionId) === String(q.id));
+                            return sa?.selectedIndex === q.correctIndex;
+                          }).length || 0;
+                          return (
+                            <div style={{
+                              display: 'flex', alignItems: 'center', gap: '10px',
+                              padding: '6px 14px', borderRadius: '20px',
+                              backgroundColor: correctCount === totalQ ? '#dcfce7' : correctCount >= totalQ / 2 ? '#fef9c3' : '#fee2e2',
+                              border: `1px solid ${correctCount === totalQ ? '#86efac' : correctCount >= totalQ / 2 ? '#fde047' : '#fca5a5'}`
+                            }}>
+                              <span style={{ fontSize: '13px', fontWeight: '700', color: correctCount === totalQ ? '#166534' : correctCount >= totalQ / 2 ? '#854d0e' : '#991b1b' }}>
+                                {correctCount}/{totalQ} Doğru
+                              </span>
+                            </div>
+                          );
+                        })()}
+                      </div>
+                      <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '20px', maxHeight: '600px', overflowY: 'auto' }}>
+                        {selectedExam.questions?.map((q, i) => {
+                          const studentAnswer = currentSubmission.answers?.find(a => String(a.questionId) === String(q.id));
+                          const isCorrect = studentAnswer?.selectedIndex === q.correctIndex;
+                          const studentSelectedText = studentAnswer?.selectedIndex != null ? q.options[studentAnswer.selectedIndex] : null;
+                          const correctText = q.options[q.correctIndex];
+                          return (
+                            <div key={q.id || i} style={{
+                              padding: '18px', borderRadius: '12px',
+                              border: `2px solid ${isCorrect ? '#86efac' : '#fca5a5'}`,
+                              backgroundColor: isCorrect ? '#f0fdf4' : '#fef2f2'
+                            }}>
+                              {/* Soru başlığı ve sonuç */}
+                              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '14px' }}>
+                                <p style={{ fontWeight: '600', color: '#1e293b', flex: 1, margin: 0 }}>
+                                  {i + 1}. {q.text}
+                                </p>
+                                <div style={{
+                                  flexShrink: 0, marginLeft: '12px',
+                                  display: 'flex', alignItems: 'center', gap: '6px',
+                                  padding: '4px 12px', borderRadius: '20px',
+                                  backgroundColor: isCorrect ? '#dcfce7' : '#fee2e2',
+                                  border: `1px solid ${isCorrect ? '#86efac' : '#fca5a5'}`
+                                }}>
+                                  <span style={{ fontSize: '14px' }}>{isCorrect ? '✓' : '✗'}</span>
+                                  <span style={{ fontSize: '12px', fontWeight: '700', color: isCorrect ? '#166534' : '#991b1b' }}>
+                                    {isCorrect ? 'Doğru' : 'Yanlış'}
+                                  </span>
+                                </div>
+                              </div>
+
+                              {/* Şıklar listesi */}
+                              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '14px' }}>
+                                {q.options.map((opt, optIdx) => {
+                                  const isSelected = studentAnswer?.selectedIndex === optIdx;
+                                  const isCorrectOpt = q.correctIndex === optIdx;
+                                  return (
+                                    <div key={optIdx} style={{ 
+                                      padding: '10px 14px', 
+                                      borderRadius: '8px',
+                                      backgroundColor: isSelected && isCorrectOpt ? '#dcfce7' : isSelected ? '#fee2e2' : isCorrectOpt ? '#f0fdf4' : '#ffffff',
+                                      border: `2px solid ${isSelected && isCorrectOpt ? '#22c55e' : isSelected ? '#ef4444' : isCorrectOpt ? '#86efac' : '#e2e8f0'}`,
+                                      display: 'flex',
+                                      alignItems: 'center',
+                                      gap: '10px'
+                                    }}>
+                                      <div style={{
+                                        width: '22px', height: '22px', borderRadius: '50%',
+                                        border: `2px solid ${isSelected ? (isCorrectOpt ? '#16a34a' : '#dc2626') : (isCorrectOpt ? '#22c55e' : '#cbd5e1')}`,
+                                        backgroundColor: isSelected ? (isCorrectOpt ? '#16a34a' : '#dc2626') : 'transparent',
+                                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                        flexShrink: 0
+                                      }}>
+                                        {isSelected && <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#fff' }} />}
+                                        {!isSelected && isCorrectOpt && <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#22c55e' }} />}
+                                      </div>
+                                      <span style={{
+                                        color: isSelected ? (isCorrectOpt ? '#166534' : '#991b1b') : isCorrectOpt ? '#166534' : '#475569',
+                                        fontWeight: isSelected || isCorrectOpt ? '600' : '400',
+                                        flex: 1
+                                      }}>
+                                        {String.fromCharCode(65 + optIdx)}) {opt}
+                                      </span>
+                                      {/* Etiketler */}
+                                      <div style={{ display: 'flex', gap: '6px', flexShrink: 0 }}>
+                                        {isSelected && (
+                                          <span style={{
+                                            fontSize: '11px', fontWeight: '600',
+                                            padding: '2px 8px', borderRadius: '10px',
+                                            backgroundColor: isCorrectOpt ? '#16a34a' : '#dc2626',
+                                            color: '#fff'
+                                          }}>
+                                            Öğrenci Cevabı
+                                          </span>
+                                        )}
+                                        {isCorrectOpt && (
+                                          <span style={{
+                                            fontSize: '11px', fontWeight: '600',
+                                            padding: '2px 8px', borderRadius: '10px',
+                                            backgroundColor: '#16a34a',
+                                            color: '#fff'
+                                          }}>
+                                            Doğru Cevap
+                                          </span>
+                                        )}
+                                      </div>
+                                    </div>
+                                  )
+                                })}
+                              </div>
+
+                              {/* Alt özet satırı */}
+                              <div style={{
+                                display: 'flex', gap: '16px', alignItems: 'center',
+                                padding: '10px 14px', borderRadius: '8px',
+                                backgroundColor: 'rgba(255,255,255,0.7)',
+                                border: '1px solid #e2e8f0'
+                              }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                  <span style={{ fontSize: '12px', color: '#64748b' }}>Öğrencinin Cevabı:</span>
+                                  <span style={{
+                                    fontSize: '13px', fontWeight: '700',
+                                    color: isCorrect ? '#16a34a' : '#dc2626'
+                                  }}>
+                                    {studentSelectedText ? `${String.fromCharCode(65 + studentAnswer.selectedIndex)}) ${studentSelectedText}` : 'Cevaplanmadı'}
+                                  </span>
+                                </div>
+                                {!isCorrect && (
+                                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                    <span style={{ fontSize: '12px', color: '#64748b' }}>Doğru Cevap:</span>
+                                    <span style={{ fontSize: '13px', fontWeight: '700', color: '#16a34a' }}>
+                                      {String.fromCharCode(65 + q.correctIndex)}) {correctText}
+                                    </span>
+                                  </div>
+                                )}
+                                <div style={{ marginLeft: 'auto', fontSize: '12px', color: '#94a3b8', fontWeight: '600' }}>
+                                  {q.points || 10} puan
+                                </div>
+                              </div>
+                            </div>
+                          )
+                        })}
                       </div>
                     </div>
+                  ) : (
+                    <div style={styles.previewCard}>
+                      <div style={styles.previewHeader}>
+                        <h3 style={styles.previewTitle}>Gönderilen Dosya</h3>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <FolderOpen style={{ width: '16px', height: '16px', color: '#3b82f6' }} />
+                          <span style={{ fontSize: '13px', color: '#3b82f6' }}>
+                            {currentSubmission.folderPath}
+                          </span>
+                        </div>
+                      </div>
                     
                     <div style={styles.fileList}>
                       {currentSubmission.files && currentSubmission.files.length > 0 ? (
@@ -1372,6 +1553,7 @@ const Evaluate = () => {
                       )}
                     </div>
                   </div>
+                  )}
                 </div>
 
                 {/* Not Verme Paneli */}

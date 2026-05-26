@@ -135,87 +135,130 @@ const Quiz = () => {
     useEffect(() => {
         if (!exam || submitted) return;
 
-        const handleContextMenu = (e) => {
-            if (exam.disableShortcuts) {
-                e.preventDefault();
-                toast.error('Sağ tık bu sınavda engellenmiştir.');
-                reportWarning(exam.id, user.id, 'right_click', 'Sağ tık kullanımı engellendi');
-            }
-        };
+        // Electron ortamında mıyız?
+        const isElectron = window && window.process && window.process.type === 'renderer';
 
-        const handleCopy = (e) => {
-            if (exam.disableShortcuts) {
-                e.preventDefault();
-                toast.error('Kopyalama bu sınavda engellenmiştir.');
-                reportWarning(exam.id, user.id, 'copy_paste', 'Kopyalama girişimi engellendi');
-            }
-        };
-
-        const handleVisibilityChange = () => {
-            if (exam.disableShortcuts && document.hidden && !submitted) {
-                toast.error('Sınav ekranından ayrıldınız! Lütfen sınavınıza odaklanın!', { duration: 5000 });
-                reportWarning(exam.id, user.id, 'tab_switch', 'Öğrenci sınav sekmesinden ayrıldı');
-            }
-        };
-
-        const handleBlur = () => {
-            if (exam.disableShortcuts && !submitted) {
-                toast.warning('Dikkatiniz dağıldı! Lütfen sınav ekranına geri dönün.');
-                reportWarning(exam.id, user.id, 'blur', 'Ekran odağı kayboldu');
-            }
-        };
-
-        const handleKeyDown = (e) => {
-            if (exam.disableShortcuts) {
-                // F1-F12 keys, Alt, Tab, Meta, Ctrl+C/V
-                if (
-                    e.key === 'F11' ||
-                    e.key === 'F12' ||
-                    (e.altKey && e.key === 'Tab') ||
-                    (e.altKey && e.key === 'F4') ||
-                    e.metaKey ||
-                    (e.ctrlKey && (e.key === 'c' || e.key === 'v' || e.key === 'p'))
-                ) {
-                    e.preventDefault();
-                    toast.error('Bu kısayol işlemi sınav sırasında engellenmiştir.');
-                    reportWarning(exam.id, user.id, 'keyboard', `Yasaklı kısayol tuşu kullanıldı (${e.key})`);
-                }
-            }
-        };
-
-        const handleFullscreenChange = async () => {
-            if (exam.preventLeaveFullScreen && !document.fullscreenElement && !submitted) {
-                toast.error('Sınav sırasında tam ekrandan çıkmak yasaktır! Lütfen tekrar tam ekrana dönün.', { duration: 6000 });
-                reportWarning(exam.id, user.id, 'fullscreen', 'Tam ekrandan çıkıldı');
-                setIsPaused(true);
-            }
-        };
-
-        // Event Listenere'ları ekle
-        document.addEventListener('contextmenu', handleContextMenu);
-        document.addEventListener('copy', handleCopy);
-        document.addEventListener('visibilitychange', handleVisibilityChange);
-        window.addEventListener('blur', handleBlur);
-        document.addEventListener('keydown', handleKeyDown);
-        document.addEventListener('fullscreenchange', handleFullscreenChange);
-
-        // Tam ekrana zorla (eğer açık ve destekleniyorsa)
-        if (exam.preventLeaveFullScreen && !document.fullscreenElement) {
-            try {
-                document.documentElement.requestFullscreen().catch((err) => {
-                    console.log('Otomatik tam ekran engellendi, kullanıcı etkileşimi bekleniyor:', err);
+        if (exam.antiCheatEnabled) {
+            if (!isElectron) {
+                // Electron haricindeyse uyarı ver ve sınav arayüzünü engelle
+                toast.error('Bu sınav yüksek güvenlik (Anti-Cheat) gerektiriyor! Lütfen sınava yerel masaüstü uygulaması (Atolye Platform) ile girin!', {
+                    duration: 99999
                 });
-            } catch (e) { }
-        }
+                setIsPaused(true);
+                return;
+            }
 
-        return () => {
-            document.removeEventListener('contextmenu', handleContextMenu);
-            document.removeEventListener('copy', handleCopy);
-            document.removeEventListener('visibilitychange', handleVisibilityChange);
-            window.removeEventListener('blur', handleBlur);
-            document.removeEventListener('keydown', handleKeyDown);
-            document.removeEventListener('fullscreenchange', handleFullscreenChange);
-        };
+            // Electron içindeyse kiosk modu etkinleştir
+            try {
+                const { ipcRenderer } = window.require('electron');
+                ipcRenderer.send('enable-anti-cheat');
+
+                const handleBlurDetected = async () => {
+                    toast.error('Pencere odağını kaybettiniz! Bu durum öğretmene raporlandı.', { duration: 5000 });
+                    reportWarning(exam.id, user.id, 'blur', 'Ekran odağı kayboldu (Alt+Tab)');
+                    
+                    // Sunucuya odak kaybı bildir
+                    try {
+                        await fetch('/api/submissions/focus-violation', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ examId: exam.id, studentId: user?.id })
+                        });
+                    } catch (err) {
+                        console.error('Focus violation notify error:', err);
+                    }
+                };
+
+                ipcRenderer.on('anti-cheat-blur-detected', handleBlurDetected);
+
+                return () => {
+                    ipcRenderer.removeListener('anti-cheat-blur-detected', handleBlurDetected);
+                    ipcRenderer.send('disable-anti-cheat');
+                };
+            } catch (err) {
+                console.error('Electron IPC Anti-Cheat Init Error:', err);
+            }
+        } else {
+            // Normal sınavlar için standart kısayol & tam ekran kontrolleri
+            const handleContextMenu = (e) => {
+                if (exam.disableShortcuts) {
+                    e.preventDefault();
+                    toast.error('Sağ tık bu sınavda engellenmiştir.');
+                    reportWarning(exam.id, user.id, 'right_click', 'Sağ tık kullanımı engellendi');
+                }
+            };
+
+            const handleCopy = (e) => {
+                if (exam.disableShortcuts) {
+                    e.preventDefault();
+                    toast.error('Kopyalama bu sınavda engellenmiştir.');
+                    reportWarning(exam.id, user.id, 'copy_paste', 'Kopyalama girişimi engellendi');
+                }
+            };
+
+            const handleVisibilityChange = () => {
+                if (exam.disableShortcuts && document.hidden && !submitted) {
+                    toast.error('Sınav ekranından ayrıldınız! Lütfen sınavınıza odaklanın!', { duration: 5000 });
+                    reportWarning(exam.id, user.id, 'tab_switch', 'Öğrenci sınav sekmesinden ayrıldı');
+                }
+            };
+
+            const handleBlur = () => {
+                if (exam.disableShortcuts && !submitted) {
+                    toast.warning('Dikkatiniz dağıldı! Lütfen sınav ekranına geri dönün.');
+                    reportWarning(exam.id, user.id, 'blur', 'Ekran odağı kayboldu');
+                }
+            };
+
+            const handleKeyDown = (e) => {
+                if (exam.disableShortcuts) {
+                    if (
+                        e.key === 'F11' ||
+                        e.key === 'F12' ||
+                        (e.altKey && e.key === 'Tab') ||
+                        (e.altKey && e.key === 'F4') ||
+                        e.metaKey ||
+                        (e.ctrlKey && (e.key === 'c' || e.key === 'v' || e.key === 'p'))
+                    ) {
+                        e.preventDefault();
+                        toast.error('Bu kısayol işlemi sınav sırasında engellenmiştir.');
+                        reportWarning(exam.id, user.id, 'keyboard', `Yasaklı kısayol tuşu kullanıldı (${e.key})`);
+                    }
+                }
+            };
+
+            const handleFullscreenChange = async () => {
+                if (exam.preventLeaveFullScreen && !document.fullscreenElement && !submitted) {
+                    toast.error('Sınav sırasında tam ekrandan çıkmak yasaktır! Lütfen tekrar tam ekrana dönün.', { duration: 6000 });
+                    reportWarning(exam.id, user.id, 'fullscreen', 'Tam ekrandan çıkıldı');
+                    setIsPaused(true);
+                }
+            };
+
+            document.addEventListener('contextmenu', handleContextMenu);
+            document.addEventListener('copy', handleCopy);
+            document.addEventListener('visibilitychange', handleVisibilityChange);
+            window.addEventListener('blur', handleBlur);
+            document.addEventListener('keydown', handleKeyDown);
+            document.addEventListener('fullscreenchange', handleFullscreenChange);
+
+            if (exam.preventLeaveFullScreen && !document.fullscreenElement) {
+                try {
+                    document.documentElement.requestFullscreen().catch((err) => {
+                        console.log('Otomatik tam ekran engellendi, kullanıcı etkileşimi bekleniyor:', err);
+                    });
+                } catch (e) { }
+            }
+
+            return () => {
+                document.removeEventListener('contextmenu', handleContextMenu);
+                document.removeEventListener('copy', handleCopy);
+                document.removeEventListener('visibilitychange', handleVisibilityChange);
+                window.removeEventListener('blur', handleBlur);
+                document.removeEventListener('keydown', handleKeyDown);
+                document.removeEventListener('fullscreenchange', handleFullscreenChange);
+            };
+        }
     }, [exam, submitted]);
 
     const handleSelectOption = (questionId, optionIndex) => {

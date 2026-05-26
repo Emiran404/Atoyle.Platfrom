@@ -3,6 +3,15 @@ set -e
 
 echo "Atolye Platform Server yapılandırılıyor..."
 
+# Bağımlılıkları kontrol et ve yerel mimariye göre derle/rebuild yap
+if command -v npm &> /dev/null; then
+    echo "better-sqlite3 modülü yerel mimari için yapılandırılıyor..."
+    cd /opt/atolye-server/server
+    # Eşleşmeyen native binary'leri temizle ve yerel olarak yeniden derlemeyi dene
+    # Hata durumunda kurulumun yarıda kalmaması için exit code 0 ile devam edilmesini sağlıyoruz
+    npm rebuild better-sqlite3 || echo "⚠️ better-sqlite3 yerel olarak derlenemedi. Sunucu hibrit JSON modunda çalışacaktır."
+fi
+
 # Servis dosyasını etkinleştir
 systemctl daemon-reload
 systemctl enable atolye-server.service

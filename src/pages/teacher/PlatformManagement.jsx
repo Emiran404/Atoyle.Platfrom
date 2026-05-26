@@ -61,6 +61,7 @@ const PlatformManagement = () => {
 
   // Güncelleme state'leri
   const [currentVersion, setCurrentVersion] = useState('1.0.0');
+  const [dbStatus, setDbStatus] = useState({ dbType: 'json', isMigrated: false });
   const [updateHistory, setUpdateHistory] = useState([]);
   const [checkingUpdate, setCheckingUpdate] = useState(false);
   const [availableUpdate, setAvailableUpdate] = useState(null);
@@ -225,6 +226,16 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
         setRegistrationEnabled(data.settings.registrationEnabled || false);
         setTeacherRegistrationEnabled(data.settings.teacherRegistrationEnabled !== false);
         setAllowedClasses(data.settings.allowedClasses || []);
+      }
+      
+      try {
+        const dbRes = await fetch('/api/settings/db-status');
+        const dbData = await dbRes.json();
+        if (dbData?.success) {
+          setDbStatus({ dbType: dbData.dbType, isMigrated: dbData.isMigrated });
+        }
+      } catch (dbErr) {
+        console.error('Veritabanı durumu alınamadı:', dbErr);
       }
     } catch (error) {
       console.error('Ayarlar yüklenemedi:', error);
@@ -1971,6 +1982,15 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
           <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid #e2e8f0' }}>
             <span style={{ color: '#64748b' }}>Platform Versiyonu</span>
             <span style={{ fontWeight: '500', color: '#1e293b' }}>v{currentVersion || '...'}</span>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid #e2e8f0' }}>
+            <span style={{ color: '#64748b' }}>Kullanılan Veritabanı</span>
+            <span style={{ 
+              fontWeight: '600', 
+              color: dbStatus.dbType === 'sqlite' ? '#10b981' : '#f59e0b' 
+            }}>
+              {dbStatus.dbType === 'sqlite' ? 'SQLite (Aktif / SQL Modu)' : 'JSON Modu (Kısıtlı)'}
+            </span>
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid #e2e8f0' }}>
             <span style={{ color: '#64748b' }}>Son Güncelleme</span>

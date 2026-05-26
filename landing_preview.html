@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atölye.Platform - Pure Structure</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Lexend', sans-serif;
+            background-color: #f8fafc;
+            color: #0f172a;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Glass Components */
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            height: 80px;
+        }
+
+        .glass-card {
+            background: transparent;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            border: none;
+            border-radius: 16px;
+            height: 160px;
+            box-shadow: none;
+        }
+
+        /* Hero Section */
+        .hero-mesh {
+            background: radial-gradient(circle at 15% 50%, rgba(37, 99, 235, 0.15), transparent 35%), 
+                        radial-gradient(circle at 85% 30%, rgba(124, 58, 237, 0.15), transparent 35%);
+            background-color: #f8fafc;
+            padding-top: 160px;
+            padding-bottom: 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-blob-1 {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            width: 384px;
+            height: 384px;
+            background: rgba(36, 99, 235, 0.1);
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: 1;
+        }
+
+        .hero-blob-2 {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 500px;
+            height: 500px;
+            background: rgba(124, 58, 237, 0.05);
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: 1;
+        }
+
+        /* Features Section */
+        .features-section {
+            padding: 96px 24px;
+            background: white;
+            position: relative;
+        }
+
+        .feature-card {
+            background: transparent;
+            border-radius: 16px;
+            padding: 32px;
+            border: none;
+            height: 240px;
+        }
+
+        /* Institution Section */
+        .institution-section {
+            padding: 96px 24px;
+            background: #f8fafc;
+        }
+
+        .institution-box {
+            background: linear-gradient(135deg, #2463eb, #7c3aed);
+            border-radius: 24px;
+            height: 400px;
+            width: 100%;
+            position: relative;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 80px 24px;
+        }
+
+        .cta-box {
+            background: #0f172a;
+            border-radius: 24px;
+            padding: 64px 32px;
+            min-height: 400px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .cta-dot-pattern {
+            position: absolute;
+            inset: 0;
+            opacity: 0.1;
+            background-image: radial-gradient(#ffffff 1px, transparent 1px);
+            background-size: 32px 32px;
+        }
+
+        /* Footer */
+        footer {
+            background: #0f172a;
+            color: white;
+            padding: 80px 0 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .footer-bg-glow {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to right, rgba(127,29,29,0.2), rgba(15,23,42,0.95));
+            z-index: 1;
+        }
+
+        /* Layout Helpers for "Empty but Same Size" */
+        .placeholder {
+            background: transparent;
+            visibility: hidden;
+        }
+
+        .title-placeholder {
+            height: 120px;
+            width: 80%;
+            max-width: 800px;
+            margin: 0 auto 24px;
+        }
+
+        .subtitle-placeholder {
+            height: 60px;
+            width: 70%;
+            max-width: 600px;
+            margin: 0 auto 40px;
+        }
+
+        .btn-placeholder {
+            width: 200px;
+            height: 56px;
+            border-radius: 12px;
+            background: rgba(0,0,0,0.05);
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-cols: repeat(1, 1fr);
+            gap: 24px;
+        }
+        @media (min-width: 768px) {
+            .grid-3 { grid-template-cols: repeat(3, 1fr); }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="glass-nav">
+        <div class="container" style="display: flex; align-items: center; justify-content: space-between; height: 100%;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <div style="width: 40px; height: 40px; background: rgba(36, 99, 235, 0.1); border-radius: 8px;"></div>
+                <div style="width: 150px; height: 24px;" class="placeholder"></div>
+            </div>
+            <div style="display: flex; gap: 32px;" class="placeholder">
+                <div style="width: 80px; height: 20px;"></div>
+                <div style="width: 80px; height: 20px;"></div>
+                <div style="width: 80px; height: 20px;"></div>
+            </div>
+            <div style="display: flex; gap: 16px;">
+                <div style="width: 100px; height: 40px; border-radius: 8px; background: rgba(0,0,0,0.03);"></div>
+                <div style="width: 120px; height: 40px; border-radius: 8px; background: rgba(0,0,0,0.03);"></div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero-mesh">
+        <div class="hero-blob-1"></div>
+        <div class="hero-blob-2"></div>
+        <div class="container" style="position: relative; z-index: 10; text-align: center; display: flex; flex-direction: column; align-items: center;">
+            <div style="width: 200px; height: 34px; border-radius: 100px; background: rgba(36, 99, 235, 0.1); margin-bottom: 32px;"></div>
+            <div class="title-placeholder" style="background: transparent;"></div>
+            <div class="subtitle-placeholder" style="background: transparent;"></div>
+            
+            <div style="display: flex; gap: 16px; margin-bottom: 64px;">
+                <div class="btn-placeholder" style="background: rgba(36, 99, 235, 0.1);"></div>
+                <div class="btn-placeholder" style="background: rgba(124, 58, 237, 0.1);"></div>
+            </div>
+
+            <div class="grid-3" style="width: 100%; max-width: 1000px; margin-top: 64px;">
+                <div class="glass-card" style="height: 160px;"></div>
+                <div class="glass-card" style="height: 160px;"></div>
+                <div class="glass-card" style="height: 160px;"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features-section">
+        <div class="container">
+            <div style="text-align: center; margin-bottom: 64px; display: flex; flex-direction: column; align-items: center;">
+                <div style="width: 150px; height: 20px; background: rgba(36, 99, 235, 0.1); margin-bottom: 12px; border-radius: 4px;"></div>
+                <div style="width: 400px; height: 56px; background: rgba(0,0,0,0.03); margin-bottom: 16px; border-radius: 8px;"></div>
+                <div style="width: 600px; height: 24px; background: rgba(0,0,0,0.03); border-radius: 4px;"></div>
+            </div>
+            <div class="grid-3">
+                <div class="feature-card"></div>
+                <div class="feature-card"></div>
+                <div class="feature-card"></div>
+                <div class="feature-card"></div>
+                <div class="feature-card"></div>
+                <div class="feature-card"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Institution -->
+    <section class="institution-section">
+        <div class="container">
+            <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 64px;">
+                <div style="flex: 1; min-width: 300px;">
+                    <div style="width: 150px; height: 20px; background: rgba(36, 99, 235, 0.1); margin-bottom: 16px; border-radius: 4px;"></div>
+                    <div style="width: 100%; height: 100px; background: rgba(0,0,0,0.03); margin-bottom: 24px; border-radius: 8px;"></div>
+                    <div style="width: 100%; height: 80px; background: rgba(0,0,0,0.03); margin-bottom: 24px; border-radius: 8px;"></div>
+                    <div style="display: flex; flex-direction: column; gap: 16px;">
+                        <div style="height: 60px; background: rgba(0,0,0,0.02); border-radius: 8px;"></div>
+                        <div style="height: 60px; background: rgba(0,0,0,0.02); border-radius: 8px;"></div>
+                    </div>
+                </div>
+                <div style="flex: 1; min-width: 300px;">
+                    <div class="institution-box"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-box">
+                <div class="cta-dot-pattern"></div>
+                <div style="width: 48px; height: 48px; background: rgba(255,255,255,0.1); border-radius: 12px; margin-bottom: 24px;"></div>
+                <div style="width: 600px; height: 64px; background: rgba(255,255,255,0.05); border-radius: 12px; margin-bottom: 24px;"></div>
+                <div style="width: 800px; height: 32px; background: rgba(255,255,255,0.05); border-radius: 8px; margin-bottom: 40px;"></div>
+                <div style="display: flex; gap: 16px;">
+                    <div class="btn-placeholder" style="background: white; opacity: 0.9;"></div>
+                    <div class="btn-placeholder" style="background: transparent; border: 1px solid rgba(255,255,255,0.2);"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Credits -->
+    <div style="background: #020617; padding: 12px 0;">
+        <div class="container" style="text-align: center;">
+            <div style="width: 400px; height: 20px; background: rgba(255,255,255,0.05); margin: 0 auto; border-radius: 4px;"></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-bg-glow"></div>
+        <div class="container" style="position: relative; z-index: 10;">
+            <div class="grid-3" style="margin-bottom: 64px;">
+                <div style="display: flex; flex-direction: column; align-items: center;">
+                    <div style="width: 112px; height: 112px; border-radius: 50%; background: #1e293b; margin-bottom: 24px;"></div>
+                    <div style="width: 200px; height: 60px; background: rgba(255,255,255,0.05); border-radius: 8px;"></div>
+                </div>
+                <div style="display: grid; grid-template-cols: 1fr 1fr; gap: 32px;">
+                    <div style="height: 150px; background: rgba(255,255,255,0.03); border-radius: 12px;"></div>
+                    <div style="height: 150px; background: rgba(255,255,255,0.03); border-radius: 12px;"></div>
+                </div>
+                <div style="height: 150px; background: rgba(255,255,255,0.03); border-radius: 12px;"></div>
+            </div>
+            <div style="height: 1px; background: rgba(255,255,255,0.1); margin-bottom: 32px;"></div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="width: 300px; height: 20px; background: rgba(255,255,255,0.05); border-radius: 4px;"></div>
+                <div style="width: 200px; height: 40px; background: rgba(255,255,255,0.05); border-radius: 20px;"></div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

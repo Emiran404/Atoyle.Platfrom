@@ -324,6 +324,40 @@ app.whenReady().then(() => {
     connectToServer(url);
   });
 
+  // SINAV GÜVENLİĞİ (ANTI-CHEAT) IPC DINLEYICILERI
+  function handleBlurNotification() {
+    if (mainWindow) {
+      console.warn('⚠️ [Anti-Cheat] Öğrenci odağı kaybetti (Blur)!');
+      mainWindow.webContents.send('anti-cheat-blur-detected');
+    }
+  }
+
+  ipcMain.on('enable-anti-cheat', () => {
+    if (mainWindow) {
+      mainWindow.setKiosk(true);
+      mainWindow.setAlwaysOnTop(true, 'screen-saver');
+      
+      // DevTools engelle
+      mainWindow.webContents.on('devtools-opened', () => {
+        mainWindow.webContents.closeDevTools();
+      });
+      
+      // Odak kaybını dinle
+      mainWindow.on('blur', handleBlurNotification);
+      console.log('🔒 [Anti-Cheat] Kiosk modu aktif edildi, DevTools kapatıldı.');
+    }
+  });
+
+  ipcMain.on('disable-anti-cheat', () => {
+    if (mainWindow) {
+      mainWindow.setKiosk(false);
+      mainWindow.setAlwaysOnTop(false);
+      mainWindow.webContents.removeAllListeners('devtools-opened');
+      mainWindow.off('blur', handleBlurNotification);
+      console.log('🔓 [Anti-Cheat] Kiosk modu kapatıldı.');
+    }
+  });
+
   // 5sn sonra manuel butonu göster
   setTimeout(() => {
     if (splashWindow && !isDiscoveryFound) {

@@ -1,6 +1,6 @@
 {
   "name": "sinav-gonderme-platformu",
-  "version": "3.9.0",
+  "version": "4.0.0",
   "description": "Modern exam and assignment management platform for Alanya Mesleki ve Teknik Anadolu Lisesi",
   "author": "Emirhan Gök <https://github.com/Emiran404>",
   "license": "MIT",
@@ -8,7 +8,7 @@
     "type": "git",
     "url": "https://github.com/Emiran404/Atolye.Platform.git"
   },
-  "notes": "## 📥 İndir (v3.9.0 Hazır Paketler)\n![Version](https://img.shields.io/badge/version-3.9.0-blue?style=for-the-badge)",
+  "notes": "## 📥 İndir (v4.0.0 Hazır Paketler)\n![Version](https://img.shields.io/badge/version-4.0.0-blue?style=for-the-badge)",
   "keywords": [
     "exam-platform",
     "education",
@@ -32,7 +32,8 @@
     "package:client-win": "cd client-electron && npx electron-builder --win nsis && cd ..",
     "package:client-all": "npm run package:client && npm run package:client-win",
     "install:all": "npm install && cd server && npm install",
-    "package:server": "node scripts/package-deb.js"
+    "package:server": "node scripts/package-deb.js",
+    "package:offline": "node scripts/package-offline.js"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.18",

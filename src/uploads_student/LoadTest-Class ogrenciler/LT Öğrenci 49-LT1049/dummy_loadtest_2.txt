@@ -1,0 +1,3 @@
+Bu bir yük testi simülasyonu için oluşturulmuş geçici test dosyasıdır.
+İçerik boyutu önemli değildir.
+Yükleme hızı ve eşzamanlılığı test edilmektedir.

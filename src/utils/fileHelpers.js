@@ -37,7 +37,10 @@ export const isValidFileType = (file, allowedTypes) => {
     mov: ['video/quicktime'],
     wmv: ['video/x-ms-wmv'],
     mkv: ['video/x-matroska'],
-    webm: ['video/webm']
+    webm: ['video/webm'],
+    // Sanal Makine
+    iso: ['application/x-iso9660-image', 'application/octet-stream'],
+    ova: ['application/x-virtualbox-ova', 'application/octet-stream', 'application/x-ova']
   };
 
   return allowedTypes.some(type => {
@@ -73,7 +76,9 @@ export const getFileIcon = (filename) => {
     jpg: 'Image',
     jpeg: 'Image',
     png: 'Image',
-    gif: 'Image'
+    gif: 'Image',
+    iso: 'Database',
+    ova: 'Database'
   };
   return iconMap[ext] || 'File';
 };
@@ -93,5 +98,6 @@ export const ALLOWED_FORMATS = {
   image: { label: 'Resim', extensions: ['.jpg', '.jpeg', '.png', '.gif'] },
   video: { label: 'Video', extensions: ['.mp4', '.avi', '.mov', '.wmv', '.mkv', '.webm'] },
   archive: { label: 'Arşiv', extensions: ['.zip', '.rar'] },
-  packet_tracer: { label: 'Packet Tracer', extensions: ['.pkt'] }
+  packet_tracer: { label: 'Packet Tracer', extensions: ['.pkt'] },
+  vm_image: { label: 'Sanal Makine (CTF)', extensions: ['.iso', '.ova'] }
 };

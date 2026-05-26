@@ -177,6 +177,7 @@ const ExamEdit = () => {
     targetClasses: [],
     allowedFileTypes: ['.pdf'],
     maxFileSize: 10,
+    maxFileCount: 1,
     isActive: true,
     isQuiz: false,
     autoGrading: true,
@@ -220,6 +221,7 @@ const ExamEdit = () => {
             ALLOWED_FORMATS[key].extensions.some(ext => (exam.allowedFileTypes || []).includes(ext))
           ),
           maxFileSize: exam.maxFileSize ? Math.round(exam.maxFileSize / (1024 * 1024)) : 10,
+          maxFileCount: exam.maxFileCount || 1,
           isActive: exam.isActive !== false,
           isQuiz: exam.isQuiz || exam.type === 'quiz',
           type: exam.type || 'exam',
@@ -232,6 +234,7 @@ const ExamEdit = () => {
           notifyBefore30: exam.notifyBefore30 || false,
           notifyBefore5: exam.notifyBefore5 || false,
           originalFileName: exam.originalFileName || '',
+          antiCheatEnabled: exam.antiCheatEnabled || false,
           questionFile: null
         });
       } else {
@@ -431,6 +434,7 @@ const ExamEdit = () => {
         ...formData,
         allowedFileTypes: finalAllowedFileTypes,
         maxFileSize: formData.maxFileSize * 1024 * 1024,
+        maxFileCount: Number(formData.maxFileCount) || 1,
         targetClasses: finalTargetClasses,
         startDate: new Date(formData.startDate).toISOString(),
         endDate: new Date(formData.endDate).toISOString(),
@@ -967,11 +971,11 @@ const ExamEdit = () => {
                           <span style={{ fontSize: '14px', fontWeight: '500', display: 'block' }}>
                             {formData.questionFileUrl ? 'Dosyayı Değiştir' : 'Dosya Yükle'}
                           </span>
-                          <span style={{ fontSize: '12px' }}>PDF, JPG, PNG (Maks. 10MB)</span>
+                          <span style={{ fontSize: '12px' }}>PDF, JPG, PNG, ISO, OVA (Maks. 1GB)</span>
                         </div>
                         <input
                           type="file"
-                          accept=".pdf,image/*"
+                          accept=".pdf,image/*,.iso,.ova"
                           onChange={handleFileChange}
                           style={{ display: 'none' }}
                         />
@@ -1039,13 +1043,47 @@ const ExamEdit = () => {
                       onChange={handleChange}
                       style={{ ...styles.input, maxWidth: '150px' }}
                       min="1"
-                      max="100"
+                      max="1024"
+                    />
+                  </div>
+
+                  <div style={styles.formGroup}>
+                    <label style={styles.label}>İzin Verilen Dosya Sayısı</label>
+                    <input
+                      type="number"
+                      name="maxFileCount"
+                      value={formData.maxFileCount}
+                      onChange={handleChange}
+                      style={{ ...styles.input, maxWidth: '150px' }}
+                      min="1"
+                      max="20"
                     />
                   </div>
                 </>
               )}
             </div>
           )}
+
+          {/* Sınav Güvenliği Ayarları */}
+          <div style={styles.card}>
+            <h3 style={styles.sectionTitle}>
+              <span style={{ color: '#ef4444' }}>🛡️</span>
+              Sınav Güvenliği (Anti-Cheat)
+            </h3>
+
+            <label style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', padding: '16px', backgroundColor: formData.antiCheatEnabled ? '#fef2f2' : '#f8fafc', borderRadius: '12px', cursor: 'pointer', transition: 'all 0.2s', border: formData.antiCheatEnabled ? '1px solid #ef4444' : '1px solid #e2e8f0', marginBottom: '16px' }}>
+              <input
+                type="checkbox"
+                checked={formData.antiCheatEnabled || false}
+                onChange={(e) => handleChange({ target: { name: 'antiCheatEnabled', value: e.target.checked } })}
+                style={{ width: '18px', height: '18px', accentColor: '#ef4444', marginTop: '2px' }}
+              />
+              <div>
+                <div style={{ fontSize: '15px', fontWeight: '600', color: '#1e293b' }}>Yüksek Güvenlikli Sınav Modu (Anti-Cheat)</div>
+                <div style={{ fontSize: '13px', color: '#64748b', marginTop: '4px' }}>Sınav sadece masaüstü uygulaması ile çözülebilir. Ekran kilitlenir (kiosk modu), DevTools engellenir ve odağı kaybetme (Alt+Tab vb.) durumları kaydedilir.</div>
+              </div>
+            </label>
+          </div>
 
           {/* Bildirim Ayarları */}
           <div style={styles.card}>

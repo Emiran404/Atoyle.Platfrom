@@ -343,12 +343,19 @@ const CreateExam = () => {
     isQuiz: false,
     autoGrading: true,
     preventLeaveFullScreen: false,
-    disableShortcuts: false
+    disableShortcuts: false,
+    antiCheatEnabled: false
   });
 
   useEffect(() => {
     loadStudents();
   }, []);
+
+  useEffect(() => {
+    if (currentStep === 2 && formData.startType === 'now' && !formData.endDate) {
+      setQuickStartTimes();
+    }
+  }, [currentStep]);
 
   const steps = [
     { number: 1, title: 'Temel Bilgiler', icon: FileText },
@@ -1427,43 +1434,28 @@ const CreateExam = () => {
         return (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
             {/* Güvenlik Ayarları */}
-            {formData.type === 'quiz' && (
-              <div>
-                <h4 style={{ fontSize: '15px', fontWeight: '600', color: '#1e293b', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <span style={{ color: '#ef4444' }}>🛡️</span>
-                  Sınav Güvenliği (Anti-Cheat)
-                </h4>
+            <div>
+              <h4 style={{ fontSize: '15px', fontWeight: '600', color: '#1e293b', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ color: '#ef4444' }}>🛡️</span>
+                Sınav Güvenliği (Anti-Cheat)
+              </h4>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                  <label style={styles.radioOption(formData.preventLeaveFullScreen)}>
-                    <input
-                      type="checkbox"
-                      checked={formData.preventLeaveFullScreen}
-                      onChange={(e) => handleChange('preventLeaveFullScreen', e.target.checked)}
-                      style={styles.checkbox}
-                    />
-                    <div style={styles.radioLabel}>
-                      <div style={styles.radioTitle}>Tam Ekrandan Çıkışı Engelle</div>
-                      <div style={styles.radioDesc}>Öğrenci sınavdayken tam ekrandan çıkarsa sınavı kilitlenebilir.</div>
-                    </div>
-                  </label>
-
-                  <label style={styles.radioOption(formData.disableShortcuts)}>
-                    <input
-                      type="checkbox"
-                      checked={formData.disableShortcuts}
-                      onChange={(e) => handleChange('disableShortcuts', e.target.checked)}
-                      style={styles.checkbox}
-                    />
-                    <div style={styles.radioLabel}>
-                      <div style={styles.radioTitle}>Sekme Değiştirmeyi Algıla & Kısayolları Kapat</div>
-                      <div style={styles.radioDesc}>Kopyalama (Ctrl+C vb.) ve başka sekmeye geçişler (Alt+Tab) kısıtlanır, algılanırsa uyarılır.</div>
-                    </div>
-                  </label>
-                </div>
-                <hr style={{ borderTop: '1px solid #e2e8f0', margin: '24px 0' }} />
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                <label style={styles.radioOption(formData.antiCheatEnabled)}>
+                  <input
+                    type="checkbox"
+                    checked={formData.antiCheatEnabled}
+                    onChange={(e) => handleChange('antiCheatEnabled', e.target.checked)}
+                    style={styles.checkbox}
+                  />
+                  <div style={styles.radioLabel}>
+                    <div style={styles.radioTitle}>Yüksek Güvenlikli Sınav Modu (Anti-Cheat)</div>
+                    <div style={styles.radioDesc}>Sınav sadece masaüstü uygulaması ile çözülebilir. Ekran kilitlenir (kiosk modu), DevTools engellenir ve odağı kaybetme (Alt+Tab vb.) durumları kaydedilir.</div>
+                  </div>
+                </label>
               </div>
-            )}
+              <hr style={{ borderTop: '1px solid #e2e8f0', margin: '24px 0' }} />
+            </div>
 
             {/* Bildirim Ayarları */}
             <div>

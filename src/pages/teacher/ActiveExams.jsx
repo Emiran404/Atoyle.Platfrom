@@ -615,6 +615,20 @@ const ActiveExams = () => {
                             Çoktan Seçmeli
                           </span>
                         )}
+                        {exam.antiCheatEnabled && (
+                          <span style={{
+                            fontSize: '10px',
+                            backgroundColor: '#fef2f2',
+                            color: '#ef4444',
+                            padding: '2px 8px',
+                            border: '1px solid #ef4444',
+                            fontWeight: 'bold',
+                            textTransform: 'uppercase',
+                            marginLeft: '4px'
+                          }}>
+                            🛡️ Güvenli Sınav
+                          </span>
+                        )}
                       </div>
                       <p style={styles.examDesc}>{exam.description || 'Açıklama yok'}</p>
                     </div>

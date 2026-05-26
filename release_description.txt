@@ -1,17 +1,10 @@
-🚀 Atolye Platform v3.9.0 - Sürüm Açıklaması
+🚀 Atolye Platform v4.0.0 - Sürüm Açıklaması
 
-Bu güncelleme, platform genelinde yedekleme sistemindeki kritik bir yetkilendirme hatasını düzeltmekte, öğretmen paneline ait hassas uç noktaları daha güvenli hale getirmekte, öğrenci oturum sürelerini sınırlandırmakta ve öğretmen istatistik panelini geliştirmektedir.
+Bu güncelleme, platform genelinde Yüksek Güvenlikli Sınav (Anti-Cheat / Kiosk) modunu getirmekte, Electron entegrasyonunu sağlamakta, sunucu bağlantısı koptuğunda gösterilen ekranı optimize etmekte ve performans iyileştirmeleri barındırmaktadır.
 
-Hata Düzeltmeleri ve İyileştirmeler:
-- Fotoğraflı Yedekleme Düzeltildi: Fotoğraflarla yedek indirme (ZIP) işlemi sırasında Authorization (JWT) token başlığının gönderilmemesinden kaynaklanan yedekleme başarısız hatası çözüldü.
-- Öğretmen Paneli Güvenliği Artırıldı: Öğrencilerin şifrelerini değiştirme ve şifre sıfırlama modunu aktifleştirme uç noktaları backend tarafında JWT doğrulaması ve öğretmen rolü kontrolü ile tamamen güvence altına olunmuştur.
-- İstek Yetkilendirmeleri: Sistem sıfırlama ve öğrenci işlem günlüklerini çekme istekleri tamamen yetkilendirildi.
-- Oturum Süresi Sınırlandırması: Öğrenci oturumlarının süresi güvenlik amacıyla tam olarak 30 dakika ile sınırlandırıldı. Öğrenciler için "Beni Hatırla" seçeneği devredışı bırakıldı; öğretmenlerde ise bu seçenek 1 hafta (7 gün) boyunca oturumu açık tutmaya devam edecektir.
-- İstatistik Paneli Geliştirmeleri ve Optimizasyonu: 
-  - Öğretmen istatistikler sayfasındaki daire grafiklerinin (PieChart) yüklenme gecikmelerinde boş görünmesi sorunu giderildi.
-  - Panel genelindeki metrik kartları sayısı 4'ten 8'e çıkarıldı (Kayıtlı Öğrenci Sayısı, Değerlendirme Bekleyen Sınavlar, En Başarılı Sınıf ve Katılım Oranı eklendi).
-  - İstatistik paneline **Sınav Başarı Ortalamaları (BarChart)** ve **Günlük Gönderim Trendi (LineChart)** olmak üzere iki yeni performans analiz grafiği eklendi.
-- Sınıf Raporu PDF Yerleşimi İyileştirildi: Sınıf bazlı PDF rapor çıktısının dikey/yatay boşlukları, yazı boyutları ve tablo dolguları sıkıştırılarak, sınıf raporlarının tek bir sayfaya sığması sağlandı ve gereksiz sayfa bölünmeleri giderildi.
-- Mimari Uyumluluk ve Paketleme: İstemci ve sunucu paketleme scriptleri güncellenerek Linux (deb - arm64/amd64) ve Windows (exe - arm64/x64) mimarileri için kurulum paketleri derlendi.
+Hata Düzeltmeleri ve Yeni Özellikler:
+- Sınav Güvenliği (Anti-Cheat Entegrasyonu): Sınavlar için öğretmenler tarafından isteğe bağlı olarak aktifleştirilebilen yüksek güvenlikli Kiosk modu eklendi. Sınav sadece Electron masaüstü istemcisi ile açılabilir. DevTools engellenir ve öğrencinin Alt+Tab / ekran odağı kaybetme durumları anlık olarak öğretmene raporlanır.
+- Sunucu Bağlantısı Arayüzü: Bağlantı koptuğunda beliren ekranın yüklenme ikonu sadeleştirildi, çakışan ekstra SVG çizgileri kaldırıldı.
+- Kararlılık & Derleme: Frontend ve backend servislerinin en güncel Vite ve Node.js sürümleriyle hatasız bir şekilde derlenmesi sağlandı.
 
-descx: Yedekleme hatası düzeltildi, öğrenci oturumları 30 dk ile sınırlandırıldı, istatistik paneline yeni grafikler eklendi ve sınıf PDF rapor yerleşimi sıkıştırıldı.
+descx: Anti-Cheat Kiosk modu entegre edildi, bağlantı koptu arayüzü iyileştirildi, sürüm 4.0.0 olarak güncellendi.

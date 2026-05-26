@@ -37,6 +37,82 @@ if not exist ".git" (
 )
 
 echo.
+echo ------------------------------------------------------
+echo Lutfen kurulum turunu secin:
+echo 1) Cevrimici (Online) - Internet baglantisi gerekir (npm install ^& build)
+echo 2) Cevrimdishi (Offline) - MEB engeli / Internetsiz laboratuvarlar icin (*.zip kullanir)
+echo ------------------------------------------------------
+set /p install_mode="Seciminiz (1 veya 2): "
+
+if "!install_mode!"=="2" (
+    echo.
+    echo [Cevrimdishi Kurulum Secildi]
+    
+    set "ZIP_FILE="
+    for %%f in (*offline*.zip) do set "ZIP_FILE=%%f"
+    
+    if not defined ZIP_FILE (
+        for %%f in (*.zip) do set "ZIP_FILE=%%f"
+    )
+    
+    if not defined ZIP_FILE (
+        echo [!] Cevrimdishi paket yerelde bulunamadi.
+        echo GithHub Releases uzerinden otomatik indiriliyor (v3.9.0)...
+        
+        set "VERSION=3.9.0"
+        set "DOWNLOAD_URL=https://github.com/Emiran404/Atolye.Platform/releases/download/v!VERSION!/atolye-platform-offline_v!VERSION!.zip"
+        set "ZIP_FILE=atolye-platform-offline_v!VERSION!.zip"
+        
+        :: curl ile indirmeyi dene
+        curl -L -o "!ZIP_FILE!" "!DOWNLOAD_URL!"
+        
+        :: Eğer curl başarısız olursa veya yoksa PowerShell ile dene
+        if not exist "!ZIP_FILE!" (
+            powershell -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; (New-Object System.Net.WebClient).DownloadFile('!DOWNLOAD_URL!', '!ZIP_FILE!')"
+        )
+        
+        if not exist "!ZIP_FILE!" (
+            echo Hata: Otomatik indirme basarisiz oldu ^(Internet baglantisi yok veya MEB engeli^).
+            echo Lutfen paketi tarayicinizdan manuel olarak indirip bu klasore atin:
+            echo Link: !DOWNLOAD_URL!
+            pause
+            exit /b 1
+        )
+        echo [OK] Indirme tamamlandi!
+    )
+    
+    echo [+] Cevrimdishi paket bulundu: !ZIP_FILE!
+    echo Paket icerigi aciliyor...
+    
+    :: PowerShell ile zip dosyasını çıkar
+    powershell -Command "Expand-Archive -Path '!ZIP_FILE!' -DestinationPath '.' -Force"
+    
+    if %errorlevel% neq 0 (
+        echo Hata: Paket acilamadi! PowerShell surumunuzu kontrol edin veya manuel cikartin.
+        pause
+        exit /b 1
+    )
+    
+    :: .env ayarı
+    if not exist ".env" (
+        if exist ".env.example" (
+            copy .env.example .env >nul
+            echo [+] .env.example dosyasi .env olarak kopyalandi.
+        )
+    )
+    
+    echo.
+    echo ======================================================
+    echo   CEVRIMDISHI KURULUM TAMAMLANDI!
+    echo ======================================================
+    echo.
+    echo Uygulamayi baslatmak icin 'baslat-offline.bat' veya 'baslat.bat' dosyasini kullanin.
+    echo.
+    pause
+    exit /b 0
+)
+
+echo.
 echo [2/4] Frontend bagimliliklari yukleniyor...
 call npm install
 
