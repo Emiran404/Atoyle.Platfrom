@@ -49,6 +49,21 @@
 > [!NOTE]
 > **Atölye.Platform** bir [PolyOS](https://github.com/Emiran404) ürünüdür — *Pardus Okul Laboratuvar Yönetim ve Ödev Sistemi.*
 
+> [!IMPORTANT]
+> **Atölye.Platform**, Alanya Mesleki ve Teknik Anadolu Lisesi (Alanya MTAL) Bilişim Teknolojileri alanındaki bilgisayar laboratuvarlarında aktif olarak **Alpha aşamasında test edilmektedir** ve gerçek sınav/ödev süreçlerinde başarıyla kullanılmaktadır.
+
+---
+
+## ❓ Neden Atölye.Platform?
+
+Mevcut bulut tabanlı alternatifler (Google Classroom, Moodle vb.), Milli Eğitim Bakanlığı (MEB) Fatih internet ağındaki erişim kısıtlamaları (kısıtlı portlar, engellenen domainler) ve Pardus laboratuvar ortamlarında doğrudan yerel ağ üzerinden hızlı dosya transferi gereksinimi sebebiyle yetersiz kalmaktadır. 
+
+**Atölye.Platform** bu ihtiyaçları yerel ağ mimarisiyle çözer:
+* 📡 **İnternet Bağımsızlığı**: Sunucu ve istemciler tamamen intranet (yerel ağ) üzerinde haberleşir, dış dünyaya ihtiyaç duymaz.
+* ⚡ **Sıfır Konfigürasyon**: mDNS (Bonjour) protokolü sayesinde IP adresi veya DNS ayarı gerektirmeksizin cihazlar birbirini otomatik bulur.
+* 🐧 **Pardus Uyumluluğu**: Yerli işletim sistemimiz Pardus ve LiderAhenk merkezi yönetim sistemi ile doğal olarak entegre çalışır.
+* 📈 **Maksimum Hız**: Gigabit yerel ağ hızında, yüzlerce öğrenciye ait dosyalar saniyeler içinde toplanır ve dağıtılır.
+
 ---
 
 ## 📥 Hazır Paketler
@@ -113,6 +128,15 @@ Derleme yapmadan, aşağıdaki hazır paketlerle saniyeler içinde kurulum yapı
 | **⏱️ Rate Limiting** | Brute-force ve DDoS koruması |
 | **📑 Güvenli PDF/Resim** | Kimlik doğrulamalı ve korumalı dosya izleyici (v4.0.0) |
 | **💾 SQLite Veritabanı** | Yerleşik `node:sqlite` veritabanı (SQLite native modülü yoksa otomatik JSON fallback desteği) |
+| **🚫 Anti-Cheat / Kiosk** | Electron istemcisi üzerinde çalışan Alt+Tab tespiti, Developer Tools engellemesi, odak kaybı izleme ve sadece istemci üzerinden sınava giriş izni (v4.0.0) |
+
+### 🚫 Kiosk & Anti-Cheat Modu (Öğrenci İstemcisi)
+
+Sınav güvenliğini en üst düzeye çıkarmak için **Electron İstemcisi** özel bir kiosk ve koruma moduyla çalışır:
+* **Klavye / Kısayol Engeli**: `Alt+Tab`, `Ctrl+Alt+Del` (Windows için) veya Pardus/Linux masaüstü geçiş kısayolları izlenir ve engellenir.
+* **Ekran ve Odak Takibi**: Öğrenci sınav ekranı dışına tıkladığında veya odağı kaybettiğinde sisteme otomatik uyarı düşer.
+* **Developer Tools Koruması**: Tarayıcı konsolunun açılması engellenir, kaynak koduna erişim kapatılır.
+* **Zorunlu İstemci**: Sınav oluşturulurken "Sadece İstemci (Kiosk) İzni" seçilerek öğrencilerin tarayıcıdan girmesi tamamen engellenebilir.
 
 ---
 
@@ -179,6 +203,20 @@ chmod +x baslat.sh
 ./baslat.sh
 ```
 
+### 🌐 Çevrimdışı (Offline) Kurulum (MEB İnternet Kısıtlaması)
+
+Fatih Projesi internet ağındaki port kısıtlamaları veya tamamen interneti bulunmayan bilgisayar laboratuvarları için projenin **Çevrimdışı (Offline) Paket** desteği mevcuttur:
+
+1. GitHub Releases sayfasından güncel çevrimdışı paketi (`atolye-platform-offline_v4.0.0.zip` veya ilgili sürüm) indirin ve sunucu bilgisayarına taşıyın.
+2. Arşivi proje klasörü içerisine kopyalayın (açmanıza gerek yoktur).
+3. Kurulum sihirbazını çalıştırın:
+   ```bash
+   chmod +x kurulum.sh
+   ./kurulum.sh
+   ```
+4. Ekrana gelen seçeneklerden **"2) Çevrimdışı (Offline)"** modunu seçin.
+5. Sihirbaz yereldeki zip dosyasını tespit edip, dış ağ bağımlılıklarına ihtiyaç duymadan `node_modules` ve `dist` klasörlerini otomatik açarak sistemi tamamen hazır hale getirecektir.
+
 ### Manuel Kurulum
 
 ```bash
@@ -201,6 +239,16 @@ npm run build
 
 > [!WARNING]
 > **Windows kullanıcıları:** `kurulum.sh` yerine doğrudan `npm run install:all` ve `npm run dev` komutlarını kullanın.
+
+---
+
+## 🌐 PolyOS Ekosistemi
+
+Atölye.Platform, okul laboratuvarlarını uçtan uca dijitalleştirmeyi amaçlayan **PolyOS** şemsiye projesinin bir parçasıdır ve aşağıdaki entegre bileşenlerle tam uyumlu bir ekosistem sunar:
+
+1. **PolyOS Labs**: Bilgisayar laboratuvarındaki istemci makinelerin açılış, kapanış, masaüstü yönetimi ve genel durum izlemesini sağlayan yönetim katmanı.
+2. **OGA (Öğrenci Gönderme Aracısı)**: Öğretmen bilgisayarından öğrenci bilgisayarlarına hızlı dosya aktarımı, komut çalıştırma ve ekran izleme sağlayan hafif veri köprüsü.
+3. **LiderAhenk SSO**: Pardus ekosisteminin merkezi yönetim sistemi olan LiderAhenk LDAP dizini ile entegre çalışarak okul personelinin ve öğrencilerin mevcut kurumsal şifreleriyle tek tıkla sisteme dahil olmasını (Single Sign-On) sağlar.
 
 ---
 
