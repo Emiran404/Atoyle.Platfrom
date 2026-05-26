@@ -25,7 +25,7 @@ Yeni bir fikriniz mi var? Lütfen önce bir Issue açarak toplulukla tartışın
 
 ## 📝 Kodlama Standartları
 - Proje **Vanilla CSS** ve **Tailwind** karışımı bir yapı kullanmaktadır.
-- Backend tarafı **Node.js/Express** üzerinedir ve veri depolama için **JSON** dosyaları tercih edilmiştir.
+- Backend tarafı **Node.js/Express** üzerinedir ve veri depolama için **JSON/SQL** dosyaları tercih edilmiştir.
 - Değişken ve fonksiyon isimlerinde İngilizce terminolojiye sadık kalınması önerilir.
 
 ## 📜 Davranış Kuralları
