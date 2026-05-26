@@ -56,6 +56,15 @@ const PlatformManagement = () => {
   const [includePhotos, setIncludePhotos] = useState(false);
   const [backupInProgress, setBackupInProgress] = useState(false);
 
+  // Otomatik yedekleme ve yerel yedek listesi state'leri
+  const [autoBackupEnabled, setAutoBackupEnabled] = useState(false);
+  const [autoBackupInterval, setAutoBackupInterval] = useState(24);
+  const [autoBackupIncludePhotos, setAutoBackupIncludePhotos] = useState(false);
+  const [autoBackupWizardConfigured, setAutoBackupWizardConfigured] = useState(false);
+  const [lastAutoBackupTime, setLastAutoBackupTime] = useState(null);
+  const [localBackups, setLocalBackups] = useState([]);
+  const [loadingLocalBackups, setLoadingLocalBackups] = useState(false);
+
   // Veri sıfırlama error state
   const [resetError, setResetError] = useState('');
 
@@ -137,6 +146,7 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
     if (activeTab === 'users') loadUsers();
     if (activeTab === 'classes' || activeTab === 'registration') loadClasses();
     if (activeTab === 'stats') loadStats();
+    if (activeTab === 'backup') loadLocalBackups();
     if (activeTab === 'update') {
       loadUpdateData();
       handleCheckUpdate(); // Otomatik kontrol et
@@ -226,6 +236,11 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
         setRegistrationEnabled(data.settings.registrationEnabled || false);
         setTeacherRegistrationEnabled(data.settings.teacherRegistrationEnabled !== false);
         setAllowedClasses(data.settings.allowedClasses || []);
+        setAutoBackupEnabled(data.settings.autoBackupEnabled || false);
+        setAutoBackupInterval(data.settings.autoBackupInterval || 24);
+        setAutoBackupIncludePhotos(data.settings.autoBackupIncludePhotos || false);
+        setAutoBackupWizardConfigured(data.settings.autoBackupWizardConfigured || false);
+        setLastAutoBackupTime(data.settings.lastAutoBackupTime || null);
       }
       
       try {
@@ -249,7 +264,11 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
       const settingsToSave = {
         registrationEnabled: newSettings.registrationEnabled !== undefined ? newSettings.registrationEnabled : registrationEnabled,
         teacherRegistrationEnabled: newSettings.teacherRegistrationEnabled !== undefined ? newSettings.teacherRegistrationEnabled : teacherRegistrationEnabled,
-        allowedClasses: newSettings.allowedClasses !== undefined ? newSettings.allowedClasses : allowedClasses
+        allowedClasses: newSettings.allowedClasses !== undefined ? newSettings.allowedClasses : allowedClasses,
+        autoBackupEnabled: newSettings.autoBackupEnabled !== undefined ? newSettings.autoBackupEnabled : autoBackupEnabled,
+        autoBackupInterval: newSettings.autoBackupInterval !== undefined ? Number(newSettings.autoBackupInterval) : autoBackupInterval,
+        autoBackupIncludePhotos: newSettings.autoBackupIncludePhotos !== undefined ? newSettings.autoBackupIncludePhotos : autoBackupIncludePhotos,
+        autoBackupWizardConfigured: newSettings.autoBackupWizardConfigured !== undefined ? newSettings.autoBackupWizardConfigured : autoBackupWizardConfigured
       };
 
       const data = await settingsApi.update(settingsToSave);
@@ -443,6 +462,106 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
     } finally {
       setBackupInProgress(false);
     }
+  };
+
+  const loadLocalBackups = async () => {
+    setLoadingLocalBackups(true);
+    try {
+      const res = await fetch('/api/backup/list', {
+        headers: { 'Authorization': `Bearer ${useAuthStore.getState().token}` }
+      });
+      const data = await res.json();
+      if (data?.success) {
+        setLocalBackups(data.backups || []);
+      }
+    } catch (err) {
+      console.error('Local backups load error:', err);
+    }
+    setLoadingLocalBackups(false);
+  };
+
+  const handleDownloadLocalBackup = async (fileName) => {
+    try {
+      const response = await fetch(`/api/backup/download/${fileName}`, {
+        headers: { 'Authorization': `Bearer ${useAuthStore.getState().token}` }
+      });
+      if (!response.ok) throw new Error('İndirme hatası');
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      toast.success('Yedek başarıyla indirildi');
+    } catch (err) {
+      toast.error('İndirme başarısız');
+    }
+  };
+
+  const handleRestoreLocalBackup = (fileName) => {
+    setConfirmModal({
+      isOpen: true,
+      title: 'Yerel Yedeği Geri Yükle',
+      message: `"${fileName}" isimli yedek dosyası geri yüklenecektir. Bu işlem mevcut tüm verileri (öğrenciler, sınavlar, notlar, teslimler) silecek ve yedekteki verileri yazacaktır. Bu işlem geri alınamaz! Devam etmek istiyor musunuz?`,
+      confirmText: 'Yedeği Geri Yükle',
+      type: 'warning',
+      onConfirm: async () => {
+        toast.info('Yedek geri yükleniyor...');
+        try {
+          const res = await fetch(`/api/backup/restore-local/${fileName}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${useAuthStore.getState().token}`
+            }
+          });
+          const data = await res.json();
+          if (data?.success) {
+            toast.success('Yedek başarıyla geri yüklendi! Sayfa yenileniyor...');
+            setTimeout(() => {
+              window.location.reload();
+            }, 2000);
+          } else {
+            toast.error('Geri yükleme başarısız: ' + (data?.error || 'Bilinmeyen hata'));
+          }
+        } catch (err) {
+          console.error(err);
+          toast.error('Geri yükleme sırasında bir hata oluştu');
+        }
+      }
+    });
+  };
+
+  const handleDeleteLocalBackup = (fileName) => {
+    setConfirmModal({
+      isOpen: true,
+      title: 'Yedek Dosyasını Sil',
+      message: `"${fileName}" isimli yedek dosyası kalıcı olarak silinecektir. Devam etmek istiyor musunuz?`,
+      confirmText: 'Yedeği Sil',
+      type: 'danger',
+      onConfirm: async () => {
+        try {
+          const res = await fetch(`/api/backup/${fileName}`, {
+            method: 'DELETE',
+            headers: {
+              'Authorization': `Bearer ${useAuthStore.getState().token}`
+            }
+          });
+          const data = await res.json();
+          if (data?.success) {
+            toast.success('Yedek dosyası silindi');
+            loadLocalBackups();
+          } else {
+            toast.error('Silme başarısız: ' + (data?.error || 'Bilinmeyen hata'));
+          }
+        } catch (err) {
+          console.error(err);
+          toast.error('Silme işlemi sırasında hata oluştu');
+        }
+      }
+    });
   };
 
   // Sınıf yönetimi fonksiyonları
@@ -1299,19 +1418,257 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
             </p>
             <ul style={{ fontSize: '13px', color: '#1e40af', lineHeight: '1.8', paddingLeft: '20px' }}>
               <li><strong>Yedeklenen Veriler:</strong> Öğrenciler, Öğretmenler, Sınavlar, Gönderimler, Notlar, Bildirimler, Programlar</li>
-              <li><strong>Fotoğraflar:</strong> Varsayılan olarak yedeklenmez (dosya boyutu nedeniyle)</li>
-              <li><strong>Format:</strong> JSON dosyası (kolayca okunabilir ve düzenlenebilir)</li>
-              <li><strong>Güvenlik:</strong> Yedek dosyaları güvenli bir yerde saklayın</li>
+              <li><strong>Fotoğraflar:</strong> Manuel veya otomatik yedeklerde tercihinize bağlı yedeklenir.</li>
+              <li><strong>Format:</strong> ZIP veya JSON dosyası (kolayca okunabilir ve geri yüklenebilir)</li>
+              <li><strong>Güvenlik:</strong> Yedek dosyalarını güvenli bir yerde saklayın.</li>
             </ul>
           </div>
         </div>
+      </div>
+
+      {/* Otomatik Yedekleme Ayarları */}
+      <div style={styles.card}>
+        <div style={styles.cardHeader}>
+          <Database size={24} style={{ color: '#3b82f6' }} />
+          <h2 style={styles.cardTitle}>Otomatik Yedekleme Ayarları</h2>
+        </div>
+
+        <p style={{ fontSize: '14px', color: '#64748b', marginBottom: '20px' }}>
+          Sistem verilerinin güvenliğini artırmak için arka planda çalışan otomatik yedekleme sistemini yapılandırın.
+        </p>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          {/* Aktif mi */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px', backgroundColor: '#f8fafc', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+            <div>
+              <label style={{ fontSize: '14px', fontWeight: '600', color: '#334155' }}>
+                Otomatik Yedekleme Sistemi
+              </label>
+              <p style={{ margin: '4px 0 0 0', fontSize: '12px', color: '#94a3b8' }}>
+                Sistem belirli periyotlarla otomatik olarak yerel yedek dosyaları oluşturur.
+              </p>
+            </div>
+            <input
+              type="checkbox"
+              checked={autoBackupEnabled}
+              onChange={(e) => setAutoBackupEnabled(e.target.checked)}
+              style={{ width: '20px', height: '20px', accentColor: '#3b82f6', cursor: 'pointer' }}
+            />
+          </div>
+
+          {autoBackupEnabled && (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
+              {/* Sıklık */}
+              <div>
+                <label style={{ fontSize: '13px', fontWeight: '600', color: '#475569', marginBottom: '6px', display: 'block' }}>
+                  Yedekleme Sıklığı (Periyot)
+                </label>
+                <select
+                  value={autoBackupInterval}
+                  onChange={(e) => setAutoBackupInterval(Number(e.target.value))}
+                  style={{
+                    width: '100%',
+                    padding: '10px 12px',
+                    fontSize: '14px',
+                    border: '2px solid #e2e8f0',
+                    borderRadius: '10px',
+                    outline: 'none',
+                    backgroundColor: '#fff',
+                    color: '#334155'
+                  }}
+                >
+                  <option value={12}>12 Saatte Bir</option>
+                  <option value={24}>Her Gün (24 Saatte Bir)</option>
+                  <option value={72}>3 Günde Bir (72 Saatte Bir)</option>
+                  <option value={168}>Her Hafta (168 Saatte Bir)</option>
+                </select>
+              </div>
+
+              {/* Fotoğraflar dahil edilsin mi */}
+              <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <input
+                    type="checkbox"
+                    id="autoBackupIncludePhotos"
+                    checked={autoBackupIncludePhotos}
+                    onChange={(e) => setAutoBackupIncludePhotos(e.target.checked)}
+                    style={{ cursor: 'pointer', width: '18px', height: '18px', accentColor: '#3b82f6' }}
+                  />
+                  <label htmlFor="autoBackupIncludePhotos" style={{
+                    fontSize: '13px',
+                    color: '#475569',
+                    cursor: 'pointer',
+                    fontWeight: '600'
+                  }}>
+                    Öğrenci Dosyalarını (uploads) Yedekle
+                  </label>
+                </div>
+                <p style={{ margin: '4px 0 0 26px', fontSize: '11px', color: '#94a3b8' }}>
+                  Öğrencilerin gönderdiği resim ve ödev dosyalarını da yedek dosyasına ekler.
+                </p>
+              </div>
+            </div>
+          )}
+
+          <button
+            onClick={async () => {
+              setSaving(true);
+              try {
+                await handleSaveSettings({
+                  autoBackupEnabled,
+                  autoBackupInterval,
+                  autoBackupIncludePhotos
+                });
+              } catch (err) {
+                console.error(err);
+              }
+              setSaving(false);
+            }}
+            disabled={saving}
+            style={{
+              ...styles.button('primary'),
+              width: '100%'
+            }}
+          >
+            Otomatik Yedekleme Ayarlarını Kaydet
+          </button>
+        </div>
+      </div>
+
+      {/* Yerel Yedek Dosyaları */}
+      <div style={styles.card}>
+        <div style={{ ...styles.cardHeader, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+            <Database size={24} style={{ color: '#10b981' }} />
+            <h2 style={styles.cardTitle}>Mevcut Yerel Yedekler ({localBackups.length})</h2>
+          </div>
+          <button
+            onClick={loadLocalBackups}
+            disabled={loadingLocalBackups}
+            style={{
+              padding: '6px 12px',
+              backgroundColor: '#f1f5f9',
+              border: '1px solid #e2e8f0',
+              borderRadius: '8px',
+              fontSize: '12px',
+              fontWeight: '600',
+              color: '#475569',
+              cursor: 'pointer'
+            }}
+          >
+            Tazele
+          </button>
+        </div>
+
+        {loadingLocalBackups ? (
+          <p style={{ textAlign: 'center', color: '#64748b', padding: '24px' }}>Yedekler yükleniyor...</p>
+        ) : localBackups.length === 0 ? (
+          <div style={{ textAlign: 'center', padding: '40px', color: '#64748b' }}>
+            <Database size={40} style={{ margin: '0 auto 12px', opacity: 0.3 }} />
+            <p>Henüz yerel veya otomatik alınmış bir yedek yok.</p>
+          </div>
+        ) : (
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+              <thead>
+                <tr style={{ borderBottom: '2px solid #e2e8f0' }}>
+                  <th style={{ textAlign: 'left', padding: '12px 16px', fontSize: '13px', color: '#64748b', fontWeight: '700' }}>Dosya Adı</th>
+                  <th style={{ textAlign: 'left', padding: '12px 16px', fontSize: '13px', color: '#64748b', fontWeight: '700' }}>Boyut</th>
+                  <th style={{ textAlign: 'left', padding: '12px 16px', fontSize: '13px', color: '#64748b', fontWeight: '700' }}>Tür / Tarih</th>
+                  <th style={{ textAlign: 'right', padding: '12px 16px', fontSize: '13px', color: '#64748b', fontWeight: '700' }}>İşlemler</th>
+                </tr>
+              </thead>
+              <tbody>
+                {localBackups.map((backup, idx) => (
+                  <tr key={idx} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                    <td style={{ padding: '12px 16px', fontSize: '14px', fontWeight: '500', color: '#1e293b' }}>
+                      {backup.name}
+                    </td>
+                    <td style={{ padding: '12px 16px', fontSize: '13px', color: '#64748b' }}>
+                      {backup.size > 1024 * 1024 
+                        ? `${(backup.size / (1024 * 1024)).toFixed(2)} MB` 
+                        : `${(backup.size / 1024).toFixed(1)} KB`}
+                    </td>
+                    <td style={{ padding: '12px 16px', fontSize: '13px', color: '#64748b' }}>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                        <span style={{
+                          alignSelf: 'flex-start',
+                          padding: '2px 8px',
+                          borderRadius: '12px',
+                          fontSize: '10px',
+                          fontWeight: '700',
+                          backgroundColor: backup.isAuto ? '#ecfdf5' : '#eff6ff',
+                          color: backup.isAuto ? '#15803d' : '#1d4ed8'
+                        }}>
+                          {backup.isAuto ? 'Otomatik' : 'Manuel'}
+                        </span>
+                        <span style={{ fontSize: '11px', color: '#94a3b8' }}>
+                          {new Date(backup.createdAt).toLocaleString('tr-TR')}
+                        </span>
+                      </div>
+                    </td>
+                    <td style={{ padding: '12px 16px', textAlign: 'right' }}>
+                      <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
+                        <button
+                          onClick={() => handleRestoreLocalBackup(backup.name)}
+                          style={{
+                            padding: '6px 12px',
+                            backgroundColor: '#fef3c7',
+                            color: '#92400e',
+                            border: 'none',
+                            borderRadius: '8px',
+                            fontSize: '12px',
+                            fontWeight: '600',
+                            cursor: 'pointer'
+                          }}
+                        >
+                          Geri Yükle
+                        </button>
+                        <button
+                          onClick={() => handleDownloadLocalBackup(backup.name)}
+                          style={{
+                            padding: '6px 12px',
+                            backgroundColor: '#e0e7ff',
+                            color: '#4338ca',
+                            border: 'none',
+                            borderRadius: '8px',
+                            fontSize: '12px',
+                            fontWeight: '600',
+                            cursor: 'pointer'
+                          }}
+                        >
+                          İndir
+                        </button>
+                        <button
+                          onClick={() => handleDeleteLocalBackup(backup.name)}
+                          style={{
+                            padding: '6px 12px',
+                            backgroundColor: '#fee2e2',
+                            color: '#991b1b',
+                            border: 'none',
+                            borderRadius: '8px',
+                            fontSize: '12px',
+                            fontWeight: '600',
+                            cursor: 'pointer'
+                          }}
+                        >
+                          Sil
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
 
       {/* JSON Yedekleme */}
       <div style={styles.card}>
         <div style={styles.cardHeader}>
           <Download size={24} style={{ color: '#10b981' }} />
-          <h2 style={styles.cardTitle}>Veri Yedekleme</h2>
+          <h2 style={styles.cardTitle}>Manuel Veri Yedekleme</h2>
         </div>
 
         <p style={{ fontSize: '14px', color: '#64748b', marginBottom: '20px' }}>
@@ -1494,7 +1851,6 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
           </label>
         </div>
       </div>
-
     </>
   );
 

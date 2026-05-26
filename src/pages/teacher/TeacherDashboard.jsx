@@ -13,7 +13,8 @@ import {
   CheckCircle,
   AlertCircle,
   ChevronRight,
-  HelpCircle
+  HelpCircle,
+  Database
 } from 'lucide-react';
 import { TeacherLayout } from '../../components/layouts';
 import { useAuthStore } from '../../store/authStore';
@@ -21,11 +22,13 @@ import { useExamStore } from '../../store/examStore';
 import { useSubmissionStore } from '../../store/submissionStore';
 import { formatDateTime, getRelativeTime } from '../../utils/dateHelpers';
 import NotificationPermissionPopup from '../../components/NotificationPermissionPopup';
-import { OnboardingTour } from '../../components/ui';
+import { OnboardingTour, Modal, Button } from '../../components/ui';
+import { useToast } from '../../components/ui/Toast';
 import { t } from '../../utils/i18n';
 
 const TeacherDashboard = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const { user, loadStudents, students } = useAuthStore();
   const { loadExams, getActiveExams, getPastExams } = useExamStore();
   const { loadSubmissions, submissions } = useSubmissionStore();
@@ -41,6 +44,15 @@ const TeacherDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [startTour, setStartTour] = useState(0); // Trigger tour re-run
 
+  // Otomatik yedekleme sihirbazı state'leri
+  const [settings, setSettings] = useState(null);
+  const [showWizardModal, setShowWizardModal] = useState(false);
+  const [wizardData, setWizardData] = useState({
+    autoBackupEnabled: true,
+    autoBackupInterval: 24,
+    autoBackupIncludePhotos: false
+  });
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -51,6 +63,21 @@ const TeacherDashboard = () => {
           loadExams(),
           loadSubmissions()
         ]);
+
+        try {
+          const settingsRes = await fetch('/api/settings');
+          const settingsData = await settingsRes.json();
+          if (settingsData?.success) {
+            setSettings(settingsData.settings);
+            setWizardData({
+              autoBackupEnabled: settingsData.settings.autoBackupEnabled !== false, // Sihirbazda varsayılan açık gelsin
+              autoBackupInterval: settingsData.settings.autoBackupInterval || 24,
+              autoBackupIncludePhotos: settingsData.settings.autoBackupIncludePhotos || false
+            });
+          }
+        } catch (settingsErr) {
+          console.error('Ayarlar yüklenemedi:', settingsErr);
+        }
 
         const now = new Date();
         const active = (examsData || []).filter(exam => {
@@ -540,6 +567,65 @@ const TeacherDashboard = () => {
       `}</style>
 
       <div style={styles.container}>
+        {/* Otomatik Yedekleme Sihirbazı Bildirim Bannerı */}
+        {settings && !settings.autoBackupWizardConfigured && (
+          <div style={{
+            backgroundColor: '#f0fdf4',
+            border: '2px solid #bbf7d0',
+            borderRadius: '16px',
+            padding: '20px',
+            marginBottom: '24px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: '16px',
+            boxShadow: '0 4px 12px rgba(22, 163, 74, 0.08)',
+            animation: 'in-expo 0.5s ease-out'
+          }}>
+            <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+              <div style={{
+                backgroundColor: '#dcfce7',
+                color: '#16a34a',
+                width: '48px',
+                height: '48px',
+                borderRadius: '12px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexShrink: 0
+              }}>
+                <Database size={24} />
+              </div>
+              <div>
+                <h4 style={{ margin: '0 0 4px 0', fontSize: '15px', fontWeight: '700', color: '#14532d' }}>
+                  Otomatik Veri Yedekleme Sihirbazı
+                </h4>
+                <p style={{ margin: 0, fontSize: '13px', color: '#166534', lineHeight: '1.5' }}>
+                  Sisteminizin veri güvenliği için otomatik yedeklemeyi ayarlayın. Bu ayara daha sonra <strong>Platform Yönetimi ➔ Veri Yedekleme</strong> menüsünden ulaşabilirsiniz.
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={() => setShowWizardModal(true)}
+              style={{
+                backgroundColor: '#16a34a',
+                color: '#ffffff',
+                border: 'none',
+                padding: '10px 20px',
+                borderRadius: '10px',
+                fontSize: '13px',
+                fontWeight: '600',
+                cursor: 'pointer',
+                transition: 'all 0.2s',
+                boxShadow: '0 2px 8px rgba(22, 163, 74, 0.25)'
+              }}
+            >
+              Şimdi Yapılandır
+            </button>
+          </div>
+        )}
+
         {/* Header */}
         <div className="teacher-header" style={styles.header}>
           <div id="welcome-header">
@@ -740,6 +826,152 @@ const TeacherDashboard = () => {
         forceShow={startTour > 0}
       />
       <NotificationPermissionPopup />
+
+      {/* Otomatik Yedekleme Sihirbazı Modalı */}
+      <Modal 
+        isOpen={showWizardModal} 
+        onClose={() => setShowWizardModal(false)} 
+        title="Otomatik Veri Yedekleme Sihirbazı"
+      >
+        <div style={{ padding: '8px 24px 24px' }}>
+          <p style={{ fontSize: '14px', color: '#64748b', marginBottom: '20px', lineHeight: '1.6' }}>
+            Sistem verilerinizin (öğrenciler, sınavlar, gönderimler ve notlar) güvenliğini sağlamak için otomatik yedekleme sistemini yapılandırın.
+          </p>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            {/* Otomatik Yedek Aktif mi */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div>
+                <label style={{ fontSize: '14px', fontWeight: '600', color: '#334155' }}>
+                  Otomatik Yedekleme Aktif
+                </label>
+                <p style={{ margin: '4px 0 0 0', fontSize: '12px', color: '#94a3b8' }}>
+                  Belirli aralıklarla arka planda otomatik yedek alınsın mı?
+                </p>
+              </div>
+              <input
+                type="checkbox"
+                checked={wizardData.autoBackupEnabled}
+                onChange={(e) => setWizardData(prev => ({ ...prev, autoBackupEnabled: e.target.checked }))}
+                style={{ width: '20px', height: '20px', accentColor: '#16a34a', cursor: 'pointer' }}
+              />
+            </div>
+
+            {wizardData.autoBackupEnabled && (
+              <>
+                {/* Yedekleme Sıklığı */}
+                <div>
+                  <label style={{ fontSize: '14px', fontWeight: '600', color: '#334155', marginBottom: '8px', display: 'block' }}>
+                    Yedekleme Sıklığı (Periyot)
+                  </label>
+                  <select
+                    value={wizardData.autoBackupInterval}
+                    onChange={(e) => setWizardData(prev => ({ ...prev, autoBackupInterval: Number(e.target.value) }))}
+                    style={{
+                      width: '100%',
+                      padding: '10px 12px',
+                      fontSize: '14px',
+                      border: '2px solid #e2e8f0',
+                      borderRadius: '10px',
+                      outline: 'none',
+                      backgroundColor: '#fff',
+                      color: '#334155'
+                    }}
+                  >
+                    <option value={12}>12 Saatte Bir</option>
+                    <option value={24}>Her Gün (24 Saatte Bir)</option>
+                    <option value={72}>3 Günde Bir (72 Saatte Bir)</option>
+                    <option value={168}>Her Hafta (168 Saatte Bir)</option>
+                  </select>
+                </div>
+
+                {/* Fotoğraflar dahil edilsin mi */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <div>
+                    <label style={{ fontSize: '14px', fontWeight: '600', color: '#334155' }}>
+                      Öğrenci Teslim Dosyalarını (uploads) Dahil Et
+                    </label>
+                    <p style={{ margin: '4px 0 0 0', fontSize: '12px', color: '#94a3b8' }}>
+                      Öğrencilerin gönderdiği resim/ödev dosyaları yedeğe eklensin mi? (Boyutu büyütebilir)
+                    </p>
+                  </div>
+                  <input
+                    type="checkbox"
+                    checked={wizardData.autoBackupIncludePhotos}
+                    onChange={(e) => setWizardData(prev => ({ ...prev, autoBackupIncludePhotos: e.target.checked }))}
+                    style={{ width: '20px', height: '20px', accentColor: '#16a34a', cursor: 'pointer' }}
+                  />
+                </div>
+              </>
+            )}
+
+            <div style={{ marginTop: '12px', display: 'flex', gap: '16px' }}>
+              <Button
+                type="button"
+                onClick={() => setShowWizardModal(false)}
+                style={{
+                  flex: 1,
+                  backgroundColor: '#fff',
+                  color: '#64748b',
+                  border: '1px solid #e2e8f0',
+                  padding: '12px',
+                  borderRadius: '12px',
+                  fontWeight: '500'
+                }}
+              >
+                Vazgeç
+              </Button>
+              <Button
+                type="button"
+                onClick={async () => {
+                  try {
+                    const settingsToSave = {
+                      ...settings,
+                      autoBackupEnabled: wizardData.autoBackupEnabled,
+                      autoBackupInterval: wizardData.autoBackupInterval,
+                      autoBackupIncludePhotos: wizardData.autoBackupIncludePhotos,
+                      autoBackupWizardConfigured: true
+                    };
+
+                    const response = await fetch('/api/settings', {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${useAuthStore.getState().token}`
+                      },
+                      body: JSON.stringify(settingsToSave)
+                    });
+                    const resData = await response.json();
+
+                    if (resData?.success) {
+                      setSettings(resData.settings);
+                      setShowWizardModal(false);
+                      toast.success('Otomatik yedekleme başarıyla yapılandırıldı.');
+                    } else {
+                      toast.error('Ayarlar kaydedilemedi.');
+                    }
+                  } catch (err) {
+                    console.error('Wizard save error:', err);
+                    toast.error('Ayarlar kaydedilirken hata oluştu.');
+                  }
+                }}
+                style={{
+                  flex: 2,
+                  background: 'linear-gradient(135deg, #16a34a 0%, #15803d 100%)',
+                  border: 'none',
+                  padding: '12px',
+                  borderRadius: '12px',
+                  fontWeight: '600',
+                  color: '#fff',
+                  boxShadow: '0 4px 12px rgba(22, 163, 74, 0.25)'
+                }}
+              >
+                Kaydet ve Kapat
+              </Button>
+            </div>
+          </div>
+        </div>
+      </Modal>
     </TeacherLayout>
   );
 };

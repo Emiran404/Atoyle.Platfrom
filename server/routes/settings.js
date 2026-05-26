@@ -14,10 +14,7 @@ const SETTINGS_FILE = path.join(__dirname, '../data/settings.json');
 // Ayarları yükle
 const loadSettings = () => {
   const settings = getData('settings');
-  if (settings) return settings;
-
-  // Default settings
-  return {
+  const defaults = {
     registrationEnabled: true,
     teacherRegistrationEnabled: true,
     allowedClasses: getData('classes') || [
@@ -25,8 +22,16 @@ const loadSettings = () => {
       "10-A", "10-B", "10-C", "10-D", "10-E", "10-F",
       "11-A", "11-B", "11-C", "11-D", "11-E", "11-F",
       "12-A", "12-B", "12-C", "12-D", "12-E", "12-F"
-    ]
+    ],
+    autoBackupEnabled: false,
+    autoBackupInterval: 24,
+    autoBackupIncludePhotos: false,
+    autoBackupWizardConfigured: false,
+    lastAutoBackupTime: null
   };
+
+  if (!settings) return defaults;
+  return { ...defaults, ...settings };
 };
 
 // Ayarları kaydet
@@ -47,7 +52,19 @@ router.get('/', (req, res) => {
 // POST /api/settings - Ayarları güncelle (Sadece Öğretmenler)
 router.post('/', authenticateToken, authorizeRole('teacher'), (req, res) => {
   try {
-    const { registrationEnabled, teacherRegistrationEnabled, allowedClasses, ogsEnabled, ogsClasses, passwordChangeModeExpiresAt } = req.body;
+    const { 
+      registrationEnabled, 
+      teacherRegistrationEnabled, 
+      allowedClasses, 
+      ogsEnabled, 
+      ogsClasses, 
+      passwordChangeModeExpiresAt,
+      autoBackupEnabled,
+      autoBackupInterval,
+      autoBackupIncludePhotos,
+      autoBackupWizardConfigured,
+      lastAutoBackupTime
+    } = req.body;
 
     const currentSettings = loadSettings();
     const settings = {
@@ -57,7 +74,12 @@ router.post('/', authenticateToken, authorizeRole('teacher'), (req, res) => {
       allowedClasses: Array.isArray(allowedClasses) ? allowedClasses : currentSettings.allowedClasses,
       ogsEnabled: ogsEnabled !== undefined ? ogsEnabled : currentSettings.ogsEnabled,
       ogsClasses: Array.isArray(ogsClasses) ? ogsClasses : currentSettings.ogsClasses,
-      passwordChangeModeExpiresAt: passwordChangeModeExpiresAt !== undefined ? passwordChangeModeExpiresAt : currentSettings.passwordChangeModeExpiresAt
+      passwordChangeModeExpiresAt: passwordChangeModeExpiresAt !== undefined ? passwordChangeModeExpiresAt : currentSettings.passwordChangeModeExpiresAt,
+      autoBackupEnabled: autoBackupEnabled !== undefined ? autoBackupEnabled : currentSettings.autoBackupEnabled,
+      autoBackupInterval: autoBackupInterval !== undefined ? Number(autoBackupInterval) : currentSettings.autoBackupInterval,
+      autoBackupIncludePhotos: autoBackupIncludePhotos !== undefined ? autoBackupIncludePhotos : currentSettings.autoBackupIncludePhotos,
+      autoBackupWizardConfigured: autoBackupWizardConfigured !== undefined ? autoBackupWizardConfigured : currentSettings.autoBackupWizardConfigured,
+      lastAutoBackupTime: lastAutoBackupTime !== undefined ? lastAutoBackupTime : currentSettings.lastAutoBackupTime
     };
 
     if (saveSettings(settings)) {

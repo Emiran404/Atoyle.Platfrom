@@ -41,6 +41,7 @@ import systemRoutes from './routes/system.js';
 import liderAhenkRoutes from './routes/liderahenk.js';
 import classesRoutes from './routes/classes.js';
 import { startNotificationWorker } from './workers/notificationWorker.js';
+import { startBackupWorker } from './workers/backupWorker.js';
 import { startDiscovery } from './utils/discovery.js';
 import { getDbStatus, setData } from './utils/storage.js';
 
@@ -112,6 +113,12 @@ if (!fs.existsSync(dataPath)) {
   fs.mkdirSync(dataPath, { recursive: true });
 }
 
+// Backups klasörü oluştur
+const backupsPath = join(__dirname, 'backups');
+if (!fs.existsSync(backupsPath)) {
+  fs.mkdirSync(backupsPath, { recursive: true });
+}
+
 const initializeDataFiles = () => {
   // SQLite veritabanı aktif ve göç tamamlanmışsa JSON dosyalarının oluşturulmasını atla
   try {
@@ -159,6 +166,11 @@ const initializeDataFiles = () => {
             "11-A", "11-B", "11-C", "11-D", "11-E", "11-F",
             "12-A", "12-B", "12-C", "12-D", "12-E", "12-F"
           ],
+          autoBackupEnabled: false,
+          autoBackupInterval: 24,
+          autoBackupIncludePhotos: false,
+          autoBackupWizardConfigured: false,
+          lastAutoBackupTime: null,
           liderAhenk: {
             enabled: false,
             url: "ldap://localhost:389",
@@ -186,6 +198,9 @@ initializeDataFiles();
 
 // Bildirim servisini baslat
 startNotificationWorker();
+
+// Yedekleme servisini baslat
+startBackupWorker();
 
 // API Routes
 app.use('/api/auth', authRoutes); // Public (login/register)
@@ -232,7 +247,12 @@ app.post('/api/reset-all-data', authenticateToken, authorizeRole('teacher'), (re
     const defaultSettings = {
       registrationEnabled: true,
       teacherRegistrationEnabled: true,
-      allowedClasses: defaultClasses
+      allowedClasses: defaultClasses,
+      autoBackupEnabled: false,
+      autoBackupInterval: 24,
+      autoBackupIncludePhotos: false,
+      autoBackupWizardConfigured: false,
+      lastAutoBackupTime: null
     };
     setData('settings', defaultSettings);
 

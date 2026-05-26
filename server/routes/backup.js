@@ -279,4 +279,165 @@ router.post('/restore-zip', upload.single('backup'), async (req, res) => {
   }
 });
 
+// GET /api/backup/list - Yerel yedek dosyalarını listele
+router.get('/list', authenticateToken, authorizeRole('teacher'), (req, res) => {
+  try {
+    const backupsDir = path.join(__dirname, '..', 'backups');
+    if (!fs.existsSync(backupsDir)) {
+      return res.json({ success: true, backups: [] });
+    }
+
+    const files = fs.readdirSync(backupsDir)
+      .filter(file => file.endsWith('.zip') || file.endsWith('.json'))
+      .map(file => {
+        const filePath = path.join(backupsDir, file);
+        const stats = fs.statSync(filePath);
+        return {
+          name: file,
+          size: stats.size,
+          createdAt: stats.mtime.toISOString(),
+          isAuto: file.startsWith('auto-backup-')
+        };
+      })
+      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+    res.json({ success: true, backups: files });
+  } catch (error) {
+    console.error('List backups error:', error);
+    res.status(500).json({ success: false, error: 'Yedek dosyaları listelenirken hata oluştu' });
+  }
+});
+
+// GET /api/backup/download/:fileName - Yerel yedeği indir
+router.get('/download/:fileName', authenticateToken, authorizeRole('teacher'), (req, res) => {
+  try {
+    const { fileName } = req.params;
+    if (fileName.includes('..') || fileName.includes('/') || fileName.includes('\\')) {
+      return res.status(400).json({ success: false, error: 'Geçersiz dosya adı' });
+    }
+
+    const backupsDir = path.join(__dirname, '..', 'backups');
+    const filePath = path.join(backupsDir, fileName);
+
+    if (!fs.existsSync(filePath)) {
+      return res.status(404).json({ success: false, error: 'Dosya bulunamadı' });
+    }
+
+    res.download(filePath);
+  } catch (error) {
+    console.error('Download backup error:', error);
+    res.status(500).json({ success: false, error: 'Yedek indirilirken hata oluştu' });
+  }
+});
+
+// DELETE /api/backup/:fileName - Yerel yedeği sil
+router.delete('/:fileName', authenticateToken, authorizeRole('teacher'), (req, res) => {
+  try {
+    const { fileName } = req.params;
+    if (fileName.includes('..') || fileName.includes('/') || fileName.includes('\\')) {
+      return res.status(400).json({ success: false, error: 'Geçersiz dosya adı' });
+    }
+
+    const backupsDir = path.join(__dirname, '..', 'backups');
+    const filePath = path.join(backupsDir, fileName);
+
+    if (!fs.existsSync(filePath)) {
+      return res.status(404).json({ success: false, error: 'Dosya bulunamadı' });
+    }
+
+    fs.unlinkSync(filePath);
+    res.json({ success: true, message: 'Yedek dosyası silindi' });
+  } catch (error) {
+    console.error('Delete backup error:', error);
+    res.status(500).json({ success: false, error: 'Yedek silinirken hata oluştu' });
+  }
+});
+
+// POST /api/backup/restore-local/:fileName - Yerel yedeği geri yükle
+router.post('/restore-local/:fileName', authenticateToken, authorizeRole('teacher'), async (req, res) => {
+  const tempDir = path.join(__dirname, '..', 'temp');
+  const extractDir = path.join(tempDir, `extract-${Date.now()}`);
+  
+  try {
+    const { fileName } = req.params;
+    if (fileName.includes('..') || fileName.includes('/') || fileName.includes('\\')) {
+      return res.status(400).json({ success: false, error: 'Geçersiz dosya adı' });
+    }
+
+    const backupsDir = path.join(__dirname, '..', 'backups');
+    const filePath = path.join(backupsDir, fileName);
+
+    if (!fs.existsSync(filePath)) {
+      return res.status(404).json({ success: false, error: 'Yedek dosyası bulunamadı' });
+    }
+
+    console.log(`📦 Yerel yedek geri yükleme başladı: ${fileName}`);
+
+    if (fileName.endsWith('.zip')) {
+      if (!fs.existsSync(tempDir)) {
+        fs.mkdirSync(tempDir, { recursive: true });
+      }
+      if (!fs.existsSync(extractDir)) {
+        fs.mkdirSync(extractDir, { recursive: true });
+      }
+
+      const zip = new AdmZip(filePath);
+      zip.extractAllTo(extractDir, true);
+
+      const backupJsonPath = path.join(extractDir, 'backup.json');
+      if (!fs.existsSync(backupJsonPath)) {
+        throw new Error('Yedek dosyasında backup.json bulunamadı');
+      }
+
+      const backupData = JSON.parse(fs.readFileSync(backupJsonPath, 'utf-8'));
+      if (!backupData.data) {
+        throw new Error('Geçersiz yedek verisi');
+      }
+
+      if (backupData.data.students) setData('students', backupData.data.students);
+      if (backupData.data.teachers) setData('teachers', backupData.data.teachers);
+      if (backupData.data.exams) setData('exams', backupData.data.exams);
+      if (backupData.data.submissions) setData('submissions', backupData.data.submissions);
+      if (backupData.data.notifications) setData('notifications', backupData.data.notifications);
+      if (backupData.data.schedules) setData('schedules', backupData.data.schedules);
+
+      const uploadsStudentSrc = path.join(extractDir, 'uploads_student');
+      const uploadsSrc = path.join(extractDir, 'uploads');
+      const uploadsStudentDest = path.join(__dirname, '..', '..', 'src', 'uploads_student');
+      const uploadsDest = path.join(__dirname, '..', 'uploads');
+
+      if (fs.existsSync(uploadsStudentSrc)) {
+        if (fs.existsSync(uploadsStudentDest)) {
+          await fsPromises.rm(uploadsStudentDest, { recursive: true, force: true });
+        }
+        await fsPromises.cp(uploadsStudentSrc, uploadsStudentDest, { recursive: true });
+      }
+      if (fs.existsSync(uploadsSrc)) {
+        if (fs.existsSync(uploadsDest)) {
+          await fsPromises.rm(uploadsDest, { recursive: true, force: true });
+        }
+        await fsPromises.cp(uploadsSrc, uploadsDest, { recursive: true });
+      }
+
+      await fsPromises.rm(extractDir, { recursive: true, force: true });
+
+    } else if (fileName.endsWith('.json')) {
+      const backupData = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+      const data = backupData.data || backupData;
+
+      if (data.students) setData('students', data.students);
+      if (data.teachers) setData('teachers', data.teachers);
+      if (data.exams) setData('exams', data.exams);
+      if (data.submissions) setData('submissions', data.submissions);
+      if (data.notifications) setData('notifications', data.notifications);
+      if (data.schedules) setData('schedules', data.schedules);
+    }
+
+    res.json({ success: true, message: 'Yedek başarıyla geri yüklendi' });
+  } catch (error) {
+    console.error('Restore local backup error:', error);
+    res.status(500).json({ success: false, error: error.message || 'Geri yükleme sırasında hata oluştu' });
+  }
+});
+
 export default router;
