@@ -76,9 +76,13 @@ jobs:
       # but NSIS is usually fine.
       run: npm run package:client-win
       
+    - name: Package Docker Setup
+      run: zip atolye-docker-setup.zip docker-compose.yml Dockerfile
+      
     - name: Release to GitHub
       uses: softprops/action-gh-release@v2
       with:
+        name: "Atolye Platform ${{ github.ref_name }} - Sürüm Açıklaması"
         files: |
           *.deb
           *.zip
