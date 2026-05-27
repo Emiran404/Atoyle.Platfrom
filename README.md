@@ -9,7 +9,7 @@
 <br/>
 
 <!-- CORE BADGES -->
-[![Version](https://img.shields.io/badge/Versiyon-4.0.0-6366f1?style=for-the-badge)](https://github.com/Emiran404/Atolye.Platform/releases)
+[![Version](https://img.shields.io/badge/Versiyon-4.0.1-6366f1?style=for-the-badge)](https://github.com/Emiran404/Atolye.Platform/releases)
 [![License](https://img.shields.io/badge/Lisans-MIT-10b981?style=for-the-badge)](LICENSE)
 [![Platform](https://img.shields.io/badge/Platform-Pardus_%7C_Windows-ef4444?style=for-the-badge)](https://github.com/Emiran404/Atolye.Platform)
 
@@ -126,9 +126,9 @@ Derleme yapmadan, aşağıdaki hazır paketlerle saniyeler içinde kurulum yapı
 | **🛡️ Kod Karıştırma** | Production build'de JavaScript Obfuscation ile kaynak kodu koruması |
 | **🔒 JWT Authentication** | Her API çağrısında token bazlı yetkilendirme |
 | **⏱️ Rate Limiting** | Brute-force ve DDoS koruması |
-| **📑 Güvenli PDF/Resim** | Kimlik doğrulamalı ve korumalı dosya izleyici (v4.0.0) |
+| **📑 Güvenli PDF/Resim** | Kimlik doğrulamalı ve korumalı dosya izleyici (v4.0.1) |
 | **💾 SQLite Veritabanı** | Yerleşik `node:sqlite` veritabanı (SQLite native modülü yoksa otomatik JSON fallback desteği) |
-| **🚫 Anti-Cheat / Kiosk** | Electron istemcisi üzerinde çalışan Alt+Tab tespiti, Developer Tools engellemesi, odak kaybı izleme ve sadece istemci üzerinden sınava giriş izni (v4.0.0) |
+| **🚫 Anti-Cheat / Kiosk** | Electron istemcisi üzerinde çalışan Alt+Tab tespiti, Developer Tools engellemesi, odak kaybı izleme ve sadece istemci üzerinden sınava giriş izni (v4.0.1) |
 
 ### 🚫 Kiosk & Anti-Cheat Modu (Öğrenci İstemcisi)
 
@@ -207,7 +207,7 @@ chmod +x baslat.sh
 
 Fatih Projesi internet ağındaki port kısıtlamaları veya tamamen interneti bulunmayan bilgisayar laboratuvarları için projenin **Çevrimdışı (Offline) Paket** desteği mevcuttur:
 
-1. GitHub Releases sayfasından güncel çevrimdışı paketi (`atolye-platform-offline_v4.0.0.zip` veya ilgili sürüm) indirin ve sunucu bilgisayarına taşıyın.
+1. GitHub Releases sayfasından güncel çevrimdışı paketi (`atolye-platform-offline_v4.0.1.zip` veya ilgili sürüm) indirin ve sunucu bilgisayarına taşıyın.
 2. Arşivi proje klasörü içerisine kopyalayın (açmanıza gerek yoktur).
 3. Kurulum sihirbazını çalıştırın:
    ```bash

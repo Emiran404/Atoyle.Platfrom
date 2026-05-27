@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  atolye-platform:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: atolye_platform
+    restart: unless-stopped
+    ports:
+      # Kullanıcılar tarayıcıya sadece IP adresi yazarak bağlanabilsin diye Port 80 yönlendirmesi
+      - "80:3001"
+      # Alternatif olarak :3001 de çalışmaya devam etsin
+      - "3001:3001"
+    volumes:
+      # Verilerin silinmemesi (Kalıcılık) için gerekli klasör eşleştirmeleri
+      - atolye_data:/app/server/data
+      - atolye_backups:/app/server/backups
+      - atolye_uploads:/app/src/uploads_student
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+
+volumes:
+  atolye_data:
+    name: atolye_data
+  atolye_backups:
+    name: atolye_backups
+  atolye_uploads:
+    name: atolye_uploads

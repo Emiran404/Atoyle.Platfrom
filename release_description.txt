@@ -1,13 +1,14 @@
-🚀 Atolye Platform v4.0.0 - Sürüm Açıklaması
+Atolye Platform v4.0.1 - Sürüm Açıklaması
 
-Bu güncelleme, platform genelinde Yüksek Güvenlikli Sınav (Anti-Cheat / Kiosk) modunu getirmekte, Electron entegrasyonunu sağlamakta, sunucu bağlantısı koptuğunda gösterilen ekranı optimize etmekte ve MEB engeline yönelik çevrimdışı kurulum desteği barındırmaktadır.
+Bu güncelleme, platformun kurulum ve dağıtım süreçlerini otomatikleştiren CI/CD altyapısını ve her ortamda çalışmayı sağlayan tam Docker desteğini içermektedir. Ayrıca önceki sürümdeki yüksek güvenlikli sınav modunu da (Kiosk) barındırmaktadır.
 
 Hata Düzeltmeleri ve Yeni Özellikler:
-- Sınav Güvenliği (Anti-Cheat Entegrasyonu): Sınavlar için öğretmenler tarafından isteğe bağlı olarak aktifleştirilebilen yüksek güvenlikli Kiosk modu eklendi. Sınav sadece Electron masaüstü istemcisi ile açılabilir. DevTools engellenir ve öğrencinin Alt+Tab / ekran odağı kaybetme durumları anlık olarak öğretmene raporlanır.
-- Sunucu Bağlantısı Arayüzü: Bağlantı koptuğunda beliren ekranın yüklenme ikonu sadeleştirildi, çakışan ekstra SVG çizgileri kaldırıldı.
-- Çevrimdışı (Offline) Kurulum ve Paketleme Desteği: MEB internet kısıtlaması olan okullar için bağımlılıkların (`node_modules`) ve derlenmiş arayüzün (`dist`) yer aldığı zip paketi hazırlama desteği (`npm run package:offline`) eklendi.
-- Akıllı Kurulum Betikleri: `kurulum.sh` ve `kurulum.bat` güncellenerek çevrimdışı modda yerel zip paketini otomatik algılama ve bulamadığında GitHub Releases üzerinden otomatik indirip kurma yeteneği kazandırıldı.
-- Çevrimdışı Başlatma: `baslat-offline.sh` ve `baslat-offline.bat` betikleri eklenerek sistemin tek tıkla çalıştırılması sağlandı.
-- Kararlılık & Derleme: Frontend ve backend servislerinin en güncel Vite ve Node.js sürümleriyle hatasız bir şekilde derlenmesi sağlandı.
+- CI/CD ve Otomasyon: GitHub Actions üzerinden otomatik derleme, test ve paketleme sistemi (.deb, .exe, .zip) kuruldu. Sürüm etiketlendiğinde dağıtım paketleri otomatik oluşturulur.
+- Docker Desteği: Uygulamanın bağımlılık sorunu olmadan (Node.js kurmadan) herhangi bir makinede çalıştırılabilmesi için Dockerfile ve docker-compose.yml yapılandırmaları eklendi.
+- Sınav Güvenliği (Anti-Cheat Entegrasyonu): Sınavlar için öğretmenler tarafından isteğe bağlı olarak aktifleştirilebilen yüksek güvenlikli Kiosk modu.
+- Sunucu Bağlantısı Arayüzü: Bağlantı koptuğunda beliren ekranın yüklenme ikonu sadeleştirildi, çakışan ekstra çizgiler kaldırıldı.
+- Çevrimdışı Kurulum: MEB internet kısıtlaması olan okullar için yerel zip paketi oluşturma desteği.
+- Akıllı Kurulum Betikleri: kurulum.sh ve kurulum.bat güncellenerek çevrimdışı paket algılama ve çalıştırma eklendi.
+- Kararlılık: JSON'dan SQLite'a ilk geçiş esnasında yaşanan veritabanı senkronizasyon hataları düzeltildi.
 
-descx: Anti-Cheat Kiosk modu ve MEB engeli için Çevrimdışı (Offline) Kurulum desteği entegre edildi, sürüm 4.0.0 olarak güncellendi.
+descx: CI/CD otomasyonu, GitHub Releases entegrasyonu ve tam Docker desteği eklendi, sürüm 4.0.1 olarak güncellendi.
