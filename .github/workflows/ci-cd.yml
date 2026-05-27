@@ -65,6 +65,12 @@ jobs:
     - name: Package Client (Linux .deb)
       run: npm run package:client
       
+    - name: Install Wine for Windows Build
+      run: |
+        sudo dpkg --add-architecture i386
+        sudo apt-get update
+        sudo apt-get install -y wine64 wine32
+        
     - name: Package Client (Windows .exe)
       # Some electron-builder tasks on Linux for Windows might need Wine, 
       # but NSIS is usually fine.
