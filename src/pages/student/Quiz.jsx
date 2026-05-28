@@ -23,6 +23,7 @@ import { useSubmissionStore } from '../../store/submissionStore';
 import { useLiveSessionStore } from '../../store/liveSessionStore';
 import { ConfirmModal } from '../../components/ui';
 import { t } from '../../utils/i18n';
+import { logsApi } from '../../services/api';
 
 const Quiz = () => {
     const { examId } = useParams();
@@ -140,41 +141,46 @@ const Quiz = () => {
 
         if (exam.antiCheatEnabled) {
             if (!isElectron) {
-                // Electron haricindeyse uyarı ver ve sınav arayüzünü engelle
+                // Electron haricindeyse uyarı ver (render'da zaten engellenecek)
                 toast.error('Bu sınav yüksek güvenlik (Anti-Cheat) gerektiriyor! Lütfen sınava yerel masaüstü uygulaması (Atolye Platform) ile girin!', {
                     duration: 99999
                 });
-                setIsPaused(true);
                 return;
             }
 
             // Electron içindeyse kiosk modu etkinleştir
             try {
-                const { ipcRenderer } = window.require('electron');
-                ipcRenderer.send('enable-anti-cheat');
+                if (window.electronAPI) {
+                    window.electronAPI.enableAntiCheat();
 
-                const handleBlurDetected = async () => {
-                    toast.error('Pencere odağını kaybettiniz! Bu durum öğretmene raporlandı.', { duration: 5000 });
-                    reportWarning(exam.id, user.id, 'blur', 'Ekran odağı kayboldu (Alt+Tab)');
-                    
-                    // Sunucuya odak kaybı bildir
-                    try {
-                        await fetch('/api/submissions/focus-violation', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ examId: exam.id, studentId: user?.id })
-                        });
-                    } catch (err) {
-                        console.error('Focus violation notify error:', err);
-                    }
-                };
+                    const handleBlurDetected = async () => {
+                        toast.error('Pencere odağını kaybettiniz! Bu durum öğretmene raporlandı.', { duration: 5000 });
+                        reportWarning(exam.id, user.id, 'blur', 'Ekran odağı kayboldu (Alt+Tab)');
+                        
+                        // Sunucuya odak kaybı bildir
+                        try {
+                            await fetch('/api/submissions/focus-violation', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ examId: exam.id, studentId: user?.id })
+                            });
+                            await logsApi.reportClientEvent({
+                                type: 'focus_loss',
+                                action: 'Ekran odağı kayboldu (Alt+Tab)',
+                                details: { examId: exam.id, isElectron: true }
+                            });
+                        } catch (err) {
+                            console.error('Focus violation notify error:', err);
+                        }
+                    };
 
-                ipcRenderer.on('anti-cheat-blur-detected', handleBlurDetected);
+                    window.electronAPI.onAntiCheatBlurDetected(handleBlurDetected);
 
-                return () => {
-                    ipcRenderer.removeListener('anti-cheat-blur-detected', handleBlurDetected);
-                    ipcRenderer.send('disable-anti-cheat');
-                };
+                    return () => {
+                        window.electronAPI.removeAntiCheatBlurListener();
+                        window.electronAPI.disableAntiCheat();
+                    };
+                }
             } catch (err) {
                 console.error('Electron IPC Anti-Cheat Init Error:', err);
             }
@@ -200,6 +206,7 @@ const Quiz = () => {
                 if (exam.disableShortcuts && document.hidden && !submitted) {
                     toast.error('Sınav ekranından ayrıldınız! Lütfen sınavınıza odaklanın!', { duration: 5000 });
                     reportWarning(exam.id, user.id, 'tab_switch', 'Öğrenci sınav sekmesinden ayrıldı');
+                    logsApi.reportClientEvent({ type: 'focus_loss', action: 'Sınav sekmesinden ayrıldı', details: { examId: exam.id } }).catch(() => {});
                 }
             };
 
@@ -207,6 +214,7 @@ const Quiz = () => {
                 if (exam.disableShortcuts && !submitted) {
                     toast.warning('Dikkatiniz dağıldı! Lütfen sınav ekranına geri dönün.');
                     reportWarning(exam.id, user.id, 'blur', 'Ekran odağı kayboldu');
+                    logsApi.reportClientEvent({ type: 'focus_loss', action: 'Ekran odağı kayboldu', details: { examId: exam.id } }).catch(() => {});
                 }
             };
 
@@ -231,6 +239,7 @@ const Quiz = () => {
                 if (exam.preventLeaveFullScreen && !document.fullscreenElement && !submitted) {
                     toast.error('Sınav sırasında tam ekrandan çıkmak yasaktır! Lütfen tekrar tam ekrana dönün.', { duration: 6000 });
                     reportWarning(exam.id, user.id, 'fullscreen', 'Tam ekrandan çıkıldı');
+                    logsApi.reportClientEvent({ type: 'kiosk_violation', action: 'Tam ekrandan çıkıldı', details: { examId: exam.id } }).catch(() => {});
                     setIsPaused(true);
                 }
             };
@@ -583,6 +592,33 @@ const Quiz = () => {
             toast.error('Tam ekrana geçiş reddedildi.');
         }
     };
+
+    const isElectron = window && window.process && window.process.type === 'renderer';
+    const isAntiCheatBlocked = exam?.antiCheatEnabled && !isElectron;
+
+    if (isAntiCheatBlocked) {
+        return (
+            <div style={{
+                position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.95)', zIndex: 9999,
+                display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: 'white'
+            }}>
+                <AlertCircle size={64} color="#ef4444" style={{ marginBottom: '24px' }} />
+                <h1 style={{ fontSize: '32px', fontWeight: 'bold', marginBottom: '16px' }}>Güvenlik İhlali (Anti-Cheat)</h1>
+                <p style={{ fontSize: '18px', color: 'var(--color-border-dark)', marginBottom: '32px', textAlign: 'center', maxWidth: '600px' }}>
+                    Öğretmeniniz bu sınav için yüksek güvenlik gereksinimi (Anti-Cheat) ayarlamış. Lütfen sınava tarayıcıdan değil, <strong>Atolye Platform</strong> masaüstü uygulamasından giriş yapın.
+                </p>
+                <button
+                    onClick={() => navigate('/ogrenci/panel')}
+                    style={{
+                        padding: '16px 32px', backgroundColor: '#374151', color: 'white', borderRadius: '12px',
+                        fontSize: '18px', fontWeight: 'bold', cursor: 'pointer', border: 'none'
+                    }}
+                >
+                    Ana Sayfaya Dön
+                </button>
+            </div>
+        );
+    }
 
     if (isPaused) {
         return (

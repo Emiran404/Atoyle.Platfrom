@@ -85,4 +85,7 @@ jobs:
           *.deb
           *.zip
           client-electron/dist/*.exe
+          client-electron/dist/latest.yml
+          client-electron/dist/latest-linux.yml
         body_path: release_description.txt
+

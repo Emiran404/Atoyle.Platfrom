@@ -444,6 +444,12 @@ export const classApi = {
   update: (oldName, newName) => fetchApi(`/classes/${oldName}`, { method: 'PUT', body: JSON.stringify({ newName }) })
 };
 
+// Logs API
+export const logsApi = {
+  getAll: () => fetchApi('/logs'),
+  reportClientEvent: (data) => fetchApi('/logs/client-event', { method: 'POST', body: JSON.stringify(data) })
+};
+
 export default {
   auth: authApi,
   exam: examApi,
@@ -459,5 +465,6 @@ export default {
   backup: backupApi,
   liderAhenk: liderAhenkApi,
   class: classApi,
+  logs: logsApi,
   healthCheck,
 };

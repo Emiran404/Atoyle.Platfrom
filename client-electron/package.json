@@ -1,6 +1,6 @@
 {
   "name": "atolye-platform-client",
-  "version": "4.0.1",
+  "version": "4.1.0",
   "type": "module",
   "description": "Atolye Platform Smart Client with Auto-Discovery",
   "main": "main.js",
@@ -12,7 +12,8 @@
   "author": "Emirhan Gök",
   "license": "MIT",
   "dependencies": {
-    "bonjour-service": "^1.2.1"
+    "bonjour-service": "^1.2.1",
+    "electron-updater": "^6.8.3"
   },
   "devDependencies": {
     "electron": "^30.0.0",
@@ -33,8 +34,24 @@
         "nsis"
       ]
     },
+    "mac": {
+      "target": [
+        "dmg"
+      ],
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false,
+      "entitlements": "build/entitlements.mac.plist",
+      "entitlementsInherit": "build/entitlements.mac.plist",
+      "identity": null
+    },
     "directories": {
       "output": "dist"
-    }
+    },
+    "publish": [
+      {
+        "provider": "generic",
+        "url": "http://127.0.0.1:3002/updates"
+      }
+    ]
   }
 }

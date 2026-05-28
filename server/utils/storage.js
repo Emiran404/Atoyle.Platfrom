@@ -22,7 +22,8 @@ try {
 const initializeSqliteConnection = () => {
   if (!sqliteDriver) return false;
   try {
-    const dbPath = join(dataPath, 'atolye.db');
+    const dbName = process.env.NODE_ENV === 'test' ? 'atolye_test.db' : 'atolye.db';
+    const dbPath = join(dataPath, dbName);
     db = new sqliteDriver(dbPath);
     db.exec('PRAGMA journal_mode = WAL');
     db.exec(`
@@ -41,7 +42,8 @@ const initializeSqliteConnection = () => {
 
 // JSON dosyalarından veri oku (Fallback için)
 function getJsonData(key) {
-  const filePath = join(dataPath, `${key}.json`);
+  const keyName = process.env.NODE_ENV === 'test' ? `${key}_test` : key;
+  const filePath = join(dataPath, `${keyName}.json`);
   try {
     if (fs.existsSync(filePath)) {
       let data = fs.readFileSync(filePath, 'utf8');
@@ -59,7 +61,8 @@ function getJsonData(key) {
 
 // JSON dosyalarına atomik veri yaz (Sadece fallback durumunda kullanılır)
 function setJsonData(key, data) {
-  const filePath = join(dataPath, `${key}.json`);
+  const keyName = process.env.NODE_ENV === 'test' ? `${key}_test` : key;
+  const filePath = join(dataPath, `${keyName}.json`);
   const tmpPath = `${filePath}.tmp`;
   try {
     fs.writeFileSync(tmpPath, JSON.stringify(data, null, 2), 'utf8');
@@ -96,7 +99,8 @@ if (dbMigrated) {
       const keys = ['classes', 'exams', 'notifications', 'reports', 'schedules', 'settings', 'students', 'submissions', 'teachers', 'updates'];
       keys.forEach(key => {
         if (key === 'settings') return; // settings.json dosyasını silmiyoruz
-        const jsonFilePath = join(dataPath, `${key}.json`);
+        const keyName = process.env.NODE_ENV === 'test' ? `${key}_test` : key;
+        const jsonFilePath = join(dataPath, `${keyName}.json`);
         if (fs.existsSync(jsonFilePath)) {
           fs.unlinkSync(jsonFilePath);
           console.log(`🗑️ [Başlangıç Temizliği] Silindi: ${key}.json`);

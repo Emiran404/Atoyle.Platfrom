@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Settings, Shield, Users, Lock, Unlock, Save, UserCheck, UserX, Trash2, Mail, BarChart3, HardDrive, FileText, Clock, Download, Database, Key, AlertTriangle, RefreshCcw, CheckCircle2, Info as InfoIcon } from 'lucide-react';
+import { Settings, Shield, Users, Lock, Unlock, Save, UserCheck, UserX, Trash2, Mail, BarChart3, HardDrive, FileText, Clock, Download, Database, Key, AlertTriangle, RefreshCcw, CheckCircle2, Info as InfoIcon, ClipboardList, Activity } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { TeacherLayout } from '../../components/layouts';
 import { useToast } from '../../components/ui/Toast';
@@ -15,7 +15,8 @@ import {
   statsApi, 
   notificationApi, 
   backupApi,
-  classApi
+  classApi,
+  logsApi
 } from '../../services/api';
 
 const PlatformManagement = () => {
@@ -26,11 +27,17 @@ const PlatformManagement = () => {
   
   // URL'den tab parametresini al (varsayılan: registration)
   const initialTab = searchParams.get('tab') || 'registration';
-  const [activeTab, setActiveTab] = useState(initialTab); // registration, users, bulk, stats, backup, update, reset
+  const [activeTab, setActiveTab] = useState(initialTab); // registration, users, bulk, stats, backup, update, reset, audit
+
+  // İşlem Geçmişi (Logs)
+  const [logs, setLogs] = useState([]);
+  const [loadingLogs, setLoadingLogs] = useState(false);
+  const [logFilterType, setLogFilterType] = useState('all');
 
   // Platform ayarları
   const [registrationEnabled, setRegistrationEnabled] = useState(true);
   const [teacherRegistrationEnabled, setTeacherRegistrationEnabled] = useState(true);
+  const [telemetryEnabled, setTelemetryEnabled] = useState(true);
   const [allowedClasses, setAllowedClasses] = useState([]);
   const [classes, setClasses] = useState([]);
   const [newClassName, setNewClassName] = useState('');
@@ -67,6 +74,10 @@ const PlatformManagement = () => {
 
   // Veri sıfırlama error state
   const [resetError, setResetError] = useState('');
+
+  // Masaüstü Güncellemeleri
+  const [autoDownloadClientUpdates, setAutoDownloadClientUpdates] = useState(true);
+  const [clientUpdatesUrl, setClientUpdatesUrl] = useState('https://github.com/Emiran404/Atolye.Platform/releases/latest/download');
 
   // Güncelleme state'leri
   const [currentVersion, setCurrentVersion] = useState('1.0.0');
@@ -147,11 +158,24 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
     if (activeTab === 'classes' || activeTab === 'registration') loadClasses();
     if (activeTab === 'stats') loadStats();
     if (activeTab === 'backup') loadLocalBackups();
+    if (activeTab === 'audit') loadLogs();
     if (activeTab === 'update') {
       loadUpdateData();
       handleCheckUpdate(); // Otomatik kontrol et
     }
   }, [activeTab]);
+
+  const loadLogs = async () => {
+    setLoadingLogs(true);
+    try {
+      const data = await logsApi.getAll();
+      if (data?.success) setLogs(data.logs || []);
+    } catch (error) {
+      console.error('Loglar yüklenemedi:', error);
+      toast.error('İşlem geçmişi yüklenirken hata oluştu');
+    }
+    setLoadingLogs(false);
+  };
 
   const loadUpdateData = async () => {
     setLoading(true);
@@ -235,12 +259,17 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
       if (data?.success && data.settings) {
         setRegistrationEnabled(data.settings.registrationEnabled || false);
         setTeacherRegistrationEnabled(data.settings.teacherRegistrationEnabled !== false);
+        setTelemetryEnabled(data.settings.telemetryEnabled !== false);
         setAllowedClasses(data.settings.allowedClasses || []);
         setAutoBackupEnabled(data.settings.autoBackupEnabled || false);
         setAutoBackupInterval(data.settings.autoBackupInterval || 24);
         setAutoBackupIncludePhotos(data.settings.autoBackupIncludePhotos || false);
         setAutoBackupWizardConfigured(data.settings.autoBackupWizardConfigured || false);
         setLastAutoBackupTime(data.settings.lastAutoBackupTime || null);
+        setAutoDownloadClientUpdates(data.settings.autoDownloadClientUpdates !== false);
+        if (data.settings.clientUpdatesUrl) {
+          setClientUpdatesUrl(data.settings.clientUpdatesUrl);
+        }
       }
       
       try {
@@ -264,11 +293,14 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
       const settingsToSave = {
         registrationEnabled: newSettings.registrationEnabled !== undefined ? newSettings.registrationEnabled : registrationEnabled,
         teacherRegistrationEnabled: newSettings.teacherRegistrationEnabled !== undefined ? newSettings.teacherRegistrationEnabled : teacherRegistrationEnabled,
+        telemetryEnabled: newSettings.telemetryEnabled !== undefined ? newSettings.telemetryEnabled : telemetryEnabled,
         allowedClasses: newSettings.allowedClasses !== undefined ? newSettings.allowedClasses : allowedClasses,
         autoBackupEnabled: newSettings.autoBackupEnabled !== undefined ? newSettings.autoBackupEnabled : autoBackupEnabled,
         autoBackupInterval: newSettings.autoBackupInterval !== undefined ? Number(newSettings.autoBackupInterval) : autoBackupInterval,
         autoBackupIncludePhotos: newSettings.autoBackupIncludePhotos !== undefined ? newSettings.autoBackupIncludePhotos : autoBackupIncludePhotos,
-        autoBackupWizardConfigured: newSettings.autoBackupWizardConfigured !== undefined ? newSettings.autoBackupWizardConfigured : autoBackupWizardConfigured
+        autoBackupWizardConfigured: newSettings.autoBackupWizardConfigured !== undefined ? newSettings.autoBackupWizardConfigured : autoBackupWizardConfigured,
+        autoDownloadClientUpdates: newSettings.autoDownloadClientUpdates !== undefined ? newSettings.autoDownloadClientUpdates : autoDownloadClientUpdates,
+        clientUpdatesUrl: newSettings.clientUpdatesUrl !== undefined ? newSettings.clientUpdatesUrl : clientUpdatesUrl
       };
 
       const data = await settingsApi.update(settingsToSave);
@@ -284,6 +316,28 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
     setSaving(false);
   };
 
+  const handleCheckDesktopUpdates = async () => {
+    setSaving(true);
+    toast.info('Güncellemeler kontrol ediliyor...');
+    try {
+      const response = await fetch('/api/settings/check-updates', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${useAuthStore.getState().token}`
+        }
+      });
+      const data = await response.json();
+      if (data?.success) {
+        toast.success(data.message);
+      } else {
+        toast.error(data.message || 'Güncelleme kontrolü başarısız.');
+      }
+    } catch (error) {
+      toast.error('Bağlantı hatası');
+    }
+    setSaving(false);
+  };
+
   const handleToggleRegistration = async (enabled) => {
     setRegistrationEnabled(enabled);
     await handleSaveSettings({ registrationEnabled: enabled });
@@ -292,6 +346,11 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
   const handleToggleTeacherRegistration = async (enabled) => {
     setTeacherRegistrationEnabled(enabled);
     await handleSaveSettings({ teacherRegistrationEnabled: enabled });
+  };
+
+  const handleToggleTelemetry = async (enabled) => {
+    setTelemetryEnabled(enabled);
+    await handleSaveSettings({ telemetryEnabled: enabled });
   };
 
   const toggleClass = async (className) => {
@@ -733,6 +792,52 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
           </div>
         )}
       </div>
+
+      {/* Telemetri Kontrolü */}
+      <div style={styles.card}>
+        <div style={styles.cardHeader}>
+          <Activity size={24} style={{ color: '#10b981' }} />
+          <h2 style={styles.cardTitle}>Kullanım İstatistikleri (Telemetri)</h2>
+        </div>
+
+        <div style={styles.toggleSection}>
+          <div style={styles.toggleLabel}>
+            <span style={styles.toggleTitle}>Telemetri Verisi Gönderimi</span>
+            <span style={styles.toggleDesc}>
+              {telemetryEnabled
+                ? 'İstatistikler ve hata raporları arka planda toplanıyor'
+                : 'Veri toplama devre dışı bırakıldı'}
+            </span>
+          </div>
+          <button
+            style={styles.toggleButton(telemetryEnabled)}
+            onClick={() => handleToggleTelemetry(!telemetryEnabled)}
+            disabled={saving}
+          >
+            {telemetryEnabled ? (
+              <>
+                <Unlock size={18} />
+                <span>Açık</span>
+              </>
+            ) : (
+              <>
+                <Lock size={18} />
+                <span>Kapalı</span>
+              </>
+            )}
+          </button>
+        </div>
+
+        {!telemetryEnabled && (
+          <div style={styles.warningBox}>
+            <p style={styles.warningTitle}>⚠️ Telemetri Kapalı</p>
+            <p style={styles.warningText}>
+              Platformun kullanımı, aktif öğrenci sayıları ve varsa ortaya çıkan sistem hataları artık dışarıya (veya Google Sheets'e) iletilmeyecektir. Bu durum sorun tespitini zorlaştırabilir.
+            </p>
+          </div>
+        )}
+      </div>
+
 
       {/* Öğrenci Kayıt Kontrolü */}
       <div style={styles.card}>
@@ -2230,8 +2335,211 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
           </div>
         </div>
       </div>
+
+      {/* Sunucu İstemci Otomatik İndirme */}
+      <div style={styles.card}>
+        <div style={styles.cardHeader}>
+          <Download size={24} style={{ color: '#ec4899' }} />
+          <h2 style={styles.cardTitle}>Masaüstü Uygulaması Güncellemeleri</h2>
+        </div>
+
+        <div style={styles.toggleSection}>
+          <div style={styles.toggleLabel}>
+            <span style={styles.toggleTitle}>Güncellemeleri Otomatik İndir (Sunucu)</span>
+            <span style={styles.toggleDesc}>
+              {autoDownloadClientUpdates
+                ? 'Sunucu dış ağdan güncellemeleri kendi bulup indirir'
+                : 'Otomatik indirme devre dışı, güncellemeler manuel yüklenmeli'}
+            </span>
+          </div>
+          <button
+            style={styles.toggleButton(autoDownloadClientUpdates)}
+            onClick={() => {
+              const newVal = !autoDownloadClientUpdates;
+              setAutoDownloadClientUpdates(newVal);
+              handleSaveSettings({ autoDownloadClientUpdates: newVal });
+            }}
+            disabled={saving}
+          >
+            {autoDownloadClientUpdates ? (
+              <>
+                <Unlock size={18} />
+                <span>Açık</span>
+              </>
+            ) : (
+              <>
+                <Lock size={18} />
+                <span>Kapalı</span>
+              </>
+            )}
+          </button>
+        </div>
+
+        <div style={{ marginTop: '16px' }}>
+          <label style={{ fontSize: '13px', fontWeight: '500', color: 'var(--color-text-muted)', marginBottom: '8px', display: 'block' }}>
+            Güncelleme Kaynak URL'si (latest.yml ve exe bulunduğu dizin)
+          </label>
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <input
+              type="text"
+              value={clientUpdatesUrl}
+              onChange={(e) => setClientUpdatesUrl(e.target.value)}
+              placeholder="https://github.com/Emiran404/Atolye.Platform/releases/latest/download"
+              style={{
+                flex: 1,
+                padding: '10px 12px',
+                borderRadius: '8px',
+                border: '1px solid var(--color-border)',
+                outline: 'none',
+                backgroundColor: 'var(--color-background)',
+                color: 'var(--color-text-primary)',
+                fontSize: '14px'
+              }}
+            />
+            <button
+              onClick={() => handleSaveSettings({ clientUpdatesUrl })}
+              disabled={saving}
+              style={{
+                padding: '8px 16px',
+                backgroundColor: 'var(--color-background-secondary)',
+                color: 'var(--color-text-primary)',
+                border: '1px solid var(--color-border)',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontWeight: '500',
+                transition: 'all 0.2s'
+              }}
+            >
+              Kaydet
+            </button>
+          </div>
+        </div>
+
+        <div style={{ marginTop: '16px' }}>
+          <button
+            onClick={handleCheckDesktopUpdates}
+            disabled={saving}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              padding: '10px 16px',
+              backgroundColor: '#ec4899',
+              color: 'white',
+              border: 'none',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              fontWeight: '500',
+              fontSize: '14px'
+            }}
+          >
+            <Download size={16} />
+            Şimdi Yeni Sürüm Denetle
+          </button>
+        </div>
+      </div>
     </div>
   );
+
+  const renderAuditTab = () => {
+    const filteredLogs = logFilterType === 'all' 
+      ? logs 
+      : logs.filter(log => log.type === logFilterType);
+
+    return (
+      <div style={styles.card}>
+        <div style={styles.cardHeader}>
+          <ClipboardList size={24} style={{ color: '#8b5cf6' }} />
+          <h2 style={styles.cardTitle}>İşlem Geçmişi (Audit)</h2>
+        </div>
+        
+        <p style={{ fontSize: '14px', color: 'var(--color-text-muted)', marginBottom: '20px' }}>
+          Platform üzerindeki kullanıcı işlemlerini ve güvenlik ihlallerini görüntüleyin.
+        </p>
+
+        <div style={{ marginBottom: '20px', display: 'flex', gap: '10px' }}>
+          <select 
+            value={logFilterType}
+            onChange={(e) => setLogFilterType(e.target.value)}
+            style={styles.select}
+          >
+            <option value="all">Tüm İşlemler</option>
+            <option value="login">Girişler</option>
+            <option value="submission">Sınav/Ödev Teslimleri</option>
+            <option value="focus_loss">Odak Kaybı</option>
+            <option value="kiosk_violation">Kiosk İhlali</option>
+            <option value="teacher_action">Öğretmen İşlemleri</option>
+            <option value="system">Sistem</option>
+          </select>
+          <Button onClick={() => window.open('/api/telemetry/export', '_blank')} variant="secondary" style={{ marginLeft: 'auto' }}>
+            İstatistikleri İndir
+          </Button>
+        </div>
+
+        {loadingLogs ? (
+          <div style={{ padding: '20px', textAlign: 'center', color: 'var(--color-text-muted)' }}>Yükleniyor...</div>
+        ) : filteredLogs.length === 0 ? (
+          <div style={{ padding: '20px', textAlign: 'center', color: 'var(--color-text-muted)' }}>Kayıt bulunamadı.</div>
+        ) : (
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+              <thead>
+                <tr>
+                  <th style={{ ...styles.th, width: '150px' }}>Tarih</th>
+                  <th style={{ ...styles.th, width: '120px' }}>Tür</th>
+                  <th style={{ ...styles.th }}>Kullanıcı</th>
+                  <th style={{ ...styles.th }}>İşlem</th>
+                  <th style={{ ...styles.th, width: '200px' }}>Detay</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredLogs.map(log => (
+                  <tr key={log.id} style={{ borderBottom: '1px solid var(--color-border)' }}>
+                    <td style={styles.td}>
+                      {new Date(log.timestamp).toLocaleString('tr-TR')}
+                    </td>
+                    <td style={styles.td}>
+                      <span style={{
+                        padding: '4px 8px',
+                        borderRadius: '4px',
+                        fontSize: '12px',
+                        backgroundColor: 
+                          log.type === 'login' ? '#dcfce7' :
+                          log.type === 'submission' ? '#dbeafe' :
+                          (log.type === 'kiosk_violation' || log.type === 'focus_loss') ? '#fee2e2' :
+                          log.type === 'teacher_action' ? '#f3e8ff' : '#f1f5f9',
+                        color: 
+                          log.type === 'login' ? '#166534' :
+                          log.type === 'submission' ? '#1e40af' :
+                          (log.type === 'kiosk_violation' || log.type === 'focus_loss') ? '#991b1b' :
+                          log.type === 'teacher_action' ? '#6b21a8' : '#334155',
+                      }}>
+                        {log.type === 'login' ? 'Giriş' :
+                         log.type === 'submission' ? 'Teslim' :
+                         log.type === 'focus_loss' ? 'Odak Kaybı' :
+                         log.type === 'kiosk_violation' ? 'Kiosk İhlali' :
+                         log.type === 'teacher_action' ? 'Öğretmen' : log.type}
+                      </span>
+                    </td>
+                    <td style={styles.td}>
+                      <div style={{ fontWeight: '500' }}>{log.userName}</div>
+                      <div style={{ fontSize: '12px', color: 'var(--color-text-muted)' }}>{log.role}</div>
+                    </td>
+                    <td style={styles.td}>{log.action}</td>
+                    <td style={{ ...styles.td, fontSize: '12px', color: 'var(--color-text-muted)', wordBreak: 'break-all' }}>
+                      {Object.entries(log.details || {}).map(([k, v]) => (
+                        <div key={k}><b>{k}:</b> {String(v)}</div>
+                      ))}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+    );
+  };
 
   const renderResetTab = () => (
     <div style={styles.card}>
@@ -2617,6 +2925,16 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
             Güncelleme Yönetimi
           </button>
           <button
+            style={styles.tab(activeTab === 'audit')}
+            onClick={() => {
+              setActiveTab('audit');
+              setSearchParams({ tab: 'audit' });
+            }}
+          >
+            <ClipboardList size={18} />
+            İşlem Geçmişi
+          </button>
+          <button
             style={{ ...styles.tab(activeTab === 'reset'), color: activeTab === 'reset' ? '#dc2626' : 'var(--color-text-muted)', borderBottomColor: activeTab === 'reset' ? '#dc2626' : 'transparent' }}
             onClick={() => setActiveTab('reset')}
           >
@@ -2633,6 +2951,7 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
         {activeTab === 'stats' && renderStatsTab()}
         {activeTab === 'backup' && renderBackupTab()}
         {activeTab === 'update' && renderUpdateTab()}
+        {activeTab === 'audit' && renderAuditTab()}
         {activeTab === 'reset' && renderResetTab()}
         <ConfirmModal
           {...confirmModal}

@@ -7,6 +7,7 @@ import { useNotificationListener } from './hooks/useNotificationListener';
 import { useAuthStore } from './store/authStore';
 import { initializeDemoData } from './utils/initData';
 import ConnectionStatusOverlay from './components/ConnectionStatusOverlay';
+import { telemetry } from './services/telemetry';
 
 // Landing
 import { LandingPage } from './pages/LandingPage';
@@ -95,6 +96,8 @@ function App() {
   useEffect(() => {
     initializeDemoData();
     loadClasses(); // Dinamik sınıfları yükle
+    telemetry.init(); // Telemetri servisini başlat
+    telemetry.trackEvent('app_start', { timestamp: Date.now() });
   }, []);
 
   // Aktivite izleyici - mouse ve keyboard hareketlerini yakala

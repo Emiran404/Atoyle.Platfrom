@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline';">
     <title>Atolye Platform | Connecting</title>
     <style>
         :root {
@@ -260,7 +261,6 @@
     </div>
 
     <script>
-        const { ipcRenderer } = require('electron');
         const showBtn = document.getElementById('show-manual-btn');
         const inputGroup = document.getElementById('input-group');
         const connectBtn = document.getElementById('connect-btn');
@@ -268,11 +268,11 @@
         const manualSection = document.getElementById('manual-section');
         const scanLabel = document.getElementById('scan-label');
 
-        ipcRenderer.on('show-manual', () => {
+        window.electronAPI.onShowManual(() => {
             manualSection.classList.add('visible');
         });
 
-        ipcRenderer.on('discovery-status', (event, text) => {
+        window.electronAPI.onDiscoveryStatus((text) => {
             if (scanLabel) scanLabel.textContent = text;
         });
 
@@ -291,7 +291,7 @@
             if (ip) {
                 connectBtn.textContent = 'Bağlanıyor...';
                 connectBtn.disabled = true;
-                ipcRenderer.send('manual-connect', ip);
+                window.electronAPI.manualConnect(ip);
             }
         });
 

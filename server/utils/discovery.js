@@ -69,7 +69,7 @@ function startUDPBroadcast(port) {
 // ═══════════════════════════════════════════════════════════════
 // mDNS YAYIN - Ek olarak Bonjour ile yayın
 // ═══════════════════════════════════════════════════════════════
-export const startDiscovery = (port = 3001) => {
+export const startDiscovery = (port = 3002) => {
   try {
     const interfaces = getNetworkAddresses();
     const allIps = interfaces.map(i => i.ip);
@@ -118,12 +118,27 @@ export const stopDiscovery = () => {
     broadcastInterval = null;
   }
   if (service) {
-    service.stop(() => {
+    const s = service;
+    service = null;
+    s.stop(() => {
       console.log('[Discovery] mDNS yayını durduruldu.');
-      instance.destroy();
+      try { instance.destroy(); } catch (e) {}
+      process.exit(0);
     });
+  } else {
+    process.exit(0);
   }
 };
 
-process.on('SIGINT', stopDiscovery);
-process.on('SIGTERM', stopDiscovery);
+let stopping = false;
+const handleShutdown = () => {
+  if (stopping) return;
+  stopping = true;
+  stopDiscovery();
+  
+  // Emniyet sübabı (mDNS takılırsa 3 saniye sonra zorla kapat)
+  setTimeout(() => process.exit(0), 3000);
+};
+
+process.on('SIGINT', handleShutdown);
+process.on('SIGTERM', handleShutdown);

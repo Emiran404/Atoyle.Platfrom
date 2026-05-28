@@ -39,21 +39,21 @@ export default defineConfig(({ command }) => ({
     },
     proxy: {
       '/api': {
-        target: 'http://127.0.0.1:3001',
+        target: 'http://127.0.0.1:3002',
         changeOrigin: true,
       },
       '/uploads': {
-        target: 'http://127.0.0.1:3001',
+        target: 'http://127.0.0.1:3002',
         changeOrigin: true,
         secure: false,
       },
       '/socket.io': {
-        target: 'http://127.0.0.1:3001',
+        target: 'http://127.0.0.1:3002',
         ws: true,
         changeOrigin: true
       },
       '/polyos-socket': {
-        target: 'http://127.0.0.1:3001',
+        target: 'http://127.0.0.1:3002',
         ws: true,
         changeOrigin: true
       }
@@ -63,21 +63,21 @@ export default defineConfig(({ command }) => ({
     port: 80,
     proxy: {
       '/api': {
-        target: 'http://127.0.0.1:3001',
+        target: 'http://127.0.0.1:3002',
         changeOrigin: true,
       },
       '/uploads': {
-        target: 'http://127.0.0.1:3001',
+        target: 'http://127.0.0.1:3002',
         changeOrigin: true,
         secure: false,
       },
       '/socket.io': {
-        target: 'http://127.0.0.1:3001',
+        target: 'http://127.0.0.1:3002',
         ws: true,
         changeOrigin: true
       },
       '/polyos-socket': {
-        target: 'http://127.0.0.1:3001',
+        target: 'http://127.0.0.1:3002',
         ws: true,
         changeOrigin: true
       }

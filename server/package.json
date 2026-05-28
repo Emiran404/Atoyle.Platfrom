@@ -1,6 +1,6 @@
 {
   "name": "sinav-platformu-backend",
-  "version": "3.5.0",
+  "version": "4.1.0",
   "type": "module",
   "main": "index.js",
   "scripts": {
@@ -26,5 +26,9 @@
     "react-dropzone": "^15.0.0",
     "socket.io": "^4.8.3",
     "socket.io-client": "^4.8.3"
+  },
+  "devDependencies": {
+    "supertest": "^7.2.2",
+    "vitest": "^4.1.7"
   }
 }

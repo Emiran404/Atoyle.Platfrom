@@ -5,6 +5,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import { updateManager } from '../utils/updateManager.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const router = express.Router();
@@ -27,7 +28,11 @@ const loadSettings = () => {
     autoBackupInterval: 24,
     autoBackupIncludePhotos: false,
     autoBackupWizardConfigured: false,
-    lastAutoBackupTime: null
+    lastAutoBackupTime: null,
+    telemetryEnabled: true,
+    telemetryPromptAnswered: false,
+    autoDownloadClientUpdates: true,
+    clientUpdatesUrl: 'https://github.com/Emiran404/Atolye.Platform/releases/latest/download'
   };
 
   if (!settings) return defaults;
@@ -63,7 +68,11 @@ router.post('/', authenticateToken, authorizeRole('teacher'), (req, res) => {
       autoBackupInterval,
       autoBackupIncludePhotos,
       autoBackupWizardConfigured,
-      lastAutoBackupTime
+      lastAutoBackupTime,
+      telemetryEnabled,
+      telemetryPromptAnswered,
+      autoDownloadClientUpdates,
+      clientUpdatesUrl
     } = req.body;
 
     const currentSettings = loadSettings();
@@ -79,7 +88,11 @@ router.post('/', authenticateToken, authorizeRole('teacher'), (req, res) => {
       autoBackupInterval: autoBackupInterval !== undefined ? Number(autoBackupInterval) : currentSettings.autoBackupInterval,
       autoBackupIncludePhotos: autoBackupIncludePhotos !== undefined ? autoBackupIncludePhotos : currentSettings.autoBackupIncludePhotos,
       autoBackupWizardConfigured: autoBackupWizardConfigured !== undefined ? autoBackupWizardConfigured : currentSettings.autoBackupWizardConfigured,
-      lastAutoBackupTime: lastAutoBackupTime !== undefined ? lastAutoBackupTime : currentSettings.lastAutoBackupTime
+      lastAutoBackupTime: lastAutoBackupTime !== undefined ? lastAutoBackupTime : currentSettings.lastAutoBackupTime,
+      telemetryEnabled: telemetryEnabled !== undefined ? telemetryEnabled : currentSettings.telemetryEnabled,
+      telemetryPromptAnswered: telemetryPromptAnswered !== undefined ? telemetryPromptAnswered : currentSettings.telemetryPromptAnswered,
+      autoDownloadClientUpdates: autoDownloadClientUpdates !== undefined ? autoDownloadClientUpdates : currentSettings.autoDownloadClientUpdates,
+      clientUpdatesUrl: clientUpdatesUrl !== undefined ? clientUpdatesUrl : currentSettings.clientUpdatesUrl
     };
 
     if (saveSettings(settings)) {
@@ -97,6 +110,16 @@ router.get('/db-status', (req, res) => {
   try {
     const status = getDbStatus();
     res.json({ success: true, ...status });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// POST /api/settings/check-updates - Manuel olarak güncellemeleri denetle
+router.post('/check-updates', authenticateToken, authorizeRole('teacher'), async (req, res) => {
+  try {
+    const result = await updateManager.checkAndDownload();
+    res.json(result);
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }

@@ -50,7 +50,7 @@ const FileManager = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:3001/api/file-manager/browse?path=${encodeURIComponent(currentPath)}`, {
+      const response = await fetch(`http://localhost:3002/api/file-manager/browse?path=${encodeURIComponent(currentPath)}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }

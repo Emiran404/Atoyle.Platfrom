@@ -44,10 +44,11 @@ import { startNotificationWorker } from './workers/notificationWorker.js';
 import { startBackupWorker } from './workers/backupWorker.js';
 import { startDiscovery } from './utils/discovery.js';
 import { getDbStatus, setData } from './utils/storage.js';
+import { updateManager } from './utils/updateManager.js';
 
 const app = express();
 const server = http.createServer(app);
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3002;
 
 // Middleware
 app.use(cors({
@@ -95,8 +96,15 @@ app.use('/uploads', (req, res, next) => {
   }
 });
 
+// Setup updates path for Electron auto-updater
+const updatesPath = join(__dirname, 'updates');
+if (!fs.existsSync(updatesPath)) {
+  fs.mkdirSync(updatesPath, { recursive: true });
+}
+
 // Fallback to express.static for non-problematic files
 app.use('/uploads', express.static(uploadsPath));
+app.use('/updates', express.static(updatesPath));
 
 console.log('📁 Uploads dizini:', uploadsPath);
 
@@ -363,4 +371,7 @@ server.listen(PORT, '0.0.0.0', () => {
   
   // mDNS Keşif servisini başlat
   startDiscovery(PORT);
+  
+  // Otomatik İndirme servisini başlat
+  updateManager.start();
 });

@@ -155,39 +155,39 @@ const FileUpload = () => {
 
     if (selectedExam.antiCheatEnabled) {
       if (!isElectron) {
-        // Electron haricindeyse uyarı ver ve sınav arayüzünü engelle
+        // Electron haricindeyse uyarı ver
         toast.error('Bu sınav yüksek güvenlik (Anti-Cheat) gerektiriyor! Lütfen sınava yerel masaüstü uygulaması (Atolye Platform) ile girin!', {
           duration: 99999
         });
-        setIsPaused(true);
         return;
       }
 
       // Electron içindeyse kiosk modu etkinleştir
       try {
-        const { ipcRenderer } = window.require('electron');
-        ipcRenderer.send('enable-anti-cheat');
+        if (window.electronAPI) {
+          window.electronAPI.enableAntiCheat();
 
-        const handleBlurDetected = async () => {
-          toast.error('Pencere odağını kaybettiniz! Bu durum öğretmene raporlandı.', { duration: 5000 });
-          // Sunucuya odak kaybı bildir
-          try {
-            await fetch('/api/submissions/focus-violation', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ examId: selectedExam.id, studentId: user?.id })
-            });
-          } catch (err) {
-            console.error('Focus violation notify error:', err);
-          }
-        };
+          const handleBlurDetected = async () => {
+            toast.error('Pencere odağını kaybettiniz! Bu durum öğretmene raporlandı.', { duration: 5000 });
+            // Sunucuya odak kaybı bildir
+            try {
+              await fetch('/api/submissions/focus-violation', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ examId: selectedExam.id, studentId: user?.id })
+              });
+            } catch (err) {
+              console.error('Focus violation notify error:', err);
+            }
+          };
 
-        ipcRenderer.on('anti-cheat-blur-detected', handleBlurDetected);
+          window.electronAPI.onAntiCheatBlurDetected(handleBlurDetected);
 
-        return () => {
-          ipcRenderer.removeListener('anti-cheat-blur-detected', handleBlurDetected);
-          ipcRenderer.send('disable-anti-cheat');
-        };
+          return () => {
+            window.electronAPI.removeAntiCheatBlurListener();
+            window.electronAPI.disableAntiCheat();
+          };
+        }
       } catch (err) {
         console.error('Electron IPC Anti-Cheat Init Error:', err);
       }
@@ -882,6 +882,33 @@ const FileUpload = () => {
       toast.error('Tam ekrana geçiş reddedildi.');
     }
   };
+
+  const isElectron = window && window.process && window.process.type === 'renderer';
+  const isAntiCheatBlocked = selectedExam?.antiCheatEnabled && !isElectron;
+
+  if (isAntiCheatBlocked) {
+      return (
+          <div style={{
+              position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.95)', zIndex: 9999,
+              display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: 'white'
+          }}>
+              <AlertCircle size={64} color="#ef4444" style={{ marginBottom: '24px' }} />
+              <h1 style={{ fontSize: '32px', fontWeight: 'bold', marginBottom: '16px' }}>Güvenlik İhlali (Anti-Cheat)</h1>
+              <p style={{ fontSize: '18px', color: 'var(--color-border-dark)', marginBottom: '32px', textAlign: 'center', maxWidth: '600px' }}>
+                  Öğretmeniniz bu sınav için yüksek güvenlik gereksinimi (Anti-Cheat) ayarlamış. Lütfen sınava tarayıcıdan değil, <strong>Atolye Platform</strong> masaüstü uygulamasından giriş yapın.
+              </p>
+              <button
+                  onClick={() => navigate('/ogrenci/panel')}
+                  style={{
+                      padding: '16px 32px', backgroundColor: '#374151', color: 'white', borderRadius: '12px',
+                      fontSize: '18px', fontWeight: 'bold', cursor: 'pointer', border: 'none'
+                  }}
+              >
+                  Ana Sayfaya Dön
+              </button>
+          </div>
+      );
+  }
 
   if (isPaused) {
     return (

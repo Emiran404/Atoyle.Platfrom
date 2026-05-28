@@ -44,6 +44,9 @@ const TeacherDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [startTour, setStartTour] = useState(0); // Trigger tour re-run
 
+  // Telemetri izin modalı
+  const [showTelemetryModal, setShowTelemetryModal] = useState(false);
+
   // Otomatik yedekleme sihirbazı state'leri
   const [settings, setSettings] = useState(null);
   const [showWizardModal, setShowWizardModal] = useState(false);
@@ -74,6 +77,11 @@ const TeacherDashboard = () => {
               autoBackupInterval: settingsData.settings.autoBackupInterval || 24,
               autoBackupIncludePhotos: settingsData.settings.autoBackupIncludePhotos || false
             });
+            
+            // Eğer telemetri izni hiç sorulmadıysa sor
+            if (settingsData.settings.telemetryPromptAnswered === false) {
+              setShowTelemetryModal(true);
+            }
           }
         } catch (settingsErr) {
           console.error('Ayarlar yüklenemedi:', settingsErr);
@@ -179,6 +187,37 @@ const TeacherDashboard = () => {
 
     return () => clearInterval(refreshInterval);
   }, []);
+
+  const handleTelemetryConsent = async (consent) => {
+    try {
+      // Backend'e güncelleme yolla
+      const res = await fetch('/api/settings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${useAuthStore.getState().token}`
+        },
+        body: JSON.stringify({
+          telemetryEnabled: consent,
+          telemetryPromptAnswered: true
+        })
+      });
+
+      if (res.ok) {
+        setShowTelemetryModal(false);
+        if (consent) {
+          toast.success("Teşekkür ederiz! Telemetri gönderimi başarıyla aktif edildi.", { duration: 4000 });
+        } else {
+          toast.info("Telemetri gönderimi kapatıldı. Ayarı dilediğiniz zaman Platform Yönetimi sayfasından değiştirebilirsiniz.", { duration: 5000 });
+        }
+      } else {
+        throw new Error('Kayıt başarısız');
+      }
+    } catch (error) {
+      toast.error('Ayarlar kaydedilirken bir hata oluştu.');
+      setShowTelemetryModal(false);
+    }
+  };
 
   const statCards = [
     {
@@ -567,6 +606,89 @@ const TeacherDashboard = () => {
       `}</style>
 
       <div style={styles.container}>
+        {/* Telemetri İzni Bannerı */}
+        {showTelemetryModal && (
+          <div style={{
+            backgroundColor: '#f8fafc',
+            border: '1px solid #cbd5e1',
+            borderRadius: '16px',
+            padding: '20px',
+            marginBottom: '24px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: '16px',
+            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+            animation: 'in-expo 0.5s ease-out'
+          }}>
+            <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-start', flex: 1, minWidth: '300px' }}>
+              <div style={{
+                backgroundColor: '#e0f2fe',
+                color: '#0284c7',
+                width: '48px',
+                height: '48px',
+                borderRadius: '12px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexShrink: 0
+              }}>
+                <Activity size={24} />
+              </div>
+              <div>
+                <h4 style={{ margin: '0 0 4px 0', fontSize: '16px', fontWeight: '700', color: '#0f172a' }}>
+                  Platformu Geliştirmemize Yardımcı Olun
+                </h4>
+                <p style={{ margin: '0', fontSize: '14px', color: '#475569', lineHeight: '1.5' }}>
+                  Sistemin kullanım durumları, aktif öğrenci sayıları ve hata raporları arka planda otomatik olarak toplanmaktadır. Kişisel veriler <strong>kesinlikle</strong> gönderilmez. Bu özelliği açarak platformun gelişimine destek olabilirsiniz.
+                </p>
+                <span style={{ fontSize: '12px', color: '#94a3b8', display: 'block', marginTop: '8px' }}>* Bu kararı daha sonra Platform Yönetimi'nden değiştirebilirsiniz.</span>
+              </div>
+            </div>
+            <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+              <button 
+                onClick={() => handleTelemetryConsent(false)}
+                style={{
+                  padding: '10px 16px',
+                  backgroundColor: 'white',
+                  border: '1px solid #cbd5e1',
+                  color: '#475569',
+                  borderRadius: '8px',
+                  fontWeight: '600',
+                  fontSize: '14px',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s',
+                  boxShadow: '0 1px 2px rgba(0,0,0,0.05)'
+                }}
+                onMouseOver={(e) => { e.currentTarget.style.backgroundColor = '#f1f5f9'; }}
+                onMouseOut={(e) => { e.currentTarget.style.backgroundColor = 'white'; }}
+              >
+                Hayır, Kapat
+              </button>
+              <button 
+                onClick={() => handleTelemetryConsent(true)}
+                style={{
+                  padding: '10px 16px',
+                  backgroundColor: '#0284c7',
+                  border: 'none',
+                  color: 'white',
+                  borderRadius: '8px',
+                  fontWeight: '600',
+                  fontSize: '14px',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s',
+                  boxShadow: '0 1px 2px rgba(0,0,0,0.05)'
+                }}
+                onMouseOver={(e) => { e.currentTarget.style.backgroundColor = '#0369a1'; }}
+                onMouseOut={(e) => { e.currentTarget.style.backgroundColor = '#0284c7'; }}
+              >
+                Evet, İzin Veriyorum
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* Otomatik Yedekleme Sihirbazı Bildirim Bannerı */}
         {settings && !settings.autoBackupWizardConfigured && (
           <div style={{
@@ -972,6 +1094,7 @@ const TeacherDashboard = () => {
           </div>
         </div>
       </Modal>
+
     </TeacherLayout>
   );
 };

@@ -7,6 +7,7 @@ import { loginLimiter } from '../middleware/rateLimit.js';
 import base64url from 'base64url';
 import crypto from 'crypto';
 import { authenticateLDAP, updateLDAPPassword } from '../utils/ldap.js';
+import { addLog } from '../utils/logger.js';
 
 const router = express.Router();
 
@@ -228,6 +229,16 @@ router.post('/login/student', loginLimiter, async (req, res) => {
 
     const { password: _, ...studentData } = currentStudent;
     const token = generateToken({ id: currentStudent.id, userType: 'student', studentNumber }, '30m');
+
+    addLog({
+      type: 'login',
+      userId: currentStudent.id,
+      userName: currentStudent.fullName,
+      role: 'student',
+      action: 'Öğrenci sisteme giriş yaptı.',
+      details: { ip: clientIp, studentNumber: currentStudent.studentNumber }
+    });
+
     res.json({ success: true, user: studentData, userType: 'student', clientIp, token });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
@@ -431,6 +442,16 @@ router.post('/login/teacher', loginLimiter, async (req, res) => {
       { id: currentTeacher.id, userType: 'teacher', username: currentTeacher.username },
       rememberMe ? '7d' : '24h'
     );
+
+    addLog({
+      type: 'login',
+      userId: currentTeacher.id,
+      userName: currentTeacher.fullName,
+      role: 'teacher',
+      action: 'Öğretmen sisteme giriş yaptı.',
+      details: { ip: clientIp, username: currentTeacher.username }
+    });
+
     res.json({ success: true, user: teacherData, userType: 'teacher', clientIp, token });
   } catch (error) {
     res.status(500).json({ success: false, error: 'Sunucu hatası: ' + error.message });
@@ -793,10 +814,8 @@ router.post('/oga-login', async (req, res) => {
 // Setup Settings - Öğretmen hesabı var mı?
 router.get('/setup-status', (req, res) => {
   try {
-    console.log('🔍 Setup status check requested');
     const teachers = getData('teachers') || [];
     const isSetupRequired = teachers.length === 0;
-    console.log('✅ Setup status:', { isSetupRequired });
     res.json({ success: true, isSetupRequired });
   } catch (error) {
     console.error('❌ Setup status error:', error);

@@ -1,4 +1,5 @@
 import { app, BrowserWindow, ipcMain } from 'electron';
+import { autoUpdater } from 'electron-updater';
 import { Bonjour } from 'bonjour-service';
 import dgram from 'dgram';
 import http from 'http';
@@ -15,7 +16,7 @@ let currentServerUrl = null;
 let isDiscoveryFound = false;
 const bonjour = new Bonjour();
 const BROADCAST_PORT = 41234;
-const SERVER_PORT = 3001;
+const SERVER_PORT = 3002;
 
 function createSplash() {
   splashWindow = new BrowserWindow({
@@ -27,8 +28,10 @@ function createSplash() {
     resizable: false,
     alwaysOnTop: true,
     webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false
+      nodeIntegration: false,
+      contextIsolation: true,
+      sandbox: true,
+      preload: path.join(__dirname, 'preload.js')
     }
   });
   splashWindow.loadFile('splash.html');
@@ -47,8 +50,10 @@ function createMainWindow(url) {
     title: "Atolye Platform",
     autoHideMenuBar: true,
     webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false
+      nodeIntegration: false,
+      contextIsolation: true,
+      sandbox: true,
+      preload: path.join(__dirname, 'preload.js')
     }
   });
 
@@ -92,6 +97,9 @@ function connectToServer(url) {
   } else {
     mainWindow.loadURL(url);
   }
+
+  // Oto Güncelleme Sistemini Başlat
+  setupAutoUpdater(url);
 
   setTimeout(() => {
     if (mainWindow) {
@@ -381,3 +389,62 @@ app.on('activate', () => {
     }
   }
 });
+
+// ═══════════════════════════════════════════════════════════════
+// AUTO UPDATER
+// ═══════════════════════════════════════════════════════════════
+function setupAutoUpdater(serverUrl) {
+  if (process.env.NODE_ENV === 'development') return;
+
+  const updateUrl = `${serverUrl}/updates`;
+  console.log(`[Updater] Ayarlanıyor: ${updateUrl}`);
+  
+  autoUpdater.setFeedURL({
+    provider: 'generic',
+    url: updateUrl
+  });
+
+  autoUpdater.on('checking-for-update', () => {
+    console.log('[Updater] Güncellemeler kontrol ediliyor...');
+  });
+
+  autoUpdater.on('update-available', (info) => {
+    console.log(`[Updater] Güncelleme bulundu: v${info.version}`);
+    if (splashWindow) splashWindow.webContents.send('discovery-status', `YENİ SÜRÜM İNDİRİLİYOR (v${info.version})`);
+  });
+
+  autoUpdater.on('update-not-available', (info) => {
+    console.log('[Updater] Güncelleme yok.');
+  });
+
+  autoUpdater.on('error', (err) => {
+    console.error('[Updater] Hata:', err);
+  });
+
+  autoUpdater.on('download-progress', (progressObj) => {
+    let log_message = `Hız: ${Math.round(progressObj.bytesPerSecond / 1024)} KB/s`;
+    log_message = log_message + ` - İndirilen: ${Math.round(progressObj.percent)}%`;
+    console.log(`[Updater] ${log_message}`);
+    
+    if (splashWindow) {
+      splashWindow.webContents.send('discovery-status', `GÜNCELLENİYOR: %${Math.round(progressObj.percent)}`);
+    } else if (mainWindow) {
+      mainWindow.webContents.send('update-progress', Math.round(progressObj.percent));
+    }
+  });
+
+  autoUpdater.on('update-downloaded', (info) => {
+    console.log('[Updater] Güncelleme indirildi. Kuruluyor...');
+    if (splashWindow) splashWindow.webContents.send('discovery-status', `GÜNCELLEME HAZIR. YENİDEN BAŞLATILIYOR...`);
+    
+    setTimeout(() => {
+      autoUpdater.quitAndInstall();
+    }, 2000);
+  });
+
+  // Kontrolü başlat
+  autoUpdater.checkForUpdatesAndNotify().catch(err => {
+    console.error('[Updater] Başlatma Hatası:', err);
+  });
+}
+

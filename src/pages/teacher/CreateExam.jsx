@@ -869,9 +869,9 @@ const CreateExam = () => {
                         onClick={() => handleChange('duration', minutes)}
                         style={{
                           padding: '8px 16px',
-                          backgroundColor: formData.duration === minutes ? '#3b82f6' : 'var(--color-primary-light)',
+                          backgroundColor: formData.duration === minutes ? '#3b82f6' : 'rgba(59, 130, 246, 0.1)',
                           color: formData.duration === minutes ? 'white' : '#3b82f6',
-                          border: 'none',
+                          border: formData.duration === minutes ? '1px solid #3b82f6' : '1px solid rgba(59, 130, 246, 0.3)',
                           borderRadius: '8px',
                           cursor: 'pointer',
                           fontSize: '13px',

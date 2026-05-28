@@ -20,7 +20,7 @@ class PolyOSService {
    * WebSocket'e bağlan
    */
   connect() {
-    const serverUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+    const serverUrl = import.meta.env.VITE_API_URL || 'http://localhost:3002';
 
     this.socket = io(serverUrl, {
       path: '/polyos-socket',

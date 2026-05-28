@@ -7,7 +7,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const root = path.join(__dirname, '..');
 
-const VERSION = "4.0.1";
+const VERSION = "4.1.0";
 const PKG_NAME = "atolye-platform-client";
 const STAGE_DIR = path.join(root, 'build_client_deb_stage');
 
@@ -185,7 +185,24 @@ exit 0
     await fs.remove(controlTar);
     await fs.remove(dataTar);
 
-    console.log(`✅ Başarılı! \n📍 Dosya: ${dest}`);
+    // 9. Generate latest-linux.yml
+    const crypto = await import('crypto');
+    const debBuffer = await fs.readFile(dest);
+    const sha512 = crypto.createHash('sha512').update(debBuffer).digest('base64');
+    const debFileName = `${PKG_NAME}_${VERSION}_${architecture}.deb`;
+    const ymlContent = `version: ${VERSION}
+files:
+  - url: ${debFileName}
+    sha512: ${sha512}
+    size: ${debBuffer.length}
+path: ${debFileName}
+sha512: ${sha512}
+releaseDate: '${new Date().toISOString()}'
+`;
+    await fs.ensureDir(path.join(root, 'client-electron', 'dist'));
+    await fs.writeFile(path.join(root, 'client-electron', 'dist', 'latest-linux.yml'), ymlContent);
+
+    console.log(`✅ Başarılı! \n📍 Dosya: ${dest}\n📍 latest-linux.yml oluşturuldu.`);
   } catch (err) {
     console.error("❌ Paketleme başarısız:", err);
     process.exit(1);

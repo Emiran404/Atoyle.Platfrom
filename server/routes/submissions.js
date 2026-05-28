@@ -5,6 +5,7 @@ import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import { getData, setData, generateId } from '../utils/storage.js';
 import { authenticateToken, authorizeRole } from '../middleware/auth.js';
+import { addLog } from '../utils/logger.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -142,6 +143,16 @@ router.post('/', (req, res) => {
 
       submissions.push(newSubmission);
       setData('submissions', submissions);
+
+      addLog({
+        type: 'submission',
+        userId: studentId,
+        userName: studentName,
+        role: 'student',
+        action: 'Sınav dosyası teslim edildi',
+        details: { examId, fileName, fileHash }
+      });
+
       res.json({ success: true, submission: newSubmission, isUpdate: false });
     }
   } catch (error) {
@@ -232,6 +243,15 @@ router.post('/quiz', (req, res) => {
     submissions.push(newSubmission);
     setData('submissions', submissions);
 
+    addLog({
+      type: 'submission',
+      userId: studentId,
+      userName: studentName,
+      role: 'student',
+      action: 'Quiz teslim edildi',
+      details: { examId, score: finalGrade }
+    });
+
     res.json({ success: true, submission: newSubmission, score: finalGrade });
   } catch (error) {
     console.error('Quiz submission error:', error);
@@ -307,6 +327,15 @@ router.post('/classic', (req, res) => {
 
     submissions.push(newSubmission);
     setData('submissions', submissions);
+
+    addLog({
+      type: 'submission',
+      userId: studentId,
+      userName: studentName,
+      role: 'student',
+      action: 'Klasik sınav teslim edildi',
+      details: { examId }
+    });
 
     res.json({ success: true, submission: newSubmission, isUpdate: false });
   } catch (error) {
