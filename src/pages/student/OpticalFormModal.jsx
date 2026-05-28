@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import Barcode from 'react-barcode';
 import { X, Printer } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
+import { t } from '../../utils/i18n';
 
 const OpticalFormModal = ({ isOpen, onClose, submission }) => {
     const { user } = useAuthStore();
@@ -152,7 +153,7 @@ const OpticalFormModal = ({ isOpen, onClose, submission }) => {
             padding: '20px'
         }}>
             <div style={{
-                backgroundColor: '#fff',
+                backgroundColor: 'var(--color-surface)',
                 borderRadius: '16px',
                 width: '100%',
                 maxWidth: '1000px',
@@ -167,17 +168,17 @@ const OpticalFormModal = ({ isOpen, onClose, submission }) => {
                     alignItems: 'center',
                     justifyContent: 'space-between',
                     padding: '20px 24px',
-                    borderBottom: '1px solid #e2e8f0'
+                    borderBottom: '1px solid var(--color-border)'
                 }}>
-                    <h2 style={{ fontSize: '20px', fontWeight: 'bold', color: '#1e293b', margin: 0 }}>
-                        Sınav Optiğimi Görüntüle
+                    <h2 style={{ fontSize: '20px', fontWeight: 'bold', color: 'var(--color-text-primary)', margin: 0 }}>
+                        {t('viewMyExamOptic')}
                     </h2>
                     <div style={{ display: 'flex', gap: '12px' }}>
                         <button
                             onClick={handlePrint}
                             style={{
                                 display: 'flex', alignItems: 'center', gap: '8px',
-                                padding: '8px 16px', backgroundColor: '#f1f5f9', color: '#334155',
+                                padding: '8px 16px', backgroundColor: 'var(--color-background-secondary)', color: 'var(--color-foreground-secondary)',
                                 border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '600'
                             }}
                         >
@@ -188,7 +189,7 @@ const OpticalFormModal = ({ isOpen, onClose, submission }) => {
                             onClick={onClose}
                             style={{
                                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                width: '36px', height: '36px', backgroundColor: '#fef2f2', color: '#ef4444',
+                                width: '36px', height: '36px', backgroundColor: 'var(--color-background-secondary)', color: '#ef4444',
                                 border: 'none', borderRadius: '8px', cursor: 'pointer'
                             }}
                         >
@@ -198,7 +199,7 @@ const OpticalFormModal = ({ isOpen, onClose, submission }) => {
                 </div>
 
                 {/* Modal Body / Optik Form */}
-                <div style={{ flex: 1, overflowY: 'auto', padding: '24px', backgroundColor: '#e2e8f0' }}>
+                <div style={{ flex: 1, overflowY: 'auto', padding: '24px', backgroundColor: 'var(--color-border)' }}>
 
                     <div
                         ref={printRef}

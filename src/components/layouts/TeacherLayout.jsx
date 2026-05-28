@@ -35,12 +35,20 @@ import { canUsePasskey } from '../../utils/platform';
 const TeacherLayout = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, logout, token } = useAuthStore();
+  const { user, logout, token, theme, setTheme } = useAuthStore();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showPasskeyModal, setShowPasskeyModal] = useState(false);
   const [updateAvailable, setUpdateAvailable] = useState(null);
   const [showUpdateBanner, setShowUpdateBanner] = useState(true);
+
+  useEffect(() => {
+    // Force light theme for teacher panel
+    if (theme === 'dark') {
+      setTheme('light');
+    }
+    document.documentElement.classList.remove('dark');
+  }, [theme, setTheme]);
 
   // Veritabanı geçiş durumları
   const [dbStatus, setDbStatus] = useState({
@@ -405,8 +413,8 @@ const TeacherLayout = ({ children }) => {
       left: 0,
       height: '100vh',
       width: sidebarOpen ? '280px' : '80px',
-      backgroundColor: '#ffffff',
-      borderRight: '1px solid #e2e8f0',
+      backgroundColor: 'var(--color-surface)',
+      borderRight: '1px solid var(--color-border)',
       display: 'flex',
       flexDirection: 'column',
       transition: 'width 0.3s ease',
@@ -415,7 +423,7 @@ const TeacherLayout = ({ children }) => {
     },
     logo: {
       padding: '20px',
-      borderBottom: '1px solid #e2e8f0',
+      borderBottom: '1px solid var(--color-border)',
       display: 'flex',
       alignItems: 'center',
       justifyContent: sidebarOpen ? 'space-between' : 'center',
@@ -432,17 +440,17 @@ const TeacherLayout = ({ children }) => {
       padding: '8px',
       borderRadius: '8px',
       border: 'none',
-      backgroundColor: '#f1f5f9',
+      backgroundColor: 'var(--color-background-secondary)',
       cursor: 'pointer',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      color: '#64748b',
+      color: 'var(--color-text-muted)',
       transition: 'all 0.2s'
     },
     userSection: {
       padding: sidebarOpen ? '20px' : '12px',
-      borderBottom: '1px solid #e2e8f0',
+      borderBottom: '1px solid var(--color-border)',
       display: 'flex',
       alignItems: 'center',
       gap: '12px'
@@ -455,7 +463,7 @@ const TeacherLayout = ({ children }) => {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      color: '#ffffff',
+      color: 'var(--color-text-inverse, #fff)',
       fontSize: '18px',
       fontWeight: '600',
       flexShrink: 0
@@ -467,14 +475,14 @@ const TeacherLayout = ({ children }) => {
     userName: {
       fontSize: '14px',
       fontWeight: '600',
-      color: '#1e293b',
+      color: 'var(--color-text-primary)',
       whiteSpace: 'nowrap',
       overflow: 'hidden',
       textOverflow: 'ellipsis'
     },
     userRole: {
       fontSize: '12px',
-      color: '#64748b',
+      color: 'var(--color-text-muted)',
       marginTop: '2px'
     },
     nav: {
@@ -494,13 +502,13 @@ const TeacherLayout = ({ children }) => {
         ? undefined
         : (isSpecial
           ? (active ? 'rgba(147, 51, 234, 0.15)' : 'rgba(147, 51, 234, 0.08)')
-          : (active ? '#f0fdfa' : 'transparent')),
+          : (active ? 'var(--color-background-secondary)' : 'transparent')),
       background: isSpecial && active
         ? 'linear-gradient(135deg, rgba(147, 51, 234, 0.2) 0%, rgba(59, 130, 246, 0.2) 100%)'
         : undefined,
       color: isSpecial
         ? (active ? '#a855f7' : '#9333ea')
-        : (active ? '#0d9488' : '#475569'),
+        : (active ? '#0d9488' : 'var(--color-text-secondary)'),
       fontWeight: active ? '600' : '500',
       fontSize: '14px',
       transition: 'all 0.2s',
@@ -516,7 +524,7 @@ const TeacherLayout = ({ children }) => {
     },
     logoutSection: {
       padding: '16px 12px',
-      borderTop: '1px solid #e2e8f0'
+      borderTop: '1px solid var(--color-border)'
     },
     logoutBtn: {
       display: 'flex',
@@ -525,7 +533,7 @@ const TeacherLayout = ({ children }) => {
       padding: sidebarOpen ? '12px 16px' : '12px',
       borderRadius: '10px',
       cursor: 'pointer',
-      backgroundColor: '#fef2f2',
+      backgroundColor: 'var(--color-background-secondary)',
       color: '#dc2626',
       fontWeight: '500',
       fontSize: '14px',
@@ -537,7 +545,7 @@ const TeacherLayout = ({ children }) => {
     main: {
       marginLeft: sidebarOpen ? '280px' : '80px',
       minHeight: '100vh',
-      backgroundColor: '#f8fafc',
+      backgroundColor: 'var(--color-background)',
       transition: 'margin-left 0.3s ease'
     },
     content: {
@@ -550,8 +558,8 @@ const TeacherLayout = ({ children }) => {
       left: 0,
       right: 0,
       height: '64px',
-      backgroundColor: '#ffffff',
-      borderBottom: '1px solid #e2e8f0',
+      backgroundColor: 'var(--color-surface)',
+      borderBottom: '1px solid var(--color-border)',
       padding: '0 16px',
       alignItems: 'center',
       justifyContent: 'space-between',
@@ -563,7 +571,7 @@ const TeacherLayout = ({ children }) => {
       border: 'none',
       backgroundColor: 'transparent',
       cursor: 'pointer',
-      color: '#475569'
+      color: 'var(--color-text-secondary)'
     },
     overlay: {
       display: mobileMenuOpen ? 'block' : 'none',
@@ -583,7 +591,7 @@ const TeacherLayout = ({ children }) => {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
-      color: '#ffffff',
+      color: 'var(--color-text-inverse, #fff)',
       boxShadow: '0 10px 25px -5px rgba(13, 148, 136, 0.4)',
       border: '1px solid rgba(255, 255, 255, 0.1)',
       position: 'relative',
@@ -635,7 +643,7 @@ const TeacherLayout = ({ children }) => {
     },
     updateBtn: {
       padding: '10px 20px',
-      backgroundColor: '#ffffff',
+      backgroundColor: 'var(--color-surface)',
       color: '#0d9488',
       border: 'none',
       borderRadius: '10px',
@@ -648,7 +656,7 @@ const TeacherLayout = ({ children }) => {
     closeBannerBtn: {
       padding: '8px',
       backgroundColor: 'rgba(255, 255, 255, 0.15)',
-      color: '#ffffff',
+      color: 'var(--color-text-inverse, #fff)',
       border: 'none',
       borderRadius: '8px',
       cursor: 'pointer',
@@ -755,7 +763,7 @@ const TeacherLayout = ({ children }) => {
                   if (item.special) {
                     e.currentTarget.style.background = 'linear-gradient(135deg, rgba(147, 51, 234, 0.15) 0%, rgba(59, 130, 246, 0.15) 100%)';
                   } else {
-                    e.currentTarget.style.backgroundColor = '#f1f5f9';
+                    e.currentTarget.style.backgroundColor = 'var(--color-background-secondary)';
                   }
                 }
               }}
@@ -780,10 +788,10 @@ const TeacherLayout = ({ children }) => {
           <button
             style={{
               ...sidebarStyles.logoutBtn,
-              backgroundColor: '#f1f5f9',
-              color: '#475569',
+              backgroundColor: 'var(--color-background-secondary)',
+              color: 'var(--color-text-secondary)',
               marginBottom: '8px',
-              border: '1px solid #e2e8f0'
+              border: '1px solid var(--color-border)'
             }}
             onClick={() => navigate('/')}
             onMouseEnter={(e) => {
@@ -792,9 +800,9 @@ const TeacherLayout = ({ children }) => {
               e.currentTarget.style.borderColor = '#0d9488';
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = '#f1f5f9';
-              e.currentTarget.style.color = '#475569';
-              e.currentTarget.style.borderColor = '#e2e8f0';
+              e.currentTarget.style.backgroundColor = 'var(--color-background-secondary)';
+              e.currentTarget.style.color = 'var(--color-text-secondary)';
+              e.currentTarget.style.borderColor = 'var(--color-border)';
             }}
           >
             <ArrowLeft size={20} />
@@ -805,7 +813,7 @@ const TeacherLayout = ({ children }) => {
             style={sidebarStyles.logoutBtn}
             onClick={handleLogout}
             onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#fee2e2'}
-            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#fef2f2'}
+            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'var(--color-background-secondary)'}
           >
             <LogOut size={20} />
             <span style={sidebarStyles.navLabel}>Çıkış Yap</span>
@@ -889,7 +897,7 @@ const TeacherLayout = ({ children }) => {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <Database size={24} style={{ color: dbStatus.dbType === 'sqlite' ? '#0d9488' : '#f59e0b' }} />
-                <h2 style={{ fontSize: '20px', fontWeight: '800', color: '#1e293b', margin: 0 }}>
+                <h2 style={{ fontSize: '20px', fontWeight: '800', color: 'var(--color-text-primary)', margin: 0 }}>
                   Yeni Sistem Veritabanı Geçişi
                 </h2>
               </div>
@@ -911,7 +919,7 @@ const TeacherLayout = ({ children }) => {
             {/* SQLite Modülü Yüklenemedi (Çok nadir - eski Node.js sürümü) */}
             {dbStatus.dbType === 'json' && (
               <div>
-                <div style={{ backgroundColor: '#fffbeb', border: '1px solid #fde68a', borderRadius: '12px', padding: '16px', marginBottom: '20px' }}>
+                <div style={{ backgroundColor: 'var(--color-background-secondary)', border: '1px solid #fde68a', borderRadius: '12px', padding: '16px', marginBottom: '20px' }}>
                   <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
                     <AlertTriangle size={20} style={{ color: '#d97706', flexShrink: 0, marginTop: '2px' }} />
                     <div>
@@ -927,7 +935,7 @@ const TeacherLayout = ({ children }) => {
                   </div>
                 </div>
 
-                <p style={{ fontSize: '14px', color: '#475569', lineHeight: '1.6', marginBottom: '20px' }}>
+                <p style={{ fontSize: '14px', color: 'var(--color-text-secondary)', lineHeight: '1.6', marginBottom: '20px' }}>
                   Lütfen Node.js sürümünüzü <strong>v22 veya üstüne</strong> güncelleyin ve sunucuyu yeniden başlatın.
                 </p>
 
@@ -957,13 +965,13 @@ const TeacherLayout = ({ children }) => {
               <div>
                 {migrationStatus === 'idle' && (
                   <div>
-                    <p style={{ fontSize: '14px', color: '#475569', lineHeight: '1.6', marginBottom: '20px' }}>
+                    <p style={{ fontSize: '14px', color: 'var(--color-text-secondary)', lineHeight: '1.6', marginBottom: '20px' }}>
                       SQLite veritabanı modülü sisteminizde aktif. 
                       Şimdi mevcut tüm JSON dosyalarınızdaki verileri (sınıflar, öğrenciler, sınavlar, teslimler vb.) 
                       güvenli bir şekilde yeni veritabanına aktarmamız gerekiyor.
                     </p>
 
-                    <div style={{ backgroundColor: '#f0fdfa', border: '1px solid #ccfbf1', borderRadius: '12px', padding: '16px', marginBottom: '24px' }}>
+                    <div style={{ backgroundColor: 'var(--color-background-secondary)', border: '1px solid #ccfbf1', borderRadius: '12px', padding: '16px', marginBottom: '24px' }}>
                       <h4 style={{ fontSize: '14px', fontWeight: '700', color: '#0f766e', margin: '0 0 8px 0' }}>
                         Taşınacak Veriler:
                       </h4>
@@ -984,22 +992,22 @@ const TeacherLayout = ({ children }) => {
                 {migrationStatus === 'migrating' && (
                   <div style={{ textAlign: 'center', padding: '10px 0' }}>
                     <Loader2 size={40} className="spin-icon" style={{ color: '#0d9488', margin: '0 auto 16px auto' }} />
-                    <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#1e293b', marginBottom: '8px' }}>
+                    <h3 style={{ fontSize: '16px', fontWeight: '700', color: 'var(--color-text-primary)', marginBottom: '8px' }}>
                       Veriler Aktarılıyor...
                     </h3>
-                    <p style={{ fontSize: '13px', color: '#64748b', marginBottom: '16px' }}>
+                    <p style={{ fontSize: '13px', color: 'var(--color-text-muted)', marginBottom: '16px' }}>
                       Lütfen işlemi bölmeyin veya sayfayı kapatmayın.
                     </p>
 
                     {/* Progress Bar */}
-                    <div style={{ width: '100%', height: '8px', backgroundColor: '#e2e8f0', borderRadius: '4px', overflow: 'hidden', marginBottom: '20px' }}>
+                    <div style={{ width: '100%', height: '8px', backgroundColor: 'var(--color-border)', borderRadius: '4px', overflow: 'hidden', marginBottom: '20px' }}>
                       <div style={{ width: `${migrationProgress}%`, height: '100%', background: 'linear-gradient(90deg, #0d9488, #3b82f6)', transition: 'width 0.4s ease' }} />
                     </div>
 
                     {/* Console Logs */}
                     <div className="step-log">
                       {migrationLogs.map((log, index) => (
-                        <div key={index} style={{ marginBottom: '4px', color: log.startsWith('❌') ? '#dc2626' : log.startsWith('✅') ? '#0d9488' : '#475569' }}>
+                        <div key={index} style={{ marginBottom: '4px', color: log.startsWith('❌') ? '#dc2626' : log.startsWith('✅') ? '#0d9488' : 'var(--color-text-secondary)' }}>
                           {log}
                         </div>
                       ))}
@@ -1010,10 +1018,10 @@ const TeacherLayout = ({ children }) => {
                 {migrationStatus === 'success' && (
                   <div style={{ textAlign: 'center', padding: '10px 0' }}>
                     <CheckCircle2 size={56} style={{ color: '#22c55e', margin: '0 auto 16px auto' }} />
-                    <h3 style={{ fontSize: '18px', fontWeight: '800', color: '#1e293b', marginBottom: '8px' }}>
+                    <h3 style={{ fontSize: '18px', fontWeight: '800', color: 'var(--color-text-primary)', marginBottom: '8px' }}>
                       Veri Geçişi Başarılı!
                     </h3>
-                    <p style={{ fontSize: '14px', color: '#475569', lineHeight: '1.6', marginBottom: '24px' }}>
+                    <p style={{ fontSize: '14px', color: 'var(--color-text-secondary)', lineHeight: '1.6', marginBottom: '24px' }}>
                       Tüm JSON verileriniz kayıpsız bir şekilde SQLite veritabanına taşındı. 
                       Sisteminiz artık en yüksek performanslı ve güvenli modda çalışmaya hazır.
                     </p>
@@ -1027,7 +1035,7 @@ const TeacherLayout = ({ children }) => {
                 {migrationStatus === 'error' && (
                   <div style={{ textAlign: 'center', padding: '10px 0' }}>
                     <AlertCircle size={56} style={{ color: '#ef4444', margin: '0 auto 16px auto' }} />
-                    <h3 style={{ fontSize: '18px', fontWeight: '800', color: '#1e293b', marginBottom: '8px' }}>
+                    <h3 style={{ fontSize: '18px', fontWeight: '800', color: 'var(--color-text-primary)', marginBottom: '8px' }}>
                       Geçiş Sırasında Hata Oluştu
                     </h3>
                     <p style={{ fontSize: '14px', color: '#ef4444', marginBottom: '16px' }}>

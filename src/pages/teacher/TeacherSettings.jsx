@@ -16,13 +16,13 @@ import { canUsePasskey } from '../../utils/platform';
 const styles = {
   container: { display: 'flex', flexDirection: 'column', gap: '24px' },
   header: { marginBottom: '8px' },
-  title: { fontSize: '24px', fontWeight: '700', color: '#1e293b', margin: 0 },
-  subtitle: { fontSize: '14px', color: '#64748b', marginTop: '4px' },
+  title: { fontSize: '24px', fontWeight: '700', color: 'var(--color-text-primary)', margin: 0 },
+  subtitle: { fontSize: '14px', color: 'var(--color-text-muted)', marginTop: '4px' },
   layout: { display: 'flex', flexDirection: 'row', gap: '24px', flexWrap: 'wrap' },
   sidebar: {
     width: '250px',
-    backgroundColor: '#ffffff',
-    border: '1px solid #e2e8f0',
+    backgroundColor: 'var(--color-surface)',
+    border: '1px solid var(--color-border)',
     borderRadius: '12px',
     padding: '16px',
     height: 'fit-content'
@@ -35,7 +35,7 @@ const styles = {
     borderRadius: '8px',
     cursor: 'pointer',
     backgroundColor: active ? '#0d9488' : 'transparent',
-    color: active ? '#ffffff' : '#64748b',
+    color: active ? '#ffffff' : 'var(--color-text-muted)',
     fontWeight: active ? '600' : '500',
     fontSize: '14px',
     border: 'none',
@@ -46,18 +46,18 @@ const styles = {
   }),
   content: { flex: '1', minWidth: '300px' },
   card: {
-    backgroundColor: '#ffffff',
-    border: '1px solid #e2e8f0',
+    backgroundColor: 'var(--color-surface)',
+    border: '1px solid var(--color-border)',
     borderRadius: '12px',
     padding: '24px'
   },
-  cardTitle: { fontSize: '20px', fontWeight: '600', color: '#1e293b', marginBottom: '24px' },
+  cardTitle: { fontSize: '20px', fontWeight: '600', color: 'var(--color-text-primary)', marginBottom: '24px' },
   formGroup: { marginBottom: '16px' },
-  label: { display: 'block', fontSize: '14px', fontWeight: '500', color: '#1e293b', marginBottom: '8px' },
-  hint: { fontSize: '12px', color: '#64748b', marginTop: '4px' },
+  label: { display: 'block', fontSize: '14px', fontWeight: '500', color: 'var(--color-text-primary)', marginBottom: '8px' },
+  hint: { fontSize: '12px', color: 'var(--color-text-muted)', marginTop: '4px' },
   errorBox: {
     padding: '16px',
-    backgroundColor: '#fef2f2',
+    backgroundColor: 'var(--color-background-secondary)',
     border: '1px solid #fecaca',
     borderRadius: '8px',
     display: 'flex',
@@ -73,8 +73,8 @@ const styles = {
     padding: '16px 0',
     borderBottom: '1px solid #f1f5f9'
   },
-  toggleLabel: { fontWeight: '500', color: '#1e293b' },
-  toggleDesc: { fontSize: '14px', color: '#64748b', marginTop: '2px' },
+  toggleLabel: { fontWeight: '500', color: 'var(--color-text-primary)' },
+  toggleDesc: { fontSize: '14px', color: 'var(--color-text-muted)', marginTop: '2px' },
   toggle: {
     width: '44px',
     height: '24px',
@@ -87,7 +87,7 @@ const styles = {
     width: '20px',
     height: '20px',
     borderRadius: '50%',
-    backgroundColor: '#ffffff',
+    backgroundColor: 'var(--color-surface)',
     position: 'absolute',
     top: '2px',
     left: checked ? '22px' : '2px',
@@ -99,19 +99,19 @@ const styles = {
     padding: '20px 16px',
     borderRadius: '12px',
     border: active ? '2px solid #0d9488' : '2px solid #e2e8f0',
-    backgroundColor: active ? '#f0fdfa' : '#ffffff',
+    backgroundColor: active ? 'var(--color-background-secondary)' : '#ffffff',
     cursor: 'pointer',
     textAlign: 'center',
     transition: 'all 0.2s'
   }),
-  themeLabel: { fontWeight: '500', color: '#1e293b', marginTop: '8px' },
+  themeLabel: { fontWeight: '500', color: 'var(--color-text-primary)', marginTop: '8px' },
   modalContent: { textAlign: 'center', padding: '16px' },
   successIcon: { width: '64px', height: '64px', color: '#10b981', margin: '0 auto 16px' }
 };
 
 const Toggle = ({ checked, onChange }) => (
   <div
-    style={{ ...styles.toggle, backgroundColor: checked ? '#0d9488' : '#cbd5e1' }}
+    style={{ ...styles.toggle, backgroundColor: checked ? '#0d9488' : 'var(--color-border-dark)' }}
     onClick={() => onChange(!checked)}
   >
     <div style={styles.toggleKnob(checked)} />
@@ -460,7 +460,7 @@ const TeacherSettings = () => {
                 onClick={() => setActiveTab(tab.id)}
                 onMouseEnter={(e) => {
                   if (activeTab !== tab.id) {
-                    e.currentTarget.style.backgroundColor = '#f1f5f9';
+                    e.currentTarget.style.backgroundColor = 'var(--color-background-secondary)';
                   }
                 }}
                 onMouseLeave={(e) => {
@@ -481,7 +481,7 @@ const TeacherSettings = () => {
                 <h2 style={styles.cardTitle}>Profil Bilgileri</h2>
                 <div style={styles.formGroup}>
                   <label style={styles.label}>Kullanıcı Adı</label>
-                  <Input value={user?.username || ''} disabled style={{ backgroundColor: '#f8fafc' }} />
+                  <Input value={user?.username || ''} disabled style={{ backgroundColor: 'var(--color-background)' }} />
                   <p style={styles.hint}>Kullanıcı adı değiştirilemez</p>
                 </div>
                 <div style={styles.formGroup}>
@@ -523,7 +523,7 @@ const TeacherSettings = () => {
                     <button
                       type="button"
                       onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-                      style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: '#64748b' }}
+                      style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-text-muted)' }}
                     >
                       {showCurrentPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                     </button>
@@ -541,7 +541,7 @@ const TeacherSettings = () => {
                     <button
                       type="button"
                       onClick={() => setShowNewPassword(!showNewPassword)}
-                      style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: '#64748b' }}
+                      style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-text-muted)' }}
                     >
                       {showNewPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                     </button>
@@ -571,7 +571,7 @@ const TeacherSettings = () => {
                 <h2 style={styles.cardTitle}>Passkey Yönetimi</h2>
                 <div style={{
                   marginBottom: '24px',
-                  color: '#64748b',
+                  color: 'var(--color-text-muted)',
                   fontSize: '15px',
                   lineHeight: '1.6'
                 }}>
@@ -607,10 +607,10 @@ const TeacherSettings = () => {
                       ? '0 4px 14px rgba(16, 185, 129, 0.3)'
                       : '0 4px 14px rgba(239, 68, 68, 0.3)'
                   }}>
-                    <Shield size={28} style={{ color: '#ffffff' }} />
+                    <Shield size={28} style={{ color: 'var(--color-text-inverse, #fff)' }} />
                   </div>
                   <div style={{ flex: 1 }}>
-                    <div style={{ fontWeight: '600', color: '#1e293b', fontSize: '16px', marginBottom: '4px' }}>
+                    <div style={{ fontWeight: '600', color: 'var(--color-text-primary)', fontSize: '16px', marginBottom: '4px' }}>
                       Passkey Durumu
                     </div>
                     <div style={{
@@ -718,10 +718,10 @@ const TeacherSettings = () => {
                   padding: '16px',
                   background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)',
                   borderRadius: '12px',
-                  border: '1px solid #e2e8f0',
+                  border: '1px solid var(--color-border)',
                   marginBottom: '12px'
                 }}>
-                  <div style={{ fontSize: '13px', color: '#64748b', lineHeight: '1.6' }}>
+                  <div style={{ fontSize: '13px', color: 'var(--color-text-muted)', lineHeight: '1.6' }}>
                     💡 <strong>Bilgi:</strong> Passkey ile giriş için platformunuzun biyometrik (parmak izi, yüz tanıma)
                     veya anahtar tabanlı kimlik doğrulamasını kullanabilirsiniz.
                   </div>
@@ -784,16 +784,16 @@ const TeacherSettings = () => {
                   alignItems: 'center',
                   justifyContent: 'space-between',
                   padding: '24px',
-                  backgroundColor: '#f8fafc',
+                  backgroundColor: 'var(--color-background)',
                   borderRadius: '12px',
-                  border: '1px solid #e2e8f0'
+                  border: '1px solid var(--color-border)'
                 }}>
                   <div>
-                    <div style={{ fontSize: '14px', color: '#64748b', marginBottom: '4px' }}>Mevcut Durum</div>
+                    <div style={{ fontSize: '14px', color: 'var(--color-text-muted)', marginBottom: '4px' }}>Mevcut Durum</div>
                     <div style={{
                       fontSize: '18px',
                       fontWeight: '600',
-                      color: (user?.recoveryKeyHash || user?.hasRecoveryKey) ? '#10b981' : '#64748b'
+                      color: (user?.recoveryKeyHash || user?.hasRecoveryKey) ? '#10b981' : 'var(--color-text-muted)'
                     }}>
                       {(user?.recoveryKeyHash || user?.hasRecoveryKey) ? '✅ Aktif' : '○ Oluşturulmamış'}
                     </div>
@@ -872,10 +872,10 @@ const TeacherSettings = () => {
                     <div style={{ 
                       textAlign: 'center', 
                       padding: '40px 20px', 
-                      backgroundColor: '#f8fafc', 
+                      backgroundColor: 'var(--color-background)', 
                       borderRadius: '12px',
-                      border: '1px dashed #cbd5e1',
-                      color: '#64748b'
+                      border: '1px dashed var(--color-border-dark)',
+                      color: 'var(--color-text-muted)'
                     }}>
                       <BookOpen size={32} style={{ marginBottom: '12px', opacity: 0.5 }} />
                       <p>Henüz ders eklenmemiş.</p>
@@ -889,9 +889,9 @@ const TeacherSettings = () => {
                           alignItems: 'center', 
                           justifyContent: 'space-between',
                           padding: '12px 16px',
-                          backgroundColor: '#f8fafc',
+                          backgroundColor: 'var(--color-background)',
                           borderRadius: '10px',
-                          border: '1px solid #e2e8f0',
+                          border: '1px solid var(--color-border)',
                           transition: 'all 0.2s'
                         }}
                       >
@@ -910,7 +910,7 @@ const TeacherSettings = () => {
                           }}>
                             {index + 1}
                           </div>
-                          <span style={{ fontWeight: '500', color: '#1e293b' }}>{course}</span>
+                          <span style={{ fontWeight: '500', color: 'var(--color-text-primary)' }}>{course}</span>
                         </div>
                         <button 
                           onClick={() => handleRemoveCourse(course)}
@@ -946,7 +946,7 @@ const TeacherSettings = () => {
             <div style={{
               marginBottom: '24px',
               padding: '16px',
-              backgroundColor: '#fef2f2',
+              backgroundColor: 'var(--color-background-secondary)',
               borderRadius: '12px',
               border: '1px solid #fee2e2'
             }}>
@@ -969,7 +969,7 @@ const TeacherSettings = () => {
             </div>
 
             <div style={{ marginBottom: '24px' }}>
-              <label style={{ fontSize: '14px', fontWeight: '500', color: '#334155', marginLeft: '4px', marginBottom: '8px', display: 'block' }}>
+              <label style={{ fontSize: '14px', fontWeight: '500', color: 'var(--color-foreground-secondary)', marginLeft: '4px', marginBottom: '8px', display: 'block' }}>
                 Kurtarma Anahtarınız
               </label>
               <div style={{ position: 'relative' }}>
@@ -977,14 +977,14 @@ const TeacherSettings = () => {
                   width: '100%',
                   padding: '16px',
                   borderRadius: '12px',
-                  border: '1px solid #e2e8f0',
-                  backgroundColor: '#f8fafc',
+                  border: '1px solid var(--color-border)',
+                  backgroundColor: 'var(--color-background)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center'
                 }}>
                   <code style={{
-                    color: '#334155',
+                    color: 'var(--color-foreground-secondary)',
                     fontSize: '18px',
                     fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
                     fontWeight: '600',
@@ -1026,9 +1026,9 @@ const TeacherSettings = () => {
                 onClick={handleDownloadKey}
                 style={{
                   flex: 1,
-                  backgroundColor: '#f8fafc',
-                  color: '#334155',
-                  border: '1px solid #e2e8f0',
+                  backgroundColor: 'var(--color-background)',
+                  color: 'var(--color-foreground-secondary)',
+                  border: '1px solid var(--color-border)',
                   padding: '12px',
                   borderRadius: '12px',
                   fontWeight: '500',
@@ -1038,8 +1038,8 @@ const TeacherSettings = () => {
                   gap: '8px',
                   boxShadow: 'none'
                 }}
-                onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#f1f5f9'}
-                onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#f8fafc'}
+                onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'var(--color-background-secondary)'}
+                onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'var(--color-background)'}
               >
                 <Download size={18} />
                 <span>Dosya Olarak İndir</span>
@@ -1048,9 +1048,9 @@ const TeacherSettings = () => {
                 onClick={handlePrintKey}
                 style={{
                   flex: 1,
-                  backgroundColor: '#ffffff',
-                  color: '#64748b',
-                  border: '1px solid #e2e8f0',
+                  backgroundColor: 'var(--color-surface)',
+                  color: 'var(--color-text-muted)',
+                  border: '1px solid var(--color-border)',
                   padding: '12px',
                   borderRadius: '12px',
                   fontWeight: '500',
@@ -1060,7 +1060,7 @@ const TeacherSettings = () => {
                   gap: '8px',
                   boxShadow: 'none'
                 }}
-                onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#f8fafc'}
+                onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'var(--color-background)'}
                 onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#ffffff'}
               >
                 <Printer size={18} />
@@ -1090,7 +1090,7 @@ const TeacherSettings = () => {
         <Modal isOpen={showSuccessModal} onClose={() => setShowSuccessModal(false)} title="İşlem Başarılı">
           <div style={styles.modalContent}>
             <CheckCircle style={styles.successIcon} />
-            <p style={{ color: '#1e293b', marginBottom: '16px' }}>{successMessage}</p>
+            <p style={{ color: 'var(--color-text-primary)', marginBottom: '16px' }}>{successMessage}</p>
             <Button onClick={() => setShowSuccessModal(false)}>Tamam</Button>
           </div>
         </Modal>

@@ -115,13 +115,13 @@ const Scheduler = () => {
       },
       scheduled: {
         text: 'Zamanlanmış',
-        bg: '#dbeafe',
+        bg: 'var(--color-border)',
         color: '#1e40af',
         icon: <Clock size={14} />
       },
       ended: {
         text: 'Sona Erdi',
-        bg: '#f3f4f6',
+        bg: 'var(--color-background-secondary)',
         color: '#6b7280',
         icon: <PowerOff size={14} />
       }
@@ -155,21 +155,21 @@ const Scheduler = () => {
       flexWrap: 'wrap',
       gap: '16px'
     },
-    title: { fontSize: '24px', fontWeight: '700', color: '#1e293b' },
+    title: { fontSize: '24px', fontWeight: '700', color: 'var(--color-text-primary)' },
     currentTime: {
       display: 'flex',
       alignItems: 'center',
       gap: '12px',
       padding: '12px 20px',
-      backgroundColor: '#eff6ff',
+      backgroundColor: 'var(--color-background-secondary)',
       borderRadius: '12px',
       border: '1px solid #bfdbfe'
     },
     card: {
-      backgroundColor: 'white',
+      backgroundColor: 'var(--color-surface)',
       borderRadius: '16px',
       padding: '20px',
-      border: '1px solid #e2e8f0',
+      border: '1px solid var(--color-border)',
       boxShadow: '0 1px 3px rgba(0,0,0,0.08)',
       marginBottom: '16px'
     },
@@ -184,7 +184,7 @@ const Scheduler = () => {
     examTitle: {
       fontSize: '18px',
       fontWeight: '700',
-      color: '#1e293b',
+      color: 'var(--color-text-primary)',
       marginBottom: '8px'
     },
     examMeta: {
@@ -192,7 +192,7 @@ const Scheduler = () => {
       gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
       gap: '12px',
       padding: '16px',
-      backgroundColor: '#f8fafc',
+      backgroundColor: 'var(--color-background)',
       borderRadius: '12px',
       marginTop: '16px'
     },
@@ -201,11 +201,11 @@ const Scheduler = () => {
       alignItems: 'center',
       gap: '8px',
       fontSize: '14px',
-      color: '#64748b'
+      color: 'var(--color-text-muted)'
     },
     metaLabel: {
       fontWeight: '600',
-      color: '#475569'
+      color: 'var(--color-text-secondary)'
     },
     countdown: {
       display: 'flex',
@@ -222,9 +222,9 @@ const Scheduler = () => {
     emptyState: {
       textAlign: 'center',
       padding: '60px 20px',
-      backgroundColor: 'white',
+      backgroundColor: 'var(--color-surface)',
       borderRadius: '16px',
-      border: '1px solid #e2e8f0'
+      border: '1px solid var(--color-border)'
     }
   };
 
@@ -235,7 +235,7 @@ const Scheduler = () => {
         <div style={styles.header}>
           <div>
             <h1 style={styles.title}>Zamanlanmış Sınavlar</h1>
-            <p style={{ color: '#64748b', fontSize: '14px', marginTop: '4px' }}>
+            <p style={{ color: 'var(--color-text-muted)', fontSize: '14px', marginTop: '4px' }}>
               Otomatik açılma/kapanma zamanlaması
             </p>
           </div>
@@ -256,7 +256,7 @@ const Scheduler = () => {
 
         {/* Info Card */}
         <div style={{
-          backgroundColor: '#eff6ff',
+          backgroundColor: 'var(--color-background-secondary)',
           padding: '16px 20px',
           borderRadius: '12px',
           border: '1px solid #bfdbfe'
@@ -273,8 +273,8 @@ const Scheduler = () => {
         {/* Scheduled Exams List */}
         {scheduledExams.length === 0 ? (
           <div style={styles.emptyState}>
-            <Calendar size={64} color="#cbd5e1" style={{ margin: '0 auto 16px' }} />
-            <h3 style={{ fontSize: '18px', fontWeight: '600', color: '#64748b', marginBottom: '8px' }}>
+            <Calendar size={64} color='var(--color-border-dark)' style={{ margin: '0 auto 16px' }} />
+            <h3 style={{ fontSize: '18px', fontWeight: '600', color: 'var(--color-text-muted)', marginBottom: '8px' }}>
               Zamanlanmış sınav yok
             </h3>
             <p style={{ color: '#94a3b8' }}>
@@ -352,7 +352,7 @@ const Scheduler = () => {
                       display: 'flex',
                       justifyContent: 'space-between',
                       fontSize: '12px',
-                      color: '#64748b',
+                      color: 'var(--color-text-muted)',
                       marginBottom: '6px'
                     }}>
                       <span>İlerleme</span>
@@ -366,7 +366,7 @@ const Scheduler = () => {
                     <div style={{
                       width: '100%',
                       height: '8px',
-                      backgroundColor: '#e2e8f0',
+                      backgroundColor: 'var(--color-border)',
                       borderRadius: '4px',
                       overflow: 'hidden'
                     }}>
@@ -393,21 +393,21 @@ const Scheduler = () => {
           gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
           gap: '12px',
           padding: '20px',
-          backgroundColor: '#f8fafc',
+          backgroundColor: 'var(--color-background)',
           borderRadius: '12px',
-          border: '1px solid #e2e8f0'
+          border: '1px solid var(--color-border)'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <div style={{ width: '12px', height: '12px', backgroundColor: '#dcfce7', borderRadius: '3px' }} />
-            <span style={{ fontSize: '13px', color: '#64748b' }}>Aktif Sınavlar</span>
+            <span style={{ fontSize: '13px', color: 'var(--color-text-muted)' }}>Aktif Sınavlar</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <div style={{ width: '12px', height: '12px', backgroundColor: '#dbeafe', borderRadius: '3px' }} />
-            <span style={{ fontSize: '13px', color: '#64748b' }}>Zamanlanmış</span>
+            <div style={{ width: '12px', height: '12px', backgroundColor: 'var(--color-border)', borderRadius: '3px' }} />
+            <span style={{ fontSize: '13px', color: 'var(--color-text-muted)' }}>Zamanlanmış</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <div style={{ width: '12px', height: '12px', backgroundColor: '#f3f4f6', borderRadius: '3px' }} />
-            <span style={{ fontSize: '13px', color: '#64748b' }}>Sona Ermiş</span>
+            <div style={{ width: '12px', height: '12px', backgroundColor: 'var(--color-background-secondary)', borderRadius: '3px' }} />
+            <span style={{ fontSize: '13px', color: 'var(--color-text-muted)' }}>Sona Ermiş</span>
           </div>
         </div>
       </div>

@@ -584,13 +584,13 @@ const FileUpload = () => {
             <div style={{
               width: '48px',
               height: '48px',
-              border: '4px solid #e2e8f0',
+              border: '4px solid var(--color-border)',
               borderTopColor: '#2463eb',
               borderRadius: '50%',
               animation: 'spin 1s linear infinite',
               margin: '0 auto 16px'
             }} />
-            <p style={{ color: '#64748b' }}>{t('loading')}</p>
+            <p style={{ color: 'var(--color-text-muted)' }}>{t('loading')}</p>
           </div>
         </div>
       </div>
@@ -630,10 +630,10 @@ const FileUpload = () => {
             {examId && (
               <>
                 <AlertCircle size={48} color="#f59e0b" style={{ margin: '0 auto 16px' }} />
-                <h2 style={{ fontSize: '24px', fontWeight: '700', color: '#111318', marginBottom: '12px' }}>
+                <h2 style={{ fontSize: '24px', fontWeight: '700', color: 'var(--color-text-primary)', marginBottom: '12px' }}>
                   {t('examNotFound')}
                 </h2>
-                <p style={{ color: '#64748b', marginBottom: '32px' }}>
+                <p style={{ color: 'var(--color-text-muted)', marginBottom: '32px' }}>
                   {t('examNotFoundDesc')}
                 </p>
               </>
@@ -641,7 +641,7 @@ const FileUpload = () => {
 
             {studentExams.length > 0 ? (
               <>
-                <h3 style={{ fontSize: '20px', fontWeight: '600', color: '#111318', marginBottom: '24px', textAlign: 'left' }}>
+                <h3 style={{ fontSize: '20px', fontWeight: '600', color: 'var(--color-text-primary)', marginBottom: '24px', textAlign: 'left' }}>
                   {t('availableExams')}
                 </h3>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '20px' }}>
@@ -658,13 +658,13 @@ const FileUpload = () => {
                         onClick={() => !hasEnded && navigate(`/ogrenci/dosya-yukle?exam=${exam.id}`)}
                         style={{
                           padding: '28px',
-                          backgroundColor: 'white',
+                          backgroundColor: 'var(--color-surface)',
                           borderRadius: '16px',
                           cursor: hasEnded ? 'not-allowed' : 'pointer',
                           textAlign: 'left',
                           transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                           opacity: hasEnded ? 0.6 : 1,
-                          border: '1px solid #e2e8f0',
+                          border: '1px solid var(--color-border)',
                           boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05)',
                           position: 'relative',
                           overflow: 'hidden',
@@ -680,7 +680,7 @@ const FileUpload = () => {
                           }
                         }}
                         onMouseLeave={(e) => {
-                          e.currentTarget.style.borderColor = '#e2e8f0';
+                          e.currentTarget.style.borderColor = 'var(--color-border)';
                           e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05)';
                           e.currentTarget.style.transform = 'translateY(0)';
                         }}
@@ -698,9 +698,9 @@ const FileUpload = () => {
                             fontWeight: '750',
                             textTransform: 'uppercase',
                             letterSpacing: '0.05em',
-                            backgroundColor: hasEnded ? '#f1f5f9' : isActive ? '#dcfce7' : '#fff7ed',
-                            color: hasEnded ? '#64748b' : isActive ? '#059669' : '#d97706',
-                            border: `1px solid ${hasEnded ? '#e2e8f0' : isActive ? '#bbf7d0' : '#ffedd5'}`,
+                            backgroundColor: hasEnded ? 'var(--color-background-secondary)' : isActive ? '#dcfce7' : '#fff7ed',
+                            color: hasEnded ? 'var(--color-text-muted)' : isActive ? '#059669' : '#d97706',
+                            border: `1px solid ${hasEnded ? 'var(--color-border)' : isActive ? '#bbf7d0' : '#ffedd5'}`,
                             display: 'flex',
                             alignItems: 'center',
                             gap: '5px'
@@ -721,7 +721,7 @@ const FileUpload = () => {
                             width: '44px',
                             height: '44px',
                             borderRadius: '12px',
-                            backgroundColor: isActive ? '#eff6ff' : '#f8fafc',
+                            backgroundColor: isActive ? 'var(--color-background-secondary)' : 'var(--color-background)',
                             color: isActive ? '#3b82f6' : '#94a3b8',
                             display: 'flex',
                             alignItems: 'center',
@@ -733,7 +733,7 @@ const FileUpload = () => {
                           <h4 style={{ 
                             fontSize: '19px', 
                             fontWeight: '800', 
-                            color: '#1e293b',
+                            color: 'var(--color-text-primary)',
                             margin: 0,
                             lineHeight: '1.2'
                           }}>
@@ -744,7 +744,7 @@ const FileUpload = () => {
                         {/* Description */}
                         {exam.description && (
                           <p style={{ 
-                            color: '#64748b', 
+                            color: 'var(--color-text-muted)', 
                             fontSize: '14.5px', 
                             lineHeight: '1.5',
                             margin: 0,
@@ -765,7 +765,7 @@ const FileUpload = () => {
                               alignItems: 'center', 
                               gap: '8px', 
                               color: '#3b82f6', 
-                              backgroundColor: '#eff6ff',
+                              backgroundColor: 'var(--color-background-secondary)',
                               padding: '8px 12px',
                               borderRadius: '10px',
                               width: 'fit-content'
@@ -783,16 +783,16 @@ const FileUpload = () => {
                             borderTop: '1px solid #f1f5f9',
                             paddingTop: '12px'
                           }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#64748b' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--color-text-muted)' }}>
                               <Clock size={14} />
                               <span style={{ fontSize: '13px' }}>
-                                <span style={{ fontWeight: '600', color: '#475569' }}>{t('startDate')}:</span> {formatDateTime(exam.startDate)}
+                                <span style={{ fontWeight: '600', color: 'var(--color-text-secondary)' }}>{t('startDate')}:</span> {formatDateTime(exam.startDate)}
                               </span>
                             </div>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#64748b' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--color-text-muted)' }}>
                               <Timer size={14} />
                               <span style={{ fontSize: '13px' }}>
-                                <span style={{ fontWeight: '600', color: '#475569' }}>{t('endDate')}:</span> {formatDateTime(exam.endDate)}
+                                <span style={{ fontWeight: '600', color: 'var(--color-text-secondary)' }}>{t('endDate')}:</span> {formatDateTime(exam.endDate)}
                               </span>
                             </div>
                           </div>
@@ -825,16 +825,16 @@ const FileUpload = () => {
                 justifyContent: 'center',
                 padding: '80px 40px',
                 textAlign: 'center',
-                backgroundColor: 'white',
+                backgroundColor: 'var(--color-surface)',
                 borderRadius: '24px',
-                border: '1px dashed #cbd5e1',
+                border: '1px dashed var(--color-border-dark)',
                 marginTop: '40px'
               }}>
                 <div style={{
                   width: '100px',
                   height: '100px',
                   borderRadius: '30px',
-                  backgroundColor: '#f8fafc',
+                  backgroundColor: 'var(--color-background)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -843,10 +843,10 @@ const FileUpload = () => {
                 }}>
                   <School size={48} />
                 </div>
-                <h2 style={{ fontSize: '26px', fontWeight: '800', color: '#1e293b', marginBottom: '16px' }}>
+                <h2 style={{ fontSize: '26px', fontWeight: '800', color: 'var(--color-text-primary)', marginBottom: '16px' }}>
                   {t('noActiveExams')}
                 </h2>
-                <p style={{ color: '#64748b', marginBottom: '32px', fontSize: '16px', maxWidth: '450px', lineHeight: '1.6' }}>
+                <p style={{ color: 'var(--color-text-muted)', marginBottom: '32px', fontSize: '16px', maxWidth: '450px', lineHeight: '1.6' }}>
                   {t('noExamsAvailable')}
                 </p>
               </div>
@@ -891,7 +891,7 @@ const FileUpload = () => {
       }}>
         <AlertCircle size={64} color="#ef4444" style={{ marginBottom: '24px' }} />
         <h1 style={{ fontSize: '32px', fontWeight: 'bold', marginBottom: '16px' }}>Sınav Duraklatıldı</h1>
-        <p style={{ fontSize: '18px', color: '#cbd5e1', marginBottom: '32px', textAlign: 'center', maxWidth: '600px' }}>
+        <p style={{ fontSize: '18px', color: 'var(--color-border-dark)', marginBottom: '32px', textAlign: 'center', maxWidth: '600px' }}>
           Sınav sırasında tam ekrandan çıkmak güvenlik kurallarına aykırıdır. Lütfen sınava devam etmek için tekrar tam ekrana geçin.
         </p>
         <button
@@ -908,15 +908,15 @@ const FileUpload = () => {
   }
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: '#f6f6f8' }}>
+    <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: 'var(--color-background)' }}>
       <StudentSidebar />
 
       <div style={{ flex: 1, marginLeft: '288px', display: 'flex', flexDirection: 'column' }}>
         {/* Header / Topbar */}
         <div style={{
           height: '72px',
-          backgroundColor: 'white',
-          borderBottom: '1px solid #f0f1f4',
+          backgroundColor: 'var(--color-surface)',
+          borderBottom: '1px solid var(--color-border)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
@@ -929,28 +929,28 @@ const FileUpload = () => {
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px' }}>
             <span
               onClick={() => navigate('/ogrenci')}
-              style={{ color: '#64748b', cursor: 'pointer', fontWeight: '500' }}
+              style={{ color: 'var(--color-text-muted)', cursor: 'pointer', fontWeight: '500' }}
             >
               {t('home')}
             </span>
-            <span style={{ color: '#cbd5e1' }}>/</span>
+            <span style={{ color: 'var(--color-border-dark)' }}>/</span>
             <span
               onClick={() => navigate('/ogrenci')}
-              style={{ color: '#64748b', cursor: 'pointer', fontWeight: '500' }}
+              style={{ color: 'var(--color-text-muted)', cursor: 'pointer', fontWeight: '500' }}
             >
               {t('dashboard')}
             </span>
-            <span style={{ color: '#cbd5e1' }}>/</span>
-            <span style={{ color: '#111318', fontWeight: '600' }}>{t('uploadFile')}</span>
+            <span style={{ color: 'var(--color-border-dark)' }}>/</span>
+            <span style={{ color: 'var(--color-text-primary)', fontWeight: '600' }}>{t('uploadFile')}</span>
           </div>
 
           {/* User Info */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
             <div style={{ textAlign: 'right' }}>
-              <div style={{ fontSize: '12px', color: '#64748b', marginBottom: '2px' }}>
+              <div style={{ fontSize: '12px', color: 'var(--color-text-muted)', marginBottom: '2px' }}>
                 {user?.studentNumber || t('student')}
               </div>
-              <div style={{ fontSize: '14px', fontWeight: '600', color: '#111318' }}>
+              <div style={{ fontSize: '14px', fontWeight: '600', color: 'var(--color-text-primary)' }}>
                 {user?.fullName || user?.name || t('student')}
               </div>
             </div>
@@ -994,20 +994,20 @@ const FileUpload = () => {
               if (hasEnded) {
                 return (
                   <div style={{
-                    backgroundColor: 'white',
+                    backgroundColor: 'var(--color-surface)',
                     borderRadius: '16px',
                     padding: '48px',
                     textAlign: 'center',
                     boxShadow: '0 1px 3px 0 rgb(0 0 0 / 0.1)'
                   }}>
                     <AlertCircle size={64} color="#ef4444" style={{ margin: '0 auto 24px' }} />
-                    <h2 style={{ fontSize: '24px', fontWeight: '700', color: '#111318', marginBottom: '12px' }}>
+                    <h2 style={{ fontSize: '24px', fontWeight: '700', color: 'var(--color-text-primary)', marginBottom: '12px' }}>
                       {t('examEnded')}
                     </h2>
-                    <p style={{ color: '#64748b', marginBottom: '8px' }}>
+                    <p style={{ color: 'var(--color-text-muted)', marginBottom: '8px' }}>
                       {selectedExam.title}
                     </p>
-                    <p style={{ color: '#64748b', marginBottom: '24px' }}>
+                    <p style={{ color: 'var(--color-text-muted)', marginBottom: '24px' }}>
                       {t('examEndedDesc')}
                     </p>
                     <button
@@ -1044,7 +1044,7 @@ const FileUpload = () => {
                 <>
                   {/* Exam Info Card */}
                   <div style={{
-                    backgroundColor: 'white',
+                    backgroundColor: 'var(--color-surface)',
                     borderRadius: '16px',
                     overflow: 'hidden',
                     boxShadow: '0 1px 3px 0 rgb(0 0 0 / 0.1)',
@@ -1129,12 +1129,12 @@ const FileUpload = () => {
                         borderRight: '1px solid #f0f1f4'
                       }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-                          <User size={18} color="#64748b" />
-                          <span style={{ fontSize: '13px', fontWeight: '500', color: '#64748b' }}>
+                          <User size={18} color='var(--color-text-muted)' />
+                          <span style={{ fontSize: '13px', fontWeight: '500', color: 'var(--color-text-muted)' }}>
                             {t('teacher')}
                           </span>
                         </div>
-                        <p style={{ fontSize: '15px', fontWeight: '600', color: '#111318' }}>
+                        <p style={{ fontSize: '15px', fontWeight: '600', color: 'var(--color-text-primary)' }}>
                           {selectedExam.teacherName || 'Teacher'}
                         </p>
                       </div>
@@ -1144,12 +1144,12 @@ const FileUpload = () => {
                         borderRight: '1px solid #f0f1f4'
                       }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-                          <Calendar size={18} color="#64748b" />
-                          <span style={{ fontSize: '13px', fontWeight: '500', color: '#64748b' }}>
+                          <Calendar size={18} color='var(--color-text-muted)' />
+                          <span style={{ fontSize: '13px', fontWeight: '500', color: 'var(--color-text-muted)' }}>
                             {t('startDate')}
                           </span>
                         </div>
-                        <p style={{ fontSize: '15px', fontWeight: '600', color: '#111318' }}>
+                        <p style={{ fontSize: '15px', fontWeight: '600', color: 'var(--color-text-primary)' }}>
                           {formatDateTime(selectedExam.startDate)}
                         </p>
                       </div>
@@ -1159,24 +1159,24 @@ const FileUpload = () => {
                         borderRight: '1px solid #f0f1f4'
                       }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-                          <AlertCircle size={18} color="#64748b" />
-                          <span style={{ fontSize: '13px', fontWeight: '500', color: '#64748b' }}>
+                          <AlertCircle size={18} color='var(--color-text-muted)' />
+                          <span style={{ fontSize: '13px', fontWeight: '500', color: 'var(--color-text-muted)' }}>
                             {t('endDate')}
                           </span>
                         </div>
-                        <p style={{ fontSize: '15px', fontWeight: '600', color: '#111318' }}>
+                        <p style={{ fontSize: '15px', fontWeight: '600', color: 'var(--color-text-primary)' }}>
                           {formatDateTime(selectedExam.endDate)}
                         </p>
                       </div>
 
                       <div style={{ padding: '24px' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-                          <FileText size={18} color="#64748b" />
-                          <span style={{ fontSize: '13px', fontWeight: '500', color: '#64748b' }}>
+                          <FileText size={18} color='var(--color-text-muted)' />
+                          <span style={{ fontSize: '13px', fontWeight: '500', color: 'var(--color-text-muted)' }}>
                             {t('constraints')}
                           </span>
                         </div>
-                        <p style={{ fontSize: '15px', fontWeight: '600', color: '#111318' }}>
+                        <p style={{ fontSize: '15px', fontWeight: '600', color: 'var(--color-text-primary)' }}>
                           {(selectedExam.allowedFileTypes || ['.pdf']).map(f => f.replace('.', '').toUpperCase()).join(', ')} | Max: {selectedExam.maxFileSize ? Math.round(selectedExam.maxFileSize / (1024 * 1024)) : 10}MB
                         </p>
                       </div>
@@ -1186,7 +1186,7 @@ const FileUpload = () => {
                   {/* Soru İçeriği */}
                   {(selectedExam.questionText || selectedExam.questionFileUrl) && (
                     <div style={{
-                      backgroundColor: 'white',
+                      backgroundColor: 'var(--color-surface)',
                       borderRadius: '16px',
                       padding: '24px',
                       boxShadow: '0 1px 3px 0 rgb(0 0 0 / 0.1)',
@@ -1194,16 +1194,16 @@ const FileUpload = () => {
                     }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
                         <FileText size={20} color="#0d9488" />
-                        <h3 style={{ fontSize: '18px', fontWeight: '700', color: '#111318' }}>Soru İçeriği</h3>
+                        <h3 style={{ fontSize: '18px', fontWeight: '700', color: 'var(--color-text-primary)' }}>Soru İçeriği</h3>
                       </div>
 
                       {selectedExam.questionText && (
                         <div style={{
-                          backgroundColor: '#f8fafc',
+                          backgroundColor: 'var(--color-background)',
                           padding: '16px',
                           borderRadius: '12px',
                           fontSize: '15px',
-                          color: '#334155',
+                          color: 'var(--color-foreground-secondary)',
                           whiteSpace: 'pre-wrap',
                           marginBottom: selectedExam.questionFileUrl ? '16px' : '0'
                         }}>
@@ -1212,7 +1212,7 @@ const FileUpload = () => {
                       )}
 
                       {selectedExam.questionFileUrl && (
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 16px', backgroundColor: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '12px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 16px', backgroundColor: 'var(--color-background-secondary)', border: '1px solid #bbf7d0', borderRadius: '12px' }}>
                           <FileText size={24} color="#16a34a" />
                           <div style={{ flex: 1 }}>
                             <div style={{ fontSize: '14px', fontWeight: '600', color: '#166534' }}>Soru Dosyası</div>
@@ -1307,15 +1307,15 @@ const FileUpload = () => {
                     {/* Left Column - Upload Area / PDF Viewer */}
                     {(selectedExam.requireFileUpload === false && (selectedExam.type === 'exam' || selectedExam.type === 'final_exam')) ? (
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', height: '800px' }}>
-                        <h3 style={{ fontSize: '18px', fontWeight: '600', color: '#111318' }}>Sınav Dosyası</h3>
+                        <h3 style={{ fontSize: '18px', fontWeight: '600', color: 'var(--color-text-primary)' }}>Sınav Dosyası</h3>
                         {selectedExam.questionFileUrl ? (
                           <iframe
                             src={getQuestionFileUrl(selectedExam.questionFileUrl)}
                             title="Sınav Soruları"
-                            style={{ width: '100%', height: '100%', border: '1px solid #e2e8f0', borderRadius: '12px', backgroundColor: '#f8fafc' }}
+                            style={{ width: '100%', height: '100%', border: '1px solid var(--color-border)', borderRadius: '12px', backgroundColor: 'var(--color-background)' }}
                           />
                         ) : (
-                          <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '12px', color: '#64748b' }}>
+                          <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'var(--color-background)', border: '1px solid var(--color-border)', borderRadius: '12px', color: 'var(--color-text-muted)' }}>
                             Sınav dosyası bulunamadı.
                           </div>
                         )}
@@ -1337,7 +1337,7 @@ const FileUpload = () => {
                               justifyContent: 'center',
                               padding: '48px 24px',
                               border: '2px dashed',
-                              borderColor: isDragging ? '#2463eb' : '#cbd5e1',
+                              borderColor: isDragging ? '#2463eb' : 'var(--color-border-dark)',
                               borderRadius: '16px',
                               backgroundColor: isDragging ? 'rgba(36, 99, 235, 0.05)' : 'rgba(248, 250, 252, 0.5)',
                               cursor: 'pointer',
@@ -1362,7 +1362,7 @@ const FileUpload = () => {
                               width: '64px',
                               height: '64px',
                               borderRadius: '50%',
-                              backgroundColor: 'white',
+                              backgroundColor: 'var(--color-surface)',
                               boxShadow: '0 1px 3px 0 rgb(0 0 0 / 0.1)',
                               display: 'flex',
                               alignItems: 'center',
@@ -1377,13 +1377,13 @@ const FileUpload = () => {
                             <h3 style={{
                               fontSize: '18px',
                               fontWeight: '600',
-                              color: '#111318',
+                              color: 'var(--color-text-primary)',
                               marginBottom: '4px'
                             }}>
                               {t('dragDropFiles')}
                             </h3>
 
-                            <p style={{ fontSize: '14px', color: '#64748b', marginBottom: '16px' }}>
+                            <p style={{ fontSize: '14px', color: 'var(--color-text-muted)', marginBottom: '16px' }}>
                               {t('orClickToBrowse')}
                             </p>
 
@@ -1395,7 +1395,7 @@ const FileUpload = () => {
 
                         {/* Display warning if upload not required */}
                         {selectedExam.requireFileUpload === false && files.length === 0 && (
-                          <div style={{ padding: '16px', backgroundColor: '#eff6ff', borderRadius: '12px', border: '1px solid #bfdbfe', color: '#1e3a8a', fontSize: '14px' }}>
+                          <div style={{ padding: '16px', backgroundColor: 'var(--color-background-secondary)', borderRadius: '12px', border: '1px solid #bfdbfe', color: '#1e3a8a', fontSize: '14px' }}>
                             Öğretmeniniz bu sınav için dosya yüklemeyi zorunlu kılmamıştır. İsterseniz dosya yüklemeden direkt teslimi gönderebilirsiniz.
                           </div>
                         )}
@@ -1434,7 +1434,7 @@ const FileUpload = () => {
                               gap: '8px',
                               fontSize: '14px',
                               fontWeight: '600',
-                              color: '#111318',
+                              color: 'var(--color-text-primary)',
                               marginBottom: '12px'
                             }}>
                               <Clock size={18} color="#2463eb" />
@@ -1448,8 +1448,8 @@ const FileUpload = () => {
                                   alignItems: 'center',
                                   justifyContent: 'space-between',
                                   padding: '16px',
-                                  backgroundColor: 'white',
-                                  border: '1px solid #e2e8f0',
+                                  backgroundColor: 'var(--color-surface)',
+                                  border: '1px solid var(--color-border)',
                                   borderRadius: '12px',
                                   boxShadow: '0 1px 3px 0 rgb(0 0 0 / 0.1)'
                                 }}>
@@ -1458,7 +1458,7 @@ const FileUpload = () => {
                                       width: '40px',
                                       height: '40px',
                                       borderRadius: '8px',
-                                      backgroundColor: '#eff6ff',
+                                      backgroundColor: 'var(--color-background-secondary)',
                                       display: 'flex',
                                       alignItems: 'center',
                                       justifyContent: 'center',
@@ -1467,10 +1467,10 @@ const FileUpload = () => {
                                       <FileText size={20} color="#2563eb" />
                                     </div>
                                     <div style={{ flex: 1, minWidth: 0 }}>
-                                      <p style={{ fontSize: '15px', fontWeight: '500', color: '#111318', marginBottom: '2px' }}>
+                                      <p style={{ fontSize: '15px', fontWeight: '500', color: 'var(--color-text-primary)', marginBottom: '2px' }}>
                                         {file.name}
                                       </p>
-                                      <p style={{ fontSize: '13px', color: '#64748b' }}>
+                                      <p style={{ fontSize: '13px', color: 'var(--color-text-muted)' }}>
                                         {formatFileSize(file.size)}
                                       </p>
                                     </div>
@@ -1483,13 +1483,13 @@ const FileUpload = () => {
                                         alignItems: 'center',
                                         gap: '8px',
                                         padding: '4px 8px',
-                                        backgroundColor: '#f1f5f9',
+                                        backgroundColor: 'var(--color-background-secondary)',
                                         borderRadius: '6px'
                                       }}>
                                         <span style={{ fontSize: '10px', fontWeight: '700', color: '#94a3b8' }}>
                                           SHA-256
                                         </span>
-                                        <code style={{ fontSize: '12px', color: '#64748b', fontFamily: 'monospace' }}>
+                                        <code style={{ fontSize: '12px', color: 'var(--color-text-muted)', fontFamily: 'monospace' }}>
                                           {fileHashes[index].substring(0, 8)}...
                                         </code>
                                       </div>
@@ -1594,8 +1594,8 @@ const FileUpload = () => {
                     {/* Right Column - History / Text Answers */}
                     {selectedExam.requireFileUpload === false && selectedExam.type === 'exam' ? (
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                        <div style={{ padding: '24px', backgroundColor: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '16px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                          <h4 style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '16px', fontWeight: '600', color: '#111318', marginBottom: '8px' }}>
+                        <div style={{ padding: '24px', backgroundColor: 'var(--color-background)', border: '1px solid var(--color-border)', borderRadius: '16px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                          <h4 style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '16px', fontWeight: '600', color: 'var(--color-text-primary)', marginBottom: '8px' }}>
                             <FileText size={20} color="#2463eb" />
                             Yanıtlarınız
                           </h4>
@@ -1604,7 +1604,7 @@ const FileUpload = () => {
                             {classicAnswers.map((answer, index) => (
                               <div key={answer.id} style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                  <label style={{ fontSize: '14px', fontWeight: '600', color: '#334155' }}>
+                                  <label style={{ fontSize: '14px', fontWeight: '600', color: 'var(--color-foreground-secondary)' }}>
                                     Cevap {index + 1}
                                   </label>
                                   {!currentSubmission?.isLocked && classicAnswers.length > 1 && (
@@ -1629,12 +1629,12 @@ const FileUpload = () => {
                                     width: '100%',
                                     minHeight: '120px',
                                     padding: '12px',
-                                    border: '1px solid #cbd5e1',
+                                    border: '1px solid var(--color-border-dark)',
                                     borderRadius: '8px',
                                     resize: 'vertical',
                                     fontFamily: 'inherit',
-                                    backgroundColor: currentSubmission?.isLocked ? '#f1f5f9' : 'white',
-                                    color: currentSubmission?.isLocked ? '#64748b' : '#0f172a'
+                                    backgroundColor: currentSubmission?.isLocked ? 'var(--color-background-secondary)' : 'white',
+                                    color: currentSubmission?.isLocked ? 'var(--color-text-muted)' : '#0f172a'
                                   }}
                                 />
                               </div>
@@ -1646,9 +1646,9 @@ const FileUpload = () => {
                               onClick={() => setClassicAnswers([...classicAnswers, { id: Date.now(), text: '' }])}
                               style={{
                                 padding: '12px',
-                                backgroundColor: 'white',
-                                color: '#334155',
-                                border: '1px dashed #cbd5e1',
+                                backgroundColor: 'var(--color-surface)',
+                                color: 'var(--color-foreground-secondary)',
+                                border: '1px dashed var(--color-border-dark)',
                                 borderRadius: '8px',
                                 fontWeight: '500',
                                 cursor: 'pointer',
@@ -1658,7 +1658,7 @@ const FileUpload = () => {
                                 gap: '8px',
                                 transition: 'all 0.2s'
                               }}
-                              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f8fafc'}
+                              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--color-background)'}
                               onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'white'}
                             >
                               <Plus size={16} /> Yeni Yanıt Alanı Ekle
@@ -1745,8 +1745,8 @@ const FileUpload = () => {
                       <div>
                         <div style={{
                           padding: '24px',
-                          backgroundColor: '#f8fafc',
-                          border: '1px solid #e2e8f0',
+                          backgroundColor: 'var(--color-background)',
+                          border: '1px solid var(--color-border)',
                           borderRadius: '16px'
                         }}>
                           <h4 style={{
@@ -1755,10 +1755,10 @@ const FileUpload = () => {
                             gap: '8px',
                             fontSize: '14px',
                             fontWeight: '600',
-                            color: '#111318',
+                            color: 'var(--color-text-primary)',
                             marginBottom: '16px'
                           }}>
-                            <Clock size={18} color="#64748b" />
+                            <Clock size={18} color='var(--color-text-muted)' />
                             {t('uploadHistory')}
                           </h4>
 
@@ -1773,7 +1773,7 @@ const FileUpload = () => {
                               fontSize: '14px',
                               color: '#94a3b8'
                             }}>
-                              <FileText size={40} color="#cbd5e1" style={{ marginBottom: '12px' }} />
+                              <FileText size={40} color='var(--color-border-dark)' style={{ marginBottom: '12px' }} />
                               {t('noFilesUploaded')}
                             </div>
                           ) : (
@@ -1782,7 +1782,7 @@ const FileUpload = () => {
                                 <div key={file.id} style={{
                                   position: 'relative',
                                   paddingLeft: '16px',
-                                  borderLeft: '2px solid #e2e8f0'
+                                  borderLeft: '2px solid var(--color-border)'
                                 }}>
                                   <div style={{
                                     position: 'absolute',
@@ -1791,7 +1791,7 @@ const FileUpload = () => {
                                     width: '8px',
                                     height: '8px',
                                     borderRadius: '50%',
-                                    backgroundColor: '#cbd5e1'
+                                    backgroundColor: 'var(--color-border-dark)'
                                   }} />
 
                                   <div style={{ display: 'flex', alignItems: 'start', justifyContent: 'space-between', gap: '8px' }}>
@@ -1799,7 +1799,7 @@ const FileUpload = () => {
                                       <p style={{
                                         fontSize: '14px',
                                         fontWeight: '500',
-                                        color: '#334155',
+                                        color: 'var(--color-foreground-secondary)',
                                         marginBottom: '2px',
                                         overflow: 'hidden',
                                         textOverflow: 'ellipsis',
@@ -1807,7 +1807,7 @@ const FileUpload = () => {
                                       }}>
                                         {file.fileName}
                                       </p>
-                                      <p style={{ fontSize: '12px', color: '#64748b' }}>
+                                      <p style={{ fontSize: '12px', color: 'var(--color-text-muted)' }}>
                                         {new Date(file.submittedAt).toLocaleString('tr-TR')}
                                       </p>
                                     </div>
@@ -1820,7 +1820,7 @@ const FileUpload = () => {
                                         backgroundColor: 'transparent',
                                         border: 'none',
                                         cursor: currentSubmission?.isLocked ? 'not-allowed' : 'pointer',
-                                        color: currentSubmission?.isLocked ? '#cbd5e1' : '#94a3b8',
+                                        color: currentSubmission?.isLocked ? 'var(--color-border-dark)' : '#94a3b8',
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',
@@ -1855,7 +1855,7 @@ const FileUpload = () => {
                                 <div style={{
                                   marginTop: '16px',
                                   padding: '16px',
-                                  backgroundColor: '#dbeafe',
+                                  backgroundColor: 'var(--color-border)',
                                   border: '2px solid #60a5fa',
                                   borderRadius: '12px'
                                 }}>
@@ -1880,7 +1880,7 @@ const FileUpload = () => {
                                     style={{
                                       width: '100%',
                                       padding: '10px',
-                                      backgroundColor: 'white',
+                                      backgroundColor: 'var(--color-surface)',
                                       color: '#1e40af',
                                       border: '2px solid #60a5fa',
                                       borderRadius: '8px',
@@ -1890,7 +1890,7 @@ const FileUpload = () => {
                                       transition: 'all 0.2s'
                                     }}
                                     onMouseEnter={(e) => {
-                                      e.currentTarget.style.backgroundColor = '#dbeafe';
+                                      e.currentTarget.style.backgroundColor = 'var(--color-border)';
                                     }}
                                     onMouseLeave={(e) => {
                                       e.currentTarget.style.backgroundColor = 'white';
@@ -1974,14 +1974,14 @@ const FileUpload = () => {
                           <div style={{
                             marginTop: '24px',
                             paddingTop: '16px',
-                            borderTop: '1px solid #e2e8f0'
+                            borderTop: '1px solid var(--color-border)'
                           }}>
                             <div style={{
                               display: 'flex',
                               alignItems: 'center',
                               gap: '8px',
                               fontSize: '12px',
-                              color: '#64748b'
+                              color: 'var(--color-text-muted)'
                             }}>
                               <BadgeCheck size={16} />
                               <span>{t('encryptedLogged')}</span>

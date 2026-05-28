@@ -92,7 +92,7 @@ const ReportProblem = () => {
   };
 
   const content = (
-    <div className="max-w-[1400px] ml-0 pl-4 lg:pl-10 py-8 lg:py-12 pr-4 relative">
+    <div className="max-w-[1600px] ml-0 pl-4 lg:pl-10 py-8 lg:py-12 pr-4 relative w-full">
       <header className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
         <div className="flex items-center gap-6">
           <button
@@ -274,7 +274,7 @@ const ReportProblem = () => {
                 </label>
                 <textarea
                   required
-                  rows={10}
+                  rows={14}
                   placeholder={t('messagePlaceholder')}
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}

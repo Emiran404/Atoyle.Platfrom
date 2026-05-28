@@ -60,42 +60,42 @@ const Schedule = () => {
   const styles = {
     container: { display: 'flex', flexDirection: 'column', gap: '24px' },
     header: { textAlign: 'center', marginBottom: '8px' },
-    title: { fontSize: '28px', fontWeight: '700', color: '#1e293b', marginBottom: '8px' },
-    subtitle: { fontSize: '16px', color: '#64748b' },
+    title: { fontSize: '28px', fontWeight: '700', color: 'var(--color-text-primary)', marginBottom: '8px' },
+    subtitle: { fontSize: '16px', color: 'var(--color-text-muted)' },
     card: {
-      backgroundColor: 'white',
+      backgroundColor: 'var(--color-surface)',
       borderRadius: '16px',
       padding: '24px',
-      border: '1px solid #e2e8f0',
+      border: '1px solid var(--color-border)',
       boxShadow: '0 1px 3px rgba(0,0,0,0.08)'
     },
     table: {
       width: '100%',
       borderCollapse: 'collapse',
-      border: '2px solid #e2e8f0',
+      border: '2px solid var(--color-border)',
       borderRadius: '12px',
       overflow: 'hidden'
     },
     th: {
-      backgroundColor: '#f8fafc',
+      backgroundColor: 'var(--color-background)',
       padding: '16px 12px',
       textAlign: 'center',
       fontSize: '14px',
       fontWeight: '700',
-      color: '#475569',
-      border: '1px solid #e2e8f0',
+      color: 'var(--color-text-secondary)',
+      border: '1px solid var(--color-border)',
       textTransform: 'uppercase',
       letterSpacing: '0.5px'
     },
     td: {
       padding: '16px 12px',
-      border: '1px solid #e2e8f0',
+      border: '1px solid var(--color-border)',
       textAlign: 'center',
       minHeight: '100px',
       verticalAlign: 'middle'
     },
     lessonCard: {
-      backgroundColor: '#eff6ff',
+      backgroundColor: 'var(--color-background-secondary)',
       padding: '16px',
       borderRadius: '10px',
       border: '2px solid #bfdbfe'
@@ -108,7 +108,7 @@ const Schedule = () => {
     },
     lessonTeacher: {
       fontSize: '13px',
-      color: '#64748b',
+      color: 'var(--color-text-muted)',
       marginBottom: '4px'
     },
     lessonRoom: {
@@ -117,7 +117,7 @@ const Schedule = () => {
       fontWeight: '600'
     },
     emptySlot: {
-      color: '#cbd5e1',
+      color: 'var(--color-border-dark)',
       fontSize: '14px',
       fontStyle: 'italic',
       padding: '30px'
@@ -152,8 +152,8 @@ const Schedule = () => {
               textAlign: 'center',
               padding: '60px 40px'
             }}>
-              <Calendar size={64} color="#cbd5e1" style={{ marginBottom: '24px' }} />
-              <h3 style={{ fontSize: '18px', fontWeight: '600', color: '#64748b', marginBottom: '8px' }}>
+              <Calendar size={64} color='var(--color-border-dark)' style={{ marginBottom: '24px' }} />
+              <h3 style={{ fontSize: '18px', fontWeight: '600', color: 'var(--color-text-muted)', marginBottom: '8px' }}>
                 Henüz ders programı yok
               </h3>
               <p style={{ color: '#94a3b8' }}>
@@ -178,7 +178,7 @@ const Schedule = () => {
                     <tr key={period}>
                       <td style={styles.td}>
                         <div style={styles.timeSlot}>{period}. Ders</div>
-                        <div style={{ fontSize: '13px', color: '#64748b', fontWeight: '600' }}>
+                        <div style={{ fontSize: '13px', color: 'var(--color-text-muted)', fontWeight: '600' }}>
                           {timeSlots[period]}
                         </div>
                       </td>
@@ -216,7 +216,7 @@ const Schedule = () => {
 
         {/* Info */}
         <div style={{
-          backgroundColor: '#eff6ff',
+          backgroundColor: 'var(--color-background-secondary)',
           padding: '16px 20px',
           borderRadius: '12px',
           border: '1px solid #bfdbfe'

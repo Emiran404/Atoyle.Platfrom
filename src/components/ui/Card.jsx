@@ -15,8 +15,8 @@ const Card = ({
   };
 
   const cardStyle = {
-    backgroundColor: '#ffffff',
-    border: '1px solid #e2e8f0',
+    backgroundColor: 'var(--color-surface)',
+    border: '1px solid var(--color-border)',
     borderRadius: '16px',
     boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
     padding: paddings[padding],
@@ -30,11 +30,11 @@ const Card = ({
       className={className}
       onMouseEnter={hover ? (e) => {
         e.currentTarget.style.boxShadow = '0 10px 25px rgba(0,0,0,0.1)';
-        e.currentTarget.style.borderColor = '#cbd5e1';
+        e.currentTarget.style.borderColor = 'var(--color-border-dark)';
       } : undefined}
       onMouseLeave={hover ? (e) => {
         e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.05)';
-        e.currentTarget.style.borderColor = '#e2e8f0';
+        e.currentTarget.style.borderColor = 'var(--color-border)';
       } : undefined}
       {...props}
     >
@@ -44,7 +44,7 @@ const Card = ({
 };
 
 const CardHeader = ({ children, className = '' }) => (
-  <div style={{ paddingBottom: '16px', borderBottom: '1px solid #e2e8f0' }} className={className}>
+  <div style={{ paddingBottom: '16px', borderBottom: '1px solid var(--color-border)' }} className={className}>
     {children}
   </div>
 );
@@ -56,7 +56,7 @@ const CardTitle = ({ children, className = '' }) => (
 );
 
 const CardDescription = ({ children, className = '' }) => (
-  <p style={{ fontSize: '14px', color: '#64748b', marginTop: '4px' }} className={className}>
+  <p style={{ fontSize: '14px', color: 'var(--color-text-muted)', marginTop: '4px' }} className={className}>
     {children}
   </p>
 );
@@ -68,7 +68,7 @@ const CardContent = ({ children, className = '' }) => (
 );
 
 const CardFooter = ({ children, className = '' }) => (
-  <div style={{ paddingTop: '16px', borderTop: '1px solid #e2e8f0' }} className={className}>
+  <div style={{ paddingTop: '16px', borderTop: '1px solid var(--color-border)' }} className={className}>
     {children}
   </div>
 );

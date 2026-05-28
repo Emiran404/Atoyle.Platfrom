@@ -45,7 +45,7 @@ const StudentSidebar = () => {
       flexDirection: 'column',
       justifyContent: 'space-between',
       borderRight: '1px solid #f0f1f4',
-      background: 'white',
+      background: 'var(--color-surface)',
       padding: '20px',
       height: '100vh',
       position: 'fixed',
@@ -72,7 +72,7 @@ const StudentSidebar = () => {
             <h1 style={{ fontSize: '18px', fontWeight: '700', lineHeight: '1', marginBottom: '2px' }}>
               Atölye
             </h1>
-            <p style={{ color: '#64748b', fontSize: '12px', fontWeight: '500' }}>
+            <p style={{ color: 'var(--color-text-muted)', fontSize: '12px', fontWeight: '500' }}>
               Student Platform
             </p>
           </div>
@@ -93,7 +93,7 @@ const StudentSidebar = () => {
                 padding: '12px',
                 borderRadius: '12px',
                 background: isActive ? 'rgba(36, 99, 235, 0.1)' : 'transparent',
-                color: isActive ? '#2463eb' : '#64748b',
+                color: isActive ? '#2463eb' : 'var(--color-text-muted)',
                 fontSize: '14px',
                 fontWeight: isActive ? '700' : '500',
                 textDecoration: 'none',
@@ -101,14 +101,14 @@ const StudentSidebar = () => {
               })}
               onMouseEnter={(e) => {
                 if (!e.currentTarget.classList.contains('active')) {
-                  e.currentTarget.style.background = '#f8fafc';
-                  e.currentTarget.style.color = '#475569';
+                  e.currentTarget.style.background = 'var(--color-background)';
+                  e.currentTarget.style.color = 'var(--color-text-secondary)';
                 }
               }}
               onMouseLeave={(e) => {
                 if (!e.currentTarget.classList.contains('active')) {
                   e.currentTarget.style.background = 'transparent';
-                  e.currentTarget.style.color = '#64748b';
+                  e.currentTarget.style.color = 'var(--color-text-muted)';
                 }
               }}
             >
@@ -130,9 +130,9 @@ const StudentSidebar = () => {
             gap: '12px',
             padding: '12px',
             borderRadius: '12px',
-            background: '#f1f5f9',
-            border: '1px solid #e2e8f0',
-            color: '#475569',
+            background: 'var(--color-background-secondary)',
+            border: '1px solid var(--color-border)',
+            color: 'var(--color-text-secondary)',
             fontSize: '14px',
             fontWeight: '600',
             cursor: 'pointer',
@@ -145,9 +145,9 @@ const StudentSidebar = () => {
             e.currentTarget.style.color = 'white';
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.background = '#f1f5f9';
-            e.currentTarget.style.borderColor = '#e2e8f0';
-            e.currentTarget.style.color = '#475569';
+            e.currentTarget.style.background = 'var(--color-background-secondary)';
+            e.currentTarget.style.borderColor = 'var(--color-border)';
+            e.currentTarget.style.color = 'var(--color-text-secondary)';
           }}
         >
           <ArrowLeft size={20} />
@@ -163,7 +163,7 @@ const StudentSidebar = () => {
             gap: '12px',
             padding: '12px',
             borderRadius: '12px',
-            background: '#fef2f2',
+            background: 'var(--color-background-secondary)',
             border: '1px solid #fecaca',
             color: '#dc2626',
             fontSize: '14px',
@@ -178,7 +178,7 @@ const StudentSidebar = () => {
             e.currentTarget.style.color = 'white';
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.background = '#fef2f2';
+            e.currentTarget.style.background = 'var(--color-background-secondary)';
             e.currentTarget.style.borderColor = '#fecaca';
             e.currentTarget.style.color = '#dc2626';
           }}
@@ -187,7 +187,7 @@ const StudentSidebar = () => {
           <span>{t('logout') || 'Çıkış Yap'}</span>
         </button>
 
-        <div style={{ height: '1px', width: '100%', background: '#f0f1f4' }}></div>
+        <div style={{ height: '1px', width: '100%', background: 'var(--color-border)' }}></div>
         <div style={{
           display: 'flex',
           alignItems: 'center',
@@ -202,10 +202,10 @@ const StudentSidebar = () => {
         >
           <Code size={20} style={{ color: '#94a3b8' }} />
           <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <p style={{ fontSize: '12px', color: '#64748b', fontWeight: '500', lineHeight: '1.2' }}>
+            <p style={{ fontSize: '12px', color: 'var(--color-text-muted)', fontWeight: '500', lineHeight: '1.2' }}>
               Developed by
             </p>
-            <p style={{ fontSize: '14px', color: '#111318', fontWeight: '700', lineHeight: '1.2' }}>
+            <p style={{ fontSize: '14px', color: 'var(--color-text-primary)', fontWeight: '700', lineHeight: '1.2' }}>
               Emirhan Gök
             </p>
           </div>

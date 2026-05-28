@@ -133,7 +133,7 @@ const StudentRegister = () => {
         justifyContent: 'center',
         padding: '24px'
       }}>
-        <p style={{ color: '#64748b' }}>Yükleniyor...</p>
+        <p style={{ color: 'var(--color-text-muted)' }}>Yükleniyor...</p>
       </div>
     );
   }
@@ -161,10 +161,10 @@ const StudentRegister = () => {
           }}>
             <AlertTriangle size={40} style={{ color: '#dc2626' }} />
           </div>
-          <h1 style={{ fontSize: '24px', fontWeight: '700', color: '#1e293b', marginBottom: '12px' }}>
+          <h1 style={{ fontSize: '24px', fontWeight: '700', color: 'var(--color-text-primary)', marginBottom: '12px' }}>
             Kayıtlar Kapalı
           </h1>
-          <p style={{ fontSize: '15px', color: '#64748b', marginBottom: '24px' }}>
+          <p style={{ fontSize: '15px', color: 'var(--color-text-muted)', marginBottom: '24px' }}>
             {!registrationEnabled 
               ? 'Öğrenci kayıtları şu anda kapalıdır. Lütfen daha sonra tekrar deneyin.'
               : 'Şu anda kayıt kabul eden sınıf bulunmamaktadır.'}
@@ -208,7 +208,7 @@ const StudentRegister = () => {
             display: 'inline-flex', 
             alignItems: 'center', 
             gap: '8px', 
-            color: '#64748b', 
+            color: 'var(--color-text-muted)', 
             textDecoration: 'none',
             marginBottom: '24px',
             fontSize: '14px'
@@ -232,18 +232,18 @@ const StudentRegister = () => {
           }}>
             <GraduationCap style={{ width: '32px', height: '32px', color: 'white' }} />
           </div>
-          <h1 style={{ fontSize: '24px', fontWeight: 'bold', color: '#1e293b', marginBottom: '8px' }}>
+          <h1 style={{ fontSize: '24px', fontWeight: 'bold', color: 'var(--color-text-primary)', marginBottom: '8px' }}>
             Öğrenci Kaydı
           </h1>
-          <p style={{ color: '#64748b' }}>Atölye Sınav Platformuna kayıt ol</p>
+          <p style={{ color: 'var(--color-text-muted)' }}>Atölye Sınav Platformuna kayıt ol</p>
         </div>
 
         <div style={{
-          backgroundColor: 'white',
+          backgroundColor: 'var(--color-surface)',
           borderRadius: '16px',
           padding: '32px',
           boxShadow: '0 10px 40px -10px rgba(0,0,0,0.1)',
-          border: '1px solid #e2e8f0'
+          border: '1px solid var(--color-border)'
         }}>
           {/* Güvenlik Uyarısı */}
           <div style={{
@@ -322,7 +322,7 @@ const StudentRegister = () => {
                             height: '4px',
                             flex: 1,
                             borderRadius: '2px',
-                            backgroundColor: passwordStrength.score >= level ? getStrengthColor() : '#e2e8f0'
+                            backgroundColor: passwordStrength.score >= level ? getStrengthColor() : 'var(--color-border)'
                           }}
                         />
                       ))}
@@ -354,7 +354,7 @@ const StudentRegister = () => {
           </form>
 
           <div style={{ marginTop: '24px', textAlign: 'center' }}>
-            <p style={{ fontSize: '14px', color: '#64748b' }}>
+            <p style={{ fontSize: '14px', color: 'var(--color-text-muted)' }}>
               Zaten hesabınız var mı?{' '}
               <Link to="/ogrenci/giris" style={{ color: '#3b82f6', textDecoration: 'none', fontWeight: '500' }}>
                 Giriş Yap
@@ -363,7 +363,7 @@ const StudentRegister = () => {
           </div>
         </div>
 
-        <p style={{ textAlign: 'center', fontSize: '14px', color: '#64748b', marginTop: '24px' }}>
+        <p style={{ textAlign: 'center', fontSize: '14px', color: 'var(--color-text-muted)', marginTop: '24px' }}>
           Öğretmen misiniz?{' '}
           <Link to="/ogretmen/kayit" style={{ color: '#3b82f6', textDecoration: 'none', fontWeight: '500' }}>
             Öğretmen kaydı

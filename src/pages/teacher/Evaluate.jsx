@@ -27,17 +27,17 @@ import {
 
 // Light theme stilleri
 const styles = {
-  page: { minHeight: '100vh', backgroundColor: '#f8fafc' },
+  page: { minHeight: '100vh', backgroundColor: 'var(--color-background)' },
   container: { height: 'calc(100vh - 64px)', display: 'flex' },
   sidebar: {
     width: '320px',
-    borderRight: '1px solid #e2e8f0',
+    borderRight: '1px solid var(--color-border)',
     display: 'flex',
     flexDirection: 'column',
-    backgroundColor: '#ffffff',
+    backgroundColor: 'var(--color-surface)',
     boxShadow: '4px 0 10px -5px rgba(0, 0, 0, 0.05)'
   },
-  sidebarHeader: { padding: '16px', borderBottom: '1px solid #e2e8f0' },
+  sidebarHeader: { padding: '16px', borderBottom: '1px solid var(--color-border)' },
   backButton: {
     display: 'flex',
     alignItems: 'center',
@@ -45,33 +45,33 @@ const styles = {
     padding: '6px 12px',
     backgroundColor: 'transparent',
     border: 'none',
-    color: '#64748b',
+    color: 'var(--color-text-muted)',
     cursor: 'pointer',
     borderRadius: '6px',
     marginBottom: '8px'
   },
-  examTitle: { fontSize: '16px', fontWeight: '600', color: '#1e293b', margin: 0 },
+  examTitle: { fontSize: '16px', fontWeight: '600', color: 'var(--color-text-primary)', margin: 0 },
   badgeRow: { display: 'flex', alignItems: 'center', gap: '8px', marginTop: '8px' },
-  searchSection: { padding: '12px', borderBottom: '1px solid #e2e8f0' },
+  searchSection: { padding: '12px', borderBottom: '1px solid var(--color-border)' },
   searchInput: {
     width: '100%',
     padding: '8px 12px',
-    border: '1px solid #e2e8f0',
+    border: '1px solid var(--color-border)',
     borderRadius: '8px',
     fontSize: '14px',
-    color: '#1e293b',
-    backgroundColor: '#ffffff',
+    color: 'var(--color-text-primary)',
+    backgroundColor: 'var(--color-surface)',
     outline: 'none',
     boxSizing: 'border-box'
   },
   filterSelect: {
     width: '100%',
     padding: '8px 12px',
-    border: '1px solid #e2e8f0',
+    border: '1px solid var(--color-border)',
     borderRadius: '8px',
     fontSize: '14px',
-    color: '#1e293b',
-    backgroundColor: '#ffffff',
+    color: 'var(--color-text-primary)',
+    backgroundColor: 'var(--color-surface)',
     marginTop: '8px'
   },
   submissionList: { flex: 1, overflowY: 'auto' },
@@ -79,40 +79,40 @@ const styles = {
     padding: '16px 20px',
     borderBottom: '1px solid #f1f5f9',
     cursor: 'pointer',
-    backgroundColor: isActive ? '#eff6ff' : '#ffffff',
+    backgroundColor: isActive ? 'var(--color-background-secondary)' : '#ffffff',
     borderLeft: isActive ? '4px solid #3b82f6' : '4px solid transparent',
     transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
     margin: '4px 8px',
     borderRadius: '12px'
   }),
-  studentName: { fontWeight: '500', color: '#1e293b', marginBottom: '4px' },
-  studentNumber: { fontSize: '13px', color: '#64748b' },
+  studentName: { fontWeight: '500', color: 'var(--color-text-primary)', marginBottom: '4px' },
+  studentNumber: { fontSize: '13px', color: 'var(--color-text-muted)' },
   gradeDisplay: { fontSize: '20px', fontWeight: '700', color: '#3b82f6' },
-  mainContent: { flex: 1, display: 'flex', flexDirection: 'column', backgroundColor: '#f1f5f9' },
+  mainContent: { flex: 1, display: 'flex', flexDirection: 'column', backgroundColor: 'var(--color-background-secondary)' },
   topBar: {
     padding: '12px 16px',
-    borderBottom: '1px solid #e2e8f0',
+    borderBottom: '1px solid var(--color-border)',
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#ffffff'
+    backgroundColor: 'var(--color-surface)'
   },
   navButtons: { display: 'flex', alignItems: 'center', gap: '12px' },
   navButton: {
     padding: '6px 10px',
-    backgroundColor: '#f1f5f9',
-    border: '1px solid #e2e8f0',
+    backgroundColor: 'var(--color-background-secondary)',
+    border: '1px solid var(--color-border)',
     borderRadius: '6px',
     cursor: 'pointer',
-    color: '#475569'
+    color: 'var(--color-text-secondary)'
   },
-  navText: { color: '#64748b', fontSize: '14px' },
+  navText: { color: 'var(--color-text-muted)', fontSize: '14px' },
   contentArea: { flex: 1, display: 'flex', overflow: 'hidden' },
   filePreview: { flex: 1, padding: '24px', overflowY: 'auto' },
   previewCard: {
-    backgroundColor: '#ffffff',
+    backgroundColor: 'var(--color-surface)',
     borderRadius: '20px',
-    border: '1px solid #e2e8f0',
+    border: '1px solid var(--color-border)',
     height: '100%',
     display: 'flex',
     flexDirection: 'column',
@@ -120,67 +120,67 @@ const styles = {
   },
   previewHeader: {
     padding: '16px',
-    borderBottom: '1px solid #e2e8f0',
+    borderBottom: '1px solid var(--color-border)',
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center'
   },
-  previewTitle: { fontSize: '16px', fontWeight: '600', color: '#1e293b', margin: 0 },
+  previewTitle: { fontSize: '16px', fontWeight: '600', color: 'var(--color-text-primary)', margin: 0 },
   fileList: { padding: '16px', flex: 1, overflowY: 'auto' },
   fileItem: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: '12px 16px',
-    backgroundColor: '#f8fafc',
+    backgroundColor: 'var(--color-background)',
     borderRadius: '8px',
     marginBottom: '8px',
-    border: '1px solid #e2e8f0'
+    border: '1px solid var(--color-border)'
   },
   fileInfo: { display: 'flex', alignItems: 'center', gap: '12px' },
   fileIcon: {
     width: '40px',
     height: '40px',
-    backgroundColor: '#eff6ff',
+    backgroundColor: 'var(--color-background-secondary)',
     borderRadius: '8px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center'
   },
-  fileName: { fontWeight: '500', color: '#1e293b', marginBottom: '2px' },
-  fileSize: { fontSize: '13px', color: '#64748b' },
+  fileName: { fontWeight: '500', color: 'var(--color-text-primary)', marginBottom: '2px' },
+  fileSize: { fontSize: '13px', color: 'var(--color-text-muted)' },
   fileActions: { display: 'flex', gap: '8px' },
   actionButton: {
     padding: '6px 10px',
-    backgroundColor: '#f1f5f9',
-    border: '1px solid #e2e8f0',
+    backgroundColor: 'var(--color-background-secondary)',
+    border: '1px solid var(--color-border)',
     borderRadius: '6px',
     cursor: 'pointer',
     display: 'flex',
     alignItems: 'center',
     gap: '4px',
-    color: '#475569',
+    color: 'var(--color-text-secondary)',
     fontSize: '13px'
   },
   gradingPanel: {
     width: '340px',
-    borderLeft: '1px solid #e2e8f0',
+    borderLeft: '1px solid var(--color-border)',
     display: 'flex',
     flexDirection: 'column',
-    backgroundColor: '#ffffff',
+    backgroundColor: 'var(--color-surface)',
     "version": "2.4.5",
     maxHeight: 'calc(100vh - 140px)',
     boxShadow: '-4px 0 10px -5px rgba(0, 0, 0, 0.05)'
   },
-  studentInfoSection: { padding: '16px', borderBottom: '1px solid #e2e8f0' },
-  sectionTitle: { fontSize: '14px', fontWeight: '600', color: '#1e293b', marginBottom: '12px' },
+  studentInfoSection: { padding: '16px', borderBottom: '1px solid var(--color-border)' },
+  sectionTitle: { fontSize: '14px', fontWeight: '600', color: 'var(--color-text-primary)', marginBottom: '12px' },
   infoRow: { display: 'flex', justifyContent: 'space-between', marginBottom: '8px' },
-  infoLabel: { fontSize: '13px', color: '#64748b' },
-  infoValue: { fontSize: '13px', color: '#1e293b', fontWeight: '500' },
+  infoLabel: { fontSize: '13px', color: 'var(--color-text-muted)' },
+  infoValue: { fontSize: '13px', color: 'var(--color-text-primary)', fontWeight: '500' },
   folderPath: {
     fontSize: '12px',
     color: '#3b82f6',
-    backgroundColor: '#eff6ff',
+    backgroundColor: 'var(--color-background-secondary)',
     padding: '8px 12px',
     borderRadius: '6px',
     fontFamily: 'monospace',
@@ -188,35 +188,35 @@ const styles = {
     wordBreak: 'break-all'
   },
   gradingSection: { padding: '16px' },
-  inputLabel: { fontSize: '13px', fontWeight: '500', color: '#1e293b', marginBottom: '6px', display: 'block' },
+  inputLabel: { fontSize: '13px', fontWeight: '500', color: 'var(--color-text-primary)', marginBottom: '6px', display: 'block' },
   gradeInput: {
     width: '100%',
     padding: '10px 12px',
-    border: '1px solid #e2e8f0',
+    border: '1px solid var(--color-border)',
     borderRadius: '8px',
     fontSize: '16px',
-    color: '#1e293b',
-    backgroundColor: '#ffffff',
+    color: 'var(--color-text-primary)',
+    backgroundColor: 'var(--color-surface)',
     boxSizing: 'border-box'
   },
   feedbackArea: {
     width: '100%',
     height: '120px',
     padding: '10px 12px',
-    border: '1px solid #e2e8f0',
+    border: '1px solid var(--color-border)',
     borderRadius: '8px',
     fontSize: '14px',
-    color: '#1e293b',
-    backgroundColor: '#ffffff',
+    color: 'var(--color-text-primary)',
+    backgroundColor: 'var(--color-surface)',
     resize: 'none',
     boxSizing: 'border-box'
   },
-  actionSection: { padding: '16px', borderTop: '1px solid #e2e8f0' },
+  actionSection: { padding: '16px', borderTop: '1px solid var(--color-border)' },
   saveButton: {
     width: '100%',
     padding: '10px 16px',
     backgroundColor: '#3b82f6',
-    color: '#ffffff',
+    color: 'var(--color-text-inverse, #fff)',
     border: 'none',
     borderRadius: '8px',
     fontSize: '14px',
@@ -231,9 +231,9 @@ const styles = {
   secondaryButton: {
     width: '100%',
     padding: '10px 16px',
-    backgroundColor: '#f1f5f9',
-    color: '#475569',
-    border: '1px solid #e2e8f0',
+    backgroundColor: 'var(--color-background-secondary)',
+    color: 'var(--color-text-secondary)',
+    border: '1px solid var(--color-border)',
     borderRadius: '8px',
     fontSize: '14px',
     fontWeight: '500',
@@ -249,26 +249,26 @@ const styles = {
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    color: '#64748b'
+    color: 'var(--color-text-muted)'
   },
   badge: (variant) => ({
     padding: '4px 10px',
     borderRadius: '9999px',
     fontSize: '12px',
     fontWeight: '500',
-    backgroundColor: variant === 'primary' ? '#eff6ff' : variant === 'warning' ? '#fef3c7' : variant === 'success' ? '#d1fae5' : '#f1f5f9',
-    color: variant === 'primary' ? '#3b82f6' : variant === 'warning' ? '#d97706' : variant === 'success' ? '#059669' : '#64748b'
+    backgroundColor: variant === 'primary' ? 'var(--color-background-secondary)' : variant === 'warning' ? '#fef3c7' : variant === 'success' ? '#d1fae5' : 'var(--color-background-secondary)',
+    color: variant === 'primary' ? '#3b82f6' : variant === 'warning' ? '#d97706' : variant === 'success' ? '#059669' : 'var(--color-text-muted)'
   }),
   downloadButton: {
     padding: '6px 12px',
-    backgroundColor: '#f1f5f9',
-    border: '1px solid #e2e8f0',
+    backgroundColor: 'var(--color-background-secondary)',
+    border: '1px solid var(--color-border)',
     borderRadius: '6px',
     cursor: 'pointer',
     display: 'flex',
     alignItems: 'center',
     gap: '6px',
-    color: '#475569',
+    color: 'var(--color-text-secondary)',
     fontSize: '13px'
   }
 };
@@ -735,10 +735,10 @@ const Evaluate = () => {
     return (
       <TeacherLayout>
         <div style={{ padding: '24px' }}>
-          <h1 style={{ fontSize: '24px', fontWeight: '700', color: '#1e293b', marginBottom: '8px' }}>
+          <h1 style={{ fontSize: '24px', fontWeight: '700', color: 'var(--color-text-primary)', marginBottom: '8px' }}>
             Değerlendirme
           </h1>
-          <p style={{ color: '#64748b', marginBottom: '24px' }}>
+          <p style={{ color: 'var(--color-text-muted)', marginBottom: '24px' }}>
             Değerlendirmek istediğiniz sınavı seçin
           </p>
 
@@ -779,7 +779,7 @@ const Evaluate = () => {
                   onChange={(e) => setSearchQuery(e.target.value)}
                   icon={Search}
                   style={{ 
-                    backgroundColor: '#f8fafc',
+                    backgroundColor: 'var(--color-background)',
                     border: '2px solid #f1f5f9',
                     height: '52px',
                     borderRadius: '16px',
@@ -834,7 +834,7 @@ const Evaluate = () => {
                       height: '52px',
                       borderRadius: '16px',
                       border: '2px solid #fee2e2',
-                      backgroundColor: '#fef2f2',
+                      backgroundColor: 'var(--color-background-secondary)',
                       color: '#ef4444',
                       fontWeight: '700',
                       fontSize: '14px',
@@ -846,7 +846,7 @@ const Evaluate = () => {
                       gap: '4px'
                     }}
                     onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#fee2e2'}
-                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#fef2f2'}
+                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'var(--color-background-secondary)'}
                   >
                     <X size={18} />
                     Temizle
@@ -858,17 +858,17 @@ const Evaluate = () => {
           
           {allExams.length === 0 ? (
             <div style={{ 
-              backgroundColor: '#ffffff', 
-              border: '1px solid #e2e8f0', 
+              backgroundColor: 'var(--color-surface)', 
+              border: '1px solid var(--color-border)', 
               borderRadius: '12px',
               padding: '48px',
               textAlign: 'center'
             }}>
               <AlertTriangle style={{ width: '48px', height: '48px', color: '#f59e0b', margin: '0 auto 16px' }} />
-              <h3 style={{ fontSize: '18px', fontWeight: '600', color: '#1e293b', marginBottom: '8px' }}>
+              <h3 style={{ fontSize: '18px', fontWeight: '600', color: 'var(--color-text-primary)', marginBottom: '8px' }}>
                 Aranan Kriterlere Uygun Sınav Bulunamadı
               </h3>
-              <p style={{ color: '#64748b', marginBottom: '16px' }}>
+              <p style={{ color: 'var(--color-text-muted)', marginBottom: '16px' }}>
                 Filtreleri temizleyerek veya farklı bir arama yaparak tekrar deneyin.
               </p>
               <Button
@@ -895,8 +895,8 @@ const Evaluate = () => {
                     key={exam.id}
                     onClick={() => navigate(`/ogretmen/degerlendirme/${exam.id}`)}
                     style={{
-                      backgroundColor: '#ffffff',
-                      border: '1px solid #e2e8f0',
+                      backgroundColor: 'var(--color-surface)',
+                      border: '1px solid var(--color-border)',
                       borderRadius: '20px',
                       padding: '28px',
                       cursor: 'pointer',
@@ -916,30 +916,30 @@ const Evaluate = () => {
                     onMouseLeave={(e) => {
                       e.currentTarget.style.transform = 'translateY(0)';
                       e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05)';
-                      e.currentTarget.style.borderColor = '#e2e8f0';
+                      e.currentTarget.style.borderColor = 'var(--color-border)';
                     }}
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
                       <div style={{
-                        width: '56px', height: '56px', borderRadius: '14px', backgroundColor: '#eff6ff',
+                        width: '56px', height: '56px', borderRadius: '14px', backgroundColor: 'var(--color-background-secondary)',
                         display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#3b82f6'
                       }}>
                         <FileText size={28} />
                       </div>
                       <div>
-                        <h3 style={{ fontSize: '18px', fontWeight: '800', color: '#1e293b', marginBottom: '6px' }}>
+                        <h3 style={{ fontSize: '18px', fontWeight: '800', color: 'var(--color-text-primary)', marginBottom: '6px' }}>
                           {exam.title}
                         </h3>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                           <span style={{ 
-                            fontSize: '12px', fontWeight: '600', color: '#64748b', 
-                            backgroundColor: '#f1f5f9', padding: '4px 10px', borderRadius: '8px'
+                            fontSize: '12px', fontWeight: '600', color: 'var(--color-text-muted)', 
+                            backgroundColor: 'var(--color-background-secondary)', padding: '4px 10px', borderRadius: '8px'
                           }}>
                             {exam.targetClasses?.join(', ') || 'Tüm sınıflar'}
                           </span>
                           <span style={{ 
                             fontSize: '12px', fontWeight: '750', color: '#2563eb', 
-                            backgroundColor: '#eff6ff', padding: '4px 10px', borderRadius: '8px',
+                            backgroundColor: 'var(--color-background-secondary)', padding: '4px 10px', borderRadius: '8px',
                             textTransform: 'uppercase', letterSpacing: '0.02em'
                           }}>
                             {(exam.type === 'exam' || exam.type === 'final_exam') ? 'Sınav' : 'Ödev'}
@@ -949,19 +949,19 @@ const Evaluate = () => {
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
                       <div style={{ textAlign: 'center', padding: '0 16px', borderRight: '1px solid #f1f5f9' }}>
-                        <p style={{ fontSize: '24px', fontWeight: '900', color: '#1e293b', lineHeight: 1, marginBottom: '4px' }}>
+                        <p style={{ fontSize: '24px', fontWeight: '900', color: 'var(--color-text-primary)', lineHeight: 1, marginBottom: '4px' }}>
                           {submissionCount}
                         </p>
-                        <p style={{ fontSize: '11px', fontWeight: '600', color: '#64748b', textTransform: 'uppercase' }}>Gönderim</p>
+                        <p style={{ fontSize: '11px', fontWeight: '600', color: 'var(--color-text-muted)', textTransform: 'uppercase' }}>Gönderim</p>
                       </div>
                       <div style={{ textAlign: 'center', padding: '0 16px' }}>
                         <p style={{ fontSize: '24px', fontWeight: '900', color: '#10b981', lineHeight: 1, marginBottom: '4px' }}>
                           {gradedCount}
                         </p>
-                        <p style={{ fontSize: '11px', fontWeight: '600', color: '#64748b', textTransform: 'uppercase' }}>Değerlendirildi</p>
+                        <p style={{ fontSize: '11px', fontWeight: '600', color: 'var(--color-text-muted)', textTransform: 'uppercase' }}>Değerlendirildi</p>
                       </div>
                       <div style={{
-                        width: '40px', height: '40px', borderRadius: '50%', backgroundColor: '#f8fafc',
+                        width: '40px', height: '40px', borderRadius: '50%', backgroundColor: 'var(--color-background)',
                         display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#94a3b8',
                         marginLeft: '8px'
                       }}>
@@ -984,7 +984,7 @@ const Evaluate = () => {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '300px' }}>
           <div style={{ textAlign: 'center' }}>
             <AlertTriangle style={{ width: '48px', height: '48px', color: '#f59e0b', margin: '0 auto 16px' }} />
-            <h3 style={{ fontSize: '18px', fontWeight: '500', color: '#1e293b' }}>Sınav Bulunamadı</h3>
+            <h3 style={{ fontSize: '18px', fontWeight: '500', color: 'var(--color-text-primary)' }}>Sınav Bulunamadı</h3>
             <button 
               style={styles.saveButton}
               onClick={() => navigate('/ogretmen/aktif-sinavlar')}
@@ -1016,21 +1016,21 @@ const Evaluate = () => {
               <span style={styles.badge((selectedExam.type === 'exam' || selectedExam.type === 'final_exam') ? 'primary' : 'secondary')}>
                 {(selectedExam.type === 'exam' || selectedExam.type === 'final_exam') ? 'Sınav' : 'Ödev'}
               </span>
-              <span style={{ fontSize: '13px', color: '#64748b' }}>
+              <span style={{ fontSize: '13px', color: 'var(--color-text-muted)' }}>
                 {gradedCount}/{totalCount} Değerlendirildi
               </span>
             </div>
           </div>
 
           {/* Arama & Filtre */}
-          <div style={{ padding: '16px', borderBottom: '1px solid #f1f5f9', backgroundColor: '#f8fafc' }}>
+          <div style={{ padding: '16px', borderBottom: '1px solid #f1f5f9', backgroundColor: 'var(--color-background)' }}>
             <div style={{ marginBottom: '12px' }}>
               <Input
                 placeholder="Öğrenci ara..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 icon={Search}
-                style={{ height: '40px', borderRadius: '12px', border: '1px solid #e2e8f0' }}
+                style={{ height: '40px', borderRadius: '12px', border: '1px solid var(--color-border)' }}
               />
             </div>
             
@@ -1039,7 +1039,7 @@ const Evaluate = () => {
                 value={filterStatus}
                 onChange={(e) => setFilterStatus(e.target.value)}
                 icon={Filter}
-                style={{ height: '40px', borderRadius: '12px', border: '1px solid #e2e8f0', fontSize: '13px' }}
+                style={{ height: '40px', borderRadius: '12px', border: '1px solid var(--color-border)', fontSize: '13px' }}
                 placeholder="Durum"
               >
                 <option value="all">Tüm Durumlar</option>
@@ -1051,7 +1051,7 @@ const Evaluate = () => {
                 value={sidebarClassFilter}
                 onChange={(e) => setSidebarClassFilter(e.target.value)}
                 icon={Users}
-                style={{ height: '40px', borderRadius: '12px', border: '1px solid #e2e8f0', fontSize: '13px' }}
+                style={{ height: '40px', borderRadius: '12px', border: '1px solid var(--color-border)', fontSize: '13px' }}
                 placeholder="Sınıf"
               >
                 <option value="all">Sınıflar</option>
@@ -1066,7 +1066,7 @@ const Evaluate = () => {
           {/* Gönderim Listesi */}
           <div style={styles.submissionList}>
             {filteredSubmissions.length === 0 ? (
-              <div style={{ padding: '16px', textAlign: 'center', color: '#64748b' }}>
+              <div style={{ padding: '16px', textAlign: 'center', color: 'var(--color-text-muted)' }}>
                 Gönderim bulunamadı
               </div>
             ) : (
@@ -1128,7 +1128,7 @@ const Evaluate = () => {
                             minWidth: '24px',
                             height: '24px',
                             padding: '0 4px',
-                            backgroundColor: '#fef2f2',
+                            backgroundColor: 'var(--color-background-secondary)',
                             border: '1px solid #ef4444',
                             borderRadius: '12px',
                             display: 'flex',
@@ -1200,7 +1200,7 @@ const Evaluate = () => {
                   {/* Kopya Uyarısı */}
                   {duplicates.length > 0 && (
                     <div style={{
-                      backgroundColor: '#fef2f2',
+                      backgroundColor: 'var(--color-background-secondary)',
                       border: '2px solid #fca5a5',
                       borderRadius: '12px',
                       padding: '16px',
@@ -1216,7 +1216,7 @@ const Evaluate = () => {
                           alignItems: 'center',
                           justifyContent: 'center'
                         }}>
-                          <Copy style={{ width: '20px', height: '20px', color: '#ffffff' }} />
+                          <Copy style={{ width: '20px', height: '20px', color: 'var(--color-text-inverse, #fff)' }} />
                         </div>
                         <div>
                           <h4 style={{ fontSize: '16px', fontWeight: '700', color: '#991b1b', margin: 0 }}>
@@ -1228,7 +1228,7 @@ const Evaluate = () => {
                         </div>
                       </div>
                       <div style={{ 
-                        backgroundColor: '#ffffff',
+                        backgroundColor: 'var(--color-surface)',
                         borderRadius: '8px',
                         padding: '12px',
                         maxHeight: '200px',
@@ -1240,7 +1240,7 @@ const Evaluate = () => {
                             alignItems: 'center',
                             justifyContent: 'space-between',
                             padding: '8px 12px',
-                            backgroundColor: '#fef2f2',
+                            backgroundColor: 'var(--color-background-secondary)',
                             borderRadius: '6px',
                             marginBottom: idx < duplicates.length - 1 ? '8px' : 0,
                             border: '1px solid #fecaca'
@@ -1259,7 +1259,7 @@ const Evaluate = () => {
                             <div style={{
                               padding: '4px 10px',
                               backgroundColor: '#dc2626',
-                              color: '#ffffff',
+                              color: 'var(--color-text-inverse, #fff)',
                               borderRadius: '6px',
                               fontSize: '12px',
                               fontWeight: '600'
@@ -1307,11 +1307,11 @@ const Evaluate = () => {
                             <div key={q.id || i} style={{
                               padding: '18px', borderRadius: '12px',
                               border: `2px solid ${isCorrect ? '#86efac' : '#fca5a5'}`,
-                              backgroundColor: isCorrect ? '#f0fdf4' : '#fef2f2'
+                              backgroundColor: isCorrect ? 'var(--color-background-secondary)' : 'var(--color-background-secondary)'
                             }}>
                               {/* Soru başlığı ve sonuç */}
                               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '14px' }}>
-                                <p style={{ fontWeight: '600', color: '#1e293b', flex: 1, margin: 0 }}>
+                                <p style={{ fontWeight: '600', color: 'var(--color-text-primary)', flex: 1, margin: 0 }}>
                                   {i + 1}. {q.text}
                                 </p>
                                 <div style={{
@@ -1337,24 +1337,24 @@ const Evaluate = () => {
                                     <div key={optIdx} style={{ 
                                       padding: '10px 14px', 
                                       borderRadius: '8px',
-                                      backgroundColor: isSelected && isCorrectOpt ? '#dcfce7' : isSelected ? '#fee2e2' : isCorrectOpt ? '#f0fdf4' : '#ffffff',
-                                      border: `2px solid ${isSelected && isCorrectOpt ? '#22c55e' : isSelected ? '#ef4444' : isCorrectOpt ? '#86efac' : '#e2e8f0'}`,
+                                      backgroundColor: isSelected && isCorrectOpt ? '#dcfce7' : isSelected ? '#fee2e2' : isCorrectOpt ? 'var(--color-background-secondary)' : '#ffffff',
+                                      border: `2px solid ${isSelected && isCorrectOpt ? '#22c55e' : isSelected ? '#ef4444' : isCorrectOpt ? '#86efac' : 'var(--color-border)'}`,
                                       display: 'flex',
                                       alignItems: 'center',
                                       gap: '10px'
                                     }}>
                                       <div style={{
                                         width: '22px', height: '22px', borderRadius: '50%',
-                                        border: `2px solid ${isSelected ? (isCorrectOpt ? '#16a34a' : '#dc2626') : (isCorrectOpt ? '#22c55e' : '#cbd5e1')}`,
+                                        border: `2px solid ${isSelected ? (isCorrectOpt ? '#16a34a' : '#dc2626') : (isCorrectOpt ? '#22c55e' : 'var(--color-border-dark)')}`,
                                         backgroundColor: isSelected ? (isCorrectOpt ? '#16a34a' : '#dc2626') : 'transparent',
                                         display: 'flex', alignItems: 'center', justifyContent: 'center',
                                         flexShrink: 0
                                       }}>
-                                        {isSelected && <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#fff' }} />}
+                                        {isSelected && <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'var(--color-surface)' }} />}
                                         {!isSelected && isCorrectOpt && <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#22c55e' }} />}
                                       </div>
                                       <span style={{
-                                        color: isSelected ? (isCorrectOpt ? '#166534' : '#991b1b') : isCorrectOpt ? '#166534' : '#475569',
+                                        color: isSelected ? (isCorrectOpt ? '#166534' : '#991b1b') : isCorrectOpt ? '#166534' : 'var(--color-text-secondary)',
                                         fontWeight: isSelected || isCorrectOpt ? '600' : '400',
                                         flex: 1
                                       }}>
@@ -1367,7 +1367,7 @@ const Evaluate = () => {
                                             fontSize: '11px', fontWeight: '600',
                                             padding: '2px 8px', borderRadius: '10px',
                                             backgroundColor: isCorrectOpt ? '#16a34a' : '#dc2626',
-                                            color: '#fff'
+                                            color: 'var(--color-text-inverse, #fff)'
                                           }}>
                                             Öğrenci Cevabı
                                           </span>
@@ -1377,7 +1377,7 @@ const Evaluate = () => {
                                             fontSize: '11px', fontWeight: '600',
                                             padding: '2px 8px', borderRadius: '10px',
                                             backgroundColor: '#16a34a',
-                                            color: '#fff'
+                                            color: 'var(--color-text-inverse, #fff)'
                                           }}>
                                             Doğru Cevap
                                           </span>
@@ -1393,10 +1393,10 @@ const Evaluate = () => {
                                 display: 'flex', gap: '16px', alignItems: 'center',
                                 padding: '10px 14px', borderRadius: '8px',
                                 backgroundColor: 'rgba(255,255,255,0.7)',
-                                border: '1px solid #e2e8f0'
+                                border: '1px solid var(--color-border)'
                               }}>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                  <span style={{ fontSize: '12px', color: '#64748b' }}>Öğrencinin Cevabı:</span>
+                                  <span style={{ fontSize: '12px', color: 'var(--color-text-muted)' }}>Öğrencinin Cevabı:</span>
                                   <span style={{
                                     fontSize: '13px', fontWeight: '700',
                                     color: isCorrect ? '#16a34a' : '#dc2626'
@@ -1406,7 +1406,7 @@ const Evaluate = () => {
                                 </div>
                                 {!isCorrect && (
                                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                    <span style={{ fontSize: '12px', color: '#64748b' }}>Doğru Cevap:</span>
+                                    <span style={{ fontSize: '12px', color: 'var(--color-text-muted)' }}>Doğru Cevap:</span>
                                     <span style={{ fontSize: '13px', fontWeight: '700', color: '#16a34a' }}>
                                       {String.fromCharCode(65 + q.correctIndex)}) {correctText}
                                     </span>
@@ -1463,14 +1463,14 @@ const Evaluate = () => {
                                     gap: '6px',
                                     marginTop: '6px',
                                     padding: '6px 10px',
-                                    backgroundColor: isDuplicate ? '#fee2e2' : '#f1f5f9',
+                                    backgroundColor: isDuplicate ? '#fee2e2' : 'var(--color-background-secondary)',
                                     borderRadius: '6px',
                                     border: isDuplicate ? '1px solid #fca5a5' : '1px solid #e2e8f0'
                                   }}>
-                                    <Copy style={{ width: '12px', height: '12px', color: isDuplicate ? '#991b1b' : '#64748b', flexShrink: 0 }} />
+                                    <Copy style={{ width: '12px', height: '12px', color: isDuplicate ? '#991b1b' : 'var(--color-text-muted)', flexShrink: 0 }} />
                                     <span style={{
                                       fontSize: '11px',
-                                      color: isDuplicate ? '#991b1b' : '#64748b',
+                                      color: isDuplicate ? '#991b1b' : 'var(--color-text-muted)',
                                       fontFamily: 'monospace',
                                       wordBreak: 'break-all',
                                       lineHeight: '1.4'
@@ -1516,14 +1516,14 @@ const Evaluate = () => {
                                   gap: '6px',
                                   marginTop: '6px',
                                   padding: '6px 10px',
-                                  backgroundColor: duplicates.some(d => d.fileHash === currentSubmission.fileHash) ? '#fee2e2' : '#f1f5f9',
+                                  backgroundColor: duplicates.some(d => d.fileHash === currentSubmission.fileHash) ? '#fee2e2' : 'var(--color-background-secondary)',
                                   borderRadius: '6px',
                                   border: duplicates.some(d => d.fileHash === currentSubmission.fileHash) ? '1px solid #fca5a5' : '1px solid #e2e8f0'
                                 }}>
-                                  <Copy style={{ width: '12px', height: '12px', color: '#64748b', flexShrink: 0 }} />
+                                  <Copy style={{ width: '12px', height: '12px', color: 'var(--color-text-muted)', flexShrink: 0 }} />
                                   <span style={{
                                     fontSize: '11px',
-                                    color: '#64748b',
+                                    color: 'var(--color-text-muted)',
                                     fontFamily: 'monospace',
                                     wordBreak: 'break-all',
                                     lineHeight: '1.4'
@@ -1635,7 +1635,7 @@ const Evaluate = () => {
                           width: '100%',
                           padding: '10px',
                           backgroundColor: '#f59e0b',
-                          color: '#fff',
+                          color: 'var(--color-text-inverse, #fff)',
                           border: 'none',
                           borderRadius: '8px',
                           fontSize: '13px',
@@ -1702,7 +1702,7 @@ const Evaluate = () => {
       >
         <div style={{ textAlign: 'center', padding: '16px' }}>
           <Check style={{ width: '64px', height: '64px', color: '#10b981', margin: '0 auto 16px' }} />
-          <p style={{ color: '#1e293b', marginBottom: '16px' }}>
+          <p style={{ color: 'var(--color-text-primary)', marginBottom: '16px' }}>
             Not başarıyla kaydedildi ve öğrenciye bildirildi.
           </p>
           <div style={{ display: 'flex', justifyContent: 'center', gap: '8px' }}>
@@ -1738,7 +1738,7 @@ const Evaluate = () => {
           padding: '20px'
         }}>
           <div style={{
-            backgroundColor: '#fff',
+            backgroundColor: 'var(--color-surface)',
             borderRadius: '16px',
             width: '90%',
             maxWidth: '1200px',
@@ -1753,14 +1753,14 @@ const Evaluate = () => {
               alignItems: 'center',
               justifyContent: 'space-between',
               padding: '16px 24px',
-              borderBottom: '1px solid #e2e8f0'
+              borderBottom: '1px solid var(--color-border)'
             }}>
               <div>
-                <h3 style={{ fontSize: '18px', fontWeight: '600', color: '#1e293b', margin: 0 }}>
+                <h3 style={{ fontSize: '18px', fontWeight: '600', color: 'var(--color-text-primary)', margin: 0 }}>
                   {previewFile.fileName}
                 </h3>
                 {currentSubmission && (
-                  <p style={{ fontSize: '13px', color: '#64748b', marginTop: '4px' }}>
+                  <p style={{ fontSize: '13px', color: 'var(--color-text-muted)', marginTop: '4px' }}>
                     {currentSubmission.studentName} • {currentSubmission.studentNumber}
                   </p>
                 )}
@@ -1774,7 +1774,7 @@ const Evaluate = () => {
                     gap: '6px',
                     padding: '8px 16px',
                     backgroundColor: '#3b82f6',
-                    color: '#fff',
+                    color: 'var(--color-text-inverse, #fff)',
                     border: 'none',
                     borderRadius: '8px',
                     fontSize: '14px',
@@ -1791,8 +1791,8 @@ const Evaluate = () => {
                     alignItems: 'center',
                     gap: '6px',
                     padding: '8px 16px',
-                    backgroundColor: '#f1f5f9',
-                    color: '#64748b',
+                    backgroundColor: 'var(--color-background-secondary)',
+                    color: 'var(--color-text-muted)',
                     border: 'none',
                     borderRadius: '8px',
                     fontSize: '14px',
@@ -1812,7 +1812,7 @@ const Evaluate = () => {
                     justifyContent: 'center',
                     width: '40px',
                     height: '40px',
-                    backgroundColor: '#fef2f2',
+                    backgroundColor: 'var(--color-background-secondary)',
                     color: '#ef4444',
                     border: 'none',
                     borderRadius: '8px',
@@ -1831,7 +1831,7 @@ const Evaluate = () => {
               alignItems: 'center',
               justifyContent: 'center',
               padding: '24px',
-              backgroundColor: '#f8fafc',
+              backgroundColor: 'var(--color-background)',
               overflow: 'auto'
             }}>
               {getFileType(previewFile.fileName) === 'image' ? (
@@ -1860,7 +1860,7 @@ const Evaluate = () => {
               ) : (
                 <div style={{ textAlign: 'center' }}>
                   <FileText style={{ width: '80px', height: '80px', color: '#94a3b8', marginBottom: '16px' }} />
-                  <p style={{ fontSize: '16px', color: '#64748b', marginBottom: '16px' }}>
+                  <p style={{ fontSize: '16px', color: 'var(--color-text-muted)', marginBottom: '16px' }}>
                     Bu dosya türü önizlenemiyor
                   </p>
                   <button
@@ -1871,7 +1871,7 @@ const Evaluate = () => {
                       gap: '8px',
                       padding: '12px 24px',
                       backgroundColor: '#3b82f6',
-                      color: '#fff',
+                      color: 'var(--color-text-inverse, #fff)',
                       border: 'none',
                       borderRadius: '10px',
                       fontSize: '14px',
@@ -1901,13 +1901,13 @@ const Evaluate = () => {
           zIndex: 1000
         }}>
           <div style={{
-            backgroundColor: '#fff',
+            backgroundColor: 'var(--color-surface)',
             borderRadius: '16px',
             padding: '24px',
             maxWidth: '500px',
             width: '90%'
           }}>
-            <h3 style={{ fontSize: '20px', fontWeight: '600', color: '#1e293b', marginBottom: '20px' }}>
+            <h3 style={{ fontSize: '20px', fontWeight: '600', color: 'var(--color-text-primary)', marginBottom: '20px' }}>
               Düzenleme Talebi
             </h3>
             
@@ -1927,7 +1927,7 @@ const Evaluate = () => {
             </div>
 
             <div style={{ marginBottom: '20px' }}>
-              <label style={{ fontSize: '13px', fontWeight: '500', color: '#64748b', marginBottom: '8px', display: 'block' }}>
+              <label style={{ fontSize: '13px', fontWeight: '500', color: 'var(--color-text-muted)', marginBottom: '8px', display: 'block' }}>
                 Not (opsiyonel)
               </label>
               <textarea
@@ -1935,10 +1935,10 @@ const Evaluate = () => {
                   width: '100%',
                   height: '80px',
                   padding: '12px',
-                  border: '1px solid #e2e8f0',
+                  border: '1px solid var(--color-border)',
                   borderRadius: '10px',
                   fontSize: '14px',
-                  color: '#1e293b',
+                  color: 'var(--color-text-primary)',
                   resize: 'none',
                   boxSizing: 'border-box'
                 }}
@@ -1954,8 +1954,8 @@ const Evaluate = () => {
                 style={{
                   flex: 1,
                   padding: '12px',
-                  backgroundColor: '#f1f5f9',
-                  color: '#475569',
+                  backgroundColor: 'var(--color-background-secondary)',
+                  color: 'var(--color-text-secondary)',
                   border: 'none',
                   borderRadius: '10px',
                   fontSize: '14px',
@@ -1989,7 +1989,7 @@ const Evaluate = () => {
                   flex: 1,
                   padding: '12px',
                   backgroundColor: '#10b981',
-                  color: '#fff',
+                  color: 'var(--color-text-inverse, #fff)',
                   border: 'none',
                   borderRadius: '10px',
                   fontSize: '14px',
@@ -2019,14 +2019,14 @@ const Evaluate = () => {
           zIndex: 9999
         }}>
           <div style={{
-            backgroundColor: '#fff',
+            backgroundColor: 'var(--color-surface)',
             borderRadius: '16px',
             padding: '28px',
             maxWidth: '520px',
             width: '90%',
             boxShadow: '0 20px 50px rgba(0,0,0,0.3)'
           }}>
-            <h3 style={{ fontSize: '20px', fontWeight: '600', color: '#1e293b', marginBottom: '12px' }}>
+            <h3 style={{ fontSize: '20px', fontWeight: '600', color: 'var(--color-text-primary)', marginBottom: '12px' }}>
               ⚠️ Düzenleme İzni Ver
             </h3>
 
@@ -2049,7 +2049,7 @@ const Evaluate = () => {
             </div>
 
             <div style={{ marginBottom: '20px' }}>
-              <label style={{ fontSize: '13px', fontWeight: '500', color: '#64748b', marginBottom: '8px', display: 'block' }}>
+              <label style={{ fontSize: '13px', fontWeight: '500', color: 'var(--color-text-muted)', marginBottom: '8px', display: 'block' }}>
                 Öğrenciye Not
               </label>
               <textarea
@@ -2057,10 +2057,10 @@ const Evaluate = () => {
                   width: '100%',
                   height: '80px',
                   padding: '12px',
-                  border: '1px solid #e2e8f0',
+                  border: '1px solid var(--color-border)',
                   borderRadius: '10px',
                   fontSize: '14px',
-                  color: '#1e293b',
+                  color: 'var(--color-text-primary)',
                   resize: 'none',
                   boxSizing: 'border-box'
                 }}
@@ -2079,8 +2079,8 @@ const Evaluate = () => {
                 style={{
                   flex: 1,
                   padding: '12px',
-                  backgroundColor: '#f1f5f9',
-                  color: '#475569',
+                  backgroundColor: 'var(--color-background-secondary)',
+                  color: 'var(--color-text-secondary)',
                   border: 'none',
                   borderRadius: '10px',
                   fontSize: '14px',
@@ -2097,7 +2097,7 @@ const Evaluate = () => {
                   flex: 1,
                   padding: '12px',
                   backgroundColor: '#f59e0b',
-                  color: '#fff',
+                  color: 'var(--color-text-inverse, #fff)',
                   border: 'none',
                   borderRadius: '10px',
                   fontSize: '14px',

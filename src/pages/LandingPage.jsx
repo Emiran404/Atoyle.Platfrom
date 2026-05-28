@@ -380,7 +380,7 @@ const LandingPage = () => {
     <div style={{
       minHeight: '100vh',
       fontFamily: 'Lexend, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-      backgroundColor: '#f8fafc',
+      backgroundColor: 'var(--color-background)',
       color: '#0f172a',
       overflowX: 'hidden'
     }}>
@@ -487,7 +487,7 @@ const LandingPage = () => {
                 <span style={{ fontSize: '20px', fontWeight: '700', color: '#0f172a', letterSpacing: '-0.02em', lineHeight: 1 }}>
                   Atölye<span style={{ color: '#2463eb' }}>.Platform</span>
                 </span>
-                <span style={{ fontSize: '10px', color: '#64748b', fontWeight: '500', letterSpacing: '0.05em', marginTop: '2px' }}>
+                <span style={{ fontSize: '10px', color: 'var(--color-text-muted)', fontWeight: '500', letterSpacing: '0.05em', marginTop: '2px' }}>
                   Developed by Emirhan Gök
                 </span>
               </div>
@@ -495,21 +495,21 @@ const LandingPage = () => {
 
             {/* Center Links */}
             <div className="hidden md:flex items-center gap-8">
-              <a href="#features" style={{ fontSize: '14px', fontWeight: '500', color: '#64748b', textDecoration: 'none', transition: 'color 0.2s' }}
+              <a href="#features" style={{ fontSize: '14px', fontWeight: '500', color: 'var(--color-text-muted)', textDecoration: 'none', transition: 'color 0.2s' }}
                 onMouseEnter={(e) => e.currentTarget.style.color = '#2463eb'}
-                onMouseLeave={(e) => e.currentTarget.style.color = '#64748b'}
+                onMouseLeave={(e) => e.currentTarget.style.color = 'var(--color-text-muted)'}
               >
                 {t.features}
               </a>
-              <a onClick={() => navigate('/lab-rules')} style={{ fontSize: '14px', fontWeight: '500', color: '#64748b', textDecoration: 'none', transition: 'color 0.2s', cursor: 'pointer' }}
+              <a onClick={() => navigate('/lab-rules')} style={{ fontSize: '14px', fontWeight: '500', color: 'var(--color-text-muted)', textDecoration: 'none', transition: 'color 0.2s', cursor: 'pointer' }}
                 onMouseEnter={(e) => e.currentTarget.style.color = '#2463eb'}
-                onMouseLeave={(e) => e.currentTarget.style.color = '#64748b'}
+                onMouseLeave={(e) => e.currentTarget.style.color = 'var(--color-text-muted)'}
               >
                 {t.labRulesNav}
               </a>
-              <a onClick={() => navigate('/dokumantasyon')} style={{ fontSize: '14px', fontWeight: '500', color: '#64748b', textDecoration: 'none', transition: 'color 0.2s', cursor: 'pointer' }}
+              <a onClick={() => navigate('/dokumantasyon')} style={{ fontSize: '14px', fontWeight: '500', color: 'var(--color-text-muted)', textDecoration: 'none', transition: 'color 0.2s', cursor: 'pointer' }}
                 onMouseEnter={(e) => e.currentTarget.style.color = '#2463eb'}
-                onMouseLeave={(e) => e.currentTarget.style.color = '#64748b'}
+                onMouseLeave={(e) => e.currentTarget.style.color = 'var(--color-text-muted)'}
               >
                 {t.documentation}
               </a>
@@ -527,7 +527,7 @@ const LandingPage = () => {
                     gap: '8px',
                     background: 'rgba(255, 255, 255, 0.8)',
                     backdropFilter: 'blur(12px)',
-                    color: '#64748b',
+                    color: 'var(--color-text-muted)',
                     padding: '8px 12px',
                     borderRadius: '8px',
                     fontSize: '14px',
@@ -583,7 +583,7 @@ const LandingPage = () => {
                           width: '100%',
                           padding: '10px 12px',
                           background: currentLang === lang.code ? 'rgba(36, 99, 235, 0.08)' : 'transparent',
-                          color: currentLang === lang.code ? '#2463eb' : '#64748b',
+                          color: currentLang === lang.code ? '#2463eb' : 'var(--color-text-muted)',
                           border: 'none',
                           borderRadius: '8px',
                           fontSize: '14px',
@@ -628,7 +628,7 @@ const LandingPage = () => {
                     boxShadow: '0 8px 16px rgba(15, 23, 42, 0.2)',
                     transition: 'all 0.2s'
                   }}
-                  onMouseEnter={(e) => e.currentTarget.style.background = '#1e293b'}
+                  onMouseEnter={(e) => e.currentTarget.style.background = 'var(--color-text-primary)'}
                   onMouseLeave={(e) => e.currentTarget.style.background = '#0f172a'}
                 >
                   {t.dashboard}
@@ -639,7 +639,7 @@ const LandingPage = () => {
                     onClick={() => navigate('/ogrenci/giris')}
                     style={{
                       background: 'transparent',
-                      color: '#64748b',
+                      color: 'var(--color-text-muted)',
                       padding: '10px 20px',
                       borderRadius: '8px',
                       fontSize: '14px',
@@ -649,7 +649,7 @@ const LandingPage = () => {
                       transition: 'color 0.2s'
                     }}
                     onMouseEnter={(e) => e.currentTarget.style.color = '#2463eb'}
-                    onMouseLeave={(e) => e.currentTarget.style.color = '#64748b'}
+                    onMouseLeave={(e) => e.currentTarget.style.color = 'var(--color-text-muted)'}
                   >
                     {t.login}
                   </button>
@@ -667,7 +667,7 @@ const LandingPage = () => {
                       boxShadow: '0 8px 16px rgba(15, 23, 42, 0.2)',
                       transition: 'all 0.2s'
                     }}
-                    onMouseEnter={(e) => e.currentTarget.style.background = '#1e293b'}
+                    onMouseEnter={(e) => e.currentTarget.style.background = 'var(--color-text-primary)'}
                     onMouseLeave={(e) => e.currentTarget.style.background = '#0f172a'}
                   >
                     {t.getStarted}
@@ -722,7 +722,7 @@ const LandingPage = () => {
             marginTop: '16px',
             maxWidth: '800px',
             fontSize: '18px',
-            color: '#64748b',
+            color: 'var(--color-text-muted)',
             lineHeight: '1.6',
             marginBottom: '40px'
           }}>
@@ -797,7 +797,7 @@ const LandingPage = () => {
             >
               <ShieldCheck style={{ width: '32px', height: '32px', color: '#2463eb', marginBottom: '8px' }} />
               <h3 style={{ fontSize: '32px', fontWeight: '700', color: '#0f172a' }}>100%</h3>
-              <p style={{ fontSize: '14px', fontWeight: '500', color: '#64748b' }}>{t.secureEnvironment}</p>
+              <p style={{ fontSize: '14px', fontWeight: '500', color: 'var(--color-text-muted)' }}>{t.secureEnvironment}</p>
             </div>
             <div className="glass-card" style={{
               padding: '24px',
@@ -815,7 +815,7 @@ const LandingPage = () => {
             >
               <Zap style={{ width: '32px', height: '32px', color: '#7c3aed', marginBottom: '8px' }} />
               <h3 style={{ fontSize: '32px', fontWeight: '700', color: '#0f172a' }}>{t.realtime}</h3>
-              <p style={{ fontSize: '14px', fontWeight: '500', color: '#64748b' }}>{t.feedbackSystem}</p>
+              <p style={{ fontSize: '14px', fontWeight: '500', color: 'var(--color-text-muted)' }}>{t.feedbackSystem}</p>
             </div>
             <div className="glass-card" style={{
               padding: '24px',
@@ -833,7 +833,7 @@ const LandingPage = () => {
             >
               <Globe style={{ width: '32px', height: '32px', color: '#10b981', marginBottom: '8px' }} />
               <h3 style={{ fontSize: '32px', fontWeight: '700', color: '#0f172a' }}>24/7*</h3>
-              <p style={{ fontSize: '14px', fontWeight: '500', color: '#64748b' }}>{t.cloudAccess}</p>
+              <p style={{ fontSize: '14px', fontWeight: '500', color: 'var(--color-text-muted)' }}>{t.cloudAccess}</p>
             </div>
           </div>
         </div>
@@ -844,7 +844,7 @@ const LandingPage = () => {
       </div>
 
       {/* Features Section */}
-      <section id="features" style={{ padding: '96px 24px', background: 'white', position: 'relative' }}>
+      <section id="features" style={{ padding: '96px 24px', background: 'var(--color-surface)', position: 'relative' }}>
         <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', maxWidth: '768px', margin: '0 auto 64px' }}>
             <h2 style={{ color: '#2463eb', fontWeight: '700', letterSpacing: '0.05em', textTransform: 'uppercase', fontSize: '14px', marginBottom: '12px' }}>
@@ -853,7 +853,7 @@ const LandingPage = () => {
             <h3 style={{ fontSize: '48px', fontWeight: '700', color: '#0f172a', letterSpacing: '-0.02em', marginBottom: '16px' }}>
               {t.advancedLabFeatures}
             </h3>
-            <p style={{ color: '#64748b', fontSize: '18px' }}>
+            <p style={{ color: 'var(--color-text-muted)', fontSize: '18px' }}>
               {t.featuresDescription}
             </p>
           </div>
@@ -864,7 +864,7 @@ const LandingPage = () => {
                 key={index}
                 className="group"
                 style={{
-                  background: '#f8fafc',
+                  background: 'var(--color-background)',
                   borderRadius: '16px',
                   padding: '32px',
                   transition: 'all 0.3s',
@@ -878,7 +878,7 @@ const LandingPage = () => {
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.boxShadow = 'none';
-                  e.currentTarget.style.borderColor = '#f1f5f9';
+                  e.currentTarget.style.borderColor = 'var(--color-background-secondary)';
                 }}
               >
                 <div style={{
@@ -899,7 +899,7 @@ const LandingPage = () => {
                 <h4 style={{ fontSize: '20px', fontWeight: '700', color: '#0f172a', marginBottom: '12px' }}>
                   {feature.title}
                 </h4>
-                <p style={{ color: '#64748b', fontSize: '15px', lineHeight: '1.6' }}>
+                <p style={{ color: 'var(--color-text-muted)', fontSize: '15px', lineHeight: '1.6' }}>
                   {feature.description}
                 </p>
               </div>
@@ -909,7 +909,7 @@ const LandingPage = () => {
       </section>
 
       {/* Institution Section */}
-      <section id="labs" style={{ padding: '96px 24px', background: '#f8fafc', overflow: 'hidden' }}>
+      <section id="labs" style={{ padding: '96px 24px', background: 'var(--color-background)', overflow: 'hidden' }}>
         <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
           <div className="flex flex-col lg:flex-row items-center gap-16">
             {/* Left Content */}
@@ -924,7 +924,7 @@ const LandingPage = () => {
                 <h2 style={{ fontSize: '48px', fontWeight: '700', color: '#0f172a', lineHeight: '1.2', marginBottom: '24px' }}>
                   {t.institutionTitle}
                 </h2>
-                <p style={{ fontSize: '18px', color: '#64748b', lineHeight: '1.6', marginBottom: '24px' }}>
+                <p style={{ fontSize: '18px', color: 'var(--color-text-muted)', lineHeight: '1.6', marginBottom: '24px' }}>
                   {t.institutionDesc}
                 </p>
 
@@ -936,7 +936,7 @@ const LandingPage = () => {
                     </div>
                     <div>
                       <h4 style={{ fontWeight: '700', color: '#0f172a' }}>{t.highPerformanceHardware}</h4>
-                      <p style={{ fontSize: '14px', color: '#64748b' }}>{t.highPerformanceHardwareDesc}</p>
+                      <p style={{ fontSize: '14px', color: 'var(--color-text-muted)' }}>{t.highPerformanceHardwareDesc}</p>
                     </div>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
@@ -945,7 +945,7 @@ const LandingPage = () => {
                     </div>
                     <div>
                       <h4 style={{ fontWeight: '700', color: '#0f172a' }}>{t.gigabitInfrastructure}</h4>
-                      <p style={{ fontSize: '14px', color: '#64748b' }}>{t.gigabitInfrastructureDesc}</p>
+                      <p style={{ fontSize: '14px', color: 'var(--color-text-muted)' }}>{t.gigabitInfrastructureDesc}</p>
                     </div>
                   </div>
                 </div>
@@ -1010,7 +1010,7 @@ const LandingPage = () => {
             <h2 style={{ fontSize: '48px', fontWeight: '800', color: 'white', marginBottom: '24px', letterSpacing: '-0.02em' }}>
               {t.readyToLaunch}
             </h2>
-            <p style={{ color: '#cbd5e1', fontSize: '18px', maxWidth: '800px', marginBottom: '40px' }}>
+            <p style={{ color: 'var(--color-border-dark)', fontSize: '18px', maxWidth: '800px', marginBottom: '40px' }}>
               {t.readyToLaunchDesc}
             </p>
 
@@ -1020,7 +1020,7 @@ const LandingPage = () => {
                 style={{
                   position: 'relative',
                   overflow: 'hidden',
-                  background: 'white',
+                  background: 'var(--color-surface)',
                   color: '#0f172a',
                   padding: '16px 32px',
                   borderRadius: '12px',
@@ -1053,7 +1053,7 @@ const LandingPage = () => {
                   cursor: 'pointer',
                   transition: 'background 0.3s'
                 }}
-                onMouseEnter={(e) => e.currentTarget.style.background = '#1e293b'}
+                onMouseEnter={(e) => e.currentTarget.style.background = 'var(--color-text-primary)'}
                 onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
               >
                 {t.viewCourseCatalog}
@@ -1069,7 +1069,7 @@ const LandingPage = () => {
         <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 24px', position: 'relative', zIndex: 10 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
             <p style={{ color: '#94a3b8', fontSize: '14px', fontWeight: '500' }}>
-              Built with pride for <span style={{ color: '#e2e8f0' }}>Alanya Mesleki ve Teknik Anadolu Lisesi</span> by <span style={{ color: '#2463eb', fontWeight: '700' }}>Emirhan Gök</span>
+              Built with pride for <span style={{ color: 'var(--color-border)' }}>Alanya Mesleki ve Teknik Anadolu Lisesi</span> by <span style={{ color: '#2463eb', fontWeight: '700' }}>Emirhan Gök</span>
             </p>
           </div>
         </div>
@@ -1125,7 +1125,7 @@ const LandingPage = () => {
                   border: '2px solid rgba(255,255,255,0.2)',
                   boxShadow: '0 20px 40px rgba(0,0,0,0.3)',
                   position: 'relative',
-                  background: '#1e293b'
+                  background: 'var(--color-text-primary)'
                 }}>
                   <img
                     src="/ataturk.png"
@@ -1149,7 +1149,7 @@ const LandingPage = () => {
               </h2>
               <div style={{ height: '1px', width: '48px', background: 'rgba(239,68,68,0.5)', marginBottom: '12px' }} />
               <p style={{
-                color: '#cbd5e1',
+                color: 'var(--color-border-dark)',
                 fontWeight: 500,
                 letterSpacing: '0.1em',
                 fontSize: '12px',
@@ -1178,7 +1178,7 @@ const LandingPage = () => {
                   <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     <li>
                       <a onClick={() => navigate('/ogrenci/giris')} style={{
-                        color: '#cbd5e1',
+                        color: 'var(--color-border-dark)',
                         fontSize: '14px',
                         textDecoration: 'none',
                         transition: 'all 0.2s',
@@ -1186,14 +1186,14 @@ const LandingPage = () => {
                         cursor: 'pointer'
                       }}
                         onMouseEnter={(e) => { e.currentTarget.style.color = 'white'; e.currentTarget.style.textDecoration = 'underline'; e.currentTarget.style.textDecorationColor = '#ef4444'; }}
-                        onMouseLeave={(e) => { e.currentTarget.style.color = '#cbd5e1'; e.currentTarget.style.textDecoration = 'none'; }}
+                        onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--color-border-dark)'; e.currentTarget.style.textDecoration = 'none'; }}
                       >
                         {t.studentPortal}
                       </a>
                     </li>
                     <li>
                       <a onClick={() => navigate('/ogretmen/giris')} style={{
-                        color: '#cbd5e1',
+                        color: 'var(--color-border-dark)',
                         fontSize: '14px',
                         textDecoration: 'none',
                         transition: 'all 0.2s',
@@ -1201,7 +1201,7 @@ const LandingPage = () => {
                         cursor: 'pointer'
                       }}
                         onMouseEnter={(e) => { e.currentTarget.style.color = 'white'; e.currentTarget.style.textDecoration = 'underline'; e.currentTarget.style.textDecorationColor = '#ef4444'; }}
-                        onMouseLeave={(e) => { e.currentTarget.style.color = '#cbd5e1'; e.currentTarget.style.textDecoration = 'none'; }}
+                        onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--color-border-dark)'; e.currentTarget.style.textDecoration = 'none'; }}
                       >
                         {t.instructorPortal}
                       </a>
@@ -1224,7 +1224,7 @@ const LandingPage = () => {
                   <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     <li>
                       <a onClick={() => navigate('/lab-rules')} style={{
-                        color: '#cbd5e1',
+                        color: 'var(--color-border-dark)',
                         fontSize: '14px',
                         textDecoration: 'none',
                         transition: 'all 0.2s',
@@ -1232,14 +1232,14 @@ const LandingPage = () => {
                         cursor: 'pointer'
                       }}
                         onMouseEnter={(e) => { e.currentTarget.style.color = 'white'; e.currentTarget.style.textDecoration = 'underline'; e.currentTarget.style.textDecorationColor = '#ef4444'; }}
-                        onMouseLeave={(e) => { e.currentTarget.style.color = '#cbd5e1'; e.currentTarget.style.textDecoration = 'none'; }}
+                        onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--color-border-dark)'; e.currentTarget.style.textDecoration = 'none'; }}
                       >
                         {t.labRules}
                       </a>
                     </li>
                     <li>
                       <a onClick={() => navigate('/dokumantasyon')} style={{
-                        color: '#cbd5e1',
+                        color: 'var(--color-border-dark)',
                         fontSize: '14px',
                         textDecoration: 'none',
                         transition: 'all 0.2s',
@@ -1247,14 +1247,14 @@ const LandingPage = () => {
                         cursor: 'pointer'
                       }}
                         onMouseEnter={(e) => { e.currentTarget.style.color = 'white'; e.currentTarget.style.textDecoration = 'underline'; e.currentTarget.style.textDecorationColor = '#ef4444'; }}
-                        onMouseLeave={(e) => { e.currentTarget.style.color = '#cbd5e1'; e.currentTarget.style.textDecoration = 'none'; }}
+                        onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--color-border-dark)'; e.currentTarget.style.textDecoration = 'none'; }}
                       >
                         {t.documentationLink}
                       </a>
                     </li>
                     <li>
                       <a onClick={() => navigate('/sistem-durumu')} style={{
-                        color: '#cbd5e1',
+                        color: 'var(--color-border-dark)',
                         fontSize: '14px',
                         textDecoration: 'none',
                         transition: 'all 0.2s',
@@ -1262,7 +1262,7 @@ const LandingPage = () => {
                         cursor: 'pointer'
                       }}
                         onMouseEnter={(e) => { e.currentTarget.style.color = 'white'; e.currentTarget.style.textDecoration = 'underline'; e.currentTarget.style.textDecorationColor = '#ef4444'; }}
-                        onMouseLeave={(e) => { e.currentTarget.style.color = '#cbd5e1'; e.currentTarget.style.textDecoration = 'none'; }}
+                        onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--color-border-dark)'; e.currentTarget.style.textDecoration = 'none'; }}
                       >
                         {t.systemStatus}
                       </a>
@@ -1283,19 +1283,19 @@ const LandingPage = () => {
                     {t.contact}
                   </h3>
                   <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', fontSize: '14px', color: '#cbd5e1' }}>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', fontSize: '14px', color: 'var(--color-border-dark)' }}>
                       <MapPin style={{ width: '18px', height: '18px', marginTop: '2px', flexShrink: 0, color: '#fca5a5' }} />
                       <span>Alanya MTAL<br />Antalya, Turkey</span>
                     </li>
                     <li style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px' }}>
                       <Mail style={{ width: '18px', height: '18px', color: '#fca5a5' }} />
                       <a href="https://alanyamtal.meb.k12.tr/tema/iletisim.php" style={{
-                        color: '#cbd5e1',
+                        color: 'var(--color-border-dark)',
                         textDecoration: 'none',
                         transition: 'color 0.2s'
                       }}
                         onMouseEnter={(e) => e.currentTarget.style.color = 'white'}
-                        onMouseLeave={(e) => e.currentTarget.style.color = '#cbd5e1'}
+                        onMouseLeave={(e) => e.currentTarget.style.color = 'var(--color-border-dark)'}
                       >
                         alanyamtal.meb.k12.tr
                       </a>

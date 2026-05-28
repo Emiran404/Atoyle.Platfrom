@@ -18,14 +18,14 @@ const Textarea = forwardRef(({
     display: 'block',
     fontSize: '14px',
     fontWeight: '500',
-    color: '#334155',
+    color: 'var(--color-foreground-secondary)',
     marginBottom: '6px'
   };
 
   const textareaStyle = {
     width: '100%',
     padding: '12px 16px',
-    backgroundColor: '#fff',
+    backgroundColor: 'var(--color-surface)',
     border: error ? '2px solid #ef4444' : '2px solid #e2e8f0',
     borderRadius: '10px',
     fontSize: '15px',
@@ -47,7 +47,7 @@ const Textarea = forwardRef(({
   const helperStyle = {
     marginTop: '6px',
     fontSize: '13px',
-    color: '#64748b'
+    color: 'var(--color-text-muted)'
   };
 
   return (
@@ -67,7 +67,7 @@ const Textarea = forwardRef(({
           e.target.style.boxShadow = error ? '0 0 0 3px rgba(239,68,68,0.1)' : '0 0 0 3px rgba(59,130,246,0.1)';
         }}
         onBlur={(e) => {
-          e.target.style.borderColor = error ? '#ef4444' : '#e2e8f0';
+          e.target.style.borderColor = error ? '#ef4444' : 'var(--color-border)';
           e.target.style.boxShadow = 'none';
         }}
         {...props}

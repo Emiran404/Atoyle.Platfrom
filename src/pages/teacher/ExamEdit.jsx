@@ -39,10 +39,10 @@ const styles = {
   title: {
     fontSize: '28px',
     fontWeight: '700',
-    color: '#1e293b'
+    color: 'var(--color-text-primary)'
   },
   card: {
-    backgroundColor: '#fff',
+    backgroundColor: 'var(--color-surface)',
     borderRadius: '16px',
     padding: '24px',
     boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
@@ -51,7 +51,7 @@ const styles = {
   sectionTitle: {
     fontSize: '16px',
     fontWeight: '600',
-    color: '#1e293b',
+    color: 'var(--color-text-primary)',
     marginBottom: '20px',
     display: 'flex',
     alignItems: 'center',
@@ -64,26 +64,26 @@ const styles = {
     display: 'block',
     fontSize: '14px',
     fontWeight: '500',
-    color: '#374151',
+    color: 'var(--color-text-secondary)',
     marginBottom: '8px'
   },
   input: {
     width: '100%',
     padding: '12px 16px',
-    border: '1px solid #e2e8f0',
+    border: '1px solid var(--color-border)',
     borderRadius: '10px',
     fontSize: '14px',
-    color: '#1e293b',
+    color: 'var(--color-text-primary)',
     outline: 'none',
     transition: 'border-color 0.2s'
   },
   textarea: {
     width: '100%',
     padding: '12px 16px',
-    border: '1px solid #e2e8f0',
+    border: '1px solid var(--color-border)',
     borderRadius: '10px',
     fontSize: '14px',
-    color: '#1e293b',
+    color: 'var(--color-text-primary)',
     outline: 'none',
     minHeight: '100px',
     resize: 'vertical'
@@ -98,13 +98,13 @@ const styles = {
     alignItems: 'center',
     gap: '10px',
     padding: '12px',
-    backgroundColor: '#f8fafc',
+    backgroundColor: 'var(--color-background)',
     borderRadius: '10px',
     cursor: 'pointer',
     transition: 'all 0.2s'
   },
   checkboxActive: {
-    backgroundColor: '#eff6ff',
+    backgroundColor: 'var(--color-background-secondary)',
     border: '1px solid #3b82f6'
   },
   buttonRow: {
@@ -119,7 +119,7 @@ const styles = {
     gap: '8px',
     padding: '12px 24px',
     backgroundColor: '#3b82f6',
-    color: '#fff',
+    color: 'var(--color-text-inverse, #fff)',
     border: 'none',
     borderRadius: '10px',
     fontSize: '14px',
@@ -132,8 +132,8 @@ const styles = {
     alignItems: 'center',
     gap: '8px',
     padding: '12px 24px',
-    backgroundColor: '#f1f5f9',
-    color: '#64748b',
+    backgroundColor: 'var(--color-background-secondary)',
+    color: 'var(--color-text-muted)',
     border: 'none',
     borderRadius: '10px',
     fontSize: '14px',
@@ -145,15 +145,15 @@ const styles = {
     alignItems: 'flex-start',
     gap: '12px',
     padding: '16px',
-    backgroundColor: '#fef2f2',
+    backgroundColor: 'var(--color-background-secondary)',
     borderRadius: '10px',
     marginBottom: '24px'
   },
   questionCard: {
-    border: '1px solid #e2e8f0',
+    border: '1px solid var(--color-border)',
     padding: '20px',
     marginBottom: '20px',
-    backgroundColor: '#ffffff',
+    backgroundColor: 'var(--color-surface)',
     borderRadius: '12px',
     boxShadow: '0 2px 4px rgba(0,0,0,0.02)',
   }
@@ -486,7 +486,7 @@ const ExamEdit = () => {
     return (
       <TeacherLayout>
         <div style={{ ...styles.container, textAlign: 'center', paddingTop: '100px' }}>
-          <p style={{ color: '#64748b' }}>Yükleniyor...</p>
+          <p style={{ color: 'var(--color-text-muted)' }}>Yükleniyor...</p>
         </div>
       </TeacherLayout>
     );
@@ -564,7 +564,7 @@ const ExamEdit = () => {
             </div>
 
             {formData.isQuiz && (
-              <div style={{ ...styles.formGroup, backgroundColor: '#f0fdfa', padding: '16px', borderRadius: '12px', border: '1px solid #ccfbf1', marginTop: '16px' }}>
+              <div style={{ ...styles.formGroup, backgroundColor: 'var(--color-background-secondary)', padding: '16px', borderRadius: '12px', border: '1px solid #ccfbf1', marginTop: '16px' }}>
                 <label style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer' }}>
                   <input
                     type="checkbox"
@@ -628,8 +628,8 @@ const ExamEdit = () => {
                     alignItems: 'center',
                     gap: '12px',
                     padding: '16px',
-                    backgroundColor: formData.targetType === 'all' ? '#f0fdfa' : '#f8fafc',
-                    border: `2px solid ${formData.targetType === 'all' ? '#0d9488' : '#e2e8f0'}`,
+                    backgroundColor: formData.targetType === 'all' ? 'var(--color-background-secondary)' : 'var(--color-background)',
+                    border: `2px solid ${formData.targetType === 'all' ? '#0d9488' : 'var(--color-border)'}`,
                     borderRadius: '12px',
                     cursor: 'pointer',
                     transition: 'all 0.2s'
@@ -644,10 +644,10 @@ const ExamEdit = () => {
                     style={{ width: '18px', height: '18px', accentColor: '#0d9488' }}
                   />
                   <div style={{ flex: 1 }}>
-                    <div style={{ fontWeight: '500', color: '#1e293b', marginBottom: '4px' }}>
+                    <div style={{ fontWeight: '500', color: 'var(--color-text-primary)', marginBottom: '4px' }}>
                       Tüm Öğrenciler
                     </div>
-                    <div style={{ fontSize: '13px', color: '#64748b' }}>
+                    <div style={{ fontSize: '13px', color: 'var(--color-text-muted)' }}>
                       Tüm kayıtlı öğrenciler
                     </div>
                   </div>
@@ -659,8 +659,8 @@ const ExamEdit = () => {
                     alignItems: 'center',
                     gap: '12px',
                     padding: '16px',
-                    backgroundColor: formData.targetType === 'class' ? '#f0fdfa' : '#f8fafc',
-                    border: `2px solid ${formData.targetType === 'class' ? '#0d9488' : '#e2e8f0'}`,
+                    backgroundColor: formData.targetType === 'class' ? 'var(--color-background-secondary)' : 'var(--color-background)',
+                    border: `2px solid ${formData.targetType === 'class' ? '#0d9488' : 'var(--color-border)'}`,
                     borderRadius: '12px',
                     cursor: 'pointer',
                     transition: 'all 0.2s'
@@ -675,10 +675,10 @@ const ExamEdit = () => {
                     style={{ width: '18px', height: '18px', accentColor: '#0d9488' }}
                   />
                   <div style={{ flex: 1 }}>
-                    <div style={{ fontWeight: '500', color: '#1e293b', marginBottom: '4px' }}>
+                    <div style={{ fontWeight: '500', color: 'var(--color-text-primary)', marginBottom: '4px' }}>
                       Belirli Sınıflar
                     </div>
-                    <div style={{ fontSize: '13px', color: '#64748b' }}>
+                    <div style={{ fontSize: '13px', color: 'var(--color-text-muted)' }}>
                       Seçili sınıflardaki öğrenciler
                     </div>
                   </div>
@@ -705,7 +705,7 @@ const ExamEdit = () => {
                         onChange={() => { }}
                         style={{ accentColor: '#3b82f6' }}
                       />
-                      <span style={{ fontSize: '14px', fontWeight: '500', color: '#1e293b' }}>{cls}</span>
+                      <span style={{ fontSize: '14px', fontWeight: '500', color: 'var(--color-text-primary)' }}>{cls}</span>
                     </div>
                   ))}
                 </div>
@@ -729,7 +729,7 @@ const ExamEdit = () => {
                         <span style={{
                           width: '28px',
                           height: '28px',
-                          backgroundColor: '#f1f5f9',
+                          backgroundColor: 'var(--color-background-secondary)',
                           borderRadius: '50%',
                           display: 'flex',
                           alignItems: 'center',
@@ -739,11 +739,11 @@ const ExamEdit = () => {
                         }}>
                           {idx + 1}
                         </span>
-                        <span style={{ fontWeight: '600', color: '#334155' }}>Soru Metni</span>
+                        <span style={{ fontWeight: '600', color: 'var(--color-foreground-secondary)' }}>Soru Metni</span>
                       </div>
                       <div style={{ display: 'flex', gap: '8px' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginRight: '12px' }}>
-                          <span style={{ fontSize: '12px', color: '#64748b' }}>Puan:</span>
+                          <span style={{ fontSize: '12px', color: 'var(--color-text-muted)' }}>Puan:</span>
                           <input
                             type="number"
                             value={q.points}
@@ -757,7 +757,7 @@ const ExamEdit = () => {
                           style={{
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
                             width: '32px', height: '32px',
-                            backgroundColor: '#fef2f2', color: '#ef4444',
+                            backgroundColor: 'var(--color-background-secondary)', color: '#ef4444',
                             border: 'none', borderRadius: '8px', cursor: 'pointer'
                           }}
                         >
@@ -788,7 +788,7 @@ const ExamEdit = () => {
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                backgroundColor: q.correctIndex === oIdx ? '#10b981' : '#f1f5f9',
+                                backgroundColor: q.correctIndex === oIdx ? '#10b981' : 'var(--color-background-secondary)',
                                 color: q.correctIndex === oIdx ? 'white' : '#94a3b8',
                                 border: q.correctIndex === oIdx ? 'none' : '1px solid #e2e8f0',
                                 borderRadius: '8px',
@@ -817,8 +817,8 @@ const ExamEdit = () => {
                     onClick={downloadSampleJSON}
                     style={{
                       display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
-                      padding: '12px 16px', backgroundColor: 'transparent', color: '#64748b',
-                      border: '1px solid #e2e8f0', borderRadius: '12px', cursor: 'pointer',
+                      padding: '12px 16px', backgroundColor: 'transparent', color: 'var(--color-text-muted)',
+                      border: '1px solid var(--color-border)', borderRadius: '12px', cursor: 'pointer',
                       fontWeight: '600', fontSize: '14px', flex: 1
                     }}
                     title="Örnek JSON İndir"
@@ -850,7 +850,7 @@ const ExamEdit = () => {
                     onClick={addQuestion}
                     style={{
                       display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
-                      padding: '12px 16px', backgroundColor: '#f0fdfa', color: '#0d9488',
+                      padding: '12px 16px', backgroundColor: 'var(--color-background-secondary)', color: '#0d9488',
                       border: '1px dashed #0d9488', borderRadius: '12px', cursor: 'pointer',
                       fontWeight: '600', fontSize: '14px', flex: 1
                     }}
@@ -868,8 +868,8 @@ const ExamEdit = () => {
                 Dosya Ayarları
               </h3>
 
-              <div style={{ backgroundColor: '#f8fafc', padding: '20px', borderRadius: '12px', border: '1px solid #e2e8f0', marginBottom: '24px' }}>
-                <h4 style={{ fontSize: '15px', fontWeight: '600', color: '#1e293b', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <div style={{ backgroundColor: 'var(--color-background)', padding: '20px', borderRadius: '12px', border: '1px solid var(--color-border)', marginBottom: '24px' }}>
+                <h4 style={{ fontSize: '15px', fontWeight: '600', color: 'var(--color-text-primary)', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <FileText size={16} color="#0d9488" />
                   Soru İçeriği (İsteğe Bağlı)
                 </h4>
@@ -884,7 +884,7 @@ const ExamEdit = () => {
                         alignItems: 'center',
                         justifyContent: 'space-between',
                         padding: '12px 16px',
-                        backgroundColor: '#f0f9ff',
+                        backgroundColor: 'var(--color-background-secondary)',
                         borderRadius: '10px',
                         border: '1px solid #bae6fd'
                       }}>
@@ -892,7 +892,7 @@ const ExamEdit = () => {
                           <div style={{
                             width: '36px',
                             height: '36px',
-                            backgroundColor: '#e0f2fe',
+                            backgroundColor: 'var(--color-border)',
                             borderRadius: '8px',
                             display: 'flex',
                             alignItems: 'center',
@@ -956,15 +956,15 @@ const ExamEdit = () => {
                         justifyContent: 'center',
                         gap: '10px',
                         padding: '16px',
-                        backgroundColor: '#ffffff',
-                        border: '2px dashed #e2e8f0',
+                        backgroundColor: 'var(--color-surface)',
+                        border: '2px dashed var(--color-border)',
                         borderRadius: '12px',
                         cursor: 'pointer',
                         transition: 'all 0.2s',
-                        color: '#64748b'
+                        color: 'var(--color-text-muted)'
                       }}
                         onMouseOver={(e) => { e.currentTarget.style.borderColor = '#3b82f6'; e.currentTarget.style.color = '#3b82f6'; }}
-                        onMouseOut={(e) => { e.currentTarget.style.borderColor = '#e2e8f0'; e.currentTarget.style.color = '#64748b'; }}
+                        onMouseOut={(e) => { e.currentTarget.style.borderColor = 'var(--color-border)'; e.currentTarget.style.color = 'var(--color-text-muted)'; }}
                       >
                         <Upload size={20} />
                         <div style={{ textAlign: 'center' }}>
@@ -985,7 +985,7 @@ const ExamEdit = () => {
                 </div>
               </div>
 
-              <div style={{ backgroundColor: '#f0fdfa', padding: '16px', borderRadius: '12px', border: '1px solid #ccfbf1', marginBottom: '24px' }}>
+              <div style={{ backgroundColor: 'var(--color-background-secondary)', padding: '16px', borderRadius: '12px', border: '1px solid #ccfbf1', marginBottom: '24px' }}>
                 <label style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer' }}>
                   <input
                     type="checkbox"
@@ -1014,8 +1014,8 @@ const ExamEdit = () => {
                             alignItems: 'center',
                             gap: '10px',
                             padding: '10px 12px',
-                            backgroundColor: formData.allowedFormats.includes(key) ? '#f0fdfa' : '#f8fafc',
-                            border: `1px solid ${formData.allowedFormats.includes(key) ? '#0d9488' : '#e2e8f0'}`,
+                            backgroundColor: formData.allowedFormats.includes(key) ? 'var(--color-background-secondary)' : 'var(--color-background)',
+                            border: `1px solid ${formData.allowedFormats.includes(key) ? '#0d9488' : 'var(--color-border)'}`,
                             borderRadius: '10px',
                             cursor: 'pointer',
                             transition: 'all 0.2s'
@@ -1028,7 +1028,7 @@ const ExamEdit = () => {
                             onChange={() => { }}
                             style={{ accentColor: '#0d9488', width: '16px', height: '16px' }}
                           />
-                          <span style={{ fontSize: '13px', fontWeight: '500', color: '#1e293b' }}>{format.label}</span>
+                          <span style={{ fontSize: '13px', fontWeight: '500', color: 'var(--color-text-primary)' }}>{format.label}</span>
                         </div>
                       ))}
                     </div>
@@ -1071,7 +1071,7 @@ const ExamEdit = () => {
               Sınav Güvenliği (Anti-Cheat)
             </h3>
 
-            <label style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', padding: '16px', backgroundColor: formData.antiCheatEnabled ? '#fef2f2' : '#f8fafc', borderRadius: '12px', cursor: 'pointer', transition: 'all 0.2s', border: formData.antiCheatEnabled ? '1px solid #ef4444' : '1px solid #e2e8f0', marginBottom: '16px' }}>
+            <label style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', padding: '16px', backgroundColor: formData.antiCheatEnabled ? 'var(--color-background-secondary)' : 'var(--color-background)', borderRadius: '12px', cursor: 'pointer', transition: 'all 0.2s', border: formData.antiCheatEnabled ? '1px solid #ef4444' : '1px solid #e2e8f0', marginBottom: '16px' }}>
               <input
                 type="checkbox"
                 checked={formData.antiCheatEnabled || false}
@@ -1079,8 +1079,8 @@ const ExamEdit = () => {
                 style={{ width: '18px', height: '18px', accentColor: '#ef4444', marginTop: '2px' }}
               />
               <div>
-                <div style={{ fontSize: '15px', fontWeight: '600', color: '#1e293b' }}>Yüksek Güvenlikli Sınav Modu (Anti-Cheat)</div>
-                <div style={{ fontSize: '13px', color: '#64748b', marginTop: '4px' }}>Sınav sadece masaüstü uygulaması ile çözülebilir. Ekran kilitlenir (kiosk modu), DevTools engellenir ve odağı kaybetme (Alt+Tab vb.) durumları kaydedilir.</div>
+                <div style={{ fontSize: '15px', fontWeight: '600', color: 'var(--color-text-primary)' }}>Yüksek Güvenlikli Sınav Modu (Anti-Cheat)</div>
+                <div style={{ fontSize: '13px', color: 'var(--color-text-muted)', marginTop: '4px' }}>Sınav sadece masaüstü uygulaması ile çözülebilir. Ekran kilitlenir (kiosk modu), DevTools engellenir ve odağı kaybetme (Alt+Tab vb.) durumları kaydedilir.</div>
               </div>
             </label>
           </div>
@@ -1092,7 +1092,7 @@ const ExamEdit = () => {
               Bildirim Ayarları
             </h3>
 
-            <label style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', padding: '16px', backgroundColor: formData.sendNotification ? '#f0fdfa' : '#f8fafc', borderRadius: '12px', cursor: 'pointer', transition: 'all 0.2s', border: formData.sendNotification ? '1px solid #14b8a6' : '1px solid #e2e8f0', marginBottom: '16px' }}>
+            <label style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', padding: '16px', backgroundColor: formData.sendNotification ? 'var(--color-background-secondary)' : 'var(--color-background)', borderRadius: '12px', cursor: 'pointer', transition: 'all 0.2s', border: formData.sendNotification ? '1px solid #14b8a6' : '1px solid #e2e8f0', marginBottom: '16px' }}>
               <input
                 type="checkbox"
                 checked={formData.sendNotification}
@@ -1100,8 +1100,8 @@ const ExamEdit = () => {
                 style={{ width: '18px', height: '18px', accentColor: '#0d9488', marginTop: '2px' }}
               />
               <div>
-                <div style={{ fontSize: '15px', fontWeight: '600', color: '#1e293b' }}>Bildirim Gönder</div>
-                <div style={{ fontSize: '13px', color: '#64748b', marginTop: '4px' }}>Öğrencilere sistem üzerinden hatırlatmalar iletilir.</div>
+                <div style={{ fontSize: '15px', fontWeight: '600', color: 'var(--color-text-primary)' }}>Bildirim Gönder</div>
+                <div style={{ fontSize: '13px', color: 'var(--color-text-muted)', marginTop: '4px' }}>Öğrencilere sistem üzerinden hatırlatmalar iletilir.</div>
               </div>
             </label>
 
@@ -1114,7 +1114,7 @@ const ExamEdit = () => {
                     onChange={(e) => handleChange({ target: { name: 'notifyOnStart', value: e.target.checked } })}
                     style={{ width: '16px', height: '16px', accentColor: '#0d9488' }}
                   />
-                  <span style={{ fontSize: '14px', color: '#1e293b' }}>Sınav başladığında bildir</span>
+                  <span style={{ fontSize: '14px', color: 'var(--color-text-primary)' }}>Sınav başladığında bildir</span>
                 </label>
 
                 <label style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer' }}>
@@ -1124,7 +1124,7 @@ const ExamEdit = () => {
                     onChange={(e) => handleChange({ target: { name: 'notifyBefore30', value: e.target.checked } })}
                     style={{ width: '16px', height: '16px', accentColor: '#0d9488' }}
                   />
-                  <span style={{ fontSize: '14px', color: '#1e293b' }}>30 dakika kala hatırlat</span>
+                  <span style={{ fontSize: '14px', color: 'var(--color-text-primary)' }}>30 dakika kala hatırlat</span>
                 </label>
 
                 <label style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer' }}>
@@ -1134,7 +1134,7 @@ const ExamEdit = () => {
                     onChange={(e) => handleChange({ target: { name: 'notifyBefore5', value: e.target.checked } })}
                     style={{ width: '16px', height: '16px', accentColor: '#0d9488' }}
                   />
-                  <span style={{ fontSize: '14px', color: '#1e293b' }}>5 dakika kala hatırlat</span>
+                  <span style={{ fontSize: '14px', color: 'var(--color-text-primary)' }}>5 dakika kala hatırlat</span>
                 </label>
               </div>
             )}

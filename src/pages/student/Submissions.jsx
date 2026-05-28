@@ -125,15 +125,15 @@ const Submissions = () => {
 
   const getStatusBadge = (submission) => {
     if (submission.grade === 'K' || submission.grade === 'G') {
-      return { text: submission.grade === 'K' ? 'Kopya (İptal)' : 'Girmedi', color: '#ef4444', bg: '#fef2f2', icon: XCircle };
+      return { text: submission.grade === 'K' ? 'Kopya (İptal)' : 'Girmedi', color: '#ef4444', bg: 'var(--color-background-secondary)', icon: XCircle };
     }
     if (submission.grade !== null && submission.grade !== undefined) {
-      return { text: 'Notlandırıldı', color: '#10b981', bg: '#ecfdf5', icon: CheckCircle };
+      return { text: 'Notlandırıldı', color: '#10b981', bg: 'var(--color-background-secondary)', icon: CheckCircle };
     }
     if (submission.isLocked) {
-      return { text: 'Kilitli', color: '#3b82f6', bg: '#eff6ff', icon: Clock };
+      return { text: 'Kilitli', color: '#3b82f6', bg: 'var(--color-background-secondary)', icon: Clock };
     }
-    return { text: 'Düzenlenebilir', color: '#f59e0b', bg: '#fffbeb', icon: Edit3 };
+    return { text: 'Düzenlenebilir', color: '#f59e0b', bg: 'var(--color-background-secondary)', icon: Edit3 };
   };
 
   const getEditRequestStatus = (submission) => {
@@ -204,46 +204,46 @@ const Submissions = () => {
   const styles = {
     container: { maxWidth: '1400px', margin: '0 auto' },
     header: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '32px', flexWrap: 'wrap', gap: '16px' },
-    title: { fontSize: '28px', fontWeight: '700', color: '#1e293b', marginBottom: '8px' },
-    subtitle: { fontSize: '14px', color: '#64748b' },
-    badge: { padding: '6px 12px', backgroundColor: '#eff6ff', color: '#3b82f6', borderRadius: '20px', fontSize: '13px', fontWeight: '500' },
+    title: { fontSize: '28px', fontWeight: '700', color: 'var(--color-text-primary)', marginBottom: '8px' },
+    subtitle: { fontSize: '14px', color: 'var(--color-text-muted)' },
+    badge: { padding: '6px 12px', backgroundColor: 'var(--color-background-secondary)', color: '#3b82f6', borderRadius: '20px', fontSize: '13px', fontWeight: '500' },
 
     // Layout
     layout: { display: 'grid', gridTemplateColumns: '320px 1fr', gap: '24px', marginTop: '24px' },
 
     // Sidebar (Exam List)
     sidebar: {
-      backgroundColor: '#ffffff',
+      backgroundColor: 'var(--color-surface)',
       borderRadius: '20px',
       padding: '20px',
       boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05)',
-      border: '1px solid #e2e8f0',
+      border: '1px solid var(--color-border)',
       height: 'fit-content',
       maxHeight: 'calc(100vh - 200px)',
       overflowY: 'auto'
     },
-    sidebarTitle: { fontSize: '16px', fontWeight: '600', color: '#1e293b', marginBottom: '16px', paddingLeft: '12px' },
+    sidebarTitle: { fontSize: '16px', fontWeight: '600', color: 'var(--color-text-primary)', marginBottom: '16px', paddingLeft: '12px' },
     examItem: (isSelected) => ({
       padding: '16px',
       borderRadius: '14px',
       marginBottom: '10px',
       cursor: 'pointer',
-      backgroundColor: isSelected ? '#eff6ff' : 'transparent',
+      backgroundColor: isSelected ? 'var(--color-background-secondary)' : 'transparent',
       border: isSelected ? '1px solid #bfdbfe' : '1px solid #f1f5f9',
       transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
       boxShadow: isSelected ? '0 4px 12px rgba(36, 99, 235, 0.1)' : 'none'
     }),
-    examItemTitle: { fontSize: '14px', fontWeight: '600', color: '#1e293b', marginBottom: '4px' },
-    examItemMeta: { fontSize: '12px', color: '#64748b', display: 'flex', alignItems: 'center', gap: '8px', marginTop: '6px' },
-    examItemBadge: { fontSize: '11px', padding: '2px 8px', borderRadius: '10px', backgroundColor: '#f1f5f9', color: '#475569', fontWeight: '500' },
+    examItemTitle: { fontSize: '14px', fontWeight: '600', color: 'var(--color-text-primary)', marginBottom: '4px' },
+    examItemMeta: { fontSize: '12px', color: 'var(--color-text-muted)', display: 'flex', alignItems: 'center', gap: '8px', marginTop: '6px' },
+    examItemBadge: { fontSize: '11px', padding: '2px 8px', borderRadius: '10px', backgroundColor: 'var(--color-background-secondary)', color: 'var(--color-text-secondary)', fontWeight: '500' },
 
     // File Manager Area
     fileManager: {
-      backgroundColor: '#ffffff',
+      backgroundColor: 'var(--color-surface)',
       borderRadius: '20px',
       padding: '32px',
       boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
-      border: '1px solid #e2e8f0',
+      border: '1px solid var(--color-border)',
       minHeight: '600px'
     },
     fileManagerHeader: {
@@ -252,16 +252,16 @@ const Submissions = () => {
       justifyContent: 'space-between',
       marginBottom: '24px',
       paddingBottom: '16px',
-      borderBottom: '1px solid #e2e8f0'
+      borderBottom: '1px solid var(--color-border)'
     },
-    fileManagerTitle: { fontSize: '18px', fontWeight: '600', color: '#1e293b' },
+    fileManagerTitle: { fontSize: '18px', fontWeight: '600', color: 'var(--color-text-primary)' },
     viewToggle: { display: 'flex', gap: '8px' },
     viewBtn: (isActive) => ({
       padding: '8px 12px',
       borderRadius: '8px',
-      border: '1px solid #e2e8f0',
+      border: '1px solid var(--color-border)',
       backgroundColor: isActive ? '#3b82f6' : '#fff',
-      color: isActive ? '#fff' : '#64748b',
+      color: isActive ? '#fff' : 'var(--color-text-muted)',
       cursor: 'pointer',
       fontSize: '13px',
       fontWeight: '500',
@@ -276,10 +276,10 @@ const Submissions = () => {
       marginTop: '24px'
     },
     fileCard: {
-      backgroundColor: '#ffffff',
+      backgroundColor: 'var(--color-surface)',
       borderRadius: '16px',
       padding: '20px',
-      border: '1px solid #e2e8f0',
+      border: '1px solid var(--color-border)',
       cursor: 'pointer',
       transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
       boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)'
@@ -288,23 +288,23 @@ const Submissions = () => {
       width: '48px',
       height: '48px',
       borderRadius: '8px',
-      backgroundColor: '#eff6ff',
+      backgroundColor: 'var(--color-background-secondary)',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
       marginBottom: '12px',
       color: '#3b82f6'
     },
-    fileCardName: { fontSize: '14px', fontWeight: '500', color: '#1e293b', marginBottom: '4px', wordBreak: 'break-word' },
-    fileCardSize: { fontSize: '12px', color: '#64748b', marginBottom: '12px' },
+    fileCardName: { fontSize: '14px', fontWeight: '500', color: 'var(--color-text-primary)', marginBottom: '4px', wordBreak: 'break-word' },
+    fileCardSize: { fontSize: '12px', color: 'var(--color-text-muted)', marginBottom: '12px' },
     fileCardActions: { display: 'flex', gap: '6px', marginTop: '12px' },
     fileActionBtn: {
       padding: '6px 10px',
       borderRadius: '6px',
-      border: '1px solid #e2e8f0',
-      backgroundColor: '#fff',
+      border: '1px solid var(--color-border)',
+      backgroundColor: 'var(--color-surface)',
       fontSize: '12px',
-      color: '#64748b',
+      color: 'var(--color-text-muted)',
       cursor: 'pointer',
       display: 'flex',
       alignItems: 'center',
@@ -322,9 +322,9 @@ const Submissions = () => {
       padding: '80px 20px',
       minHeight: '400px'
     },
-    emptyIcon: { marginBottom: '16px', color: '#cbd5e1' },
-    emptyTitle: { fontSize: '18px', fontWeight: '600', color: '#1e293b', marginBottom: '8px' },
-    emptyText: { fontSize: '14px', color: '#64748b' },
+    emptyIcon: { marginBottom: '16px', color: 'var(--color-border-dark)' },
+    emptyTitle: { fontSize: '18px', fontWeight: '600', color: 'var(--color-text-primary)', marginBottom: '8px' },
+    emptyText: { fontSize: '14px', color: 'var(--color-text-muted)' },
 
     // Modal styles
     modal: {
@@ -338,7 +338,7 @@ const Submissions = () => {
       padding: '20px'
     },
     modalContent: {
-      backgroundColor: '#ffffff',
+      backgroundColor: 'var(--color-surface)',
       borderRadius: '16px',
       padding: '24px',
       maxWidth: '500px',
@@ -346,13 +346,13 @@ const Submissions = () => {
       maxHeight: '80vh',
       overflowY: 'auto'
     },
-    modalTitle: { fontSize: '20px', fontWeight: '600', color: '#1e293b', marginBottom: '24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' },
+    modalTitle: { fontSize: '20px', fontWeight: '600', color: 'var(--color-text-primary)', marginBottom: '24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' },
     modalSection: { marginBottom: '20px' },
-    modalLabel: { fontSize: '13px', fontWeight: '500', color: '#64748b', marginBottom: '8px' },
-    modalBox: { backgroundColor: '#f8fafc', borderRadius: '12px', padding: '16px' },
+    modalLabel: { fontSize: '13px', fontWeight: '500', color: 'var(--color-text-muted)', marginBottom: '8px' },
+    modalBox: { backgroundColor: 'var(--color-background)', borderRadius: '12px', padding: '16px' },
     modalRow: { display: 'flex', justifyContent: 'space-between', marginBottom: '12px' },
-    modalRowLabel: { color: '#64748b', fontSize: '14px' },
-    modalRowValue: { color: '#1e293b', fontSize: '14px', fontWeight: '500' },
+    modalRowLabel: { color: 'var(--color-text-muted)', fontSize: '14px' },
+    modalRowValue: { color: 'var(--color-text-primary)', fontSize: '14px', fontWeight: '500' },
 
     // Preview Modal
     previewModal: {
@@ -368,7 +368,7 @@ const Submissions = () => {
       width: '90%',
       height: '90%',
       maxWidth: '1200px',
-      backgroundColor: '#1e293b',
+      backgroundcolor: 'var(--color-text-primary)',
       borderRadius: '16px',
       overflow: 'hidden',
       display: 'flex',
@@ -383,7 +383,7 @@ const Submissions = () => {
       borderBottom: '1px solid #334155'
     },
     previewTitle: {
-      color: '#fff',
+      color: 'var(--color-text-inverse, #fff)',
       fontSize: '16px',
       fontWeight: '500',
       display: 'flex',
@@ -431,7 +431,7 @@ const Submissions = () => {
       width: '100%',
       height: '120px',
       padding: '12px',
-      border: '1px solid #e2e8f0',
+      border: '1px solid var(--color-border)',
       borderRadius: '12px',
       fontSize: '14px',
       resize: 'none',
@@ -443,9 +443,9 @@ const Submissions = () => {
     return (
       <>
         <StudentSidebar />
-        <div style={{ marginLeft: '288px', minHeight: '100vh', background: '#f6f6f8' }}>
+        <div style={{ marginLeft: '288px', minHeight: '100vh', background: 'var(--color-background)' }}>
           <div style={{ ...styles.container, textAlign: 'center', paddingTop: '100px' }}>
-            <p style={{ color: '#64748b' }}>Yükleniyor...</p>
+            <p style={{ color: 'var(--color-text-muted)' }}>Yükleniyor...</p>
           </div>
         </div>
       </>
@@ -460,12 +460,12 @@ const Submissions = () => {
       <div style={{
         marginLeft: '288px',
         minHeight: '100vh',
-        background: '#f6f6f8'
+        background: 'var(--color-background)'
       }}>
         {/* Header */}
         <header style={{
-          background: 'white',
-          borderBottom: '1px solid #f0f1f4',
+          background: 'var(--color-surface)',
+          borderBottom: '1px solid var(--color-border)',
           padding: '20px 48px',
           position: 'sticky',
           top: 0,
@@ -505,12 +505,12 @@ const Submissions = () => {
               <h1 style={{
                 fontSize: '24px',
                 fontWeight: '700',
-                color: '#1e293b',
+                color: 'var(--color-text-primary)',
                 marginBottom: '4px'
               }}>
                 {t('submissions')}
               </h1>
-              <p style={{ fontSize: '14px', color: '#64748b' }}>
+              <p style={{ fontSize: '14px', color: 'var(--color-text-muted)' }}>
                 {user?.studentNumber} • {user?.fullName || user?.name || t('student')}
               </p>
             </div>
@@ -558,8 +558,8 @@ const Submissions = () => {
                     textAlign: 'center',
                     padding: '40px 20px'
                   }}>
-                    <FolderOpen size={48} style={{ color: '#cbd5e1', marginBottom: '12px' }} />
-                    <p style={{ fontSize: '13px', color: '#64748b' }}>{t('noSubmissionsYet')}</p>
+                    <FolderOpen size={48} style={{ color: 'var(--color-border-dark)', marginBottom: '12px' }} />
+                    <p style={{ fontSize: '13px', color: 'var(--color-text-muted)' }}>{t('noSubmissionsYet')}</p>
                   </div>
                 ) : (
                   submissions.map((submission) => {
@@ -571,7 +571,7 @@ const Submissions = () => {
                         onClick={() => setSelectedExam(submission)}
                         onMouseEnter={(e) => {
                           if (selectedExam?.examId !== submission.examId) {
-                            e.currentTarget.style.backgroundColor = '#f8fafc';
+                            e.currentTarget.style.backgroundColor = 'var(--color-background)';
                           }
                         }}
                         onMouseLeave={(e) => {
@@ -591,7 +591,7 @@ const Submissions = () => {
                           {(submission.grade !== null && submission.grade !== undefined) && (
                             <span style={{
                               ...styles.examItemBadge,
-                              backgroundColor: (submission.grade === 'K' || submission.grade === 'G') ? '#fef2f2' : (submission.grade >= 70 ? '#dcfce7' : submission.grade >= 50 ? '#fef3c7' : '#fee2e2'),
+                              backgroundColor: (submission.grade === 'K' || submission.grade === 'G') ? 'var(--color-background-secondary)' : (submission.grade >= 70 ? '#dcfce7' : submission.grade >= 50 ? '#fef3c7' : '#fee2e2'),
                               color: (submission.grade === 'K' || submission.grade === 'G') ? '#dc2626' : (submission.grade >= 70 ? '#166534' : submission.grade >= 50 ? '#92400e' : '#991b1b')
                             }}>
                               ⭐ {submission.grade}
@@ -618,14 +618,14 @@ const Submissions = () => {
                     <div style={styles.fileManagerHeader}>
                       <div>
                         <h2 style={styles.fileManagerTitle}>{selectedExam.exam?.title}</h2>
-                        <p style={{ fontSize: '13px', color: '#64748b', marginTop: '4px' }}>
+                        <p style={{ fontSize: '13px', color: 'var(--color-text-muted)', marginTop: '4px' }}>
                           {formatDate(selectedExam.lastSubmittedAt)} • {selectedExam.isQuiz ? t('quiz') : `${selectedExam.files?.length || 0} ${t('files')}`}
                           {(selectedExam.grade !== null && selectedExam.grade !== undefined) && (
                             <span style={{
                               marginLeft: '12px',
                               padding: '4px 10px',
                               borderRadius: '12px',
-                              backgroundColor: (selectedExam.grade === 'K' || selectedExam.grade === 'G') ? '#fef2f2' : (selectedExam.grade >= 70 ? '#dcfce7' : selectedExam.grade >= 50 ? '#fef3c7' : '#fee2e2'),
+                              backgroundColor: (selectedExam.grade === 'K' || selectedExam.grade === 'G') ? 'var(--color-background-secondary)' : (selectedExam.grade >= 70 ? '#dcfce7' : selectedExam.grade >= 50 ? '#fef3c7' : '#fee2e2'),
                               color: (selectedExam.grade === 'K' || selectedExam.grade === 'G') ? '#dc2626' : (selectedExam.grade >= 70 ? '#166534' : selectedExam.grade >= 50 ? '#92400e' : '#991b1b'),
                               fontSize: '12px',
                               fontWeight: '600'
@@ -668,7 +668,7 @@ const Submissions = () => {
                               onMouseLeave={(e) => {
                                 e.currentTarget.style.transform = 'translateY(0)';
                                 e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.05)';
-                                e.currentTarget.style.borderColor = '#e2e8f0';
+                                e.currentTarget.style.borderColor = 'var(--color-border)';
                               }}
                             >
                               <div style={styles.fileIcon}>
@@ -682,7 +682,7 @@ const Submissions = () => {
                               <div style={styles.fileCardActions}>
                                 {file.isQuiz ? (
                                   <button
-                                    style={{ ...styles.fileActionBtn, backgroundColor: '#2463eb', color: '#fff', border: 'none', width: '100%' }}
+                                    style={{ ...styles.fileActionBtn, backgroundColor: '#2463eb', color: 'var(--color-text-inverse, #fff)', border: 'none', width: '100%' }}
                                     onClick={() => {
                                       setSelectedSubmission({ ...file, ...selectedExam });
                                       setShowDetailModal(true);
@@ -723,10 +723,10 @@ const Submissions = () => {
                               alignItems: 'center',
                               justifyContent: 'space-between',
                               padding: '16px',
-                              backgroundColor: '#f8fafc',
+                              backgroundColor: 'var(--color-background)',
                               borderRadius: '12px',
                               marginBottom: '12px',
-                              border: '1px solid #e2e8f0'
+                              border: '1px solid var(--color-border)'
                             }}
                           >
                             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flex: 1 }}>
@@ -734,7 +734,7 @@ const Submissions = () => {
                                 width: '40px',
                                 height: '40px',
                                 borderRadius: '8px',
-                                backgroundColor: file.isQuiz ? '#f0fdf4' : '#eff6ff',
+                                backgroundColor: file.isQuiz ? 'var(--color-background-secondary)' : 'var(--color-background-secondary)',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
@@ -743,10 +743,10 @@ const Submissions = () => {
                                 {file.isQuiz ? <CheckCircle size={20} /> : <FileText size={20} />}
                               </div>
                               <div>
-                                <div style={{ fontSize: '14px', fontWeight: '500', color: '#1e293b' }}>
+                                <div style={{ fontSize: '14px', fontWeight: '500', color: 'var(--color-text-primary)' }}>
                                   {file.fileName || (file.isQuiz ? t('quizResult') : t('file'))}
                                 </div>
-                                <div style={{ fontSize: '12px', color: '#64748b', marginTop: '4px' }}>
+                                <div style={{ fontSize: '12px', color: 'var(--color-text-muted)', marginTop: '4px' }}>
                                   {file.isQuiz ? ((selectedExam.grade === null || selectedExam.grade === undefined) ? t('waitingForGrade') : `${selectedExam.earnedPoints || 0} / ${selectedExam.totalPoints || 100} ${t('score')}`) : formatFileSize(file.fileSize)} • {formatDateTime(file.submittedAt)}
                                 </div>
                               </div>
@@ -754,7 +754,7 @@ const Submissions = () => {
                             <div style={{ display: 'flex', gap: '8px' }}>
                               {file.isQuiz ? (
                                 <button
-                                  style={{ ...styles.fileActionBtn, backgroundColor: '#2463eb', color: '#fff', border: 'none' }}
+                                  style={{ ...styles.fileActionBtn, backgroundColor: '#2463eb', color: 'var(--color-text-inverse, #fff)', border: 'none' }}
                                   onClick={() => {
                                     setSelectedSubmission({ ...file, ...selectedExam });
                                     setShowDetailModal(true);
@@ -800,13 +800,13 @@ const Submissions = () => {
                     </div>
                     <div style={styles.previewActions}>
                       <button
-                        style={{ ...styles.previewBtn, backgroundColor: '#3b82f6', color: '#fff' }}
+                        style={{ ...styles.previewBtn, backgroundColor: '#3b82f6', color: 'var(--color-text-inverse, #fff)' }}
                         onClick={() => handleDownload(selectedSubmission)}
                       >
                         <Download size={16} /> İndir
                       </button>
                       <button
-                        style={{ ...styles.previewBtn, backgroundColor: '#475569', color: '#fff' }}
+                        style={{ ...styles.previewBtn, backgroundcolor: 'var(--color-text-secondary)', color: 'var(--color-text-inverse, #fff)' }}
                         onClick={() => setShowPreviewModal(false)}
                       >
                         <X size={16} /> Kapat
@@ -840,7 +840,7 @@ const Submissions = () => {
                     <span>{t('submissionDetails') || 'Teslim Detayları'}</span>
                     <button
                       onClick={() => setShowDetailModal(false)}
-                      style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#64748b' }}
+                      style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-text-muted)' }}
                     >
                       <X size={20} />
                     </button>
@@ -849,8 +849,8 @@ const Submissions = () => {
                   <div style={styles.modalSection}>
                     <p style={styles.modalLabel}>{t('examInfo') || 'Sınav Bilgileri'}</p>
                     <div style={styles.modalBox}>
-                      <p style={{ fontWeight: '600', color: '#1e293b', marginBottom: '4px' }}>{selectedSubmission.exam?.title}</p>
-                      <p style={{ fontSize: '14px', color: '#64748b' }}>{selectedSubmission.exam?.department}</p>
+                      <p style={{ fontWeight: '600', color: 'var(--color-text-primary)', marginBottom: '4px' }}>{selectedSubmission.exam?.title}</p>
+                      <p style={{ fontSize: '14px', color: 'var(--color-text-muted)' }}>{selectedSubmission.exam?.department}</p>
                     </div>
                   </div>
 
@@ -903,10 +903,10 @@ const Submissions = () => {
                           const studentAnswer = selectedSubmission.answers.find(a => a.questionId === question.id);
                           const isCorrect = studentAnswer?.isCorrect;
                           return (
-                            <div key={question.id} style={{ padding: '12px', border: '1px solid #e2e8f0', borderRadius: '12px', backgroundColor: (selectedSubmission.grade === null || selectedSubmission.grade === undefined) ? '#f8fafc' : (isCorrect ? '#f0fdf4' : (studentAnswer?.selectedIndex === null ? '#f8fafc' : '#fef2f2')) }}>
+                            <div key={question.id} style={{ padding: '12px', border: '1px solid var(--color-border)', borderRadius: '12px', backgroundColor: (selectedSubmission.grade === null || selectedSubmission.grade === undefined) ? 'var(--color-background)' : (isCorrect ? 'var(--color-background-secondary)' : (studentAnswer?.selectedIndex === null ? 'var(--color-background)' : 'var(--color-background-secondary)')) }}>
                               <p style={{ fontSize: '14px', fontWeight: '600', marginBottom: '8px' }}>{idx + 1}. {question.text}</p>
                               <div style={{ fontSize: '13px' }}>
-                                <p style={{ color: '#64748b' }}>{t('yourAnswer')}: <span style={{ fontWeight: '600', color: (selectedSubmission.grade !== null && selectedSubmission.grade !== undefined) ? (isCorrect ? '#10b981' : '#ef4444') : '#475569' }}>{studentAnswer?.selectedIndex !== null ? question.options[studentAnswer.selectedIndex] : t('emptyAnswer')}</span></p>
+                                <p style={{ color: 'var(--color-text-muted)' }}>{t('yourAnswer')}: <span style={{ fontWeight: '600', color: (selectedSubmission.grade !== null && selectedSubmission.grade !== undefined) ? (isCorrect ? '#10b981' : '#ef4444') : 'var(--color-text-secondary)' }}>{studentAnswer?.selectedIndex !== null ? question.options[studentAnswer.selectedIndex] : t('emptyAnswer')}</span></p>
                                 {(selectedSubmission.grade !== null && selectedSubmission.grade !== undefined) && !isCorrect && (
                                   <p style={{ color: '#10b981', marginTop: '4px' }}>{t('correctAnswer')}: <span style={{ fontWeight: '600' }}>{question.options[question.correctIndex]}</span></p>
                                 )}
@@ -923,13 +923,13 @@ const Submissions = () => {
                       <p style={styles.modalLabel}>{t('evaluation') || 'Değerlendirme'}</p>
                       <div style={styles.modalBox}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
-                          <span style={{ fontSize: '24px', fontWeight: '700', color: '#1e293b' }}>{selectedSubmission.grade}</span>
-                          <span style={{ color: '#64748b' }}>/ 100</span>
+                          <span style={{ fontSize: '24px', fontWeight: '700', color: 'var(--color-text-primary)' }}>{selectedSubmission.grade}</span>
+                          <span style={{ color: 'var(--color-text-muted)' }}>/ 100</span>
                         </div>
                         {selectedSubmission.feedback && (
                           <div>
-                            <p style={{ fontSize: '13px', color: '#64748b', marginBottom: '4px' }}>{t('teacherComment') || 'Öğretmen Yorumu'}:</p>
-                            <p style={{ color: '#1e293b' }}>
+                            <p style={{ fontSize: '13px', color: 'var(--color-text-muted)', marginBottom: '4px' }}>{t('teacherComment') || 'Öğretmen Yorumu'}:</p>
+                            <p style={{ color: 'var(--color-text-primary)' }}>
                               {selectedSubmission.isQuiz && selectedSubmission.feedback.includes('Otomatik notlandırma')
                                 ? selectedSubmission.feedback.replace('Otomatik notlandırma', t('autoGrading'))
                                 : selectedSubmission.feedback
@@ -946,14 +946,14 @@ const Submissions = () => {
                       <>
                         {canPreview(selectedSubmission) && (
                           <button
-                            style={{ flex: 1, padding: '12px', backgroundColor: '#f1f5f9', color: '#475569', border: 'none', borderRadius: '10px', fontSize: '14px', fontWeight: '500', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
+                            style={{ flex: 1, padding: '12px', backgroundColor: 'var(--color-background-secondary)', color: 'var(--color-text-secondary)', border: 'none', borderRadius: '10px', fontSize: '14px', fontWeight: '500', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
                             onClick={() => { setShowDetailModal(false); handlePreview(selectedSubmission); }}
                           >
                             <Eye size={16} /> {t('preview') || 'Önizle'}
                           </button>
                         )}
                         <button
-                          style={{ flex: 1, padding: '12px', backgroundColor: '#3b82f6', color: '#fff', border: 'none', borderRadius: '10px', fontSize: '14px', fontWeight: '500', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
+                          style={{ flex: 1, padding: '12px', backgroundColor: '#3b82f6', color: 'var(--color-text-inverse, #fff)', border: 'none', borderRadius: '10px', fontSize: '14px', fontWeight: '500', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
                           onClick={() => handleDownload(selectedSubmission)}
                         >
                           <Download size={16} /> {t('download') || 'İndir'}
@@ -961,7 +961,7 @@ const Submissions = () => {
                       </>
                     ) : (
                       <button
-                        style={{ flex: 1, padding: '12px', backgroundColor: '#3b82f6', color: '#fff', border: 'none', borderRadius: '10px', fontSize: '14px', fontWeight: '500', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
+                        style={{ flex: 1, padding: '12px', backgroundColor: '#3b82f6', color: 'var(--color-text-inverse, #fff)', border: 'none', borderRadius: '10px', fontSize: '14px', fontWeight: '500', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
                         onClick={() => setShowDetailModal(false)}
                       >
                         <CheckCircle size={16} /> {t('close') || 'Kapat'}
@@ -980,7 +980,7 @@ const Submissions = () => {
                     <span>Düzenleme Talebi</span>
                     <button
                       onClick={() => setShowEditRequestModal(false)}
-                      style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#64748b' }}
+                      style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-text-muted)' }}
                     >
                       <X size={20} />
                     </button>
@@ -1024,7 +1024,7 @@ const Submissions = () => {
                     style={{
                       width: '100%',
                       padding: '14px',
-                      backgroundColor: editReason.trim() ? '#f59e0b' : '#e2e8f0',
+                      backgroundColor: editReason.trim() ? '#f59e0b' : 'var(--color-border)',
                       color: editReason.trim() ? '#fff' : '#94a3b8',
                       border: 'none',
                       borderRadius: '10px',

@@ -21,6 +21,10 @@ export const translations = {
 
     // Settings
     settings: 'Ayarlar',
+    theme: 'Görünüm',
+    themeDesc: 'Karanlık ve aydınlık mod arasında geçiş yapın',
+    darkTheme: 'Koyu Tema',
+    lightTheme: 'Açık Tema',
     language: 'Dil',
     languageSettings: 'Dil Ayarları',
     applicationLanguage: 'Uygulama Dili',
@@ -153,6 +157,7 @@ export const translations = {
     noQuizResultYet: 'Henüz Quiz Sonucu Yok',
     noQuizResultDesc: 'Katıldığınız quiz sınavlarının değerlendirme sonuçları ve optik formları burada görünecektir.',
     viewMyOptic: 'Optiğimi Görüntüle',
+    viewMyExamOptic: 'Sınav Optiğimi Görüntüle',
     inEvaluation: 'Değerlendirme aşamasında',
     cheatCancelled: 'Kopya (İptal)',
     pending: 'Beklemede',
@@ -417,8 +422,13 @@ export const translations = {
     fileSizeLabel: 'Boyut',
 
     // Topbar
+    help: 'Yardım',
+    studentAccount: 'Öğrenci Hesabı',
+    notSpecified: 'Belirtilmedi',
     logout: 'Çıkış Yap',
     darkTheme: 'Koyu Tema',
+    theme: 'Görünüm',
+    themeDesc: 'Karanlık ve aydınlık mod arasında geçiş yapın',
     lightTheme: 'Açık Tema',
     user: 'Kullanıcı',
 
@@ -520,6 +530,10 @@ export const translations = {
 
     // Settings
     settings: 'Settings',
+    theme: 'Appearance',
+    themeDesc: 'Switch between dark and light mode',
+    darkTheme: 'Dark Theme',
+    lightTheme: 'Light Theme',
     language: 'Language',
     languageSettings: 'Language Settings',
     applicationLanguage: 'Application Language',
@@ -652,6 +666,7 @@ export const translations = {
     noQuizResultYet: 'No Quiz Result Yet',
     noQuizResultDesc: 'Evaluation results and optical forms of the quiz exams you participated in will appear here.',
     viewMyOptic: 'View My Optic',
+    viewMyExamOptic: 'View My Exam Optic',
     inEvaluation: 'Evaluation in progress',
     cheatCancelled: 'Cheating (Cancelled)',
     pending: 'Pending',
@@ -916,8 +931,13 @@ export const translations = {
     fileSizeLabel: 'Size',
 
     // Topbar
+    help: 'Help',
+    studentAccount: 'Student Account',
+    notSpecified: 'Not Specified',
     logout: 'Logout',
     darkTheme: 'Dark Theme',
+    theme: 'Appearance',
+    themeDesc: 'Switch between dark and light mode',
     lightTheme: 'Light Theme',
     user: 'User',
 
@@ -1019,6 +1039,10 @@ export const translations = {
 
     // Settings
     settings: 'Настройки',
+    theme: 'Внешний вид',
+    themeDesc: 'Переключение между темным и светлым режимом',
+    darkTheme: 'Темная тема',
+    lightTheme: 'Светлая тема',
     language: 'Язык',
     languageSettings: 'Настройки языка',
     applicationLanguage: 'Язык приложения',
@@ -1151,6 +1175,7 @@ export const translations = {
     noQuizResultYet: 'Результатов теста пока нет',
     noQuizResultDesc: 'Здесь будут отображаться результаты оценивания и оптические формы пройденных вами тестов.',
     viewMyOptic: 'Посмотреть мой бланк',
+    viewMyExamOptic: 'Посмотреть мой бланк экзамена',
     inEvaluation: 'На стадии оценки',
     cheatCancelled: 'Списывание (Аннулировано)',
     pending: 'В ожидании',
@@ -1402,8 +1427,13 @@ export const translations = {
     fileSizeLabel: 'Размер',
 
     // Topbar
+    help: 'Помощь',
+    studentAccount: 'Учетная запись студента',
+    notSpecified: 'Не указано',
     logout: 'Выйти',
     darkTheme: 'Темная тема',
+    theme: 'Внешний вид',
+    themeDesc: 'Переключение между темным и светлым режимом',
     lightTheme: 'Светлая тема',
     user: 'Пользователь',
 
@@ -1528,6 +1558,10 @@ export const translations = {
 
     // Settings
     settings: 'Einstellungen',
+    theme: 'Erscheinungsbild',
+    themeDesc: 'Wechseln Sie zwischen dunklem und hellem Modus',
+    darkTheme: 'Dunkles Thema',
+    lightTheme: 'Helles Thema',
     language: 'Sprache',
     languageSettings: 'Spracheinstellungen',
     applicationLanguage: 'Anwendungssprache',
@@ -1659,7 +1693,8 @@ export const translations = {
     examOpticsSubtitle: 'Optische Formulare und Ergebnisse Ihrer Prüfungen im Quizformat',
     noQuizResultYet: 'Noch kein Quizergebnis',
     noQuizResultDesc: 'Bewertungsergebnisse und optische Formulare der Quizprüfungen, an denen Sie teilgenommen haben, werden hier angezeigt.',
-    viewMyOptic: 'Meine Optik ansehen',
+    viewMyOptic: 'Meine Optik anzeigen',
+    viewMyExamOptic: 'Meine Prüfungsoptik anzeigen',
     inEvaluation: 'Bewertung läuft',
     cheatCancelled: 'Betrug (Abgebrochen)',
     pending: 'Ausstehend',
@@ -1939,8 +1974,13 @@ export const translations = {
     fileSizeLabel: 'Größe',
 
     // Topbar
+    help: 'Hilfe',
+    studentAccount: 'Studentenkonto',
+    notSpecified: 'Nicht angegeben',
     logout: 'Abmelden',
     darkTheme: 'Dunkles Thema',
+    theme: 'Erscheinungsbild',
+    themeDesc: 'Wechseln Sie zwischen dunklem und hellem Modus',
     lightTheme: 'Helles Thema',
     user: 'Benutzer',
 

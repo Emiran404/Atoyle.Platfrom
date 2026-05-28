@@ -5,13 +5,16 @@ import { useAuthStore } from '../../store/authStore';
 import { useNotificationStore } from '../../store/notificationStore';
 import { getRelativeTime } from '../../utils/dateHelpers';
 import { t } from '../../utils/i18n';
+import { getNotificationTranslation } from '../../utils/notificationHelpers';
 
 const Notifications = () => {
-  const { user, userType } = useAuthStore();
+  const { user, userType, language } = useAuthStore();
+
   const { notifications, loadNotifications, markAsRead, markAllAsRead, deleteNotification } = useNotificationStore();
   const [filter, setFilter] = useState('all');
   const [loading, setLoading] = useState(true);
 
+  // Re-fetch or re-render automatically happens when `language` changes
   useEffect(() => {
     const fetchNotifications = async () => {
       setLoading(true);
@@ -28,7 +31,7 @@ const Notifications = () => {
 
       return () => clearInterval(refreshInterval);
     }
-  }, [user, userType]);
+  }, [user, userType]); // `language`'i buraya eklemiyoruz çünkü sadece re-render istiyoruz, fetch degil.
 
   const filteredNotifications = notifications.filter(n => {
     if (filter === 'unread') return !n.isRead;
@@ -56,47 +59,47 @@ const Notifications = () => {
   const styles = {
     container: { maxWidth: '800px', margin: '0 auto' },
     header: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '32px', flexWrap: 'wrap', gap: '16px' },
-    title: { fontSize: '28px', fontWeight: '700', color: '#1e293b', marginBottom: '8px' },
-    subtitle: { fontSize: '14px', color: '#64748b' },
+    title: { fontSize: '28px', fontWeight: '700', color: 'var(--color-text-primary)', marginBottom: '8px' },
+    subtitle: { fontSize: '14px', color: 'var(--color-text-muted)' },
     markAllBtn: {
-      padding: '10px 16px', backgroundColor: '#f1f5f9', color: '#475569',
+      padding: '10px 16px', backgroundColor: 'var(--color-background-secondary)', color: 'var(--color-text-secondary)',
       border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '500', cursor: 'pointer'
     },
     filterContainer: { display: 'flex', gap: '8px', marginBottom: '24px' },
     filterBtn: (active) => ({
       padding: '10px 16px', borderRadius: '10px', fontSize: '14px', fontWeight: '500',
-      backgroundColor: active ? '#eff6ff' : 'transparent',
-      color: active ? '#3b82f6' : '#64748b',
+      backgroundColor: active ? 'var(--color-background-secondary)' : 'transparent',
+      color: active ? '#3b82f6' : 'var(--color-text-muted)',
       border: 'none', cursor: 'pointer', transition: 'all 0.2s'
     }),
     card: {
-      backgroundColor: '#ffffff',
+      backgroundColor: 'var(--color-surface)',
       borderRadius: '16px',
       padding: '20px',
       boxShadow: '0 1px 3px rgba(0,0,0,0.08)',
-      border: '1px solid #e2e8f0',
+      border: '1px solid var(--color-border)',
       marginBottom: '12px',
       cursor: 'pointer',
       transition: 'all 0.2s'
     },
     cardUnread: {
-      backgroundColor: '#eff6ff',
+      backgroundColor: 'var(--color-background-secondary)',
       border: '1px solid #bfdbfe'
     },
     notificationContent: { display: 'flex', alignItems: 'flex-start', gap: '16px' },
     iconWrapper: (unread) => ({
       padding: '10px', borderRadius: '10px',
-      backgroundColor: unread ? '#dbeafe' : '#f1f5f9'
+      backgroundColor: unread ? 'var(--color-border)' : 'var(--color-background-secondary)'
     }),
     textContent: { flex: 1, minWidth: 0 },
     notificationTitle: (unread) => ({
       fontSize: '15px', fontWeight: unread ? '600' : '500',
-      color: unread ? '#1e293b' : '#64748b', marginBottom: '4px'
+      color: unread ? 'var(--color-text-primary)' : 'var(--color-text-muted)', marginBottom: '4px'
     }),
-    notificationMessage: { fontSize: '14px', color: '#64748b', marginBottom: '8px' },
+    notificationMessage: { fontSize: '14px', color: 'var(--color-text-muted)', marginBottom: '8px' },
     notificationTime: { fontSize: '12px', color: '#94a3b8' },
     rightSection: { display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 },
-    badge: { padding: '4px 8px', backgroundColor: '#3b82f6', color: '#fff', borderRadius: '6px', fontSize: '11px', fontWeight: '600' },
+    badge: { padding: '4px 8px', backgroundColor: '#3b82f6', color: 'var(--color-text-inverse, #fff)', borderRadius: '6px', fontSize: '11px', fontWeight: '600' },
     deleteBtn: {
       padding: '8px', backgroundColor: 'transparent', border: 'none',
       color: '#94a3b8', cursor: 'pointer', borderRadius: '6px', transition: 'all 0.2s'
@@ -108,14 +111,14 @@ const Notifications = () => {
       justifyContent: 'center',
       textAlign: 'center',
       padding: '60px 20px',
-      backgroundColor: '#ffffff',
+      backgroundColor: 'var(--color-surface)',
       borderRadius: '16px',
-      border: '1px solid #e2e8f0',
+      border: '1px solid var(--color-border)',
       minHeight: '300px'
     },
-    emptyIcon: { marginBottom: '16px', color: '#cbd5e1' },
-    emptyTitle: { fontSize: '18px', fontWeight: '600', color: '#1e293b', marginBottom: '8px' },
-    emptyText: { fontSize: '14px', color: '#64748b' }
+    emptyIcon: { marginBottom: '16px', color: 'var(--color-border-dark)' },
+    emptyTitle: { fontSize: '18px', fontWeight: '600', color: 'var(--color-text-primary)', marginBottom: '8px' },
+    emptyText: { fontSize: '14px', color: 'var(--color-text-muted)' }
   };
 
   return (
@@ -126,12 +129,12 @@ const Notifications = () => {
       <div style={{
         marginLeft: '288px',
         minHeight: '100vh',
-        background: '#f6f6f8'
+        background: 'var(--color-background)'
       }}>
         {/* Header */}
         <header style={{
-          background: 'white',
-          borderBottom: '1px solid #f0f1f4',
+          background: 'var(--color-surface)',
+          borderBottom: '1px solid var(--color-border)',
           padding: '20px 48px',
           position: 'sticky',
           top: 0,
@@ -171,12 +174,12 @@ const Notifications = () => {
               <h1 style={{
                 fontSize: '24px',
                 fontWeight: '700',
-                color: '#1e293b',
+                color: 'var(--color-text-primary)',
                 marginBottom: '4px'
               }}>
                 {t('notifications')}
               </h1>
-              <p style={{ fontSize: '14px', color: '#64748b' }}>
+              <p style={{ fontSize: '14px', color: 'var(--color-text-muted)' }}>
                 {user?.studentNumber} • {user?.fullName || user?.name || t('student')}
               </p>
             </div>
@@ -242,7 +245,9 @@ const Notifications = () => {
               </div>
             ) : (
               <div>
-                {filteredNotifications.map((notification) => (
+                {filteredNotifications.map((notification) => {
+                  const translatedNotif = getNotificationTranslation(notification);
+                  return (
                   <div
                     key={notification.id}
                     style={{
@@ -260,10 +265,10 @@ const Notifications = () => {
 
                       <div style={styles.textContent}>
                         <p style={styles.notificationTitle(!notification.isRead)}>
-                          {notification.title}
+                          {translatedNotif.title}
                         </p>
                         <p style={styles.notificationMessage}>
-                          {notification.message}
+                          {translatedNotif.message}
                         </p>
                         <p style={styles.notificationTime}>
                           {getRelativeTime(notification.createdAt)}
@@ -280,7 +285,7 @@ const Notifications = () => {
                             deleteNotification(notification.id);
                           }}
                           style={styles.deleteBtn}
-                          onMouseEnter={(e) => { e.currentTarget.style.color = '#ef4444'; e.currentTarget.style.backgroundColor = '#fef2f2'; }}
+                          onMouseEnter={(e) => { e.currentTarget.style.color = '#ef4444'; e.currentTarget.style.backgroundColor = 'var(--color-background-secondary)'; }}
                           onMouseLeave={(e) => { e.currentTarget.style.color = '#94a3b8'; e.currentTarget.style.backgroundColor = 'transparent'; }}
                         >
                           <Trash2 size={16} />
@@ -288,7 +293,8 @@ const Notifications = () => {
                       </div>
                     </div>
                   </div>
-                ))}
+                );
+              })}
               </div>
             )}
           </div>

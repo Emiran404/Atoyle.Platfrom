@@ -10,7 +10,7 @@ import { formatDateTime } from '../../utils/dateHelpers';
 const styles = {
     container: {
         padding: '32px',
-        backgroundColor: '#f8fafc',
+        backgroundColor: 'var(--color-background)',
         minHeight: '100vh',
     },
     header: {
@@ -19,7 +19,7 @@ const styles = {
     title: {
         fontSize: '28px',
         fontWeight: '700',
-        color: '#1e293b',
+        color: 'var(--color-text-primary)',
         margin: 0,
         display: 'flex',
         alignItems: 'center',
@@ -27,7 +27,7 @@ const styles = {
     },
     subtitle: {
         fontSize: '14px',
-        color: '#64748b',
+        color: 'var(--color-text-muted)',
         marginTop: '8px'
     },
     contentGrid: {
@@ -37,17 +37,17 @@ const styles = {
         alignItems: 'start'
     },
     examListCard: {
-        backgroundColor: 'white',
+        backgroundColor: 'var(--color-surface)',
         borderRadius: '16px',
         padding: '24px',
-        border: '1px solid #e2e8f0',
+        border: '1px solid var(--color-border)',
         boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
     },
     examItem: (isActive) => ({
         padding: '16px',
         borderRadius: '12px',
         border: `2px solid ${isActive ? '#3b82f6' : 'transparent'}`,
-        backgroundColor: isActive ? '#eff6ff' : '#f8fafc',
+        backgroundColor: isActive ? 'var(--color-background-secondary)' : 'var(--color-background)',
         cursor: 'pointer',
         marginBottom: '12px',
         transition: 'all 0.2s',
@@ -56,10 +56,10 @@ const styles = {
         gap: '8px'
     }),
     monitorCard: {
-        backgroundColor: 'white',
+        backgroundColor: 'var(--color-surface)',
         borderRadius: '16px',
         padding: '24px',
-        border: '1px solid #e2e8f0',
+        border: '1px solid var(--color-border)',
         boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
         minHeight: '500px'
     },
@@ -72,8 +72,8 @@ const styles = {
     studentCard: (isOffline, hasWarnings) => ({
         padding: '16px',
         borderRadius: '12px',
-        border: `1px solid ${hasWarnings ? '#fecaca' : (isOffline ? '#e2e8f0' : '#bbf7d0')}`,
-        backgroundColor: hasWarnings ? '#fef2f2' : (isOffline ? '#f8fafc' : '#f0fdf4'),
+        border: `1px solid ${hasWarnings ? '#fecaca' : (isOffline ? 'var(--color-border)' : '#bbf7d0')}`,
+        backgroundColor: hasWarnings ? 'var(--color-background-secondary)' : (isOffline ? 'var(--color-background)' : 'var(--color-background-secondary)'),
         display: 'flex',
         flexDirection: 'column',
         gap: '12px'
@@ -99,7 +99,7 @@ const styles = {
     emptyState: {
         textAlign: 'center',
         padding: '60px 20px',
-        color: '#64748b'
+        color: 'var(--color-text-muted)'
     }
 };
 
@@ -167,7 +167,7 @@ const LiveExams = () => {
                         
                         {activeExamsList.length === 0 ? (
                             <div style={styles.emptyState}>
-                                <MonitorPlay size={48} color="#cbd5e1" style={{ margin: '0 auto 16px' }} />
+                                <MonitorPlay size={48} color='var(--color-border-dark)' style={{ margin: '0 auto 16px' }} />
                                 <p>Şu anda canlı sınav bulunmamaktadır.</p>
                             </div>
                         ) : (
@@ -177,8 +177,8 @@ const LiveExams = () => {
                                     style={styles.examItem(selectedExamId === exam.id)}
                                     onClick={() => handleExamSelect(exam.id)}
                                 >
-                                    <h4 style={{ margin: 0, fontSize: '15px', fontWeight: '600', color: '#1e293b' }}>{exam.title}</h4>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: '#64748b' }}>
+                                    <h4 style={{ margin: 0, fontSize: '15px', fontWeight: '600', color: 'var(--color-text-primary)' }}>{exam.title}</h4>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: 'var(--color-text-muted)' }}>
                                         <Clock size={14} />
                                         Bitiş: {formatDateTime(exam.endDate)}
                                     </div>
@@ -191,7 +191,7 @@ const LiveExams = () => {
                     <div style={styles.monitorCard}>
                         {selectedExamId ? (
                             <>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #e2e8f0', paddingBottom: '20px' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--color-border)', paddingBottom: '20px' }}>
                                     <h3 style={{ fontSize: '20px', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '12px' }}>
                                         <Users size={24} color="#3b82f6" />
                                         Canlı Öğrenci Monitörü ({sessions.length})
@@ -216,13 +216,13 @@ const LiveExams = () => {
                                             <div key={student.studentId} style={styles.studentCard(student.status === 'offline', student.warnings?.length > 0)}>
                                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                                                     <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                                                        <h4 style={{ margin: 0, fontSize: '16px', fontWeight: '600', color: '#1e293b', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                                        <h4 style={{ margin: 0, fontSize: '16px', fontWeight: '600', color: 'var(--color-text-primary)', display: 'flex', alignItems: 'center', gap: '8px' }}>
                                                             {student.studentName}
                                                             <div style={styles.statusIndicator(student.status)} title={student.status} />
                                                         </h4>
-                                                        <span style={{ fontSize: '13px', color: '#64748b' }}>{student.studentNumber} • {student.className}</span>
+                                                        <span style={{ fontSize: '13px', color: 'var(--color-text-muted)' }}>{student.studentNumber} • {student.className}</span>
                                                         {student.currentQuestion !== undefined && (
-                                                            <span style={{ fontSize: '12px', fontWeight: '500', color: '#3b82f6', backgroundColor: '#eff6ff', padding: '2px 8px', borderRadius: '12px', width: 'fit-content' }}>
+                                                            <span style={{ fontSize: '12px', fontWeight: '500', color: '#3b82f6', backgroundColor: 'var(--color-background-secondary)', padding: '2px 8px', borderRadius: '12px', width: 'fit-content' }}>
                                                                 Soru: {student.currentQuestion + 1}
                                                             </span>
                                                         )}

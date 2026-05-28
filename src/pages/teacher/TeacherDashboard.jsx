@@ -154,7 +154,7 @@ const TeacherDashboard = () => {
                   <div style={{ fontWeight: '600', color: '#0d9488', fontSize: '13px' }}>
                     {exam?.title || 'Bilinmeyen Sınav'}
                   </div>
-                  <div style={{ fontSize: '12px', color: '#64748b' }}>
+                  <div style={{ fontSize: '12px', color: 'var(--color-text-muted)' }}>
                     {g.files.length > 1 ? `${g.files.length} Dosya` : g.files[0]}
                   </div>
                 </div>
@@ -186,7 +186,7 @@ const TeacherDashboard = () => {
       value: stats.totalStudents,
       icon: Users,
       color: '#3b82f6',
-      bgColor: '#eff6ff',
+      bgColor: 'var(--color-background-secondary)',
       detail: t('registeredStudents')
     },
     {
@@ -194,7 +194,7 @@ const TeacherDashboard = () => {
       value: stats.activeExams,
       icon: FileText,
       color: '#10b981',
-      bgColor: '#ecfdf5',
+      bgColor: 'var(--color-background-secondary)',
       detail: t('ongoing')
     },
     {
@@ -202,7 +202,7 @@ const TeacherDashboard = () => {
       value: stats.pendingEvaluations,
       icon: ClipboardCheck,
       color: '#f59e0b',
-      bgColor: '#fffbeb',
+      bgColor: 'var(--color-background-secondary)',
       detail: t('ungraded')
     },
     {
@@ -326,12 +326,12 @@ const TeacherDashboard = () => {
     greeting: {
       fontSize: '28px',
       fontWeight: '700',
-      color: '#1e293b',
+      color: 'var(--color-text-primary)',
       marginBottom: '4px'
     },
     subGreeting: {
       fontSize: '14px',
-      color: '#64748b'
+      color: 'var(--color-text-muted)'
     },
     newExamBtn: {
       display: 'flex',
@@ -339,7 +339,7 @@ const TeacherDashboard = () => {
       gap: '8px',
       padding: '12px 24px',
       backgroundColor: '#0d9488',
-      color: '#ffffff',
+      color: 'var(--color-text-inverse, #fff)',
       border: 'none',
       borderRadius: '12px',
       fontSize: '14px',
@@ -355,11 +355,11 @@ const TeacherDashboard = () => {
       marginBottom: '32px'
     },
     statCard: {
-      backgroundColor: '#ffffff',
+      backgroundColor: 'var(--color-surface)',
       borderRadius: '16px',
       padding: '24px',
       boxShadow: '0 1px 3px rgba(0,0,0,0.08)',
-      border: '1px solid #e2e8f0',
+      border: '1px solid var(--color-border)',
       transition: 'transform 0.2s, box-shadow 0.2s'
     },
     statIcon: (bgColor) => ({
@@ -375,12 +375,12 @@ const TeacherDashboard = () => {
     statValue: {
       fontSize: '32px',
       fontWeight: '700',
-      color: '#1e293b',
+      color: 'var(--color-text-primary)',
       marginBottom: '4px'
     },
     statLabel: {
       fontSize: '14px',
-      color: '#64748b',
+      color: 'var(--color-text-muted)',
       marginBottom: '2px'
     },
     statDetail: {
@@ -394,11 +394,11 @@ const TeacherDashboard = () => {
       marginBottom: '24px'
     },
     card: {
-      backgroundColor: '#ffffff',
+      backgroundColor: 'var(--color-surface)',
       borderRadius: '16px',
       padding: '24px',
       boxShadow: '0 1px 3px rgba(0,0,0,0.08)',
-      border: '1px solid #e2e8f0'
+      border: '1px solid var(--color-border)'
     },
     cardHeader: {
       display: 'flex',
@@ -409,7 +409,7 @@ const TeacherDashboard = () => {
     cardTitle: {
       fontSize: '18px',
       fontWeight: '600',
-      color: '#1e293b'
+      color: 'var(--color-text-primary)'
     },
     viewAllBtn: {
       display: 'flex',
@@ -435,8 +435,8 @@ const TeacherDashboard = () => {
       alignItems: 'center',
       gap: '12px',
       padding: '16px',
-      backgroundColor: '#f8fafc',
-      border: '1px solid #e2e8f0',
+      backgroundColor: 'var(--color-background)',
+      border: '1px solid var(--color-border)',
       borderRadius: '12px',
       cursor: 'pointer',
       transition: 'all 0.2s',
@@ -455,14 +455,14 @@ const TeacherDashboard = () => {
     quickActionLabel: {
       fontSize: '14px',
       fontWeight: '500',
-      color: '#1e293b'
+      color: 'var(--color-text-primary)'
     },
     examItem: {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
       padding: '16px',
-      backgroundColor: '#f8fafc',
+      backgroundColor: 'var(--color-background)',
       borderRadius: '12px',
       marginBottom: '12px',
       cursor: 'pointer',
@@ -475,12 +475,12 @@ const TeacherDashboard = () => {
     examTitle: {
       fontSize: '15px',
       fontWeight: '600',
-      color: '#1e293b',
+      color: 'var(--color-text-primary)',
       marginBottom: '4px'
     },
     examMeta: {
       fontSize: '13px',
-      color: '#64748b',
+      color: 'var(--color-text-muted)',
       display: 'flex',
       alignItems: 'center',
       gap: '8px'
@@ -490,7 +490,7 @@ const TeacherDashboard = () => {
       alignItems: 'center',
       gap: '4px',
       padding: '4px 10px',
-      backgroundColor: '#ecfdf5',
+      backgroundColor: 'var(--color-background-secondary)',
       color: '#059669',
       borderRadius: '20px',
       fontSize: '12px',
@@ -518,12 +518,12 @@ const TeacherDashboard = () => {
     },
     activityMessage: {
       fontSize: '14px',
-      color: '#1e293b',
+      color: 'var(--color-text-primary)',
       marginBottom: '2px'
     },
     activityDetail: {
       fontSize: '12px',
-      color: '#64748b'
+      color: 'var(--color-text-muted)'
     },
     activityTime: {
       fontSize: '12px',
@@ -533,11 +533,11 @@ const TeacherDashboard = () => {
     emptyState: {
       textAlign: 'center',
       padding: '40px 20px',
-      color: '#64748b'
+      color: 'var(--color-text-muted)'
     },
     emptyIcon: {
       marginBottom: '12px',
-      color: '#cbd5e1'
+      color: 'var(--color-border-dark)'
     }
   };
 
@@ -570,7 +570,7 @@ const TeacherDashboard = () => {
         {/* Otomatik Yedekleme Sihirbazı Bildirim Bannerı */}
         {settings && !settings.autoBackupWizardConfigured && (
           <div style={{
-            backgroundColor: '#f0fdf4',
+            backgroundColor: 'var(--color-background-secondary)',
             border: '2px solid #bbf7d0',
             borderRadius: '16px',
             padding: '20px',
@@ -610,7 +610,7 @@ const TeacherDashboard = () => {
               onClick={() => setShowWizardModal(true)}
               style={{
                 backgroundColor: '#16a34a',
-                color: '#ffffff',
+                color: 'var(--color-text-inverse, #fff)',
                 border: 'none',
                 padding: '10px 20px',
                 borderRadius: '10px',
@@ -636,9 +636,9 @@ const TeacherDashboard = () => {
             <button
               style={{
                 ...styles.newExamBtn,
-                backgroundColor: '#ffffff',
-                color: '#64748b',
-                border: '1px solid #e2e8f0',
+                backgroundColor: 'var(--color-surface)',
+                color: 'var(--color-text-muted)',
+                border: '1px solid var(--color-border)',
                 boxShadow: 'none'
               }}
               onClick={() => setStartTour(prev => prev + 1)}
@@ -702,8 +702,8 @@ const TeacherDashboard = () => {
                     e.currentTarget.style.backgroundColor = '#ffffff';
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = '#e2e8f0';
-                    e.currentTarget.style.backgroundColor = '#f8fafc';
+                    e.currentTarget.style.borderColor = 'var(--color-border)';
+                    e.currentTarget.style.backgroundColor = 'var(--color-background)';
                   }}
                 >
                   <div style={styles.quickActionIcon(action.color)}>
@@ -722,7 +722,7 @@ const TeacherDashboard = () => {
               <button
                 style={styles.viewAllBtn}
                 onClick={() => navigate('/ogretmen/aktif-sinavlar')}
-                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f0fdfa'}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--color-background-secondary)'}
                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
               >
                 Tümünü Gör
@@ -748,7 +748,7 @@ const TeacherDashboard = () => {
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.borderColor = 'transparent';
-                      e.currentTarget.style.backgroundColor = '#f8fafc';
+                      e.currentTarget.style.backgroundColor = 'var(--color-background)';
                     }}
                   >
                     <div style={styles.examInfo}>
@@ -757,7 +757,7 @@ const TeacherDashboard = () => {
                         {exam.isQuiz && (
                           <span style={{
                             fontSize: '9px',
-                            backgroundColor: '#f0fdfa',
+                            backgroundColor: 'var(--color-background-secondary)',
                             color: '#0d9488',
                             padding: '1px 6px',
                             border: '1px solid #0d9488',
@@ -802,7 +802,7 @@ const TeacherDashboard = () => {
                 <div
                   key={activity.id}
                   style={styles.activityItem}
-                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f8fafc'}
+                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--color-background)'}
                   onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
                 >
                   <div style={styles.activityDot} />
@@ -834,7 +834,7 @@ const TeacherDashboard = () => {
         title="Otomatik Veri Yedekleme Sihirbazı"
       >
         <div style={{ padding: '8px 24px 24px' }}>
-          <p style={{ fontSize: '14px', color: '#64748b', marginBottom: '20px', lineHeight: '1.6' }}>
+          <p style={{ fontSize: '14px', color: 'var(--color-text-muted)', marginBottom: '20px', lineHeight: '1.6' }}>
             Sistem verilerinizin (öğrenciler, sınavlar, gönderimler ve notlar) güvenliğini sağlamak için otomatik yedekleme sistemini yapılandırın.
           </p>
 
@@ -842,7 +842,7 @@ const TeacherDashboard = () => {
             {/* Otomatik Yedek Aktif mi */}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div>
-                <label style={{ fontSize: '14px', fontWeight: '600', color: '#334155' }}>
+                <label style={{ fontSize: '14px', fontWeight: '600', color: 'var(--color-foreground-secondary)' }}>
                   Otomatik Yedekleme Aktif
                 </label>
                 <p style={{ margin: '4px 0 0 0', fontSize: '12px', color: '#94a3b8' }}>
@@ -861,7 +861,7 @@ const TeacherDashboard = () => {
               <>
                 {/* Yedekleme Sıklığı */}
                 <div>
-                  <label style={{ fontSize: '14px', fontWeight: '600', color: '#334155', marginBottom: '8px', display: 'block' }}>
+                  <label style={{ fontSize: '14px', fontWeight: '600', color: 'var(--color-foreground-secondary)', marginBottom: '8px', display: 'block' }}>
                     Yedekleme Sıklığı (Periyot)
                   </label>
                   <select
@@ -871,11 +871,11 @@ const TeacherDashboard = () => {
                       width: '100%',
                       padding: '10px 12px',
                       fontSize: '14px',
-                      border: '2px solid #e2e8f0',
+                      border: '2px solid var(--color-border)',
                       borderRadius: '10px',
                       outline: 'none',
-                      backgroundColor: '#fff',
-                      color: '#334155'
+                      backgroundColor: 'var(--color-surface)',
+                      color: 'var(--color-foreground-secondary)'
                     }}
                   >
                     <option value={12}>12 Saatte Bir</option>
@@ -888,7 +888,7 @@ const TeacherDashboard = () => {
                 {/* Fotoğraflar dahil edilsin mi */}
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                   <div>
-                    <label style={{ fontSize: '14px', fontWeight: '600', color: '#334155' }}>
+                    <label style={{ fontSize: '14px', fontWeight: '600', color: 'var(--color-foreground-secondary)' }}>
                       Öğrenci Teslim Dosyalarını (uploads) Dahil Et
                     </label>
                     <p style={{ margin: '4px 0 0 0', fontSize: '12px', color: '#94a3b8' }}>
@@ -911,9 +911,9 @@ const TeacherDashboard = () => {
                 onClick={() => setShowWizardModal(false)}
                 style={{
                   flex: 1,
-                  backgroundColor: '#fff',
-                  color: '#64748b',
-                  border: '1px solid #e2e8f0',
+                  backgroundColor: 'var(--color-surface)',
+                  color: 'var(--color-text-muted)',
+                  border: '1px solid var(--color-border)',
                   padding: '12px',
                   borderRadius: '12px',
                   fontWeight: '500'
@@ -962,7 +962,7 @@ const TeacherDashboard = () => {
                   padding: '12px',
                   borderRadius: '12px',
                   fontWeight: '600',
-                  color: '#fff',
+                  color: 'var(--color-text-inverse, #fff)',
                   boxShadow: '0 4px 12px rgba(22, 163, 74, 0.25)'
                 }}
               >

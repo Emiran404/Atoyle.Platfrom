@@ -40,7 +40,7 @@ const styles = {
   },
   subtitle: { 
     fontSize: '15px', 
-    color: '#64748b', 
+    color: 'var(--color-text-muted)', 
     marginTop: '6px',
     fontWeight: '500'
   },
@@ -50,8 +50,8 @@ const styles = {
     gap: '20px' 
   },
   statCard: {
-    backgroundColor: '#ffffff',
-    border: '1px solid #e2e8f0',
+    backgroundColor: 'var(--color-surface)',
+    border: '1px solid var(--color-border)',
     borderRadius: '24px',
     padding: '24px',
     display: 'flex',
@@ -86,13 +86,13 @@ const styles = {
   statLabel: { 
     fontSize: '13px', 
     fontWeight: '700', 
-    color: '#64748b', 
+    color: 'var(--color-text-muted)', 
     textTransform: 'uppercase', 
     letterSpacing: '0.05em' 
   },
   filterCard: {
-    backgroundColor: '#ffffff',
-    border: '1px solid #e2e8f0',
+    backgroundColor: 'var(--color-surface)',
+    border: '1px solid var(--color-border)',
     borderRadius: '24px',
     padding: '24px',
     boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.05)',
@@ -114,21 +114,21 @@ const styles = {
     position: 'relative'
   },
   select: {
-    backgroundColor: '#f8fafc',
-    border: '1px solid #e2e8f0',
+    backgroundColor: 'var(--color-background)',
+    border: '1px solid var(--color-border)',
     borderRadius: '12px',
     padding: '12px 16px',
     fontSize: '14px',
     fontWeight: '600',
-    color: '#1e293b',
+    color: 'var(--color-text-primary)',
     cursor: 'pointer',
     outline: 'none',
     transition: 'all 0.2s',
     minWidth: '160px'
   },
   emptyState: {
-    backgroundColor: '#ffffff',
-    border: '1px solid #e2e8f0',
+    backgroundColor: 'var(--color-surface)',
+    border: '1px solid var(--color-border)',
     borderRadius: '24px',
     padding: '80px 48px',
     textAlign: 'center',
@@ -137,7 +137,7 @@ const styles = {
   emptyIcon: { 
     width: '80px', 
     height: '80px', 
-    color: '#cbd5e1', 
+    color: 'var(--color-border-dark)', 
     margin: '0 auto 24px',
     opacity: 0.5 
   },
@@ -149,14 +149,14 @@ const styles = {
     fontFamily: 'Lexend, sans-serif'
   },
   emptyText: { 
-    color: '#64748b', 
+    color: 'var(--color-text-muted)', 
     fontSize: '16px',
     maxWidth: '400px',
     margin: '0 auto'
   },
   examCard: {
-    backgroundColor: '#ffffff',
-    border: '1px solid #e2e8f0',
+    backgroundColor: 'var(--color-surface)',
+    border: '1px solid var(--color-border)',
     borderRadius: '24px',
     padding: '24px',
     marginBottom: '16px',
@@ -206,7 +206,7 @@ const styles = {
   },
   examDesc: { 
     fontSize: '14px', 
-    color: '#64748b', 
+    color: 'var(--color-text-muted)', 
     marginTop: '4px', 
     fontWeight: '500',
     whiteSpace: 'nowrap',
@@ -271,9 +271,9 @@ const styles = {
     gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
     gap: '24px',
     padding: '24px',
-    backgroundColor: '#f8fafc',
+    backgroundColor: 'var(--color-background)',
     borderRadius: '20px',
-    border: '1px solid #e2e8f0'
+    border: '1px solid var(--color-border)'
   },
   detailItem: {
     display: 'flex',
@@ -289,7 +289,7 @@ const styles = {
   },
   detailValue: { 
     fontWeight: '700', 
-    color: '#334155',
+    color: 'var(--color-foreground-secondary)',
     fontSize: '16px'
   },
   statsRow: { 
@@ -299,7 +299,7 @@ const styles = {
   },
   statBox: (color) => ({
     padding: '20px',
-    backgroundColor: '#ffffff',
+    backgroundColor: 'var(--color-surface)',
     border: `2px solid ${color}15`,
     borderRadius: '16px',
     textAlign: 'center',
@@ -908,9 +908,9 @@ const Archive = () => {
               }).join('');
 
               const avg = validExamCount > 0 ? Math.round(totalScore / validExamCount) : 'G';
-              const avgColor = avg === 'G' ? '#dc2626' : (avg < 50 ? '#d97706' : '#1e293b');
+              const avgColor = avg === 'G' ? '#dc2626' : (avg < 50 ? '#d97706' : 'var(--color-text-primary)');
 
-              const bgColor = i % 2 === 0 ? '#ffffff' : '#f8fafc';
+              const bgColor = i % 2 === 0 ? '#ffffff' : 'var(--color-background)';
 
               return `
                 <tr style="background-color: ${bgColor}; page-break-inside: avoid;">
@@ -1007,9 +1007,9 @@ const Archive = () => {
           <div style={{ display: 'flex', gap: '12px' }}>
             <button
               onClick={() => setShowClassReportModal(true)}
-              style={styles.actionButton('white', '#475569')}
-              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#f8fafc'; e.currentTarget.style.borderColor = '#cbd5e1'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'white'; e.currentTarget.style.borderColor = '#e2e8f0'; }}
+              style={styles.actionButton('white', 'var(--color-text-secondary)')}
+              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'var(--color-background)'; e.currentTarget.style.borderColor = 'var(--color-border-dark)'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'white'; e.currentTarget.style.borderColor = 'var(--color-border)'; }}
             >
               <FileSpreadsheet size={18} />
               Sınıf Bazlı Rapor
@@ -1086,7 +1086,7 @@ const Archive = () => {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 icon={Search}
                 style={{ 
-                  backgroundColor: '#f8fafc',
+                  backgroundColor: 'var(--color-background)',
                   border: '2px solid #f1f5f9',
                   height: '52px',
                   borderRadius: '16px',
@@ -1141,7 +1141,7 @@ const Archive = () => {
                     height: '52px',
                     borderRadius: '16px',
                     border: '2px solid #fee2e2',
-                    backgroundColor: '#fef2f2',
+                    backgroundColor: 'var(--color-background-secondary)',
                     color: '#ef4444',
                     fontWeight: '600',
                     fontSize: '14px',
@@ -1157,7 +1157,7 @@ const Archive = () => {
                     e.currentTarget.style.transform = 'scale(1.02)';
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = '#fef2f2';
+                    e.currentTarget.style.backgroundColor = 'var(--color-background-secondary)';
                     e.currentTarget.style.transform = 'scale(1)';
                   }}
                 >
@@ -1175,7 +1175,7 @@ const Archive = () => {
               const stats = getExamStats(exam.id);
               const isExam = exam.type === 'exam' || exam.type === 'final_exam';
               const iconColor = isExam ? '#0ea5e9' : '#8b5cf6';
-              const iconBg = isExam ? '#f0f9ff' : '#f5f3ff';
+              const iconBg = isExam ? 'var(--color-background-secondary)' : '#f5f3ff';
               
               return (
                 <div
@@ -1189,7 +1189,7 @@ const Archive = () => {
                   onMouseLeave={(e) => {
                     e.currentTarget.style.transform = 'none';
                     e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.05)';
-                    e.currentTarget.style.borderColor = '#e2e8f0';
+                    e.currentTarget.style.borderColor = 'var(--color-border)';
                   }}
                 >
                   <div style={styles.examRow}>
@@ -1248,21 +1248,21 @@ const Archive = () => {
                     <div style={styles.examActions}>
                       <button 
                         onClick={() => { setSelectedExam(exam); setShowDetailModal(true); }}
-                        style={{ ...styles.actionButton('#f8fafc', '#64748b'), padding: '10px' }}
+                        style={{ ...styles.actionButton('var(--color-background)', 'var(--color-text-muted)'), padding: '10px' }}
                         title="İncele"
                       >
                         <Eye size={20} />
                       </button>
                       <button 
                         onClick={() => { setSelectedExam(exam); setShowDownloadModal(true); }}
-                        style={{ ...styles.actionButton('#f0f9ff', '#0369a1'), padding: '10px' }}
+                        style={{ ...styles.actionButton('var(--color-background-secondary)', '#0369a1'), padding: '10px' }}
                         title="İndir"
                       >
                         <Download size={20} />
                       </button>
                       <button 
                         onClick={() => handleDelete(exam)}
-                        style={{ ...styles.actionButton('#fef2f2', '#ef4444'), padding: '10px' }}
+                        style={{ ...styles.actionButton('var(--color-background-secondary)', '#ef4444'), padding: '10px' }}
                         title="Sil"
                       >
                         <Trash2 size={20} />
@@ -1289,7 +1289,7 @@ const Archive = () => {
               {(() => {
                 const isExam = selectedExam.type === 'exam';
                 const iconColor = isExam ? '#0ea5e9' : '#8b5cf6';
-                const iconBg = isExam ? '#f0f9ff' : '#f5f3ff';
+                const iconBg = isExam ? 'var(--color-background-secondary)' : '#f5f3ff';
                 return (
                   <div style={styles.modalHeader}>
                     <div style={styles.modalIcon(iconBg, iconColor)}>
@@ -1332,13 +1332,13 @@ const Archive = () => {
               {selectedExam.description && (
                 <div style={{ 
                   padding: '24px', 
-                  backgroundColor: '#ffffff', 
+                  backgroundColor: 'var(--color-surface)', 
                   borderRadius: '20px',
-                  border: '1px solid #e2e8f0',
+                  border: '1px solid var(--color-border)',
                   boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.02)'
                 }}>
                   <p style={styles.detailLabel}>Açıklama</p>
-                  <p style={{ ...styles.detailValue, marginTop: '8px', lineHeight: '1.6', color: '#64748b', fontWeight: '500' }}>
+                  <p style={{ ...styles.detailValue, marginTop: '8px', lineHeight: '1.6', color: 'var(--color-text-muted)', fontWeight: '500' }}>
                     {selectedExam.description}
                   </p>
                 </div>
@@ -1399,16 +1399,16 @@ const Archive = () => {
                     <div style={{ 
                       maxHeight: '320px', 
                       overflowY: 'auto',
-                      border: '1px solid #e2e8f0',
+                      border: '1px solid var(--color-border)',
                       borderRadius: '20px',
-                      backgroundColor: '#ffffff',
+                      backgroundColor: 'var(--color-surface)',
                       overflow: 'hidden'
                     }}>
                       <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                         <thead style={{ 
                           position: 'sticky', 
                           top: 0, 
-                          backgroundColor: '#f8fafc',
+                          backgroundColor: 'var(--color-background)',
                           zIndex: 1
                         }}>
                           <tr>
@@ -1421,9 +1421,9 @@ const Archive = () => {
                         <tbody>
                           {gradesData.map((item, idx) => (
                             <tr key={idx} style={{ borderTop: '1px solid #f1f5f9' }}>
-                              <td style={{ padding: '14px 16px', fontSize: '14px', color: '#64748b', fontWeight: '500' }}>{item.studentNumber}</td>
-                              <td style={{ padding: '14px 16px', fontSize: '14px', color: '#1e293b', fontWeight: '700' }}>{item.studentName}</td>
-                              <td style={{ padding: '14px 16px', fontSize: '14px', color: '#64748b' }}>{item.studentClass}</td>
+                              <td style={{ padding: '14px 16px', fontSize: '14px', color: 'var(--color-text-muted)', fontWeight: '500' }}>{item.studentNumber}</td>
+                              <td style={{ padding: '14px 16px', fontSize: '14px', color: 'var(--color-text-primary)', fontWeight: '700' }}>{item.studentName}</td>
+                              <td style={{ padding: '14px 16px', fontSize: '14px', color: 'var(--color-text-muted)' }}>{item.studentClass}</td>
                               <td style={{ padding: '14px 16px', textAlign: 'center' }}>
                                 <span style={{
                                   display: 'inline-block',
@@ -1431,7 +1431,7 @@ const Archive = () => {
                                   borderRadius: '10px',
                                   fontSize: '14px',
                                   fontWeight: '800',
-                                  backgroundColor: item.grade >= 85 ? '#dcfce7' : item.grade >= 70 ? '#eff6ff' : item.grade >= 50 ? '#fffbeb' : '#fef2f2',
+                                  backgroundColor: item.grade >= 85 ? '#dcfce7' : item.grade >= 70 ? 'var(--color-background-secondary)' : item.grade >= 50 ? 'var(--color-background-secondary)' : 'var(--color-background-secondary)',
                                   color: item.grade >= 85 ? '#166534' : item.grade >= 70 ? '#1d4ed8' : item.grade >= 50 ? '#b45309' : '#b91c1c',
                                   minWidth: '45px'
                                 }}>
@@ -1457,14 +1457,14 @@ const Archive = () => {
               }}>
                 <button 
                   onClick={() => { setShowDetailModal(false); setShowDownloadModal(true); }}
-                  style={styles.actionButton('#f0f9ff', '#0369a1')}
+                  style={styles.actionButton('var(--color-background-secondary)', '#0369a1')}
                 >
                   <Download size={18} />
                   Rapor İndir
                 </button>
                 <button 
                   onClick={() => setShowDetailModal(false)}
-                  style={styles.actionButton('#f1f5f9', '#475569')}
+                  style={styles.actionButton('var(--color-background-secondary)', 'var(--color-text-secondary)')}
                 >
                   Kapat
                 </button>
@@ -1477,7 +1477,7 @@ const Archive = () => {
         <Modal isOpen={showDownloadModal} onClose={() => setShowDownloadModal(false)} title="Rapor İndir">
           {selectedExam && (
             <div style={{ padding: '16px' }}>
-              <p style={{ fontSize: '14px', color: '#64748b', marginBottom: '24px' }}>
+              <p style={{ fontSize: '14px', color: 'var(--color-text-muted)', marginBottom: '24px' }}>
                 &quot;{selectedExam.title}&quot; için rapor formatını seçin
               </p>
               <div style={{ display: 'grid', gap: '12px' }}>
@@ -1488,8 +1488,8 @@ const Archive = () => {
                     alignItems: 'center',
                     gap: '12px',
                     padding: '16px',
-                    backgroundColor: '#ffffff',
-                    border: '2px solid #e2e8f0',
+                    backgroundColor: 'var(--color-surface)',
+                    border: '2px solid var(--color-border)',
                     borderRadius: '12px',
                     cursor: 'pointer',
                     transition: 'all 0.2s',
@@ -1497,10 +1497,10 @@ const Archive = () => {
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.borderColor = '#0d9488';
-                    e.currentTarget.style.backgroundColor = '#f0fdfa';
+                    e.currentTarget.style.backgroundColor = 'var(--color-background-secondary)';
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = '#e2e8f0';
+                    e.currentTarget.style.borderColor = 'var(--color-border)';
                     e.currentTarget.style.backgroundColor = '#ffffff';
                   }}
                 >
@@ -1516,10 +1516,10 @@ const Archive = () => {
                     <FileText size={24} style={{ color: '#059669' }} />
                   </div>
                   <div style={{ flex: 1, textAlign: 'left' }}>
-                    <div style={{ fontSize: '16px', fontWeight: '600', color: '#1e293b' }}>CSV Dosyası</div>
-                    <div style={{ fontSize: '13px', color: '#64748b' }}>Excel ve diğer programlarda açılabilir</div>
+                    <div style={{ fontSize: '16px', fontWeight: '600', color: 'var(--color-text-primary)' }}>CSV Dosyası</div>
+                    <div style={{ fontSize: '13px', color: 'var(--color-text-muted)' }}>Excel ve diğer programlarda açılabilir</div>
                   </div>
-                  <Download size={20} style={{ color: '#64748b' }} />
+                  <Download size={20} style={{ color: 'var(--color-text-muted)' }} />
                 </button>
 
                 <button
@@ -1529,8 +1529,8 @@ const Archive = () => {
                     alignItems: 'center',
                     gap: '12px',
                     padding: '16px',
-                    backgroundColor: '#ffffff',
-                    border: '2px solid #e2e8f0',
+                    backgroundColor: 'var(--color-surface)',
+                    border: '2px solid var(--color-border)',
                     borderRadius: '12px',
                     cursor: 'pointer',
                     transition: 'all 0.2s',
@@ -1538,10 +1538,10 @@ const Archive = () => {
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.borderColor = '#10b981';
-                    e.currentTarget.style.backgroundColor = '#ecfdf5';
+                    e.currentTarget.style.backgroundColor = 'var(--color-background-secondary)';
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = '#e2e8f0';
+                    e.currentTarget.style.borderColor = 'var(--color-border)';
                     e.currentTarget.style.backgroundColor = '#ffffff';
                   }}
                 >
@@ -1549,7 +1549,7 @@ const Archive = () => {
                     width: '48px',
                     height: '48px',
                     borderRadius: '10px',
-                    backgroundColor: '#dbeafe',
+                    backgroundColor: 'var(--color-border)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center'
@@ -1557,10 +1557,10 @@ const Archive = () => {
                     <FileSpreadsheet size={24} style={{ color: '#1e40af' }} />
                   </div>
                   <div style={{ flex: 1, textAlign: 'left' }}>
-                    <div style={{ fontSize: '16px', fontWeight: '600', color: '#1e293b' }}>Excel Dosyası</div>
-                    <div style={{ fontSize: '13px', color: '#64748b' }}>Microsoft Excel formatında</div>
+                    <div style={{ fontSize: '16px', fontWeight: '600', color: 'var(--color-text-primary)' }}>Excel Dosyası</div>
+                    <div style={{ fontSize: '13px', color: 'var(--color-text-muted)' }}>Microsoft Excel formatında</div>
                   </div>
-                  <Download size={20} style={{ color: '#64748b' }} />
+                  <Download size={20} style={{ color: 'var(--color-text-muted)' }} />
                 </button>
 
                 <button
@@ -1570,8 +1570,8 @@ const Archive = () => {
                     alignItems: 'center',
                     gap: '12px',
                     padding: '16px',
-                    backgroundColor: '#ffffff',
-                    border: '2px solid #e2e8f0',
+                    backgroundColor: 'var(--color-surface)',
+                    border: '2px solid var(--color-border)',
                     borderRadius: '12px',
                     cursor: 'pointer',
                     transition: 'all 0.2s',
@@ -1580,10 +1580,10 @@ const Archive = () => {
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.borderColor = '#ef4444';
-                    e.currentTarget.style.backgroundColor = '#fef2f2';
+                    e.currentTarget.style.backgroundColor = 'var(--color-background-secondary)';
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = '#e2e8f0';
+                    e.currentTarget.style.borderColor = 'var(--color-border)';
                     e.currentTarget.style.backgroundColor = '#ffffff';
                   }}
                 >
@@ -1599,10 +1599,10 @@ const Archive = () => {
                     <FileDown size={24} style={{ color: '#dc2626' }} />
                   </div>
                   <div style={{ flex: 1, textAlign: 'left' }}>
-                    <div style={{ fontSize: '16px', fontWeight: '600', color: '#1e293b' }}>PDF Dosyası</div>
-                    <div style={{ fontSize: '13px', color: '#64748b' }}>Profesyonel PDF raporu</div>
+                    <div style={{ fontSize: '16px', fontWeight: '600', color: 'var(--color-text-primary)' }}>PDF Dosyası</div>
+                    <div style={{ fontSize: '13px', color: 'var(--color-text-muted)' }}>Profesyonel PDF raporu</div>
                   </div>
-                  <Download size={20} style={{ color: '#64748b' }} />
+                  <Download size={20} style={{ color: 'var(--color-text-muted)' }} />
                 </button>
               </div>
               <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '24px' }}>
@@ -1618,12 +1618,12 @@ const Archive = () => {
         {/* Class Report Modal */}
         <Modal isOpen={showClassReportModal} onClose={() => setShowClassReportModal(false)} title="Toplu Sınıf Raporu Al">
           <div style={{ padding: '16px' }}>
-            <p style={{ fontSize: '14px', color: '#64748b', marginBottom: '24px' }}>
+            <p style={{ fontSize: '14px', color: 'var(--color-text-muted)', marginBottom: '24px' }}>
               İstediğiniz sınıfı seçerek tüm sınav/ödev sonuçlarını tek bir tabloda görün. (Girmeyenler "G" olarak görünür).
             </p>
 
             <div style={{ marginBottom: '24px' }}>
-              <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', color: '#1e293b', marginBottom: '8px' }}>
+              <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', color: 'var(--color-text-primary)', marginBottom: '8px' }}>
                 Raporlanacak Sınıf
               </label>
               <select
@@ -1646,8 +1646,8 @@ const Archive = () => {
                   alignItems: 'center',
                   gap: '12px',
                   padding: '16px',
-                  backgroundColor: '#ffffff',
-                  border: '2px solid #e2e8f0',
+                  backgroundColor: 'var(--color-surface)',
+                  border: '2px solid var(--color-border)',
                   borderRadius: '12px',
                   cursor: 'pointer',
                   width: '100%',
@@ -1655,10 +1655,10 @@ const Archive = () => {
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.borderColor = '#10b981';
-                  e.currentTarget.style.backgroundColor = '#ecfdf5';
+                  e.currentTarget.style.backgroundColor = 'var(--color-background-secondary)';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = '#e2e8f0';
+                  e.currentTarget.style.borderColor = 'var(--color-border)';
                   e.currentTarget.style.backgroundColor = '#ffffff';
                 }}
               >
@@ -1666,10 +1666,10 @@ const Archive = () => {
                   <FileSpreadsheet size={24} style={{ color: '#059669' }} />
                 </div>
                 <div style={{ flex: 1, textAlign: 'left' }}>
-                  <div style={{ fontSize: '16px', fontWeight: '600', color: '#1e293b' }}>Excel Dosyası</div>
-                  <div style={{ fontSize: '13px', color: '#64748b' }}>Düzenlenebilir liste arşivi (G harfli)</div>
+                  <div style={{ fontSize: '16px', fontWeight: '600', color: 'var(--color-text-primary)' }}>Excel Dosyası</div>
+                  <div style={{ fontSize: '13px', color: 'var(--color-text-muted)' }}>Düzenlenebilir liste arşivi (G harfli)</div>
                 </div>
-                <Download size={20} style={{ color: '#64748b' }} />
+                <Download size={20} style={{ color: 'var(--color-text-muted)' }} />
               </button>
 
               <button
@@ -1686,8 +1686,8 @@ const Archive = () => {
                   alignItems: 'center',
                   gap: '12px',
                   padding: '16px',
-                  backgroundColor: '#ffffff',
-                  border: '2px solid #e2e8f0',
+                  backgroundColor: 'var(--color-surface)',
+                  border: '2px solid var(--color-border)',
                   borderRadius: '12px',
                   cursor: 'pointer',
                   width: '100%',
@@ -1695,19 +1695,19 @@ const Archive = () => {
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.borderColor = '#6366f1';
-                  e.currentTarget.style.backgroundColor = '#e0e7ff';
+                  e.currentTarget.style.backgroundColor = 'var(--color-primary-light)';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = '#e2e8f0';
+                  e.currentTarget.style.borderColor = 'var(--color-border)';
                   e.currentTarget.style.backgroundColor = '#ffffff';
                 }}
               >
-                <div style={{ width: '48px', height: '48px', borderRadius: '10px', backgroundColor: '#e0e7ff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ width: '48px', height: '48px', borderRadius: '10px', backgroundColor: 'var(--color-primary-light)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <Eye size={24} style={{ color: '#4f46e5' }} />
                 </div>
                 <div style={{ flex: 1, textAlign: 'left' }}>
-                  <div style={{ fontSize: '16px', fontWeight: '600', color: '#1e293b' }}>Önizleme Görüntüle</div>
-                  <div style={{ fontSize: '13px', color: '#64748b' }}>Rapor dökümünü indirmeden incele</div>
+                  <div style={{ fontSize: '16px', fontWeight: '600', color: 'var(--color-text-primary)' }}>Önizleme Görüntüle</div>
+                  <div style={{ fontSize: '13px', color: 'var(--color-text-muted)' }}>Rapor dökümünü indirmeden incele</div>
                 </div>
               </button>
 
@@ -1718,8 +1718,8 @@ const Archive = () => {
                   alignItems: 'center',
                   gap: '12px',
                   padding: '16px',
-                  backgroundColor: '#ffffff',
-                  border: '2px solid #e2e8f0',
+                  backgroundColor: 'var(--color-surface)',
+                  border: '2px solid var(--color-border)',
                   borderRadius: '12px',
                   cursor: 'pointer',
                   width: '100%',
@@ -1730,7 +1730,7 @@ const Archive = () => {
                   e.currentTarget.style.backgroundColor = '#fef3c7';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = '#e2e8f0';
+                  e.currentTarget.style.borderColor = 'var(--color-border)';
                   e.currentTarget.style.backgroundColor = '#ffffff';
                 }}
               >
@@ -1738,10 +1738,10 @@ const Archive = () => {
                   <FileText size={24} style={{ color: '#d97706' }} />
                 </div>
                 <div style={{ flex: 1, textAlign: 'left' }}>
-                  <div style={{ fontSize: '16px', fontWeight: '600', color: '#1e293b' }}>CSV Dosyası</div>
-                  <div style={{ fontSize: '13px', color: '#64748b' }}>Saf veri tablosu formatı</div>
+                  <div style={{ fontSize: '16px', fontWeight: '600', color: 'var(--color-text-primary)' }}>CSV Dosyası</div>
+                  <div style={{ fontSize: '13px', color: 'var(--color-text-muted)' }}>Saf veri tablosu formatı</div>
                 </div>
-                <Download size={20} style={{ color: '#64748b' }} />
+                <Download size={20} style={{ color: 'var(--color-text-muted)' }} />
               </button>
 
               <button
@@ -1751,8 +1751,8 @@ const Archive = () => {
                   alignItems: 'center',
                   gap: '12px',
                   padding: '16px',
-                  backgroundColor: '#ffffff',
-                  border: '2px solid #e2e8f0',
+                  backgroundColor: 'var(--color-surface)',
+                  border: '2px solid var(--color-border)',
                   borderRadius: '12px',
                   cursor: 'pointer',
                   width: '100%',
@@ -1760,10 +1760,10 @@ const Archive = () => {
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.borderColor = '#ef4444';
-                  e.currentTarget.style.backgroundColor = '#fef2f2';
+                  e.currentTarget.style.backgroundColor = 'var(--color-background-secondary)';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = '#e2e8f0';
+                  e.currentTarget.style.borderColor = 'var(--color-border)';
                   e.currentTarget.style.backgroundColor = '#ffffff';
                 }}
               >
@@ -1771,10 +1771,10 @@ const Archive = () => {
                   <FileDown size={24} style={{ color: '#dc2626' }} />
                 </div>
                 <div style={{ flex: 1, textAlign: 'left' }}>
-                  <div style={{ fontSize: '16px', fontWeight: '600', color: '#1e293b' }}>PDF Dosyası</div>
-                  <div style={{ fontSize: '13px', color: '#64748b' }}>Yazdırılabilir profesyonel rapor (G harfli)</div>
+                  <div style={{ fontSize: '16px', fontWeight: '600', color: 'var(--color-text-primary)' }}>PDF Dosyası</div>
+                  <div style={{ fontSize: '13px', color: 'var(--color-text-muted)' }}>Yazdırılabilir profesyonel rapor (G harfli)</div>
                 </div>
-                <Download size={20} style={{ color: '#64748b' }} />
+                <Download size={20} style={{ color: 'var(--color-text-muted)' }} />
               </button>
             </div>
             <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '24px' }}>
@@ -1792,13 +1792,13 @@ const Archive = () => {
             backdropFilter: 'blur(4px)', padding: '40px'
           }}>
             <div style={{
-              backgroundColor: '#e2e8f0', borderRadius: '16px', width: '100%', height: '100%',
+              backgroundColor: 'var(--color-border)', borderRadius: '16px', width: '100%', height: '100%',
               display: 'flex', flexDirection: 'column', overflow: 'hidden', boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
             }}>
-              <div style={{ padding: '16px 24px', backgroundColor: '#ffffff', borderBottom: '1px solid #cbd5e1', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div style={{ padding: '16px 24px', backgroundColor: 'var(--color-surface)', borderBottom: '1px solid var(--color-border-dark)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div>
-                  <h2 style={{ fontSize: '20px', fontWeight: '700', color: '#1e293b', margin: 0 }}>Rapor Önizlemesi</h2>
-                  <p style={{ fontSize: '13px', color: '#64748b', margin: 0 }}>Bu ekran PDF dökümünün birebir aynısıdır.</p>
+                  <h2 style={{ fontSize: '20px', fontWeight: '700', color: 'var(--color-text-primary)', margin: 0 }}>Rapor Önizlemesi</h2>
+                  <p style={{ fontSize: '13px', color: 'var(--color-text-muted)', margin: 0 }}>Bu ekran PDF dökümünün birebir aynısıdır.</p>
                 </div>
                 <div style={{ display: 'flex', gap: '12px' }}>
                   <Button variant="outline" onClick={() => setShowPreviewModal(false)}>Geri Dön</Button>

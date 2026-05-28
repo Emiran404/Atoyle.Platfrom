@@ -4,44 +4,44 @@ import { Loader2 } from 'lucide-react';
 const variantStyles = {
   primary: {
     backgroundColor: '#2563eb',
-    color: '#fff',
+    color: 'var(--color-text-inverse, #fff)',
     border: 'none',
     boxShadow: '0 4px 6px -1px rgba(37, 99, 235, 0.3)'
   },
   secondary: {
-    backgroundColor: '#475569',
-    color: '#fff',
+    backgroundcolor: 'var(--color-text-secondary)',
+    color: 'var(--color-text-inverse, #fff)',
     border: 'none',
     boxShadow: '0 4px 6px -1px rgba(71, 85, 105, 0.3)'
   },
   success: {
     backgroundColor: '#059669',
-    color: '#fff',
+    color: 'var(--color-text-inverse, #fff)',
     border: 'none',
     boxShadow: '0 4px 6px -1px rgba(5, 150, 105, 0.3)'
   },
   error: {
     backgroundColor: '#dc2626',
-    color: '#fff',
+    color: 'var(--color-text-inverse, #fff)',
     border: 'none',
     boxShadow: '0 4px 6px -1px rgba(220, 38, 38, 0.3)'
   },
   warning: {
     backgroundColor: '#f59e0b',
-    color: '#fff',
+    color: 'var(--color-text-inverse, #fff)',
     border: 'none',
     boxShadow: '0 4px 6px -1px rgba(245, 158, 11, 0.3)'
   },
   ghost: {
     backgroundColor: 'transparent',
-    color: '#334155',
+    color: 'var(--color-foreground-secondary)',
     border: 'none',
     boxShadow: 'none'
   },
   outline: {
     backgroundColor: 'transparent',
-    color: '#334155',
-    border: '2px solid #cbd5e1',
+    color: 'var(--color-foreground-secondary)',
+    border: '2px solid var(--color-border-dark)',
     boxShadow: 'none'
   }
 };

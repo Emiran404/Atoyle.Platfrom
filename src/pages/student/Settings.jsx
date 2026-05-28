@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { User, Lock, Globe, Copy, Eye, EyeOff, BadgeCheck, School, Home, ArrowRight } from 'lucide-react';
+import { User, Lock, Globe, Copy, Eye, EyeOff, BadgeCheck, School, Home, ArrowRight, Sun, Moon } from 'lucide-react';
 import StudentSidebar from '../../components/layout/StudentSidebar';
 import { useAuthStore } from '../../store/authStore';
 import { useNotificationStore } from '../../store/notificationStore';
@@ -8,7 +8,7 @@ import { checkPasswordStrength } from '../../utils/crypto';
 import { t, languages } from '../../utils/i18n';
 
 const Settings = () => {
-  const { user, changePassword: updatePassword, language, setLanguage, updateNotificationSettings } = useAuthStore();
+  const { user, changePassword: updatePassword, language, setLanguage, updateNotificationSettings, theme, setTheme } = useAuthStore();
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -87,12 +87,12 @@ const Settings = () => {
       <div style={{
         marginLeft: '288px',
         minHeight: '100vh',
-        background: '#f6f6f8'
+        background: 'var(--color-background)'
       }}>
         {/* Header */}
         <header style={{
-          background: 'white',
-          borderBottom: '1px solid #f0f1f4',
+          background: 'var(--color-surface)',
+          borderBottom: '1px solid var(--color-border)',
           padding: '20px 48px'
         }}>
           {/* Breadcrumbs */}
@@ -116,13 +116,13 @@ const Settings = () => {
               {t('profile')}
             </span>
             <span>/</span>
-            <span style={{ color: '#111318', fontWeight: '600' }}>{t('settings')}</span>
+            <span style={{ color: 'var(--color-text-primary)', fontWeight: '600' }}>{t('settings')}</span>
           </div>
 
           <h1 style={{
             fontSize: '32px',
             fontWeight: '700',
-            color: '#111318'
+            color: 'var(--color-text-primary)'
           }}>
             {t('settings')}
           </h1>
@@ -136,10 +136,10 @@ const Settings = () => {
         }}>
           {/* Profile Card (Read Only) */}
           <section style={{
-            background: 'linear-gradient(135deg, #eef5ff 0%, #f0f9ff 100%)',
+            background: 'var(--color-surface)',
             borderRadius: '16px',
             padding: '32px',
-            border: '1px solid #e0f2fe',
+            border: '1px solid var(--color-border)',
             marginBottom: '32px',
             position: 'relative',
             overflow: 'hidden'
@@ -198,7 +198,7 @@ const Settings = () => {
                 <h2 style={{
                   fontSize: '24px',
                   fontWeight: '700',
-                  color: '#111318',
+                  color: 'var(--color-text-primary)',
                   marginBottom: '8px'
                 }}>
                   {user?.fullName}
@@ -208,23 +208,23 @@ const Settings = () => {
                     display: 'flex',
                     alignItems: 'center',
                     gap: '8px',
-                    color: '#64748b',
+                    color: 'var(--color-text-muted)',
                     fontSize: '14px'
                   }}>
                     <BadgeCheck size={18} />
                     <span>{t('studentNumber')}: </span>
-                    <span style={{ color: '#111318', fontWeight: '600' }}>{user?.studentNumber}</span>
+                    <span style={{ color: 'var(--color-text-primary)', fontWeight: '600' }}>{user?.studentNumber}</span>
                   </div>
                   <div style={{
                     display: 'flex',
                     alignItems: 'center',
                     gap: '8px',
-                    color: '#64748b',
+                    color: 'var(--color-text-muted)',
                     fontSize: '14px'
                   }}>
                     <School size={18} />
                     <span>{t('className')}: </span>
-                    <span style={{ color: '#111318', fontWeight: '600' }}>{user?.className}</span>
+                    <span style={{ color: 'var(--color-text-primary)', fontWeight: '600' }}>{user?.className}</span>
                   </div>
                 </div>
               </div>
@@ -232,13 +232,13 @@ const Settings = () => {
               {/* Read Only Badge */}
               <div style={{
                 padding: '6px 16px',
-                background: 'white',
-                border: '1px solid #e2e8f0',
+                background: 'var(--color-surface)',
+                border: '1px solid var(--color-border)',
                 borderRadius: '999px',
                 fontSize: '11px',
                 fontWeight: '700',
                 textTransform: 'uppercase',
-                color: '#64748b',
+                color: 'var(--color-text-muted)',
                 letterSpacing: '0.05em',
                 boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05)'
               }}>
@@ -256,10 +256,10 @@ const Settings = () => {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
               {/* Language Preference */}
               <section style={{
-                background: 'white',
+                background: 'var(--color-surface)',
                 borderRadius: '16px',
                 padding: '32px',
-                border: '1px solid #e2e8f0',
+                border: '1px solid var(--color-border)',
                 boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05)'
               }}>
                 <div style={{
@@ -272,16 +272,16 @@ const Settings = () => {
                     <h3 style={{
                       fontSize: '18px',
                       fontWeight: '700',
-                      color: '#111318',
+                      color: 'var(--color-text-primary)',
                       marginBottom: '4px'
                     }}>
                       {t('languagePreference')}
                     </h3>
-                    <p style={{ fontSize: '14px', color: '#64748b' }}>
+                    <p style={{ fontSize: '14px', color: 'var(--color-text-muted)' }}>
                       {t('selectPreferredLanguage')}
                     </p>
                   </div>
-                  <Globe size={32} style={{ color: '#cbd5e1' }} />
+                  <Globe size={32} style={{ color: 'var(--color-border-dark)' }} />
                 </div>
 
                 <div style={{
@@ -302,7 +302,7 @@ const Settings = () => {
                         padding: '16px',
                         borderRadius: '12px',
                         border: language === lang.code ? '2px solid #2463eb' : '2px solid #e2e8f0',
-                        background: language === lang.code ? '#eef5ff' : '#f8fafc',
+                        background: language === lang.code ? '#eef5ff' : 'var(--color-background)',
                         cursor: 'pointer',
                         transition: 'all 0.2s',
                         boxShadow: language === lang.code ? '0 2px 4px rgba(36, 99, 235, 0.1)' : 'none'
@@ -314,7 +314,7 @@ const Settings = () => {
                       }}
                       onMouseLeave={(e) => {
                         if (language !== lang.code) {
-                          e.currentTarget.style.borderColor = '#e2e8f0';
+                          e.currentTarget.style.borderColor = 'var(--color-border)';
                         }
                       }}
                     >
@@ -357,7 +357,7 @@ const Settings = () => {
                       <span style={{
                         fontSize: '14px',
                         fontWeight: language === lang.code ? '700' : '600',
-                        color: language === lang.code ? '#2463eb' : '#64748b'
+                        color: language === lang.code ? '#2463eb' : 'var(--color-text-muted)'
                       }}>
                         {lang.nativeName}
                       </span>
@@ -368,22 +368,22 @@ const Settings = () => {
 
               {/* Local Data Folder */}
               <section style={{
-                background: 'white',
+                background: 'var(--color-surface)',
                 borderRadius: '16px',
                 padding: '32px',
-                border: '1px solid #e2e8f0',
+                border: '1px solid var(--color-border)',
                 boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05)'
               }}>
                 <div style={{ marginBottom: '16px' }}>
                   <h3 style={{
                     fontSize: '18px',
                     fontWeight: '700',
-                    color: '#111318',
+                    color: 'var(--color-text-primary)',
                     marginBottom: '4px'
                   }}>
                     {t('localDataFolder')}
                   </h3>
-                  <p style={{ fontSize: '14px', color: '#64748b' }}>
+                  <p style={{ fontSize: '14px', color: 'var(--color-text-muted)' }}>
                     {t('assignmentsSyncedHere')}
                   </p>
                 </div>
@@ -392,15 +392,15 @@ const Settings = () => {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
-                  background: '#f8fafc',
-                  border: '1px solid #e2e8f0',
+                  background: 'var(--color-background)',
+                  border: '1px solid var(--color-border)',
                   borderRadius: '12px',
                   padding: '12px 16px'
                 }}>
                   <code style={{
                     fontSize: '13px',
                     fontFamily: 'monospace',
-                    color: '#64748b'
+                    color: 'var(--color-text-muted)'
                   }}>
                     ~/Documents/Atolye/Submissions/{user?.className}/
                   </code>
@@ -411,7 +411,7 @@ const Settings = () => {
                       borderRadius: '8px',
                       border: 'none',
                       background: 'transparent',
-                      color: '#64748b',
+                      color: 'var(--color-text-muted)',
                       cursor: 'pointer',
                       transition: 'all 0.2s'
                     }}
@@ -421,7 +421,7 @@ const Settings = () => {
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.background = 'transparent';
-                      e.currentTarget.style.color = '#64748b';
+                      e.currentTarget.style.color = 'var(--color-text-muted)';
                     }}
                     title={t('copyPath')}
                   >
@@ -432,10 +432,10 @@ const Settings = () => {
 
               {/* Notification Preferences */}
               <section style={{
-                background: 'white',
+                background: 'var(--color-surface)',
                 borderRadius: '16px',
                 padding: '32px',
-                border: '1px solid #e2e8f0',
+                border: '1px solid var(--color-border)',
                 boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05)'
               }}>
                 <div style={{
@@ -446,7 +446,7 @@ const Settings = () => {
                 }}>
                   <div style={{
                     padding: '8px',
-                    background: '#ecfdf5',
+                    background: 'var(--color-background-secondary)',
                     borderRadius: '12px',
                     color: '#10b981'
                   }}>
@@ -456,12 +456,12 @@ const Settings = () => {
                     <h3 style={{
                       fontSize: '18px',
                       fontWeight: '700',
-                      color: '#111318',
+                      color: 'var(--color-text-primary)',
                       marginBottom: '2px'
                     }}>
                       {t('notificationPreferences')}
                     </h3>
-                    <p style={{ fontSize: '12px', color: '#64748b' }}>
+                    <p style={{ fontSize: '12px', color: 'var(--color-text-muted)' }}>
                       {t('manageHowYouGetNotified')}
                     </p>
                   </div>
@@ -473,12 +473,12 @@ const Settings = () => {
                     alignItems: 'center',
                     justifyContent: 'space-between',
                     padding: '12px',
-                    background: '#f8fafc',
+                    background: 'var(--color-background)',
                     borderRadius: '12px'
                   }}>
                     <div>
-                      <p style={{ fontSize: '14px', fontWeight: '600', color: '#1e293b' }}>{t('loginAlerts')}</p>
-                      <p style={{ fontSize: '12px', color: '#64748b' }}>{t('loginAlertsDesc')}</p>
+                      <p style={{ fontSize: '14px', fontWeight: '600', color: 'var(--color-text-primary)' }}>{t('loginAlerts')}</p>
+                      <p style={{ fontSize: '12px', color: 'var(--color-text-muted)' }}>{t('loginAlertsDesc')}</p>
                     </div>
                     <div 
                       onClick={() => setLoginAlerts(!loginAlerts)}
@@ -486,7 +486,7 @@ const Settings = () => {
                         width: '44px',
                         height: '24px',
                         borderRadius: '12px',
-                        backgroundColor: loginAlerts ? '#2463eb' : '#cbd5e1',
+                        backgroundColor: loginAlerts ? '#2463eb' : 'var(--color-border-dark)',
                         cursor: 'pointer',
                         position: 'relative',
                         transition: 'all 0.2s'
@@ -496,7 +496,7 @@ const Settings = () => {
                         width: '20px',
                         height: '20px',
                         borderRadius: '50%',
-                        backgroundColor: 'white',
+                        backgroundColor: 'var(--color-surface)',
                         position: 'absolute',
                         top: '2px',
                         left: loginAlerts ? '22px' : '2px',
@@ -530,10 +530,10 @@ const Settings = () => {
             {/* Right Column - Security */}
             <div>
               <section style={{
-                background: 'white',
+                background: 'var(--color-surface)',
                 borderRadius: '16px',
                 padding: '32px',
-                border: '1px solid #e2e8f0',
+                border: '1px solid var(--color-border)',
                 boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05)',
                 height: 'fit-content'
               }}>
@@ -543,11 +543,11 @@ const Settings = () => {
                   gap: '12px',
                   marginBottom: '24px',
                   paddingBottom: '16px',
-                  borderBottom: '1px solid #f0f1f4'
+                  borderBottom: '1px solid var(--color-border)'
                 }}>
                   <div style={{
                     padding: '8px',
-                    background: '#fef2f2',
+                    background: 'var(--color-background-secondary)',
                     borderRadius: '12px',
                     color: '#ef4444'
                   }}>
@@ -557,12 +557,12 @@ const Settings = () => {
                     <h3 style={{
                       fontSize: '18px',
                       fontWeight: '700',
-                      color: '#111318',
+                      color: 'var(--color-text-primary)',
                       marginBottom: '2px'
                     }}>
                       {t('security')}
                     </h3>
-                    <p style={{ fontSize: '12px', color: '#64748b' }}>
+                    <p style={{ fontSize: '12px', color: 'var(--color-text-muted)' }}>
                       {t('updateYourPassword')}
                     </p>
                   </div>
@@ -581,7 +581,7 @@ const Settings = () => {
                       fontWeight: '700',
                       textTransform: 'uppercase',
                       letterSpacing: '0.05em',
-                      color: '#64748b',
+                      color: 'var(--color-text-muted)',
                       marginBottom: '6px'
                     }}>
                       {t('currentPassword')}
@@ -593,12 +593,12 @@ const Settings = () => {
                         onChange={(e) => setPasswordData({ ...passwordData, currentPassword: e.target.value })}
                         style={{
                           width: '100%',
-                          background: '#f8fafc',
-                          border: '1px solid #e2e8f0',
+                          background: 'var(--color-background)',
+                          border: '1px solid var(--color-border)',
                           borderRadius: '12px',
                           padding: '10px 40px 10px 16px',
                           fontSize: '14px',
-                          color: '#111318',
+                          color: 'var(--color-text-primary)',
                           outline: 'none',
                           transition: 'all 0.2s',
                           boxSizing: 'border-box'
@@ -608,7 +608,7 @@ const Settings = () => {
                           e.target.style.boxShadow = '0 0 0 3px rgba(36, 99, 235, 0.1)';
                         }}
                         onBlur={(e) => {
-                          e.target.style.borderColor = '#e2e8f0';
+                          e.target.style.borderColor = 'var(--color-border)';
                           e.target.style.boxShadow = 'none';
                         }}
                       />
@@ -640,7 +640,7 @@ const Settings = () => {
                       fontWeight: '700',
                       textTransform: 'uppercase',
                       letterSpacing: '0.05em',
-                      color: '#64748b',
+                      color: 'var(--color-text-muted)',
                       marginBottom: '6px'
                     }}>
                       {t('newPassword')}
@@ -653,12 +653,12 @@ const Settings = () => {
                         placeholder="••••••••"
                         style={{
                           width: '100%',
-                          background: '#f8fafc',
-                          border: '1px solid #e2e8f0',
+                          background: 'var(--color-background)',
+                          border: '1px solid var(--color-border)',
                           borderRadius: '12px',
                           padding: '10px 40px 10px 16px',
                           fontSize: '14px',
-                          color: '#111318',
+                          color: 'var(--color-text-primary)',
                           outline: 'none',
                           transition: 'all 0.2s',
                           boxSizing: 'border-box'
@@ -668,7 +668,7 @@ const Settings = () => {
                           e.target.style.boxShadow = '0 0 0 3px rgba(36, 99, 235, 0.1)';
                         }}
                         onBlur={(e) => {
-                          e.target.style.borderColor = '#e2e8f0';
+                          e.target.style.borderColor = 'var(--color-border)';
                           e.target.style.boxShadow = 'none';
                         }}
                       />
@@ -712,19 +712,19 @@ const Settings = () => {
                         }}>
                           <div style={{
                             flex: 1,
-                            background: strength.level >= 1 ? strength.color : '#e2e8f0',
+                            background: strength.level >= 1 ? strength.color : 'var(--color-border)',
                             borderRadius: '999px',
                             transition: 'background 0.3s'
                           }}></div>
                           <div style={{
                             flex: 1,
-                            background: strength.level >= 2 ? strength.color : '#e2e8f0',
+                            background: strength.level >= 2 ? strength.color : 'var(--color-border)',
                             borderRadius: '999px',
                             transition: 'background 0.3s'
                           }}></div>
                           <div style={{
                             flex: 1,
-                            background: strength.level >= 3 ? strength.color : '#e2e8f0',
+                            background: strength.level >= 3 ? strength.color : 'var(--color-border)',
                             borderRadius: '999px',
                             transition: 'background 0.3s'
                           }}></div>
@@ -741,7 +741,7 @@ const Settings = () => {
                       fontWeight: '700',
                       textTransform: 'uppercase',
                       letterSpacing: '0.05em',
-                      color: '#64748b',
+                      color: 'var(--color-text-muted)',
                       marginBottom: '6px'
                     }}>
                       {t('confirmPassword')}
@@ -754,12 +754,12 @@ const Settings = () => {
                         placeholder="••••••••"
                         style={{
                           width: '100%',
-                          background: '#f8fafc',
-                          border: '1px solid #e2e8f0',
+                          background: 'var(--color-background)',
+                          border: '1px solid var(--color-border)',
                           borderRadius: '12px',
                           padding: '10px 16px',
                           fontSize: '14px',
-                          color: '#111318',
+                          color: 'var(--color-text-primary)',
                           outline: 'none',
                           transition: 'all 0.2s',
                           boxSizing: 'border-box'
@@ -769,7 +769,7 @@ const Settings = () => {
                           e.target.style.boxShadow = '0 0 0 3px rgba(36, 99, 235, 0.1)';
                         }}
                         onBlur={(e) => {
-                          e.target.style.borderColor = '#e2e8f0';
+                          e.target.style.borderColor = 'var(--color-border)';
                           e.target.style.boxShadow = 'none';
                         }}
                       />
@@ -810,6 +810,86 @@ const Settings = () => {
                     <ArrowRight size={18} />
                   </button>
                 </form>
+              </section>
+
+              {/* Theme Settings */}
+              <section style={{
+                background: 'var(--color-surface)',
+                borderRadius: '16px',
+                padding: '32px',
+                border: '1px solid var(--color-border)',
+                boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05)',
+                height: 'fit-content',
+                marginTop: '32px'
+              }}>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px',
+                  marginBottom: '24px',
+                  paddingBottom: '16px',
+                  borderBottom: '1px solid var(--color-border)'
+                }}>
+                  <div style={{
+                    padding: '8px',
+                    background: 'var(--color-background-secondary)',
+                    borderRadius: '12px',
+                    color: 'var(--color-text-primary)'
+                  }}>
+                    {theme === 'dark' ? <Moon size={24} /> : <Sun size={24} />}
+                  </div>
+                  <div>
+                    <h3 style={{
+                      fontSize: '18px',
+                      fontWeight: '700',
+                      color: 'var(--color-text-primary)',
+                      marginBottom: '2px'
+                    }}>
+                      {t('theme')}
+                    </h3>
+                    <p style={{ fontSize: '12px', color: 'var(--color-text-muted)' }}>
+                      {t('themeDesc')}
+                    </p>
+                  </div>
+                </div>
+
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  padding: '12px',
+                  background: 'var(--color-background)',
+                  borderRadius: '12px'
+                }}>
+                  <div>
+                    <p style={{ fontSize: '14px', fontWeight: '600', color: 'var(--color-text-primary)' }}>
+                      {theme === 'dark' ? t('darkTheme') : t('lightTheme')}
+                    </p>
+                  </div>
+                  <div 
+                    onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                    style={{
+                      width: '44px',
+                      height: '24px',
+                      borderRadius: '12px',
+                      backgroundColor: theme === 'dark' ? 'var(--color-primary)' : 'var(--color-border-dark)',
+                      cursor: 'pointer',
+                      position: 'relative',
+                      transition: 'all 0.2s'
+                    }}
+                  >
+                    <div style={{
+                      width: '20px',
+                      height: '20px',
+                      borderRadius: '50%',
+                      backgroundColor: 'var(--color-surface)',
+                      position: 'absolute',
+                      top: '2px',
+                      left: theme === 'dark' ? '22px' : '2px',
+                      transition: 'all 0.2s'
+                    }} />
+                  </div>
+                </div>
               </section>
             </div>
           </div>

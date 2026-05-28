@@ -158,7 +158,7 @@ const StudentLogin = () => {
             display: 'inline-flex',
             alignItems: 'center',
             gap: '8px',
-            color: '#64748b',
+            color: 'var(--color-text-muted)',
             textDecoration: 'none',
             marginBottom: '24px',
             fontSize: '14px'
@@ -182,18 +182,18 @@ const StudentLogin = () => {
           }}>
             <GraduationCap style={{ width: '32px', height: '32px', color: 'white' }} />
           </div>
-          <h1 style={{ fontSize: '24px', fontWeight: 'bold', color: '#1e293b', marginBottom: '8px' }}>
+          <h1 style={{ fontSize: '24px', fontWeight: 'bold', color: 'var(--color-text-primary)', marginBottom: '8px' }}>
             Öğrenci Girişi
           </h1>
-          <p style={{ color: '#64748b' }}>Atölye Sınav Platformuna hoş geldiniz</p>
+          <p style={{ color: 'var(--color-text-muted)' }}>Atölye Sınav Platformuna hoş geldiniz</p>
         </div>
 
         <div style={{
-          backgroundColor: 'white',
+          backgroundColor: 'var(--color-surface)',
           borderRadius: '16px',
           padding: '32px',
           boxShadow: '0 10px 40px -10px rgba(0,0,0,0.1)',
-          border: '1px solid #e2e8f0'
+          border: '1px solid var(--color-border)'
         }}>
           {/* Güvenlik Uyarısı */}
           <div style={{
@@ -252,7 +252,7 @@ const StudentLogin = () => {
                         onChange={(e) => handleChange('rememberMe', e.target.checked)}
                         style={{ width: '16px', height: '16px', accentColor: '#3b82f6' }}
                       />
-                      <span style={{ fontSize: '14px', color: '#64748b' }}>Beni hatırla</span>
+                      <span style={{ fontSize: '14px', color: 'var(--color-text-muted)' }}>Beni hatırla</span>
                     </label>
                     <button
                       type="button"
@@ -278,7 +278,7 @@ const StudentLogin = () => {
                 <>
                   <div style={{
                     padding: '12px 16px',
-                    backgroundColor: '#eff6ff',
+                    backgroundColor: 'var(--color-background-secondary)',
                     borderLeft: '4px solid #3b82f6',
                     borderRadius: '4px',
                     marginBottom: '8px'
@@ -320,7 +320,7 @@ const StudentLogin = () => {
           </form>
 
           <div style={{ marginTop: '24px', textAlign: 'center' }}>
-            <p style={{ fontSize: '14px', color: '#64748b' }}>
+            <p style={{ fontSize: '14px', color: 'var(--color-text-muted)' }}>
               Hesabınız yok mu?{' '}
               <Link to="/ogrenci/kayit" style={{ color: '#3b82f6', textDecoration: 'none', fontWeight: '500' }}>
                 Kayıt Ol
@@ -329,7 +329,7 @@ const StudentLogin = () => {
           </div>
         </div >
 
-        <p style={{ textAlign: 'center', fontSize: '14px', color: '#64748b', marginTop: '24px' }}>
+        <p style={{ textAlign: 'center', fontSize: '14px', color: 'var(--color-text-muted)', marginTop: '24px' }}>
           Öğretmen misiniz?{' '}
           <Link to="/ogretmen/giris" style={{ color: '#3b82f6', textDecoration: 'none', fontWeight: '500' }}>
             Öğretmen girişi
@@ -357,7 +357,7 @@ const StudentLogin = () => {
           >
             <div
               style={{
-                backgroundColor: 'white',
+                backgroundColor: 'var(--color-surface)',
                 borderRadius: '16px',
                 padding: '32px',
                 maxWidth: '400px',
@@ -381,22 +381,22 @@ const StudentLogin = () => {
                 >
                   <Lock style={{ width: '32px', height: '32px', color: '#f59e0b' }} />
                 </div>
-                <h2 style={{ fontSize: '20px', fontWeight: '600', color: '#1e293b', marginBottom: '8px' }}>
+                <h2 style={{ fontSize: '20px', fontWeight: '600', color: 'var(--color-text-primary)', marginBottom: '8px' }}>
                   Şifrenizi mi Unuttunuz?
                 </h2>
-                <p style={{ fontSize: '14px', color: '#64748b', lineHeight: '1.6' }}>
+                <p style={{ fontSize: '14px', color: 'var(--color-text-muted)', lineHeight: '1.6' }}>
                   Şifrenizi sıfırlamak için lütfen öğretmeninizle iletişime geçin.
                 </p>
               </div>
               <div
                 style={{
                   padding: '16px',
-                  backgroundColor: '#f8fafc',
+                  backgroundColor: 'var(--color-background)',
                   borderRadius: '12px',
                   marginBottom: '24px'
                 }}
               >
-                <p style={{ fontSize: '13px', color: '#475569', lineHeight: '1.6', margin: 0 }}>
+                <p style={{ fontSize: '13px', color: 'var(--color-text-secondary)', lineHeight: '1.6', margin: 0 }}>
                   💡 <strong>Not:</strong> Öğretmeniniz sizin için yeni bir şifre oluşturabilir veya mevcut şifrenizi sıfırlayabilir.
                 </p>
               </div>

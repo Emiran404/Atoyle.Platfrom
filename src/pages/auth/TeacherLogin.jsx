@@ -321,7 +321,7 @@ const TeacherLogin = () => {
             display: 'inline-flex',
             alignItems: 'center',
             gap: '8px',
-            color: '#64748b',
+            color: 'var(--color-text-muted)',
             textDecoration: 'none',
             marginBottom: '24px',
             fontSize: '14px'
@@ -345,18 +345,18 @@ const TeacherLogin = () => {
           }}>
             <Users style={{ width: '32px', height: '32px', color: 'white' }} />
           </div>
-          <h1 style={{ fontSize: '24px', fontWeight: 'bold', color: '#1e293b', marginBottom: '8px' }}>
+          <h1 style={{ fontSize: '24px', fontWeight: 'bold', color: 'var(--color-text-primary)', marginBottom: '8px' }}>
             Öğretmen Girişi
           </h1>
-          <p style={{ color: '#64748b' }}>Atölye Sınav Platformuna hoş geldiniz</p>
+          <p style={{ color: 'var(--color-text-muted)' }}>Atölye Sınav Platformuna hoş geldiniz</p>
         </div>
 
         <div style={{
-          backgroundColor: 'white',
+          backgroundColor: 'var(--color-surface)',
           borderRadius: '16px',
           padding: '32px',
           boxShadow: '0 10px 40px -10px rgba(0,0,0,0.1)',
-          border: '1px solid #e2e8f0'
+          border: '1px solid var(--color-border)'
         }}>
           {/* Sekmeler */}
           <div style={{ display: 'flex', gap: '8px', marginBottom: '24px' }}>
@@ -375,10 +375,10 @@ const TeacherLogin = () => {
                 borderRadius: '10px',
                 border: activeTab === 'passkey' ? '2px solid #6366f1' : '2px solid #e2e8f0',
                 background: !canUsePasskey()
-                  ? '#f1f5f9'
+                  ? 'var(--color-background-secondary)'
                   : activeTab === 'passkey'
                     ? 'linear-gradient(135deg, #6366f1 0%, #a855f7 100%)'
-                    : '#f8fafc',
+                    : 'var(--color-background)',
                 color: !canUsePasskey() ? '#94a3b8' : activeTab === 'passkey' ? '#fff' : '#6366f1',
                 fontWeight: '600',
                 cursor: canUsePasskey() ? 'pointer' : 'not-allowed',
@@ -409,10 +409,10 @@ const TeacherLogin = () => {
                 borderRadius: '10px',
                 border: activeTab === 'password' ? '2px solid #6366f1' : '2px solid #e2e8f0',
                 background: (hasPasskey && !mnComboPressed)
-                  ? '#e2e8f0'
+                  ? 'var(--color-border)'
                   : activeTab === 'password'
                     ? 'linear-gradient(135deg, #6366f1 0%, #a855f7 100%)'
-                    : '#f8fafc',
+                    : 'var(--color-background)',
                 color: (hasPasskey && !mnComboPressed) ? '#94a3b8' : activeTab === 'password' ? '#fff' : '#6366f1',
                 fontWeight: '600',
                 cursor: (hasPasskey && !mnComboPressed) ? 'not-allowed' : 'pointer',
@@ -445,7 +445,7 @@ const TeacherLogin = () => {
                     onChange={(e) => handleChange('rememberMe', e.target.checked)}
                     style={{ width: '16px', height: '16px', accentColor: '#6366f1' }}
                   />
-                  <span style={{ fontSize: '14px', color: '#64748b' }}>Beni hatırla</span>
+                  <span style={{ fontSize: '14px', color: 'var(--color-text-muted)' }}>Beni hatırla</span>
                 </label>
               </div>
               <button
@@ -457,7 +457,7 @@ const TeacherLogin = () => {
                   borderRadius: '10px',
                   background: canUsePasskey() 
                     ? 'linear-gradient(135deg, #6366f1 0%, #a855f7 100%)'
-                    : '#e2e8f0',
+                    : 'var(--color-border)',
                   color: canUsePasskey() ? '#fff' : '#94a3b8',
                   fontWeight: '600',
                   fontSize: '16px',
@@ -470,7 +470,7 @@ const TeacherLogin = () => {
               >
                 {canUsePasskey() ? 'Passkey ile Giriş Yap' : 'Platform Desteklenmiyor'}
               </button>
-              <p style={{ fontSize: '13px', color: '#64748b', textAlign: 'center', marginTop: '8px' }}>
+              <p style={{ fontSize: '13px', color: 'var(--color-text-muted)', textAlign: 'center', marginTop: '8px' }}>
                 {canUsePasskey() 
                   ? 'Windows Hello, Linux (Pardus) ve MacOS ile uyumlu.' 
                   : 'Passkey şu an sadece Windows platformunda desteklenmektedir.'}
@@ -513,7 +513,7 @@ const TeacherLogin = () => {
                       onChange={(e) => handleChange('rememberMe', e.target.checked)}
                       style={{ width: '16px', height: '16px', accentColor: '#6366f1' }}
                     />
-                    <span style={{ fontSize: '14px', color: '#64748b' }}>Beni hatırla</span>
+                    <span style={{ fontSize: '14px', color: 'var(--color-text-muted)' }}>Beni hatırla</span>
 
                   </label>
                   <button
@@ -542,7 +542,7 @@ const TeacherLogin = () => {
                     padding: '14px',
                     borderRadius: '10px',
                     background: 'linear-gradient(135deg, #6366f1 0%, #a855f7 100%)',
-                    color: '#fff',
+                    color: 'var(--color-text-inverse, #fff)',
                     fontWeight: '600',
                     fontSize: '16px',
                     border: 'none',
@@ -554,7 +554,7 @@ const TeacherLogin = () => {
                 >
                   Parolayla Aç
                 </button>
-                <p style={{ fontSize: '13px', color: '#64748b', textAlign: 'center', marginTop: '8px' }}>
+                <p style={{ fontSize: '13px', color: 'var(--color-text-muted)', textAlign: 'center', marginTop: '8px' }}>
                   Giriş yapmak için bilgileri girip Enter tuşuna basın.
                 </p>
               </div>
@@ -568,22 +568,22 @@ const TeacherLogin = () => {
               <div style={{
                 marginBottom: '24px',
                 padding: '16px',
-                backgroundColor: '#f8fafc',
+                backgroundColor: 'var(--color-background)',
                 borderRadius: '12px',
-                border: '1px solid #e2e8f0'
+                border: '1px solid var(--color-border)'
               }}>
                 <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
                   <div style={{
                     padding: '8px',
-                    backgroundColor: '#e0e7ff',
+                    backgroundColor: 'var(--color-primary-light)',
                     borderRadius: '8px',
                     color: '#4f46e5'
                   }}>
                     <Key size={20} />
                   </div>
                   <div>
-                    <h4 style={{ margin: '0 0 4px 0', color: '#1e293b', fontSize: '15px', fontWeight: '600' }}>Kurtarma Anahtarı</h4>
-                    <p style={{ margin: 0, fontSize: '13px', color: '#64748b', lineHeight: '1.5' }}>
+                    <h4 style={{ margin: '0 0 4px 0', color: 'var(--color-text-primary)', fontSize: '15px', fontWeight: '600' }}>Kurtarma Anahtarı</h4>
+                    <p style={{ margin: 0, fontSize: '13px', color: 'var(--color-text-muted)', lineHeight: '1.5' }}>
                       Hesabınızı kurtarmak için "Ayarlar" sayfasından aldığınız özel anahtarı girin.
                     </p>
                   </div>
@@ -601,7 +601,7 @@ const TeacherLogin = () => {
                 />
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                  <label style={{ fontSize: '14px', fontWeight: '500', color: '#334155', marginLeft: '4px' }}>Kurtarma Anahtarı</label>
+                  <label style={{ fontSize: '14px', fontWeight: '500', color: 'var(--color-foreground-secondary)', marginLeft: '4px' }}>Kurtarma Anahtarı</label>
                   <div style={{ position: 'relative' }}>
                     <Key size={18} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
                     <input
@@ -613,11 +613,11 @@ const TeacherLogin = () => {
                         width: '100%',
                         padding: '12px 16px 12px 48px',
                         borderRadius: '12px',
-                        border: '1px solid #e2e8f0',
+                        border: '1px solid var(--color-border)',
                         fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
                         fontSize: '15px',
-                        backgroundColor: '#f8fafc',
-                        color: '#334155',
+                        backgroundColor: 'var(--color-background)',
+                        color: 'var(--color-foreground-secondary)',
                         transition: 'all 0.2s',
                         outline: 'none',
                         letterSpacing: '0.5px'
@@ -628,8 +628,8 @@ const TeacherLogin = () => {
                         e.target.style.boxShadow = '0 0 0 4px rgba(99, 102, 241, 0.1)';
                       }}
                       onBlur={(e) => {
-                        e.target.style.borderColor = '#e2e8f0';
-                        e.target.style.backgroundColor = '#f8fafc';
+                        e.target.style.borderColor = 'var(--color-border)';
+                        e.target.style.backgroundColor = 'var(--color-background)';
                         e.target.style.boxShadow = 'none';
                       }}
                       required
@@ -665,15 +665,15 @@ const TeacherLogin = () => {
                     onClick={() => setShowRecoveryModal(false)}
                     style={{
                       flex: 1,
-                      backgroundColor: '#fff',
-                      color: '#64748b',
-                      border: '1px solid #e2e8f0',
+                      backgroundColor: 'var(--color-surface)',
+                      color: 'var(--color-text-muted)',
+                      border: '1px solid var(--color-border)',
                       padding: '12px',
                       borderRadius: '12px',
                       fontWeight: '500',
                       transition: 'all 0.2s'
                     }}
-                    onMouseOver={(e) => e.target.style.backgroundColor = '#f8fafc'}
+                    onMouseOver={(e) => e.target.style.backgroundColor = 'var(--color-background)'}
                     onMouseOut={(e) => e.target.style.backgroundColor = '#fff'}
                   >
                     İptal
@@ -702,7 +702,7 @@ const TeacherLogin = () => {
           </Modal>
 
           <div style={{ marginTop: '24px', textAlign: 'center' }}>
-            <p style={{ fontSize: '14px', color: '#64748b' }}>
+            <p style={{ fontSize: '14px', color: 'var(--color-text-muted)' }}>
               Hesabınız yok mu?{' '}
               <Link to="/ogretmen/kayit" style={{ color: '#6366f1', textDecoration: 'none', fontWeight: '500' }}>
                 Kayıt Ol
@@ -711,7 +711,7 @@ const TeacherLogin = () => {
           </div>
         </div>
 
-        <p style={{ textAlign: 'center', fontSize: '14px', color: '#64748b', marginTop: '24px' }}>
+        <p style={{ textAlign: 'center', fontSize: '14px', color: 'var(--color-text-muted)', marginTop: '24px' }}>
           Öğrenci misiniz?{' '}
           <Link to="/ogrenci/giris" style={{ color: '#6366f1', textDecoration: 'none', fontWeight: '500' }}>
             Öğrenci girişi

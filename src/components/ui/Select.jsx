@@ -20,7 +20,7 @@ const Select = forwardRef(({
     display: 'block',
     fontSize: '14px',
     fontWeight: '500',
-    color: '#334155',
+    color: 'var(--color-foreground-secondary)',
     marginBottom: '6px'
   };
 
@@ -47,12 +47,12 @@ const Select = forwardRef(({
     padding: '12px 44px 12px 16px',
     paddingLeft: Icon ? '48px' : '16px',
     paddingRight: '44px',
-    backgroundColor: '#fff',
+    backgroundColor: 'var(--color-surface)',
     border: error ? '2px solid #ef4444' : '2px solid #e2e8f0',
     borderRadius: '12px',
     fontSize: '15px',
     fontWeight: '500',
-    color: '#334155',
+    color: 'var(--color-foreground-secondary)',
     outline: 'none',
     transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
     cursor: 'pointer',
@@ -99,7 +99,7 @@ const Select = forwardRef(({
             e.target.style.boxShadow = error ? '0 0 0 3px rgba(239,68,68,0.1)' : '0 0 0 3px rgba(59,130,246,0.1)';
           }}
           onBlur={(e) => {
-            e.target.style.borderColor = error ? '#ef4444' : '#e2e8f0';
+            e.target.style.borderColor = error ? '#ef4444' : 'var(--color-border)';
             e.target.style.boxShadow = 'none';
           }}
           {...props}

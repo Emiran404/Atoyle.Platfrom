@@ -6,7 +6,7 @@ const StudentLayout = ({ children }) => {
     <div style={{ 
       display: 'flex', 
       minHeight: '100vh', 
-      backgroundColor: '#f6f6f8',
+      backgroundColor: 'var(--color-background)',
       fontFamily: 'Lexend, sans-serif'
     }}>
       <StudentSidebar />

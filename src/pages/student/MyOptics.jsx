@@ -68,24 +68,24 @@ const MyOptics = () => {
   const getStatusBadge = (submission) => {
     if (submission.grade !== null && submission.grade !== undefined) {
       const grade = submission.grade;
-      if (grade === 'K') return { text: t('cheatCancelled'), color: '#ef4444', bg: '#fef2f2' };
-      if (grade >= 85) return { text: t('excellent'), color: '#10b981', bg: '#ecfdf5' };
-      if (grade >= 70) return { text: t('good'), color: '#3b82f6', bg: '#eff6ff' };
-      if (grade >= 50) return { text: t('pass'), color: '#f59e0b', bg: '#fffbeb' };
-      return { text: t('fail'), color: '#ef4444', bg: '#fef2f2' };
+      if (grade === 'K') return { text: t('cheatCancelled'), color: '#ef4444', bg: 'var(--color-background-secondary)' };
+      if (grade >= 85) return { text: t('excellent'), color: '#10b981', bg: 'var(--color-background-secondary)' };
+      if (grade >= 70) return { text: t('good'), color: '#3b82f6', bg: 'var(--color-background-secondary)' };
+      if (grade >= 50) return { text: t('pass'), color: '#f59e0b', bg: 'var(--color-background-secondary)' };
+      return { text: t('fail'), color: '#ef4444', bg: 'var(--color-background-secondary)' };
     }
-    return { text: t('pending'), color: '#64748b', bg: '#f1f5f9' };
+    return { text: t('pending'), color: 'var(--color-text-muted)', bg: 'var(--color-background-secondary)' };
   };
 
   const styles = {
     container: { width: '100%', maxWidth: '1200px', margin: '40px auto', padding: '0 20px' },
     header: { marginBottom: '32px' },
-    title: { fontSize: '28px', fontWeight: '700', color: '#1e293b', marginBottom: '8px' },
-    subtitle: { fontSize: '14px', color: '#64748b' },
+    title: { fontSize: '28px', fontWeight: '700', color: 'var(--color-text-primary)', marginBottom: '8px' },
+    subtitle: { fontSize: '14px', color: 'var(--color-text-muted)' },
     card: {
-      backgroundColor: '#fff',
+      backgroundColor: 'var(--color-surface)',
       borderRadius: '20px',
-      border: '1px solid #e2e8f0',
+      border: '1px solid var(--color-border)',
       overflow: 'hidden',
       marginBottom: '20px',
       transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
@@ -99,8 +99,8 @@ const MyOptics = () => {
       padding: '28px 28px 20px',
       borderBottom: '1px solid #f1f5f9'
     },
-    examTitle: { fontSize: '19px', fontWeight: '800', color: '#1e293b', marginBottom: '6px' },
-    examDesc: { fontSize: '14px', color: '#64748b', fontWeight: '500' },
+    examTitle: { fontSize: '19px', fontWeight: '800', color: 'var(--color-text-primary)', marginBottom: '6px' },
+    examDesc: { fontSize: '14px', color: 'var(--color-text-muted)', fontWeight: '500' },
     badge: (status) => ({
       display: 'inline-flex',
       alignItems: 'center',
@@ -113,7 +113,7 @@ const MyOptics = () => {
       letterSpacing: '0.05em',
       backgroundColor: status.bg,
       color: status.color,
-      border: `1px solid ${status.bg === '#fef2f2' ? '#fee2e2' : status.bg === '#ecfdf5' ? '#dcfce7' : status.bg === '#eff6ff' ? '#dbeafe' : status.bg === '#fffbeb' ? '#fef3c7' : '#e2e8f0'}`
+      border: `1px solid ${status.bg === 'var(--color-background-secondary)' ? '#fee2e2' : status.bg === 'var(--color-background-secondary)' ? '#dcfce7' : status.bg === 'var(--color-background-secondary)' ? 'var(--color-border)' : status.bg === 'var(--color-background-secondary)' ? '#fef3c7' : 'var(--color-border)'}`
     }),
     cardBody: {
       padding: '24px 28px',
@@ -122,11 +122,11 @@ const MyOptics = () => {
       gap: '24px',
       alignItems: 'center'
     },
-    infoItem: { display: 'flex', alignItems: 'center', gap: '10px', fontSize: '14.5px', color: '#475569', fontWeight: '500' },
+    infoItem: { display: 'flex', alignItems: 'center', gap: '10px', fontSize: '14.5px', color: 'var(--color-text-secondary)', fontWeight: '500' },
     gradeSection: {
       padding: '24px 28px',
-      backgroundColor: '#f8fafc',
-      borderTop: '1px solid #e2e8f0',
+      backgroundColor: 'var(--color-background)',
+      borderTop: '1px solid var(--color-border)',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between'
@@ -149,9 +149,9 @@ const MyOptics = () => {
       justifyContent: 'center',
       textAlign: 'center',
       padding: '60px 20px',
-      backgroundColor: '#fff',
+      backgroundColor: 'var(--color-surface)',
       borderRadius: '16px',
-      border: '1px solid #e2e8f0',
+      border: '1px solid var(--color-border)',
       minHeight: '300px'
     }
   };
@@ -160,7 +160,7 @@ const MyOptics = () => {
     return (
       <StudentLayout>
         <div style={{ ...styles.container, textAlign: 'center', paddingTop: '100px' }}>
-          <p style={{ color: '#64748b' }}>{t('loading')}</p>
+          <p style={{ color: 'var(--color-text-muted)' }}>{t('loading')}</p>
         </div>
       </StudentLayout>
     );
@@ -176,11 +176,11 @@ const MyOptics = () => {
 
         {uniqueQuizzes.length === 0 ? (
           <div style={styles.emptyState}>
-            <Target size={64} color="#cbd5e1" style={{ marginBottom: '16px' }} />
-            <h3 style={{ fontSize: '18px', fontWeight: '600', color: '#1e293b', marginBottom: '8px' }}>
+            <Target size={64} color='var(--color-border-dark)' style={{ marginBottom: '16px' }} />
+            <h3 style={{ fontSize: '18px', fontWeight: '600', color: 'var(--color-text-primary)', marginBottom: '8px' }}>
               {t('noQuizResultYet')}
             </h3>
-            <p style={{ color: '#64748b', fontSize: '14px' }}>
+            <p style={{ color: 'var(--color-text-muted)', fontSize: '14px' }}>
               {t('noQuizResultDesc')}
             </p>
           </div>
@@ -201,7 +201,7 @@ const MyOptics = () => {
                   onMouseLeave={(e) => {
                     e.currentTarget.style.transform = 'translateY(0)';
                     e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05)';
-                    e.currentTarget.style.borderColor = '#e2e8f0';
+                    e.currentTarget.style.borderColor = 'var(--color-border)';
                   }}
                 >
                   <div style={styles.cardHeader}>
@@ -221,7 +221,7 @@ const MyOptics = () => {
                   <div style={styles.cardBody}>
                     <div style={styles.infoItem}>
                       <div style={{
-                        width: '36px', height: '36px', borderRadius: '10px', backgroundColor: '#f0fdf4',
+                        width: '36px', height: '36px', borderRadius: '10px', backgroundColor: 'var(--color-background-secondary)',
                         display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#10b981'
                       }}>
                         <Calendar size={18} />
@@ -236,7 +236,7 @@ const MyOptics = () => {
                       }}>
                         <Award size={18} />
                       </div>
-                      <span style={{ fontWeight: '600', color: '#1e293b' }}>
+                      <span style={{ fontWeight: '600', color: 'var(--color-text-primary)' }}>
                         {(submission.grade === null || submission.grade === undefined) ? '-' : submission.earnedPoints} / {(submission.grade === null || submission.grade === undefined) ? '-' : submission.totalPoints} {t('score')}
                       </span>
                     </div>
@@ -249,18 +249,18 @@ const MyOptics = () => {
                         }}
                         style={{
                           display: 'inline-flex', alignItems: 'center', gap: '10px',
-                          padding: '12px 24px', backgroundColor: '#eff6ff', color: '#2563eb',
+                          padding: '12px 24px', backgroundColor: 'var(--color-background-secondary)', color: '#2563eb',
                           border: '1px solid #dbeafe', borderRadius: '12px', cursor: 'pointer',
                           fontSize: '14.5px', fontWeight: '700', transition: 'all 0.3s',
                           boxShadow: '0 1px 2px rgba(37, 99, 235, 0.05)'
                         }}
                         onMouseEnter={(e) => {
-                          e.currentTarget.style.backgroundColor = '#dbeafe';
+                          e.currentTarget.style.backgroundColor = 'var(--color-border)';
                           e.currentTarget.style.transform = 'translateY(-2px)';
                           e.currentTarget.style.boxShadow = '0 4px 6px rgba(37, 99, 235, 0.1)';
                         }}
                         onMouseLeave={(e) => {
-                          e.currentTarget.style.backgroundColor = '#eff6ff';
+                          e.currentTarget.style.backgroundColor = 'var(--color-background-secondary)';
                           e.currentTarget.style.transform = 'translateY(0)';
                           e.currentTarget.style.boxShadow = '0 1px 2px rgba(37, 99, 235, 0.05)';
                         }}
@@ -277,14 +277,14 @@ const MyOptics = () => {
                       <div style={styles.gradeDisplay}>
                         <Award size={24} color={submission.grade === 'K' ? '#ef4444' : '#f59e0b'} />
                         <span style={styles.gradeNumber(submission.grade)}>{submission.grade}</span>
-                        {submission.grade !== 'K' && <span style={{ color: '#64748b', fontSize: '16px', fontWeight: '500' }}>/ 100</span>}
+                        {submission.grade !== 'K' && <span style={{ color: 'var(--color-text-muted)', fontSize: '16px', fontWeight: '500' }}>/ 100</span>}
                       </div>
                     </div>
                   )}
 
                   {/* Pending Message */}
                   {(submission.grade === null || submission.grade === undefined) && (
-                    <div style={{ ...styles.gradeSection, backgroundColor: '#fffbeb' }}>
+                    <div style={{ ...styles.gradeSection, backgroundColor: 'var(--color-background-secondary)' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                         <AlertCircle size={20} color="#f59e0b" />
                         <span style={{ color: '#92400e', fontSize: '14px', fontWeight: '500' }}>

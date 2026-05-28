@@ -44,11 +44,11 @@ const styles = {
   title: {
     fontSize: '28px',
     fontWeight: '700',
-    color: '#1e293b',
+    color: 'var(--color-text-primary)',
     marginBottom: '8px',
   },
   subtitle: {
-    color: '#64748b',
+    color: 'var(--color-text-muted)',
     fontSize: '15px',
   },
   stepsContainer: {
@@ -71,7 +71,7 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: completed || active ? '#0d9488' : '#f1f5f9',
+    backgroundColor: completed || active ? '#0d9488' : 'var(--color-background-secondary)',
     color: completed || active ? '#ffffff' : '#94a3b8',
     transition: 'all 0.3s ease',
     border: active ? '2px solid #0d9488' : 'none',
@@ -87,14 +87,14 @@ const styles = {
     flex: 1,
     height: '2px',
     margin: '0 8px',
-    backgroundColor: completed ? '#0d9488' : '#e2e8f0',
+    backgroundColor: completed ? '#0d9488' : 'var(--color-border)',
     borderRadius: '2px',
     marginTop: '-30px',
   }),
   card: {
-    backgroundColor: '#ffffff',
+    backgroundColor: 'var(--color-surface)',
     borderRadius: '12px',
-    border: '1px solid #e2e8f0',
+    border: '1px solid var(--color-border)',
     padding: '32px',
     marginBottom: '24px',
     minHeight: '400px',
@@ -103,7 +103,7 @@ const styles = {
   cardTitle: {
     fontSize: '18px',
     fontWeight: '600',
-    color: '#1e293b',
+    color: 'var(--color-text-primary)',
     marginBottom: '24px',
     paddingBottom: '16px',
     borderBottom: '1px solid #f1f5f9',
@@ -115,17 +115,17 @@ const styles = {
     display: 'block',
     fontSize: '14px',
     fontWeight: '500',
-    color: '#374151',
+    color: 'var(--color-text-secondary)',
     marginBottom: '8px',
   },
   input: {
     width: '100%',
     padding: '12px 16px',
     fontSize: '14px',
-    border: '1px solid #e2e8f0',
+    border: '1px solid var(--color-border)',
     borderRadius: '12px',
-    backgroundColor: '#ffffff',
-    color: '#1e293b',
+    backgroundColor: 'var(--color-surface)',
+    color: 'var(--color-text-primary)',
     outline: 'none',
     transition: 'border-color 0.2s',
     boxSizing: 'border-box',
@@ -134,10 +134,10 @@ const styles = {
     width: '100%',
     padding: '12px 16px',
     fontSize: '14px',
-    border: '1px solid #e2e8f0',
+    border: '1px solid var(--color-border)',
     borderRadius: '12px',
-    backgroundColor: '#ffffff',
-    color: '#1e293b',
+    backgroundColor: 'var(--color-surface)',
+    color: 'var(--color-text-primary)',
     cursor: 'pointer',
     boxSizing: 'border-box',
   },
@@ -145,10 +145,10 @@ const styles = {
     width: '100%',
     padding: '12px 16px',
     fontSize: '14px',
-    border: '1px solid #e2e8f0',
+    border: '1px solid var(--color-border)',
     borderRadius: '12px',
-    backgroundColor: '#ffffff',
-    color: '#1e293b',
+    backgroundColor: 'var(--color-surface)',
+    color: 'var(--color-text-primary)',
     resize: 'vertical',
     minHeight: '100px',
     fontFamily: 'inherit',
@@ -164,8 +164,8 @@ const styles = {
     alignItems: 'center',
     gap: '12px',
     padding: '16px',
-    backgroundColor: selected ? '#f0fdfa' : '#f8fafc',
-    border: `1px solid ${selected ? '#0d9488' : '#e2e8f0'}`,
+    backgroundColor: selected ? 'var(--color-background-secondary)' : 'var(--color-background)',
+    border: `1px solid ${selected ? '#0d9488' : 'var(--color-border)'}`,
     borderRadius: '12px',
     cursor: 'pointer',
     transition: 'all 0.2s',
@@ -180,12 +180,12 @@ const styles = {
   },
   radioTitle: {
     fontWeight: '500',
-    color: '#1e293b',
+    color: 'var(--color-text-primary)',
     marginBottom: '4px',
   },
   radioDesc: {
     fontSize: '13px',
-    color: '#64748b',
+    color: 'var(--color-text-muted)',
   },
   checkboxGrid: {
     display: 'grid',
@@ -197,8 +197,8 @@ const styles = {
     alignItems: 'center',
     gap: '10px',
     padding: '12px 16px',
-    backgroundColor: selected ? '#f0fdfa' : '#f8fafc',
-    border: `1px solid ${selected ? '#0d9488' : '#e2e8f0'}`,
+    backgroundColor: selected ? 'var(--color-background-secondary)' : 'var(--color-background)',
+    border: `1px solid ${selected ? '#0d9488' : 'var(--color-border)'}`,
     borderRadius: '12px',
     cursor: 'pointer',
     transition: 'all 0.2s',
@@ -236,16 +236,16 @@ const styles = {
     marginTop: '8px',
   },
   summarySection: {
-    backgroundColor: '#f8fafc',
+    backgroundColor: 'var(--color-background)',
     borderRadius: '12px',
     padding: '20px',
     marginBottom: '16px',
-    border: '1px solid #e2e8f0',
+    border: '1px solid var(--color-border)',
   },
   summaryTitle: {
     fontSize: '15px',
     fontWeight: '600',
-    color: '#1e293b',
+    color: 'var(--color-text-primary)',
     marginBottom: '16px',
     display: 'flex',
     alignItems: 'center',
@@ -255,14 +255,14 @@ const styles = {
     display: 'flex',
     justifyContent: 'space-between',
     padding: '8px 0',
-    borderBottom: '1px solid #e2e8f0',
+    borderBottom: '1px solid var(--color-border)',
   },
   summaryLabel: {
-    color: '#64748b',
+    color: 'var(--color-text-muted)',
     fontSize: '14px',
   },
   summaryValue: {
-    color: '#1e293b',
+    color: 'var(--color-text-primary)',
     fontSize: '14px',
     fontWeight: '500',
   },
@@ -283,7 +283,7 @@ const styles = {
     cursor: 'pointer',
     transition: 'all 0.2s',
     backgroundColor: variant === 'primary' ? '#0d9488' : variant === 'success' ? '#10b981' : variant === 'danger' ? '#ef4444' : variant === 'ghost' ? '#ffffff' : 'transparent',
-    color: variant === 'ghost' ? '#64748b' : '#ffffff',
+    color: variant === 'ghost' ? 'var(--color-text-muted)' : '#ffffff',
   }),
   classGrid: {
     display: 'grid',
@@ -296,10 +296,10 @@ const styles = {
     marginTop: '16px',
   },
   questionCard: {
-    border: '1px solid #e2e8f0',
+    border: '1px solid var(--color-border)',
     padding: '20px',
     marginBottom: '20px',
-    backgroundColor: '#ffffff',
+    backgroundColor: 'var(--color-surface)',
     boxShadow: '0 2px 4px rgba(0,0,0,0.02)',
   },
 };
@@ -693,7 +693,7 @@ const CreateExam = () => {
             </div>
 
             {formData.type === 'quiz' && (
-              <div style={{ ...styles.formGroup, backgroundColor: '#f0fdfa', padding: '16px', borderRadius: '12px', border: '1px solid #ccfbf1' }}>
+              <div style={{ ...styles.formGroup, backgroundColor: 'var(--color-background-secondary)', padding: '16px', borderRadius: '12px', border: '1px solid #ccfbf1' }}>
                 <label style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer' }}>
                   <input
                     type="checkbox"
@@ -740,9 +740,9 @@ const CreateExam = () => {
                         style={{
                           padding: '4px 10px',
                           fontSize: '12px',
-                          backgroundColor: formData.department === course ? '#0d9488' : '#f1f5f9',
-                          color: formData.department === course ? 'white' : '#475569',
-                          border: '1px solid #e2e8f0',
+                          backgroundColor: formData.department === course ? '#0d9488' : 'var(--color-background-secondary)',
+                          color: formData.department === course ? 'white' : 'var(--color-text-secondary)',
+                          border: '1px solid var(--color-border)',
                           borderRadius: '6px',
                           cursor: 'pointer'
                         }}
@@ -838,7 +838,7 @@ const CreateExam = () => {
 
               {formData.startType === 'now' && (
                 <div style={{
-                  backgroundColor: '#dbeafe',
+                  backgroundColor: 'var(--color-border)',
                   padding: '16px',
                   borderRadius: '12px',
                   marginTop: '16px',
@@ -869,7 +869,7 @@ const CreateExam = () => {
                         onClick={() => handleChange('duration', minutes)}
                         style={{
                           padding: '8px 16px',
-                          backgroundColor: formData.duration === minutes ? '#3b82f6' : '#e0e7ff',
+                          backgroundColor: formData.duration === minutes ? '#3b82f6' : 'var(--color-primary-light)',
                           color: formData.duration === minutes ? 'white' : '#3b82f6',
                           border: 'none',
                           borderRadius: '8px',
@@ -921,14 +921,14 @@ const CreateExam = () => {
             <div>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
                 <div>
-                  <h3 style={{ fontSize: '16px', fontWeight: '600', color: '#1e293b' }}>Sorular ({formData.questions.length})</h3>
-                  <p style={{ fontSize: '13px', color: '#64748b' }}>Sınav için sorularınızı bu alanda hazırlayın.</p>
+                  <h3 style={{ fontSize: '16px', fontWeight: '600', color: 'var(--color-text-primary)' }}>Sorular ({formData.questions.length})</h3>
+                  <p style={{ fontSize: '13px', color: 'var(--color-text-muted)' }}>Sınav için sorularınızı bu alanda hazırlayın.</p>
                 </div>
                 <div style={{ display: 'flex', gap: '12px' }}>
                   <button
                     type="button"
                     onClick={downloadSampleJSON}
-                    style={{ ...styles.button('ghost'), color: '#64748b', borderColor: '#e2e8f0', padding: '8px 12px' }}
+                    style={{ ...styles.button('ghost'), color: 'var(--color-text-muted)', borderColor: 'var(--color-border)', padding: '8px 12px' }}
                     title="Örnek JSON İndir"
                   >
                     <Download size={16} />
@@ -971,11 +971,11 @@ const CreateExam = () => {
                       }}>
                         {idx + 1}
                       </span>
-                      <span style={{ fontWeight: '600', color: '#334155' }}>Soru Metni</span>
+                      <span style={{ fontWeight: '600', color: 'var(--color-foreground-secondary)' }}>Soru Metni</span>
                     </div>
                     <div style={{ display: 'flex', gap: '8px' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginRight: '12px' }}>
-                        <span style={{ fontSize: '12px', color: '#64748b' }}>Puan:</span>
+                        <span style={{ fontSize: '12px', color: 'var(--color-text-muted)' }}>Puan:</span>
                         <input
                           type="number"
                           value={q.points}
@@ -1015,7 +1015,7 @@ const CreateExam = () => {
                               display: 'flex',
                               alignItems: 'center',
                               justifyContent: 'center',
-                              backgroundColor: q.correctIndex === oIdx ? '#10b981' : '#f1f5f9',
+                              backgroundColor: q.correctIndex === oIdx ? '#10b981' : 'var(--color-background-secondary)',
                               color: q.correctIndex === oIdx ? 'white' : '#94a3b8',
                               border: q.correctIndex === oIdx ? 'none' : '1px solid #e2e8f0',
                               cursor: 'pointer'
@@ -1055,9 +1055,9 @@ const CreateExam = () => {
               ))}
 
               <div style={{
-                backgroundColor: '#f8fafc',
+                backgroundColor: 'var(--color-background)',
                 padding: '16px',
-                border: '1px dashed #cbd5e1',
+                border: '1px dashed var(--color-border-dark)',
                 textAlign: 'center'
               }}>
                 <button
@@ -1075,8 +1075,8 @@ const CreateExam = () => {
 
         return (
           <div>
-            <div style={{ backgroundColor: '#f8fafc', padding: '20px', borderRadius: '12px', border: '1px solid #e2e8f0', marginBottom: '24px' }}>
-              <h4 style={{ fontSize: '15px', fontWeight: '600', color: '#1e293b', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div style={{ backgroundColor: 'var(--color-background)', padding: '20px', borderRadius: '12px', border: '1px solid var(--color-border)', marginBottom: '24px' }}>
+              <h4 style={{ fontSize: '15px', fontWeight: '600', color: 'var(--color-text-primary)', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <FileText size={16} color="#0d9488" />
                 Soru İçeriği (İsteğe Bağlı)
               </h4>
@@ -1108,7 +1108,7 @@ const CreateExam = () => {
               </div>
             </div>
 
-            <div style={{ backgroundColor: '#f0fdfa', padding: '16px', borderRadius: '12px', border: '1px solid #ccfbf1', marginBottom: '24px' }}>
+            <div style={{ backgroundColor: 'var(--color-background-secondary)', padding: '16px', borderRadius: '12px', border: '1px solid #ccfbf1', marginBottom: '24px' }}>
               <label style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer' }}>
                 <input
                   type="checkbox"
@@ -1144,7 +1144,7 @@ const CreateExam = () => {
                           }}
                           style={styles.checkbox}
                         />
-                        <span style={{ color: '#1e293b', fontWeight: '500' }}>{format.label}</span>
+                        <span style={{ color: 'var(--color-text-primary)', fontWeight: '500' }}>{format.label}</span>
                       </label>
                     ))}
                   </div>
@@ -1272,10 +1272,10 @@ const CreateExam = () => {
                       style={{
                         padding: '4px 8px',
                         fontSize: '12px',
-                        background: '#f1f5f9',
-                        border: '1px solid #e2e8f0',
+                        background: 'var(--color-background-secondary)',
+                        border: '1px solid var(--color-border)',
                         borderRadius: '6px',
-                        color: '#475569',
+                        color: 'var(--color-text-secondary)',
                         cursor: 'pointer'
                       }}
                     >
@@ -1287,10 +1287,10 @@ const CreateExam = () => {
                       style={{
                         padding: '4px 8px',
                         fontSize: '12px',
-                        background: '#f1f5f9',
-                        border: '1px solid #e2e8f0',
+                        background: 'var(--color-background-secondary)',
+                        border: '1px solid var(--color-border)',
                         borderRadius: '6px',
-                        color: '#475569',
+                        color: 'var(--color-text-secondary)',
                         cursor: 'pointer'
                       }}
                     >
@@ -1317,7 +1317,7 @@ const CreateExam = () => {
                           }}
                           style={styles.checkbox}
                         />
-                        <span style={{ color: '#1e293b', fontWeight: '500' }}>{className}</span>
+                        <span style={{ color: 'var(--color-text-primary)', fontWeight: '500' }}>{className}</span>
                       </label>
                     );
                   })}
@@ -1365,10 +1365,10 @@ const CreateExam = () => {
                     style={{
                       padding: '4px 8px',
                       fontSize: '12px',
-                      background: '#f1f5f9',
-                      border: '1px solid #e2e8f0',
+                      background: 'var(--color-background-secondary)',
+                      border: '1px solid var(--color-border)',
                       borderRadius: '6px',
-                      color: '#475569',
+                      color: 'var(--color-text-secondary)',
                       cursor: 'pointer'
                     }}
                   >
@@ -1381,7 +1381,7 @@ const CreateExam = () => {
                 <div style={{ 
                   maxHeight: '300px', 
                   overflowY: 'auto', 
-                  border: '1px solid #e2e8f0', 
+                  border: '1px solid var(--color-border)', 
                   borderRadius: '12px',
                   padding: '8px'
                 }}>
@@ -1397,7 +1397,7 @@ const CreateExam = () => {
                           padding: '10px 12px',
                           borderRadius: '8px',
                           cursor: 'pointer',
-                          backgroundColor: formData.targetStudents.includes(student.id) ? '#f0fdfa' : 'transparent',
+                          backgroundColor: formData.targetStudents.includes(student.id) ? 'var(--color-background-secondary)' : 'transparent',
                           transition: 'all 0.2s',
                           borderBottom: '1px solid #f1f5f9'
                         }}
@@ -1414,8 +1414,8 @@ const CreateExam = () => {
                           style={styles.checkbox}
                         />
                         <div style={{ display: 'flex', flexDirection: 'column' }}>
-                          <span style={{ fontSize: '14px', fontWeight: '500', color: '#1e293b' }}>{student.fullName}</span>
-                          <span style={{ fontSize: '12px', color: '#64748b' }}>{student.studentNumber} • {student.className}</span>
+                          <span style={{ fontSize: '14px', fontWeight: '500', color: 'var(--color-text-primary)' }}>{student.fullName}</span>
+                          <span style={{ fontSize: '12px', color: 'var(--color-text-muted)' }}>{student.studentNumber} • {student.className}</span>
                         </div>
                       </label>
                     ))}
@@ -1435,7 +1435,7 @@ const CreateExam = () => {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
             {/* Güvenlik Ayarları */}
             <div>
-              <h4 style={{ fontSize: '15px', fontWeight: '600', color: '#1e293b', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <h4 style={{ fontSize: '15px', fontWeight: '600', color: 'var(--color-text-primary)', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <span style={{ color: '#ef4444' }}>🛡️</span>
                 Sınav Güvenliği (Anti-Cheat)
               </h4>
@@ -1454,12 +1454,12 @@ const CreateExam = () => {
                   </div>
                 </label>
               </div>
-              <hr style={{ borderTop: '1px solid #e2e8f0', margin: '24px 0' }} />
+              <hr style={{ borderTop: '1px solid var(--color-border)', margin: '24px 0' }} />
             </div>
 
             {/* Bildirim Ayarları */}
             <div>
-              <h4 style={{ fontSize: '15px', fontWeight: '600', color: '#1e293b', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <h4 style={{ fontSize: '15px', fontWeight: '600', color: 'var(--color-text-primary)', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <Bell size={16} color="#3b82f6" />
                 Bildirim Ayarları
               </h4>
@@ -1485,7 +1485,7 @@ const CreateExam = () => {
                       onChange={(e) => handleChange('notifyOnStart', e.target.checked)}
                       style={styles.checkbox}
                     />
-                    <span style={{ color: '#1e293b' }}>Sınav başladığında bildir</span>
+                    <span style={{ color: 'var(--color-text-primary)' }}>Sınav başladığında bildir</span>
                   </label>
 
                   <label style={{ ...styles.checkboxOption(formData.notifyBefore30), marginBottom: '12px' }}>
@@ -1495,7 +1495,7 @@ const CreateExam = () => {
                       onChange={(e) => handleChange('notifyBefore30', e.target.checked)}
                       style={styles.checkbox}
                     />
-                    <span style={{ color: '#1e293b' }}>30 dakika kala hatırlat</span>
+                    <span style={{ color: 'var(--color-text-primary)' }}>30 dakika kala hatırlat</span>
                   </label>
 
                   <label style={styles.checkboxOption(formData.notifyBefore5)}>
@@ -1505,7 +1505,7 @@ const CreateExam = () => {
                       onChange={(e) => handleChange('notifyBefore5', e.target.checked)}
                       style={styles.checkbox}
                     />
-                    <span style={{ color: '#1e293b' }}>5 dakika kala hatırlat</span>
+                    <span style={{ color: 'var(--color-text-primary)' }}>5 dakika kala hatırlat</span>
                   </label>
                 </div>
               )}
@@ -1548,7 +1548,7 @@ const CreateExam = () => {
                       <span>🚀 Hemen Başlıyor</span>
                       <span style={{
                         fontSize: '11px',
-                        backgroundColor: '#dbeafe',
+                        backgroundColor: 'var(--color-border)',
                         color: '#1e40af',
                         padding: '2px 8px',
                         borderRadius: '12px',

@@ -33,12 +33,12 @@ const styles = {
   title: {
     fontSize: '24px',
     fontWeight: '700',
-    color: '#1e293b',
+    color: 'var(--color-text-primary)',
     margin: 0
   },
   subtitle: {
     fontSize: '14px',
-    color: '#64748b',
+    color: 'var(--color-text-muted)',
     marginTop: '4px'
   },
   statsGrid: {
@@ -48,7 +48,7 @@ const styles = {
   },
   statCard: (isActive) => ({
     padding: '12px',
-    backgroundColor: isActive ? '#f0fdfa' : '#ffffff',
+    backgroundColor: isActive ? 'var(--color-background-secondary)' : '#ffffff',
     border: isActive ? '2px solid #0d9488' : '1px solid #e2e8f0',
     borderRadius: '10px',
     cursor: 'pointer',
@@ -57,15 +57,15 @@ const styles = {
   statValue: {
     fontSize: '18px',
     fontWeight: '700',
-    color: '#1e293b'
+    color: 'var(--color-text-primary)'
   },
   statLabel: {
     fontSize: '13px',
-    color: '#64748b'
+    color: 'var(--color-text-muted)'
   },
   filterCard: {
-    backgroundColor: '#ffffff',
-    border: '1px solid #e2e8f0',
+    backgroundColor: 'var(--color-surface)',
+    border: '1px solid var(--color-border)',
     borderRadius: '12px',
     padding: '16px'
   },
@@ -81,17 +81,17 @@ const styles = {
     maxWidth: '300px'
   },
   select: {
-    backgroundColor: '#f8fafc',
-    border: '1px solid #e2e8f0',
+    backgroundColor: 'var(--color-background)',
+    border: '1px solid var(--color-border)',
     borderRadius: '8px',
     padding: '8px 12px',
     fontSize: '14px',
-    color: '#1e293b',
+    color: 'var(--color-text-primary)',
     cursor: 'pointer'
   },
   emptyState: {
-    backgroundColor: '#ffffff',
-    border: '1px solid #e2e8f0',
+    backgroundColor: 'var(--color-surface)',
+    border: '1px solid var(--color-border)',
     borderRadius: '12px',
     padding: '48px',
     textAlign: 'center'
@@ -105,15 +105,15 @@ const styles = {
   emptyTitle: {
     fontSize: '18px',
     fontWeight: '600',
-    color: '#1e293b',
+    color: 'var(--color-text-primary)',
     marginBottom: '8px'
   },
   emptyText: {
-    color: '#64748b'
+    color: 'var(--color-text-muted)'
   },
   tableCard: {
-    backgroundColor: '#ffffff',
-    border: '1px solid #e2e8f0',
+    backgroundColor: 'var(--color-surface)',
+    border: '1px solid var(--color-border)',
     borderRadius: '12px',
     overflow: 'hidden'
   },
@@ -122,22 +122,22 @@ const styles = {
     borderCollapse: 'collapse'
   },
   tableHead: {
-    backgroundColor: '#f8fafc',
-    borderBottom: '1px solid #e2e8f0'
+    backgroundColor: 'var(--color-background)',
+    borderBottom: '1px solid var(--color-border)'
   },
   th: {
     textAlign: 'left',
     padding: '12px 16px',
     fontSize: '13px',
     fontWeight: '600',
-    color: '#64748b'
+    color: 'var(--color-text-muted)'
   },
   thRight: {
     textAlign: 'right',
     padding: '12px 16px',
     fontSize: '13px',
     fontWeight: '600',
-    color: '#64748b'
+    color: 'var(--color-text-muted)'
   },
   tr: {
     borderBottom: '1px solid #f1f5f9',
@@ -145,11 +145,11 @@ const styles = {
   },
   td: {
     padding: '12px 16px',
-    color: '#1e293b'
+    color: 'var(--color-text-primary)'
   },
   tdMuted: {
     padding: '12px 16px',
-    color: '#64748b',
+    color: 'var(--color-text-muted)',
     fontSize: '14px'
   },
   tdRight: {
@@ -160,7 +160,7 @@ const styles = {
     width: '36px',
     height: '36px',
     borderRadius: '10px',
-    backgroundColor: '#f0fdfa',
+    backgroundColor: 'var(--color-background-secondary)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -173,10 +173,10 @@ const styles = {
   },
   studentName: {
     fontWeight: '600',
-    color: '#1e293b'
+    color: 'var(--color-text-primary)'
   },
   expandedRow: {
-    backgroundColor: '#f8fafc',
+    backgroundColor: 'var(--color-background)',
     padding: '16px 32px'
   },
   expandedGrid: {
@@ -187,7 +187,7 @@ const styles = {
   expandedLabel: {
     fontSize: '13px',
     fontWeight: '500',
-    color: '#64748b',
+    color: 'var(--color-text-muted)',
     marginBottom: '8px'
   },
   expandedValue: {
@@ -195,12 +195,12 @@ const styles = {
     alignItems: 'center',
     gap: '8px',
     padding: '8px 12px',
-    backgroundColor: '#ffffff',
+    backgroundColor: 'var(--color-surface)',
     borderRadius: '8px',
-    border: '1px solid #e2e8f0',
+    border: '1px solid var(--color-border)',
     fontSize: '13px',
     fontFamily: 'monospace',
-    color: '#1e293b'
+    color: 'var(--color-text-primary)'
   },
   gradeSuccess: {
     fontWeight: '700',
@@ -228,7 +228,7 @@ const styles = {
     width: '64px',
     height: '64px',
     borderRadius: '16px',
-    backgroundColor: '#f0fdfa',
+    backgroundColor: 'var(--color-background-secondary)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -237,7 +237,7 @@ const styles = {
   modalName: {
     fontSize: '20px',
     fontWeight: '600',
-    color: '#1e293b'
+    color: 'var(--color-text-primary)'
   },
   modalInfo: {
     display: 'flex',
@@ -252,7 +252,7 @@ const styles = {
   },
   detailCard: {
     padding: '16px',
-    backgroundColor: '#f8fafc',
+    backgroundColor: 'var(--color-background)',
     borderRadius: '12px'
   },
   detailLabel: {
@@ -260,13 +260,13 @@ const styles = {
     alignItems: 'center',
     gap: '8px',
     fontSize: '13px',
-    color: '#64748b',
+    color: 'var(--color-text-muted)',
     marginBottom: '8px'
   },
   detailValue: {
     fontSize: '14px',
     fontWeight: '500',
-    color: '#1e293b',
+    color: 'var(--color-text-primary)',
     wordBreak: 'break-all',
     fontFamily: 'monospace'
   },
@@ -277,18 +277,18 @@ const styles = {
   },
   statBox: {
     padding: '16px',
-    backgroundColor: '#f8fafc',
+    backgroundColor: 'var(--color-background)',
     borderRadius: '12px',
     textAlign: 'center'
   },
   statBoxValue: {
     fontSize: '24px',
     fontWeight: '700',
-    color: '#1e293b'
+    color: 'var(--color-text-primary)'
   },
   statBoxLabel: {
     fontSize: '13px',
-    color: '#64748b',
+    color: 'var(--color-text-muted)',
     marginTop: '4px'
   },
   ipList: {
@@ -301,22 +301,22 @@ const styles = {
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: '8px 12px',
-    backgroundColor: '#f8fafc',
+    backgroundColor: 'var(--color-background)',
     borderRadius: '8px'
   },
   ipAddress: {
     fontFamily: 'monospace',
     fontSize: '13px',
-    color: '#1e293b'
+    color: 'var(--color-text-primary)'
   },
   ipDate: {
     fontSize: '12px',
-    color: '#64748b'
+    color: 'var(--color-text-muted)'
   },
   sectionTitle: {
     fontSize: '14px',
     fontWeight: '500',
-    color: '#64748b',
+    color: 'var(--color-text-muted)',
     marginBottom: '12px'
   }
 };
@@ -697,7 +697,7 @@ const StudentList = () => {
               onClick={() => setClassFilter(classFilter === stat.name ? 'all' : stat.name)}
               onMouseEnter={(e) => {
                 if (classFilter !== stat.name) {
-                  e.currentTarget.style.backgroundColor = '#f8fafc';
+                  e.currentTarget.style.backgroundColor = 'var(--color-background)';
                 }
               }}
               onMouseLeave={(e) => {
@@ -724,7 +724,7 @@ const StudentList = () => {
               />
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Filter size={16} style={{ color: '#64748b' }} />
+              <Filter size={16} style={{ color: 'var(--color-text-muted)' }} />
               <select
                 style={styles.select}
                 value={classFilter}
@@ -790,7 +790,7 @@ const StudentList = () => {
                       <React.Fragment key={student.id}>
                         <tr
                           style={styles.tr}
-                          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f8fafc'}
+                          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--color-background)'}
                           onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
                         >
                           <td style={styles.td}>
@@ -820,7 +820,7 @@ const StudentList = () => {
                           </td>
                           <td style={styles.td}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                              <span style={{ fontWeight: '600', color: '#1e293b' }}>{stats.totalSubmissions}</span>
+                              <span style={{ fontWeight: '600', color: 'var(--color-text-primary)' }}>{stats.totalSubmissions}</span>
                               {stats.lateSubmissions > 0 && (
                                 <Badge variant="danger" size="sm">{stats.lateSubmissions} geç</Badge>
                               )}
@@ -857,7 +857,7 @@ const StudentList = () => {
 
                         {/* Expanded Row */}
                         {isExpanded && (
-                          <tr key={`${student.id}-expanded`} style={{ backgroundColor: '#f8fafc' }}>
+                          <tr key={`${student.id}-expanded`} style={{ backgroundColor: 'var(--color-background)' }}>
                             <td colSpan="8" style={styles.expandedRow}>
                               <div style={styles.expandedGrid}>
                                 <div>
@@ -869,7 +869,7 @@ const StudentList = () => {
                                 </div>
                                 <div>
                                   <h4 style={styles.expandedLabel}>Kayıt Bilgileri</h4>
-                                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#64748b', fontSize: '14px' }}>
+                                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--color-text-muted)', fontSize: '14px' }}>
                                     <Calendar size={16} />
                                     <span>Kayıt: {formatDate(student.createdAt)}</span>
                                   </div>
@@ -1048,16 +1048,16 @@ const StudentList = () => {
               <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                 {/* Detaylı İstatistikler */}
                 <div style={{
-                  backgroundColor: 'white',
+                  backgroundColor: 'var(--color-surface)',
                   borderRadius: '20px',
                   padding: '28px',
-                  border: '1px solid #e2e8f0',
+                  border: '1px solid var(--color-border)',
                   boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)'
                 }}>
                   <h3 style={{
                     fontSize: '18px',
                     fontWeight: '700',
-                    color: '#1e293b',
+                    color: 'var(--color-text-primary)',
                     margin: '0 0 20px 0',
                     display: 'flex',
                     alignItems: 'center',
@@ -1081,7 +1081,7 @@ const StudentList = () => {
                           <p style={{ fontSize: '32px', fontWeight: '700', color: '#0f172a', margin: '8px 0 4px' }}>
                             {stats.totalSubmissions}
                           </p>
-                          <p style={{ fontSize: '12px', color: '#64748b', fontWeight: '600', margin: 0 }}>TOPLAM GÖNDERİM</p>
+                          <p style={{ fontSize: '12px', color: 'var(--color-text-muted)', fontWeight: '600', margin: 0 }}>TOPLAM GÖNDERİM</p>
                         </div>
                         <div style={{
                           padding: '20px',
@@ -1094,7 +1094,7 @@ const StudentList = () => {
                           <p style={{ fontSize: '32px', fontWeight: '700', color: '#0f172a', margin: '8px 0 4px' }}>
                             {stats.averageGrade !== null ? stats.averageGrade : '-'}
                           </p>
-                          <p style={{ fontSize: '12px', color: '#64748b', fontWeight: '600', margin: 0 }}>ORTALAMA NOT</p>
+                          <p style={{ fontSize: '12px', color: 'var(--color-text-muted)', fontWeight: '600', margin: 0 }}>ORTALAMA NOT</p>
                         </div>
                         <div style={{
                           padding: '20px',
@@ -1107,7 +1107,7 @@ const StudentList = () => {
                           <p style={{ fontSize: '32px', fontWeight: '700', color: '#0f172a', margin: '8px 0 4px' }}>
                             {stats.lateSubmissions}
                           </p>
-                          <p style={{ fontSize: '12px', color: '#64748b', fontWeight: '600', margin: 0 }}>GEÇ GÖNDERİM</p>
+                          <p style={{ fontSize: '12px', color: 'var(--color-text-muted)', fontWeight: '600', margin: 0 }}>GEÇ GÖNDERİM</p>
                         </div>
                       </div>
                     );
@@ -1116,10 +1116,10 @@ const StudentList = () => {
 
                 {/* Şifre Yönetimi */}
                 <div style={{
-                  backgroundColor: 'white',
+                  backgroundColor: 'var(--color-surface)',
                   borderRadius: '20px',
                   padding: '24px',
-                  border: '1px solid #e2e8f0',
+                  border: '1px solid var(--color-border)',
                   boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)'
                 }}>
                   <div style={{
@@ -1142,10 +1142,10 @@ const StudentList = () => {
                         <Lock size={24} style={{ color: '#f59e0b' }} />
                       </div>
                       <div>
-                        <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#1e293b', margin: 0 }}>
+                        <h3 style={{ fontSize: '16px', fontWeight: '700', color: 'var(--color-text-primary)', margin: 0 }}>
                           Şifre Yönetimi
                         </h3>
-                        <p style={{ fontSize: '13px', color: '#64748b', margin: '2px 0 0' }}>
+                        <p style={{ fontSize: '13px', color: 'var(--color-text-muted)', margin: '2px 0 0' }}>
                           Öğrenci şifresini güncelle veya şifre değiştirme modunu aktif et
                         </p>
                       </div>
@@ -1156,7 +1156,7 @@ const StudentList = () => {
                         <button
                           onClick={handleEnableIndividualPasswordChangeMode}
                           style={{
-                            backgroundColor: '#eff6ff',
+                            backgroundColor: 'var(--color-background-secondary)',
                             color: '#2563eb',
                             border: '1px solid #bfdbfe',
                             borderRadius: '12px',
@@ -1173,11 +1173,11 @@ const StudentList = () => {
                             textAlign: 'center'
                           }}
                           onMouseEnter={(e) => {
-                            e.target.style.backgroundColor = '#dbeafe';
+                            e.target.style.backgroundColor = 'var(--color-border)';
                             e.target.style.borderColor = '#93c5fd';
                           }}
                           onMouseLeave={(e) => {
-                            e.target.style.backgroundColor = '#eff6ff';
+                            e.target.style.backgroundColor = 'var(--color-background-secondary)';
                             e.target.style.borderColor = '#bfdbfe';
                           }}
                         >
@@ -1231,7 +1231,7 @@ const StudentList = () => {
                           <label style={{
                             fontSize: '13px',
                             fontWeight: '600',
-                            color: '#64748b',
+                            color: 'var(--color-text-muted)',
                             display: 'block',
                             marginBottom: '8px'
                           }}>
@@ -1248,7 +1248,7 @@ const StudentList = () => {
                           <label style={{
                             fontSize: '13px',
                             fontWeight: '600',
-                            color: '#64748b',
+                            color: 'var(--color-text-muted)',
                             display: 'block',
                             marginBottom: '8px'
                           }}>
@@ -1295,9 +1295,9 @@ const StudentList = () => {
                           }}
                           style={{
                             flex: 1,
-                            backgroundColor: '#f1f5f9',
-                            color: '#64748b',
-                            border: '1px solid #e2e8f0',
+                            backgroundColor: 'var(--color-background-secondary)',
+                            color: 'var(--color-text-muted)',
+                            border: '1px solid var(--color-border)',
                             borderRadius: '12px',
                             padding: '12px',
                             fontSize: '14px',
@@ -1310,12 +1310,12 @@ const StudentList = () => {
                             transition: 'all 0.2s'
                           }}
                           onMouseEnter={(e) => {
-                            e.target.style.backgroundColor = '#e2e8f0';
-                            e.target.style.color = '#1e293b';
+                            e.target.style.backgroundColor = 'var(--color-border)';
+                            e.target.style.color = 'var(--color-text-primary)';
                           }}
                           onMouseLeave={(e) => {
-                            e.target.style.backgroundColor = '#f1f5f9';
-                            e.target.style.color = '#64748b';
+                            e.target.style.backgroundColor = 'var(--color-background-secondary)';
+                            e.target.style.color = 'var(--color-text-muted)';
                           }}
                         >
                           <X size={16} />
@@ -1329,16 +1329,16 @@ const StudentList = () => {
                 {/* IP Geçmişi */}
                 {selectedStudent.ipHistory && selectedStudent.ipHistory.length > 0 && (
                   <div style={{
-                    backgroundColor: 'white',
+                    backgroundColor: 'var(--color-surface)',
                     borderRadius: '20px',
                     padding: '28px',
-                    border: '1px solid #e2e8f0',
+                    border: '1px solid var(--color-border)',
                     boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)'
                   }}>
                     <h3 style={{
                       fontSize: '16px',
                       fontWeight: '700',
-                      color: '#1e293b',
+                      color: 'var(--color-text-primary)',
                       margin: '0 0 16px 0'
                     }}>
                       Son Giriş IP Adresleri
@@ -1350,9 +1350,9 @@ const StudentList = () => {
                           justifyContent: 'space-between',
                           alignItems: 'center',
                           padding: '12px 16px',
-                          backgroundColor: '#f8fafc',
+                          backgroundColor: 'var(--color-background)',
                           borderRadius: '12px',
-                          border: '1px solid #e2e8f0'
+                          border: '1px solid var(--color-border)'
                         }}>
                           <span style={{
                             fontFamily: 'monospace',
@@ -1364,7 +1364,7 @@ const StudentList = () => {
                           </span>
                           <span style={{
                             fontSize: '13px',
-                            color: '#64748b',
+                            color: 'var(--color-text-muted)',
                             fontWeight: '500'
                           }}>
                             {formatDate(ip.date)}
@@ -1379,10 +1379,10 @@ const StudentList = () => {
 
               {/* 3. Sütun - Zaman Çizelgesi (Loglar) */}
               <div style={{
-                backgroundColor: 'white',
+                backgroundColor: 'var(--color-surface)',
                 borderRadius: '20px',
                 padding: '24px',
-                border: '1px solid #e2e8f0',
+                border: '1px solid var(--color-border)',
                 boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)',
                 display: 'flex',
                 flexDirection: 'column'
@@ -1393,13 +1393,13 @@ const StudentList = () => {
                   gap: '10px',
                   marginBottom: '20px',
                   paddingBottom: '16px',
-                  borderBottom: '1px solid #e2e8f0'
+                  borderBottom: '1px solid var(--color-border)'
                 }}>
                   <Activity size={22} style={{ color: '#0d9488' }} />
                   <h3 style={{
                     fontSize: '18px',
                     fontWeight: '700',
-                    color: '#1e293b',
+                    color: 'var(--color-text-primary)',
                     margin: 0
                   }}>
                     Aktivite Geçmişi
@@ -1416,23 +1416,23 @@ const StudentList = () => {
                   maxHeight: '600px'
                 }}>
                   {loadingLogs ? (
-                    <div style={{ textAlign: 'center', padding: '20px', color: '#64748b' }}>
+                    <div style={{ textAlign: 'center', padding: '20px', color: 'var(--color-text-muted)' }}>
                       Yükleniyor...
                     </div>
                   ) : studentLogs.length === 0 ? (
-                    <div style={{ textAlign: 'center', padding: '20px', color: '#64748b', fontSize: '13px' }}>
+                    <div style={{ textAlign: 'center', padding: '20px', color: 'var(--color-text-muted)', fontSize: '13px' }}>
                       Henüz aktivite kaydı bulunmuyor.
                     </div>
                   ) : (
                     studentLogs.map((log, index) => {
                       let Icon = Clock;
-                      let iconColor = '#64748b';
-                      let bgColor = '#f1f5f9';
+                      let iconColor = 'var(--color-text-muted)';
+                      let bgColor = 'var(--color-background-secondary)';
 
                       if (log.type === 'login') {
                         Icon = LogIn;
                         iconColor = '#0ea5e9';
-                        bgColor = '#e0f2fe';
+                        bgColor = 'var(--color-border)';
                       } else if (log.type === 'submission' || log.type === 'submission_update') {
                         Icon = Upload;
                         iconColor = '#10b981';
@@ -1461,7 +1461,7 @@ const StudentList = () => {
                               left: '15px',
                               bottom: '-28px',
                               width: '2px',
-                              backgroundColor: '#e2e8f0'
+                              backgroundColor: 'var(--color-border)'
                             }} />
                           )}
 
@@ -1486,7 +1486,7 @@ const StudentList = () => {
                               <p style={{
                                 fontSize: '13px',
                                 fontWeight: '600',
-                                color: '#1e293b',
+                                color: 'var(--color-text-primary)',
                                 margin: 0
                               }}>
                                 {log.action}
@@ -1507,7 +1507,7 @@ const StudentList = () => {
                             </div>
                             <p style={{
                               fontSize: '12px',
-                              color: '#64748b',
+                              color: 'var(--color-text-muted)',
                               margin: 0,
                               lineHeight: '1.4'
                             }}>

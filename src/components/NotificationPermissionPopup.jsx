@@ -61,13 +61,13 @@ const NotificationPermissionPopup = () => {
       bottom: '24px',
       right: '24px',
       width: '360px',
-      backgroundColor: 'white',
+      backgroundColor: 'var(--color-surface)',
       borderRadius: '16px',
       boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)',
       padding: '20px',
       zIndex: 9999,
       animation: 'slideIn 0.3s ease-out',
-      border: '2px solid #e2e8f0'
+      border: '2px solid var(--color-border)'
     }}>
       <style>
         {`
@@ -111,8 +111,8 @@ const NotificationPermissionPopup = () => {
           transition: 'all 0.2s'
         }}
         onMouseEnter={(e) => {
-          e.currentTarget.style.backgroundColor = '#f1f5f9';
-          e.currentTarget.style.color = '#64748b';
+          e.currentTarget.style.backgroundColor = 'var(--color-background-secondary)';
+          e.currentTarget.style.color = 'var(--color-text-muted)';
         }}
         onMouseLeave={(e) => {
           e.currentTarget.style.backgroundColor = 'transparent';
@@ -126,7 +126,7 @@ const NotificationPermissionPopup = () => {
       <div style={{
         width: '56px',
         height: '56px',
-        backgroundColor: '#eff6ff',
+        backgroundColor: 'var(--color-background-secondary)',
         borderRadius: '16px',
         display: 'flex',
         alignItems: 'center',
@@ -141,7 +141,7 @@ const NotificationPermissionPopup = () => {
       <h3 style={{
         fontSize: '18px',
         fontWeight: '700',
-        color: '#1e293b',
+        color: 'var(--color-text-primary)',
         marginBottom: '8px',
         paddingRight: '24px'
       }}>
@@ -151,7 +151,7 @@ const NotificationPermissionPopup = () => {
       {/* Description */}
       <p style={{
         fontSize: '14px',
-        color: '#64748b',
+        color: 'var(--color-text-muted)',
         lineHeight: '1.6',
         marginBottom: '16px'
       }}>
@@ -198,8 +198,8 @@ const NotificationPermissionPopup = () => {
           onClick={handleDismiss}
           style={{
             padding: '12px 20px',
-            backgroundColor: '#f1f5f9',
-            color: '#64748b',
+            backgroundColor: 'var(--color-background-secondary)',
+            color: 'var(--color-text-muted)',
             border: 'none',
             borderRadius: '10px',
             fontSize: '14px',
@@ -208,10 +208,10 @@ const NotificationPermissionPopup = () => {
             transition: 'all 0.2s'
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = '#e2e8f0';
+            e.currentTarget.style.backgroundColor = 'var(--color-border)';
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = '#f1f5f9';
+            e.currentTarget.style.backgroundColor = 'var(--color-background-secondary)';
           }}
         >
           {t('later')}

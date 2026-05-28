@@ -228,7 +228,7 @@ const FileManager = () => {
             </button>
 
             <div style={styles.searchBox}>
-              <Search style={{ width: '16px', height: '16px', color: '#64748b' }} />
+              <Search style={{ width: '16px', height: '16px', color: 'var(--color-text-muted)' }} />
               <input
                 type="text"
                 placeholder="Dosya veya klasör ara..."
@@ -441,15 +441,15 @@ const FileManager = () => {
 const styles = {
   container: {
     padding: '24px',
-    backgroundColor: '#ffffff',
+    backgroundColor: 'var(--color-surface)',
     minHeight: '100vh'
   },
   header: {
-    backgroundColor: '#ffffff',
+    backgroundColor: 'var(--color-surface)',
     borderRadius: '12px',
     padding: '24px',
     marginBottom: '24px',
-    border: '1px solid #e2e8f0'
+    border: '1px solid var(--color-border)'
   },
   headerTop: {
     display: 'flex',
@@ -460,7 +460,7 @@ const styles = {
   title: {
     fontSize: '24px',
     fontWeight: '700',
-    color: '#1e293b',
+    color: 'var(--color-text-primary)',
     margin: 0
   },
   headerActions: {
@@ -473,7 +473,7 @@ const styles = {
     gap: '8px',
     padding: '10px 16px',
     backgroundColor: '#3b82f6',
-    color: '#ffffff',
+    color: 'var(--color-text-inverse, #fff)',
     border: 'none',
     borderRadius: '8px',
     fontSize: '14px',
@@ -490,11 +490,11 @@ const styles = {
   },
   breadcrumbBtn: {
     padding: '6px 12px',
-    backgroundColor: '#f1f5f9',
+    backgroundColor: 'var(--color-background-secondary)',
     border: 'none',
     borderRadius: '6px',
     fontSize: '14px',
-    color: '#475569',
+    color: 'var(--color-text-secondary)',
     cursor: 'pointer',
     transition: 'all 0.2s',
     display: 'flex',
@@ -511,11 +511,11 @@ const styles = {
     alignItems: 'center',
     gap: '6px',
     padding: '10px 16px',
-    backgroundColor: '#f1f5f9',
+    backgroundColor: 'var(--color-background-secondary)',
     border: 'none',
     borderRadius: '8px',
     fontSize: '14px',
-    color: '#475569',
+    color: 'var(--color-text-secondary)',
     cursor: 'pointer',
     transition: 'all 0.2s'
   },
@@ -525,8 +525,8 @@ const styles = {
     alignItems: 'center',
     gap: '8px',
     padding: '10px 16px',
-    backgroundColor: '#f8fafc',
-    border: '1px solid #e2e8f0',
+    backgroundColor: 'var(--color-background)',
+    border: '1px solid var(--color-border)',
     borderRadius: '8px'
   },
   searchInput: {
@@ -539,7 +539,7 @@ const styles = {
   viewToggle: {
     display: 'flex',
     gap: '4px',
-    backgroundColor: '#f1f5f9',
+    backgroundColor: 'var(--color-background-secondary)',
     borderRadius: '8px',
     padding: '4px'
   },
@@ -548,32 +548,32 @@ const styles = {
     backgroundColor: 'transparent',
     border: 'none',
     borderRadius: '6px',
-    color: '#64748b',
+    color: 'var(--color-text-muted)',
     cursor: 'pointer',
     transition: 'all 0.2s',
     display: 'flex',
     alignItems: 'center'
   },
   viewBtnActive: {
-    backgroundColor: '#ffffff',
+    backgroundColor: 'var(--color-surface)',
     color: '#3b82f6'
   },
   content: {
-    backgroundColor: '#ffffff',
+    backgroundColor: 'var(--color-surface)',
     borderRadius: '12px',
     padding: '24px',
-    border: '1px solid #e2e8f0',
+    border: '1px solid var(--color-border)',
     minHeight: '500px'
   },
   loading: {
     textAlign: 'center',
     padding: '48px',
-    color: '#64748b'
+    color: 'var(--color-text-muted)'
   },
   empty: {
     textAlign: 'center',
     padding: '48px',
-    color: '#64748b',
+    color: 'var(--color-text-muted)',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center'
@@ -589,7 +589,7 @@ const styles = {
   },
   gridItem: {
     padding: '16px',
-    border: '1px solid #e2e8f0',
+    border: '1px solid var(--color-border)',
     borderRadius: '8px',
     cursor: 'pointer',
     transition: 'all 0.2s',
@@ -600,11 +600,11 @@ const styles = {
     marginBottom: '12px',
     display: 'flex',
     justifyContent: 'center',
-    color: '#64748b'
+    color: 'var(--color-text-muted)'
   },
   gridItemName: {
     fontSize: '14px',
-    color: '#1e293b',
+    color: 'var(--color-text-primary)',
     marginBottom: '4px',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
@@ -612,7 +612,7 @@ const styles = {
   },
   gridItemSize: {
     fontSize: '12px',
-    color: '#64748b'
+    color: 'var(--color-text-muted)'
   },
   gridItemActions: {
     display: 'flex',
@@ -630,12 +630,12 @@ const styles = {
     gridTemplateColumns: '1fr 120px 180px 120px',
     gap: '16px',
     padding: '12px 16px',
-    backgroundColor: '#f8fafc',
+    backgroundColor: 'var(--color-background)',
     borderRadius: '8px',
     marginBottom: '8px',
     fontSize: '14px',
     fontWeight: '600',
-    color: '#64748b'
+    color: 'var(--color-text-muted)'
   },
   listItem: {
     display: 'grid',
@@ -651,18 +651,18 @@ const styles = {
   listItemIcon: {
     display: 'inline-flex',
     marginRight: '8px',
-    color: '#64748b'
+    color: 'var(--color-text-muted)'
   },
   listColumnName: {
     display: 'flex',
     alignItems: 'center',
-    color: '#1e293b'
+    color: 'var(--color-text-primary)'
   },
   listColumnSize: {
-    color: '#64748b'
+    color: 'var(--color-text-muted)'
   },
   listColumnDate: {
-    color: '#64748b'
+    color: 'var(--color-text-muted)'
   },
   listColumnActions: {
     display: 'flex',
@@ -675,7 +675,7 @@ const styles = {
     border: 'none',
     borderRadius: '6px',
     cursor: 'pointer',
-    color: '#64748b',
+    color: 'var(--color-text-muted)',
     transition: 'all 0.2s',
     display: 'flex',
     alignItems: 'center'
@@ -693,7 +693,7 @@ const styles = {
     zIndex: 1000
   },
   modal: {
-    backgroundColor: '#ffffff',
+    backgroundColor: 'var(--color-surface)',
     borderRadius: '12px',
     padding: '24px',
     width: '400px',
@@ -702,13 +702,13 @@ const styles = {
   modalTitle: {
     fontSize: '18px',
     fontWeight: '600',
-    color: '#1e293b',
+    color: 'var(--color-text-primary)',
     marginBottom: '16px'
   },
   modalInput: {
     width: '100%',
     padding: '10px 12px',
-    border: '1px solid #e2e8f0',
+    border: '1px solid var(--color-border)',
     borderRadius: '8px',
     fontSize: '14px',
     marginBottom: '16px',
@@ -721,11 +721,11 @@ const styles = {
   },
   modalCancelBtn: {
     padding: '10px 16px',
-    backgroundColor: '#f1f5f9',
+    backgroundColor: 'var(--color-background-secondary)',
     border: 'none',
     borderRadius: '8px',
     fontSize: '14px',
-    color: '#475569',
+    color: 'var(--color-text-secondary)',
     cursor: 'pointer'
   },
   modalCreateBtn: {
@@ -734,11 +734,11 @@ const styles = {
     border: 'none',
     borderRadius: '8px',
     fontSize: '14px',
-    color: '#ffffff',
+    color: 'var(--color-text-inverse, #fff)',
     cursor: 'pointer'
   },
   previewModal: {
-    backgroundColor: '#ffffff',
+    backgroundColor: 'var(--color-surface)',
     borderRadius: '12px',
     width: '80%',
     maxWidth: '1200px',
@@ -751,19 +751,19 @@ const styles = {
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: '20px 24px',
-    borderBottom: '1px solid #e2e8f0'
+    borderBottom: '1px solid var(--color-border)'
   },
   previewTitle: {
     fontSize: '18px',
     fontWeight: '600',
-    color: '#1e293b',
+    color: 'var(--color-text-primary)',
     margin: 0
   },
   closeBtn: {
     fontSize: '32px',
     border: 'none',
     backgroundColor: 'transparent',
-    color: '#64748b',
+    color: 'var(--color-text-muted)',
     cursor: 'pointer',
     lineHeight: 1
   },
@@ -787,7 +787,7 @@ const styles = {
   },
   previewUnsupported: {
     textAlign: 'center',
-    color: '#64748b'
+    color: 'var(--color-text-muted)'
   },
   downloadBtn: {
     display: 'inline-flex',
@@ -795,7 +795,7 @@ const styles = {
     gap: '8px',
     padding: '10px 16px',
     backgroundColor: '#3b82f6',
-    color: '#ffffff',
+    color: 'var(--color-text-inverse, #fff)',
     border: 'none',
     borderRadius: '8px',
     fontSize: '14px',

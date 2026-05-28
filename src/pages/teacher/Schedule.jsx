@@ -225,51 +225,51 @@ const Schedule = () => {
       flexWrap: 'wrap',
       gap: '16px'
     },
-    title: { fontSize: '24px', fontWeight: '700', color: '#1e293b' },
+    title: { fontSize: '24px', fontWeight: '700', color: 'var(--color-text-primary)' },
     controls: { display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap' },
     select: {
       padding: '10px 16px',
-      border: '1px solid #e2e8f0',
+      border: '1px solid var(--color-border)',
       borderRadius: '8px',
       fontSize: '14px',
       fontWeight: '500',
-      backgroundColor: 'white',
+      backgroundColor: 'var(--color-surface)',
       cursor: 'pointer'
     },
     card: {
-      backgroundColor: 'white',
+      backgroundColor: 'var(--color-surface)',
       borderRadius: '16px',
       padding: '24px',
-      border: '1px solid #e2e8f0',
+      border: '1px solid var(--color-border)',
       boxShadow: '0 1px 3px rgba(0,0,0,0.08)'
     },
     table: {
       width: '100%',
       borderCollapse: 'collapse',
-      border: '2px solid #e2e8f0',
+      border: '2px solid var(--color-border)',
       borderRadius: '12px',
       overflow: 'hidden'
     },
     th: {
-      backgroundColor: '#f8fafc',
+      backgroundColor: 'var(--color-background)',
       padding: '14px 12px',
       textAlign: 'center',
       fontSize: '13px',
       fontWeight: '700',
-      color: '#475569',
-      border: '1px solid #e2e8f0',
+      color: 'var(--color-text-secondary)',
+      border: '1px solid var(--color-border)',
       textTransform: 'uppercase',
       letterSpacing: '0.5px'
     },
     td: {
       padding: '12px',
-      border: '1px solid #e2e8f0',
+      border: '1px solid var(--color-border)',
       textAlign: 'center',
       minHeight: '80px',
       verticalAlign: 'top'
     },
     lessonCard: {
-      backgroundColor: '#eff6ff',
+      backgroundColor: 'var(--color-background-secondary)',
       padding: '12px',
       borderRadius: '8px',
       border: '1px solid #bfdbfe',
@@ -283,7 +283,7 @@ const Schedule = () => {
     },
     lessonTeacher: {
       fontSize: '12px',
-      color: '#64748b',
+      color: 'var(--color-text-muted)',
       marginBottom: '4px'
     },
     lessonRoom: {
@@ -298,7 +298,7 @@ const Schedule = () => {
       justifyContent: 'center'
     },
     emptySlot: {
-      color: '#cbd5e1',
+      color: 'var(--color-border-dark)',
       fontSize: '13px',
       fontStyle: 'italic',
       padding: '20px'
@@ -312,7 +312,7 @@ const Schedule = () => {
     input: {
       width: '100%',
       padding: '10px 12px',
-      border: '1px solid #e2e8f0',
+      border: '1px solid var(--color-border)',
       borderRadius: '8px',
       fontSize: '14px',
       marginBottom: '16px'
@@ -321,7 +321,7 @@ const Schedule = () => {
       display: 'block',
       fontSize: '13px',
       fontWeight: '600',
-      color: '#475569',
+      color: 'var(--color-text-secondary)',
       marginBottom: '6px'
     }
   };
@@ -333,7 +333,7 @@ const Schedule = () => {
         <div style={styles.header}>
           <div>
             <h1 style={styles.title}>Ders Programı</h1>
-            <p style={{ color: '#64748b', fontSize: '14px', marginTop: '4px' }}>
+            <p style={{ color: 'var(--color-text-muted)', fontSize: '14px', marginTop: '4px' }}>
               Haftalık ders programını düzenleyin
             </p>
           </div>
@@ -374,7 +374,7 @@ const Schedule = () => {
                   <tr key={period}>
                     <td style={styles.td}>
                       <div style={styles.timeSlot}>{period}. Ders</div>
-                      <div style={{ fontSize: '12px', color: '#64748b', fontWeight: '500' }}>
+                      <div style={{ fontSize: '12px', color: 'var(--color-text-muted)', fontWeight: '500' }}>
                         {timeSlots[period]}
                       </div>
                     </td>
@@ -471,11 +471,11 @@ const Schedule = () => {
 
             {!editingSchedule && (
               <div style={{
-                backgroundColor: '#f8fafc',
+                backgroundColor: 'var(--color-background)',
                 padding: '16px',
                 borderRadius: '8px',
                 marginBottom: '16px',
-                border: '1px solid #e2e8f0'
+                border: '1px solid var(--color-border)'
               }}>
                 <label style={{
                   display: 'flex',
@@ -490,7 +490,7 @@ const Schedule = () => {
                     onChange={(e) => setBulkMode(e.target.checked)}
                     style={{ cursor: 'pointer' }}
                   />
-                  <span style={{ fontSize: '14px', fontWeight: '600', color: '#1e293b' }}>
+                  <span style={{ fontSize: '14px', fontWeight: '600', color: 'var(--color-text-primary)' }}>
                     🎯 Toplu Ekleme (Birden fazla saate aynı dersi ekle)
                   </span>
                 </label>

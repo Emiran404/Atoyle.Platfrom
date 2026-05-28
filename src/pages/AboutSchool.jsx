@@ -345,7 +345,7 @@ const AboutSchool = () => {
   ];
 
   return (
-    <div style={{ minHeight: '100vh', background: '#f8fafc', fontFamily: "'Lexend', sans-serif", color: '#1e293b' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--color-background)', fontFamily: "'Lexend', sans-serif", color: 'var(--color-text-primary)' }}>
       {isSetupRequired && <SystemSetupPopup />}
       
       <style>{`
@@ -370,27 +370,27 @@ const AboutSchool = () => {
               </div>
               <div style={{ display: 'flex', flexDirection: 'column' }}>
                 <span style={{ fontSize: '20px', fontWeight: '700', color: '#0f172a', letterSpacing: '-0.02em', lineHeight: 1 }}>Atölye<span style={{ color: '#2463eb' }}>.Platform</span></span>
-                <span style={{ fontSize: '10px', color: '#64748b', fontWeight: '500', letterSpacing: '0.05em', marginTop: '2px' }}>Developed by Emirhan Gök</span>
+                <span style={{ fontSize: '10px', color: 'var(--color-text-muted)', fontWeight: '500', letterSpacing: '0.05em', marginTop: '2px' }}>Developed by Emirhan Gök</span>
               </div>
             </div>
 
             <div className="hidden md:flex items-center gap-8">
-              <a onClick={() => navigate('/')} style={{ fontSize: '14px', fontWeight: '500', color: '#64748b', textDecoration: 'none', cursor: 'pointer' }}>{currentLang === 'TR' ? 'Ana Sayfa' : (currentLang === 'EN' ? 'Home' : (currentLang === 'DE' ? 'Startseite' : 'Главная'))}</a>
-              <a onClick={() => navigate('/lab-rules')} style={{ fontSize: '14px', fontWeight: '500', color: '#64748b', textDecoration: 'none', cursor: 'pointer' }}>{t.labRules}</a>
-              <a onClick={() => navigate('/dokumantasyon')} style={{ fontSize: '14px', fontWeight: '500', color: '#64748b', textDecoration: 'none', cursor: 'pointer' }}>{t.documentationLink}</a>
+              <a onClick={() => navigate('/')} style={{ fontSize: '14px', fontWeight: '500', color: 'var(--color-text-muted)', textDecoration: 'none', cursor: 'pointer' }}>{currentLang === 'TR' ? 'Ana Sayfa' : (currentLang === 'EN' ? 'Home' : (currentLang === 'DE' ? 'Startseite' : 'Главная'))}</a>
+              <a onClick={() => navigate('/lab-rules')} style={{ fontSize: '14px', fontWeight: '500', color: 'var(--color-text-muted)', textDecoration: 'none', cursor: 'pointer' }}>{t.labRules}</a>
+              <a onClick={() => navigate('/dokumantasyon')} style={{ fontSize: '14px', fontWeight: '500', color: 'var(--color-text-muted)', textDecoration: 'none', cursor: 'pointer' }}>{t.documentationLink}</a>
             </div>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
               <div style={{ position: 'relative' }}>
-                <button onClick={() => setShowLangMenu(!showLangMenu)} style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'white', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '8px 12px', cursor: 'pointer' }}>
-                  <Globe size={16} color="#64748b" />
-                  <span style={{ fontSize: '14px', fontWeight: '600', color: '#64748b' }}>{currentLang}</span>
-                  <ChevronDown size={14} color="#64748b" />
+                <button onClick={() => setShowLangMenu(!showLangMenu)} style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: '8px', padding: '8px 12px', cursor: 'pointer' }}>
+                  <Globe size={16} color='var(--color-text-muted)' />
+                  <span style={{ fontSize: '14px', fontWeight: '600', color: 'var(--color-text-muted)' }}>{currentLang}</span>
+                  <ChevronDown size={14} color='var(--color-text-muted)' />
                 </button>
                 {showLangMenu && (
-                  <div onMouseLeave={() => setShowLangMenu(false)} style={{ position: 'absolute', top: '100%', right: 0, marginTop: '8px', background: 'white', borderRadius: '12px', border: '1px solid #e2e8f0', boxShadow: '0 10px 25px rgba(0,0,0,0.1)', minWidth: '160px', zIndex: 100, padding: '8px' }}>
+                  <div onMouseLeave={() => setShowLangMenu(false)} style={{ position: 'absolute', top: '100%', right: 0, marginTop: '8px', background: 'var(--color-surface)', borderRadius: '12px', border: '1px solid var(--color-border)', boxShadow: '0 10px 25px rgba(0,0,0,0.1)', minWidth: '160px', zIndex: 100, padding: '8px' }}>
                     {languages.map(lang => (
-                      <button key={lang.code} onClick={() => { changeLanguage(lang.code.toLowerCase()); setCurrentLang(lang.code); setShowLangMenu(false); }} style={{ display: 'flex', width: '100%', padding: '10px 12px', borderRadius: '8px', border: 'none', background: currentLang === lang.code ? '#f1f5f9' : 'transparent', cursor: 'pointer', fontSize: '14px', textAlign: 'left', color: currentLang === lang.code ? '#2463eb' : '#64748b' }}>
+                      <button key={lang.code} onClick={() => { changeLanguage(lang.code.toLowerCase()); setCurrentLang(lang.code); setShowLangMenu(false); }} style={{ display: 'flex', width: '100%', padding: '10px 12px', borderRadius: '8px', border: 'none', background: currentLang === lang.code ? 'var(--color-background-secondary)' : 'transparent', cursor: 'pointer', fontSize: '14px', textAlign: 'left', color: currentLang === lang.code ? '#2463eb' : 'var(--color-text-muted)' }}>
                         {lang.name}
                       </button>
                     ))}
@@ -416,7 +416,7 @@ const AboutSchool = () => {
             <h1 style={{ fontSize: '48px', fontWeight: '900', color: '#0f172a', marginBottom: '20px', letterSpacing: '-0.03em' }}>
               {t.title}
             </h1>
-            <p style={{ fontSize: '18px', color: '#64748b', maxWidth: '700px', margin: '0 auto', lineHeight: '1.6' }}>
+            <p style={{ fontSize: '18px', color: 'var(--color-text-muted)', maxWidth: '700px', margin: '0 auto', lineHeight: '1.6' }}>
               {t.subtitle}
             </p>
           </div>
@@ -436,7 +436,7 @@ const AboutSchool = () => {
                       <Icon size={24} />
                     </div>
                     <div style={{ fontSize: '28px', fontWeight: '800', color: '#0f172a', marginBottom: '4px' }}>{stat.value}</div>
-                    <div style={{ fontSize: '14px', fontWeight: '600', color: '#64748b' }}>{stat.label}</div>
+                    <div style={{ fontSize: '14px', fontWeight: '600', color: 'var(--color-text-muted)' }}>{stat.label}</div>
                   </div>
                 );
               })}
@@ -456,14 +456,14 @@ const AboutSchool = () => {
                 
                 <div style={{ marginBottom: '40px' }}>
                   <h3 style={{ fontSize: '18px', fontWeight: '800', color: '#2463eb', marginBottom: '12px' }}>{t.vision}</h3>
-                  <p style={{ fontSize: '16px', color: '#475569', lineHeight: '1.7' }}>
+                  <p style={{ fontSize: '16px', color: 'var(--color-text-secondary)', lineHeight: '1.7' }}>
                     {t.visionText}
                   </p>
                 </div>
                 
                 <div>
                   <h3 style={{ fontSize: '18px', fontWeight: '800', color: '#7c3aed', marginBottom: '12px' }}>{t.mission}</h3>
-                  <p style={{ fontSize: '16px', color: '#475569', lineHeight: '1.7' }}>
+                  <p style={{ fontSize: '16px', color: 'var(--color-text-secondary)', lineHeight: '1.7' }}>
                     {t.missionText}
                   </p>
                 </div>
@@ -481,7 +481,7 @@ const AboutSchool = () => {
                     <div key={idx} className="achievement-item">
                       <div style={{ fontSize: '14px', fontWeight: '800', color: '#2463eb', marginBottom: '4px' }}>{item.year}</div>
                       <div style={{ fontSize: '18px', fontWeight: '700', color: '#0f172a', marginBottom: '6px' }}>{item.title}</div>
-                      <div style={{ fontSize: '15px', color: '#64748b', lineHeight: '1.5' }}>{item.desc}</div>
+                      <div style={{ fontSize: '15px', color: 'var(--color-text-muted)', lineHeight: '1.5' }}>{item.desc}</div>
                     </div>
                   ))}
                 </div>
@@ -552,7 +552,7 @@ const AboutSchool = () => {
             <div className="flex flex-col items-center text-center col-span-1 lg:col-span-1">
               <div style={{ position: 'relative', marginBottom: '24px' }}>
                 <div style={{ position: 'absolute', inset: '-16px', background: 'rgba(255,255,255,0.2)', borderRadius: '50%', filter: 'blur(20px)', opacity: 0.3 }} />
-                <div style={{ width: '112px', height: '112px', borderRadius: '50%', overflow: 'hidden', border: '2px solid rgba(255,255,255,0.2)', boxShadow: '0 20px 40px rgba(0,0,0,0.3)', position: 'relative', background: '#1e293b' }}>
+                <div style={{ width: '112px', height: '112px', borderRadius: '50%', overflow: 'hidden', border: '2px solid rgba(255,255,255,0.2)', boxShadow: '0 20px 40px rgba(0,0,0,0.3)', position: 'relative', background: 'var(--color-text-primary)' }}>
                   <img src="/ataturk.png" alt="Mustafa Kemal Atatürk" style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'grayscale(1) contrast(1.25)' }} />
                 </div>
               </div>
@@ -561,7 +561,7 @@ const AboutSchool = () => {
                 <span style={{ color: '#fca5a5' }}>{t.ataturkQuote2}</span>"
               </h2>
               <div style={{ height: '1px', width: '48px', background: 'rgba(239,68,68,0.5)', marginBottom: '12px' }} />
-              <p style={{ color: '#cbd5e1', fontWeight: 500, letterSpacing: '0.1em', fontSize: '12px', textTransform: 'uppercase', opacity: 0.8 }}>{t.ataturk}</p>
+              <p style={{ color: 'var(--color-border-dark)', fontWeight: 500, letterSpacing: '0.1em', fontSize: '12px', textTransform: 'uppercase', opacity: 0.8 }}>{t.ataturk}</p>
             </div>
 
             {/* Other Columns */}
@@ -571,17 +571,17 @@ const AboutSchool = () => {
                   <h3 style={{ fontSize: '14px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#fca5a5', marginBottom: '16px' }}>{t.platform}</h3>
                   <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     <li>
-                      <a onClick={() => navigate('/ogrenci/giris')} style={{ color: '#cbd5e1', fontSize: '14px', textDecoration: 'none', transition: 'all 0.2s', display: 'inline-block', cursor: 'pointer' }}
+                      <a onClick={() => navigate('/ogrenci/giris')} style={{ color: 'var(--color-border-dark)', fontSize: '14px', textDecoration: 'none', transition: 'all 0.2s', display: 'inline-block', cursor: 'pointer' }}
                         onMouseEnter={(e) => { e.currentTarget.style.color = 'white'; e.currentTarget.style.textDecoration = 'underline'; e.currentTarget.style.textDecorationColor = '#ef4444'; }}
-                        onMouseLeave={(e) => { e.currentTarget.style.color = '#cbd5e1'; e.currentTarget.style.textDecoration = 'none'; }}
+                        onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--color-border-dark)'; e.currentTarget.style.textDecoration = 'none'; }}
                       >
                         {t.studentPortal}
                       </a>
                     </li>
                     <li>
-                      <a onClick={() => navigate('/ogretmen/giris')} style={{ color: '#cbd5e1', fontSize: '14px', textDecoration: 'none', transition: 'all 0.2s', display: 'inline-block', cursor: 'pointer' }}
+                      <a onClick={() => navigate('/ogretmen/giris')} style={{ color: 'var(--color-border-dark)', fontSize: '14px', textDecoration: 'none', transition: 'all 0.2s', display: 'inline-block', cursor: 'pointer' }}
                         onMouseEnter={(e) => { e.currentTarget.style.color = 'white'; e.currentTarget.style.textDecoration = 'underline'; e.currentTarget.style.textDecorationColor = '#ef4444'; }}
-                        onMouseLeave={(e) => { e.currentTarget.style.color = '#cbd5e1'; e.currentTarget.style.textDecoration = 'none'; }}
+                        onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--color-border-dark)'; e.currentTarget.style.textDecoration = 'none'; }}
                       >
                         {t.instructorPortal}
                       </a>
@@ -593,25 +593,25 @@ const AboutSchool = () => {
                   <h3 style={{ fontSize: '14px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#fca5a5', marginBottom: '16px' }}>{t.resources}</h3>
                   <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     <li>
-                      <a onClick={() => navigate('/lab-rules')} style={{ color: '#cbd5e1', fontSize: '14px', textDecoration: 'none', transition: 'all 0.2s', display: 'inline-block', cursor: 'pointer' }}
+                      <a onClick={() => navigate('/lab-rules')} style={{ color: 'var(--color-border-dark)', fontSize: '14px', textDecoration: 'none', transition: 'all 0.2s', display: 'inline-block', cursor: 'pointer' }}
                         onMouseEnter={(e) => { e.currentTarget.style.color = 'white'; e.currentTarget.style.textDecoration = 'underline'; e.currentTarget.style.textDecorationColor = '#ef4444'; }}
-                        onMouseLeave={(e) => { e.currentTarget.style.color = '#cbd5e1'; e.currentTarget.style.textDecoration = 'none'; }}
+                        onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--color-border-dark)'; e.currentTarget.style.textDecoration = 'none'; }}
                       >
                         {t.labRules}
                       </a>
                     </li>
                     <li>
-                      <a onClick={() => navigate('/dokumantasyon')} style={{ color: '#cbd5e1', fontSize: '14px', textDecoration: 'none', transition: 'all 0.2s', display: 'inline-block', cursor: 'pointer' }}
+                      <a onClick={() => navigate('/dokumantasyon')} style={{ color: 'var(--color-border-dark)', fontSize: '14px', textDecoration: 'none', transition: 'all 0.2s', display: 'inline-block', cursor: 'pointer' }}
                         onMouseEnter={(e) => { e.currentTarget.style.color = 'white'; e.currentTarget.style.textDecoration = 'underline'; e.currentTarget.style.textDecorationColor = '#ef4444'; }}
-                        onMouseLeave={(e) => { e.currentTarget.style.color = '#cbd5e1'; e.currentTarget.style.textDecoration = 'none'; }}
+                        onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--color-border-dark)'; e.currentTarget.style.textDecoration = 'none'; }}
                       >
                         {t.documentationLink}
                       </a>
                     </li>
                     <li>
-                      <a onClick={() => navigate('/sistem-durumu')} style={{ color: '#cbd5e1', fontSize: '14px', textDecoration: 'none', transition: 'all 0.2s', display: 'inline-block', cursor: 'pointer' }}
+                      <a onClick={() => navigate('/sistem-durumu')} style={{ color: 'var(--color-border-dark)', fontSize: '14px', textDecoration: 'none', transition: 'all 0.2s', display: 'inline-block', cursor: 'pointer' }}
                         onMouseEnter={(e) => { e.currentTarget.style.color = 'white'; e.currentTarget.style.textDecoration = 'underline'; e.currentTarget.style.textDecorationColor = '#ef4444'; }}
-                        onMouseLeave={(e) => { e.currentTarget.style.color = '#cbd5e1'; e.currentTarget.style.textDecoration = 'none'; }}
+                        onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--color-border-dark)'; e.currentTarget.style.textDecoration = 'none'; }}
                       >
                         {t.systemStatus}
                       </a>
@@ -622,15 +622,15 @@ const AboutSchool = () => {
                 <div>
                   <h3 style={{ fontSize: '14px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#fca5a5', marginBottom: '16px' }}>{t.contact}</h3>
                   <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', fontSize: '14px', color: '#cbd5e1' }}>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', fontSize: '14px', color: 'var(--color-border-dark)' }}>
                       <MapPin style={{ width: '18px', height: '18px', marginTop: '2px', flexShrink: 0, color: '#fca5a5' }} />
                       <span>Alanya MTAL<br />Antalya, Turkey</span>
                     </li>
                     <li style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px' }}>
                       <Mail style={{ width: '18px', height: '18px', color: '#fca5a5' }} />
-                      <a href="https://alanyamtal.meb.k12.tr/tema/iletisim.php" style={{ color: '#cbd5e1', textDecoration: 'none', transition: 'color 0.2s' }}
+                      <a href="https://alanyamtal.meb.k12.tr/tema/iletisim.php" style={{ color: 'var(--color-border-dark)', textDecoration: 'none', transition: 'color 0.2s' }}
                         onMouseEnter={(e) => e.currentTarget.style.color = 'white'}
-                        onMouseLeave={(e) => e.currentTarget.style.color = '#cbd5e1'}
+                        onMouseLeave={(e) => e.currentTarget.style.color = 'var(--color-border-dark)'}
                       >
                         alanyamtal.meb.k12.tr
                       </a>
@@ -671,7 +671,7 @@ const DetailItem = ({ icon: Icon, label, value }) => (
     </div>
     <div>
       <div style={{ fontSize: '12px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{label}</div>
-      <div style={{ fontSize: '15px', fontWeight: '600', color: '#334155' }}>{value}</div>
+      <div style={{ fontSize: '15px', fontWeight: '600', color: 'var(--color-foreground-secondary)' }}>{value}</div>
     </div>
   </div>
 );

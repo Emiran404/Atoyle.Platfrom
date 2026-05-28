@@ -1,14 +1,13 @@
-Atolye Platform v4.0.1 - Sürüm Açıklaması
+# Sürüm v4.0.2 - Hata Düzeltmeleri & İyileştirmeler 🚀
 
-Bu güncelleme, platformun kurulum ve dağıtım süreçlerini otomatikleştiren CI/CD altyapısını ve her ortamda çalışmayı sağlayan tam Docker desteğini içermektedir. Ayrıca önceki sürümdeki yüksek güvenlikli sınav modunu da (Kiosk) barındırmaktadır.
+## 🐞 Hata Düzeltmeleri (Bug Fixes)
+- Öğrenci tarafında karanlık tema kullanımındaki çeşitli arayüz bugları düzeltildi.
+- Bildirimlerde ve soru detaylarında görünürlüğü engelleyen arkaplan renk sorunları tamamen giderildi.
+- "Optik Formu Görüntüle" sayfasında optik alanının tamamen beyaz kalması sağlandı.
+- Öğrenci paneli "Ayarlar" sekmesindeki karanlık/aydınlık tema çevirilerinde yaşanan çoklu dil (Rusça, İngilizce vb.) desteği hatası düzeltildi.
 
-Hata Düzeltmeleri ve Yeni Özellikler:
-- CI/CD ve Otomasyon: GitHub Actions üzerinden otomatik derleme, test ve paketleme sistemi (.deb, .exe, .zip) kuruldu. Sürüm etiketlendiğinde dağıtım paketleri otomatik oluşturulur.
-- Docker Desteği: Uygulamanın bağımlılık sorunu olmadan (Node.js kurmadan) herhangi bir makinede çalıştırılabilmesi için Dockerfile ve docker-compose.yml yapılandırmaları eklendi.
-- Sınav Güvenliği (Anti-Cheat Entegrasyonu): Sınavlar için öğretmenler tarafından isteğe bağlı olarak aktifleştirilebilen yüksek güvenlikli Kiosk modu.
-- Sunucu Bağlantısı Arayüzü: Bağlantı koptuğunda beliren ekranın yüklenme ikonu sadeleştirildi, çakışan ekstra çizgiler kaldırıldı.
-- Çevrimdışı Kurulum: MEB internet kısıtlaması olan okullar için yerel zip paketi oluşturma desteği.
-- Akıllı Kurulum Betikleri: kurulum.sh ve kurulum.bat güncellenerek çevrimdışı paket algılama ve çalıştırma eklendi.
-- Kararlılık: JSON'dan SQLite'a ilk geçiş esnasında yaşanan veritabanı senkronizasyon hataları düzeltildi.
-
-descx: CI/CD otomasyonu, GitHub Releases entegrasyonu ve tam Docker desteği eklendi, sürüm 4.0.1 olarak güncellendi.
+## ✨ İyileştirmeler (Enhancements)
+- Karanlık mod renk paleti Visual Studio Code Dark Mode'un saf karanlık (Dark) tonlarına güncellenerek okunabilirlik artırıldı.
+- Sınav gönderim sistemi ana panel kartlarındaki ikonların ve tasarımların kontrastı yeni karanlık moda uygun hale getirildi.
+- **Sorun Bildir (Report Issue)** sayfasının maksimum boyutu (1600px'e) artırıldı ve detaylı sorun açıklaması (textarea) yüksekliği büyütüldü.
+- Dil değiştirici ikonlarının arkaplan uyumluluğu sağlandı.

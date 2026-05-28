@@ -365,26 +365,26 @@ const Quiz = () => {
             alignItems: 'center',
             justifyContent: 'space-between',
             padding: '20px',
-            backgroundColor: 'white',
+            backgroundColor: 'var(--color-surface)',
             borderRadius: '16px',
             boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
-            border: '1px solid #e2e8f0',
+            border: '1px solid var(--color-border)',
             position: 'sticky',
             top: '24px',
             zIndex: 10
         },
         quizCard: {
-            backgroundColor: 'white',
+            backgroundColor: 'var(--color-surface)',
             borderRadius: '24px',
             padding: '40px',
             boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)',
-            border: '1px solid #e2e8f0',
+            border: '1px solid var(--color-border)',
             flex: 1
         },
         questionText: {
             fontSize: '22px',
             fontWeight: '700',
-            color: '#1e293b',
+            color: 'var(--color-text-primary)',
             marginBottom: '32px',
             lineHeight: '1.4'
         },
@@ -399,9 +399,9 @@ const Quiz = () => {
             border: '2px solid',
             borderColor: isSelected
                 ? (isSubmitted ? (isCorrect ? '#10b981' : '#ef4444') : '#2463eb')
-                : '#e2e8f0',
+                : 'var(--color-border)',
             backgroundColor: isSelected
-                ? (isSubmitted ? (isCorrect ? '#f0fdf4' : '#fef2f2') : '#f8faff')
+                ? (isSubmitted ? (isCorrect ? 'var(--color-background-secondary)' : 'var(--color-background-secondary)') : '#f8faff')
                 : 'white',
             cursor: isSubmitted ? 'default' : 'pointer',
             transition: 'all 0.2s',
@@ -409,7 +409,7 @@ const Quiz = () => {
             alignItems: 'center',
             gap: '16px',
             fontWeight: isSelected ? '600' : '400',
-            color: isSelected ? '#1e293b' : '#64748b'
+            color: isSelected ? 'var(--color-text-primary)' : 'var(--color-text-muted)'
         }),
         optionCircle: (isSelected, isSubmitted, isCorrect) => ({
             width: '24px',
@@ -418,7 +418,7 @@ const Quiz = () => {
             border: '2px solid',
             borderColor: isSelected
                 ? (isSubmitted ? (isCorrect ? '#10b981' : '#ef4444') : '#2463eb')
-                : '#cbd5e1',
+                : 'var(--color-border-dark)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -443,24 +443,24 @@ const Quiz = () => {
             cursor: 'pointer',
             transition: 'all 0.2s',
             backgroundColor: variant === 'primary' ? '#2463eb' : 'white',
-            color: variant === 'primary' ? 'white' : '#64748b',
+            color: variant === 'primary' ? 'white' : 'var(--color-text-muted)',
             border: variant === 'primary' ? 'none' : '1px solid #e2e8f0'
         }),
         progressDot: (isActive, isAnswered) => ({
             width: '10px',
             height: '10px',
             borderRadius: '50%',
-            backgroundColor: isActive ? '#2463eb' : (isAnswered ? '#10b981' : '#e2e8f0'),
+            backgroundColor: isActive ? '#2463eb' : (isAnswered ? '#10b981' : 'var(--color-border)'),
             transition: 'transform 0.2s',
             transform: isActive ? 'scale(1.2)' : 'scale(1)'
         }),
         resultCard: {
             textAlign: 'center',
             padding: '60px 20px',
-            backgroundColor: 'white',
+            backgroundColor: 'var(--color-surface)',
             borderRadius: '32px',
             boxShadow: '0 10px 25px -5px rgba(0,0,0,0.1)',
-            border: '1px solid #e2e8f0'
+            border: '1px solid var(--color-border)'
         },
         badge: (score) => ({
             display: 'inline-flex',
@@ -470,7 +470,7 @@ const Quiz = () => {
             fontSize: '14px',
             textTransform: 'uppercase',
             letterSpacing: '1px',
-            backgroundColor: score >= 50 ? '#ecfdf5' : '#fef2f2',
+            backgroundColor: score >= 50 ? 'var(--color-background-secondary)' : 'var(--color-background-secondary)',
             color: score >= 50 ? '#059669' : '#dc2626',
             marginBottom: '24px'
         })
@@ -482,7 +482,7 @@ const Quiz = () => {
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
                     <div style={{ textAlign: 'center' }}>
                         <div className="spinner" style={{ marginBottom: '16px' }}></div>
-                        <p style={{ color: '#64748b' }}>{t('loading')}</p>
+                        <p style={{ color: 'var(--color-text-muted)' }}>{t('loading')}</p>
                     </div>
                 </div>
             </StudentSidebar>
@@ -499,7 +499,7 @@ const Quiz = () => {
                             width: '120px',
                             height: '120px',
                             borderRadius: '50%',
-                            backgroundColor: quizResult.grade >= 50 ? '#f0fdf4' : '#fef2f2',
+                            backgroundColor: quizResult.grade >= 50 ? 'var(--color-background-secondary)' : 'var(--color-background-secondary)',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
@@ -513,10 +513,10 @@ const Quiz = () => {
                             {quizResult.grade >= 50 ? 'Başarılı' : 'Geliştirilmeli'}
                         </div>
 
-                        <h2 style={{ fontSize: '32px', fontWeight: '800', color: '#1e293b', marginBottom: '8px' }}>
+                        <h2 style={{ fontSize: '32px', fontWeight: '800', color: 'var(--color-text-primary)', marginBottom: '8px' }}>
                             Puanınız: {quizResult.grade}
                         </h2>
-                        <p style={{ color: '#64748b', fontSize: '18px', marginBottom: '40px' }}>
+                        <p style={{ color: 'var(--color-text-muted)', fontSize: '18px', marginBottom: '40px' }}>
                             {quizResult.earnedPoints} / {quizResult.totalPoints} puan topladınız.
                         </p>
 
@@ -528,26 +528,26 @@ const Quiz = () => {
                             margin: '0 auto 40px',
                             textAlign: 'left'
                         }}>
-                            <div style={{ padding: '20px', backgroundColor: '#f8fafc', borderRadius: '16px' }}>
+                            <div style={{ padding: '20px', backgroundColor: 'var(--color-background)', borderRadius: '16px' }}>
                                 <CheckCircle2 size={24} color="#10b981" style={{ marginBottom: '12px' }} />
                                 <div style={{ fontSize: '20px', fontWeight: '700' }}>
                                     {quizResult.answers.filter(a => a.isCorrect).length}
                                 </div>
-                                <div style={{ fontSize: '12px', color: '#64748b', fontWeight: '500' }}>DOĞRU</div>
+                                <div style={{ fontSize: '12px', color: 'var(--color-text-muted)', fontWeight: '500' }}>DOĞRU</div>
                             </div>
-                            <div style={{ padding: '20px', backgroundColor: '#f8fafc', borderRadius: '16px' }}>
+                            <div style={{ padding: '20px', backgroundColor: 'var(--color-background)', borderRadius: '16px' }}>
                                 <XCircle size={24} color="#ef4444" style={{ marginBottom: '12px' }} />
                                 <div style={{ fontSize: '20px', fontWeight: '700' }}>
                                     {quizResult.answers.filter(a => !a.isCorrect && a.selectedIndex !== null).length}
                                 </div>
-                                <div style={{ fontSize: '12px', color: '#64748b', fontWeight: '500' }}>YANLIŞ</div>
+                                <div style={{ fontSize: '12px', color: 'var(--color-text-muted)', fontWeight: '500' }}>YANLIŞ</div>
                             </div>
-                            <div style={{ padding: '20px', backgroundColor: '#f8fafc', borderRadius: '16px' }}>
+                            <div style={{ padding: '20px', backgroundColor: 'var(--color-background)', borderRadius: '16px' }}>
                                 <HelpCircle size={24} color="#94a3b8" style={{ marginBottom: '12px' }} />
                                 <div style={{ fontSize: '20px', fontWeight: '700' }}>
                                     {quizResult.answers.filter(a => a.selectedIndex === null).length}
                                 </div>
-                                <div style={{ fontSize: '12px', color: '#64748b', fontWeight: '500' }}>BOŞ</div>
+                                <div style={{ fontSize: '12px', color: 'var(--color-text-muted)', fontWeight: '500' }}>BOŞ</div>
                             </div>
                         </div>
 
@@ -592,7 +592,7 @@ const Quiz = () => {
             }}>
                 <AlertCircle size={64} color="#ef4444" style={{ marginBottom: '24px' }} />
                 <h1 style={{ fontSize: '32px', fontWeight: 'bold', marginBottom: '16px' }}>Sınav Duraklatıldı</h1>
-                <p style={{ fontSize: '18px', color: '#cbd5e1', marginBottom: '32px', textAlign: 'center', maxWidth: '600px' }}>
+                <p style={{ fontSize: '18px', color: 'var(--color-border-dark)', marginBottom: '32px', textAlign: 'center', maxWidth: '600px' }}>
                     Sınav sırasında tam ekrandan çıkmak güvenlik kurallarına aykırıdır. Lütfen sınava devam etmek için tekrar tam ekrana geçin.
                 </p>
                 <button
@@ -617,7 +617,7 @@ const Quiz = () => {
                     minHeight: '100vh',
                     display: 'flex',
                     flexDirection: 'column',
-                    background: '#f6f6f8',
+                    background: 'var(--color-background)',
                     userSelect: exam?.disableShortcuts ? 'none' : 'auto' // Metin seçimini engelle
                 }}
                 onCopy={(e) => exam?.disableShortcuts && e.preventDefault()}
@@ -638,13 +638,13 @@ const Quiz = () => {
                                         onConfirm: () => navigate('/ogrenci/panel')
                                     });
                                 }}
-                                style={{ padding: '8px', borderRadius: '8px', border: '1px solid #e2e8f0', cursor: 'pointer', background: 'white' }}
+                                style={{ padding: '8px', borderRadius: '8px', border: '1px solid var(--color-border)', cursor: 'pointer', background: 'var(--color-surface)' }}
                             >
-                                <ChevronLeft size={20} color="#64748b" />
+                                <ChevronLeft size={20} color='var(--color-text-muted)' />
                             </button>
                             <div>
-                                <h1 style={{ fontSize: '18px', fontWeight: '700', color: '#1e293b' }}>{exam?.title}</h1>
-                                <p style={{ fontSize: '13px', color: '#64748b' }}>Soru {currentQuestionIndex + 1} / {exam?.questions.length}</p>
+                                <h1 style={{ fontSize: '18px', fontWeight: '700', color: 'var(--color-text-primary)' }}>{exam?.title}</h1>
+                                <p style={{ fontSize: '13px', color: 'var(--color-text-muted)' }}>Soru {currentQuestionIndex + 1} / {exam?.questions.length}</p>
                             </div>
                         </div>
 
@@ -658,7 +658,7 @@ const Quiz = () => {
                                     }}
                                     style={{
                                         padding: '8px 16px',
-                                        backgroundColor: '#1e293b',
+                                        backgroundcolor: 'var(--color-text-primary)',
                                         color: 'white',
                                         border: 'none',
                                         borderRadius: '8px',
@@ -714,7 +714,7 @@ const Quiz = () => {
                                             style={styles.option(answers[currentQuestion.id] === idx, false)}
                                             onClick={() => handleSelectOption(currentQuestion.id, idx)}
                                             onMouseEnter={e => !submitted && (e.currentTarget.style.borderColor = '#2463eb')}
-                                            onMouseLeave={e => !submitted && answers[currentQuestion.id] !== idx && (e.currentTarget.style.borderColor = '#e2e8f0')}
+                                            onMouseLeave={e => !submitted && answers[currentQuestion.id] !== idx && (e.currentTarget.style.borderColor = 'var(--color-border)')}
                                         >
                                             <div style={styles.optionCircle(answers[currentQuestion.id] === idx, false)}>
                                                 {answers[currentQuestion.id] === idx && (
@@ -767,7 +767,7 @@ const Quiz = () => {
                     {/* Instructions / Info Box */}
                     <div style={{
                         padding: '20px',
-                        backgroundColor: '#eff6ff',
+                        backgroundColor: 'var(--color-background-secondary)',
                         borderRadius: '16px',
                         border: '1px solid #dbeafe',
                         display: 'flex',

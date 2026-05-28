@@ -133,7 +133,7 @@ const TeacherRegister = () => {
             display: 'inline-flex', 
             alignItems: 'center', 
             gap: '8px', 
-            color: '#64748b', 
+            color: 'var(--color-text-muted)', 
             textDecoration: 'none',
             marginBottom: '24px',
             fontSize: '14px'
@@ -157,31 +157,31 @@ const TeacherRegister = () => {
           }}>
             <Users style={{ width: '32px', height: '32px', color: 'white' }} />
           </div>
-          <h1 style={{ fontSize: '24px', fontWeight: 'bold', color: '#1e293b', marginBottom: '8px' }}>
+          <h1 style={{ fontSize: '24px', fontWeight: 'bold', color: 'var(--color-text-primary)', marginBottom: '8px' }}>
             Öğretmen Kaydı
           </h1>
-          <p style={{ color: '#64748b' }}>Atölye Sınav Platformuna kayıt ol</p>
+          <p style={{ color: 'var(--color-text-muted)' }}>Atölye Sınav Platformuna kayıt ol</p>
         </div>
 
         {settingsLoading ? (
           <div style={{
-            backgroundColor: 'white',
+            backgroundColor: 'var(--color-surface)',
             borderRadius: '16px',
             padding: '32px',
             boxShadow: '0 10px 40px -10px rgba(0,0,0,0.1)',
-            border: '1px solid #e2e8f0',
+            border: '1px solid var(--color-border)',
             textAlign: 'center',
-            color: '#64748b'
+            color: 'var(--color-text-muted)'
           }}>
             Yükleniyor...
           </div>
         ) : !teacherRegistrationEnabled ? (
           <div style={{
-            backgroundColor: 'white',
+            backgroundColor: 'var(--color-surface)',
             borderRadius: '16px',
             padding: '32px',
             boxShadow: '0 10px 40px -10px rgba(0,0,0,0.1)',
-            border: '1px solid #e2e8f0'
+            border: '1px solid var(--color-border)'
           }}>
             <div style={{
               backgroundColor: '#fee2e2',
@@ -223,11 +223,11 @@ const TeacherRegister = () => {
           </div>
         ) : (
           <div style={{
-          backgroundColor: 'white',
+          backgroundColor: 'var(--color-surface)',
           borderRadius: '16px',
           padding: '32px',
           boxShadow: '0 10px 40px -10px rgba(0,0,0,0.1)',
-          border: '1px solid #e2e8f0'
+          border: '1px solid var(--color-border)'
         }}>
           <form onSubmit={handleSubmit}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
@@ -285,7 +285,7 @@ const TeacherRegister = () => {
                             height: '4px',
                             flex: 1,
                             borderRadius: '2px',
-                            backgroundColor: passwordStrength.score >= level ? getStrengthColor() : '#e2e8f0'
+                            backgroundColor: passwordStrength.score >= level ? getStrengthColor() : 'var(--color-border)'
                           }}
                         />
                       ))}
@@ -317,7 +317,7 @@ const TeacherRegister = () => {
           </form>
 
           <div style={{ marginTop: '24px', textAlign: 'center' }}>
-            <p style={{ fontSize: '14px', color: '#64748b' }}>
+            <p style={{ fontSize: '14px', color: 'var(--color-text-muted)' }}>
               Zaten hesabınız var mı?{' '}
               <Link to="/ogretmen/giris" style={{ color: '#6366f1', textDecoration: 'none', fontWeight: '500' }}>
                 Giriş Yap
@@ -327,7 +327,7 @@ const TeacherRegister = () => {
         </div>
         )}
 
-        <p style={{ textAlign: 'center', fontSize: '14px', color: '#64748b', marginTop: '24px' }}>
+        <p style={{ textAlign: 'center', fontSize: '14px', color: 'var(--color-text-muted)', marginTop: '24px' }}>
           Öğrenci misiniz?{' '}
           <Link to="/ogrenci/kayit" style={{ color: '#6366f1', textDecoration: 'none', fontWeight: '500' }}>
             Öğrenci kaydı

@@ -29,7 +29,7 @@ import { formatDateTime, getRelativeTime } from '../../utils/dateHelpers';
 const styles = {
   container: {
     padding: '32px',
-    backgroundColor: '#f8fafc',
+    backgroundColor: 'var(--color-background)',
     minHeight: '100vh'
   },
   header: {
@@ -41,12 +41,12 @@ const styles = {
   title: {
     fontSize: '28px',
     fontWeight: '700',
-    color: '#1e293b',
+    color: 'var(--color-text-primary)',
     margin: 0
   },
   subtitle: {
     fontSize: '14px',
-    color: '#64748b',
+    color: 'var(--color-text-muted)',
     marginTop: '4px'
   },
   createBtn: {
@@ -55,7 +55,7 @@ const styles = {
     gap: '8px',
     padding: '12px 24px',
     backgroundColor: '#0d9488',
-    color: '#fff',
+    color: 'var(--color-text-inverse, #fff)',
     border: 'none',
     borderRadius: '12px',
     fontSize: '14px',
@@ -70,10 +70,10 @@ const styles = {
     marginBottom: '32px'
   },
   statCard: {
-    backgroundColor: '#fff',
+    backgroundColor: 'var(--color-surface)',
     borderRadius: '12px',
     padding: '24px',
-    border: '1px solid #e2e8f0',
+    border: '1px solid var(--color-border)',
     boxShadow: 'none'
   },
   statIcon: {
@@ -88,12 +88,12 @@ const styles = {
   statValue: {
     fontSize: '28px',
     fontWeight: '700',
-    color: '#1e293b',
+    color: 'var(--color-text-primary)',
     marginBottom: '4px'
   },
   statLabel: {
     fontSize: '14px',
-    color: '#64748b'
+    color: 'var(--color-text-muted)'
   },
   searchRow: {
     display: 'flex',
@@ -106,8 +106,8 @@ const styles = {
     alignItems: 'center',
     gap: '12px',
     padding: '12px 16px',
-    backgroundColor: '#fff',
-    border: '1px solid #e2e8f0',
+    backgroundColor: 'var(--color-surface)',
+    border: '1px solid var(--color-border)',
     borderRadius: '12px',
   },
   input: {
@@ -115,7 +115,7 @@ const styles = {
     border: 'none',
     outline: 'none',
     fontSize: '14px',
-    color: '#1e293b',
+    color: 'var(--color-text-primary)',
     backgroundColor: 'transparent'
   },
   filterBtn: {
@@ -123,11 +123,11 @@ const styles = {
     alignItems: 'center',
     gap: '8px',
     padding: '12px 20px',
-    backgroundColor: '#fff',
-    border: '1px solid #e2e8f0',
+    backgroundColor: 'var(--color-surface)',
+    border: '1px solid var(--color-border)',
     borderRadius: '12px',
     fontSize: '14px',
-    color: '#64748b',
+    color: 'var(--color-text-muted)',
     cursor: 'pointer'
   },
   examList: {
@@ -136,10 +136,10 @@ const styles = {
     gap: '16px'
   },
   examCard: {
-    backgroundColor: '#fff',
+    backgroundColor: 'var(--color-surface)',
     borderRadius: '12px',
     padding: '24px',
-    border: '1px solid #e2e8f0',
+    border: '1px solid var(--color-border)',
     boxShadow: 'none',
     transition: 'all 0.2s'
   },
@@ -152,12 +152,12 @@ const styles = {
   examTitle: {
     fontSize: '18px',
     fontWeight: '600',
-    color: '#1e293b',
+    color: 'var(--color-text-primary)',
     marginBottom: '4px'
   },
   examDesc: {
     fontSize: '14px',
-    color: '#64748b'
+    color: 'var(--color-text-muted)'
   },
   statusBadge: {
     display: 'inline-flex',
@@ -179,7 +179,7 @@ const styles = {
     alignItems: 'center',
     gap: '8px',
     fontSize: '14px',
-    color: '#64748b'
+    color: 'var(--color-text-muted)'
   },
   progressSection: {
     marginBottom: '16px'
@@ -188,12 +188,12 @@ const styles = {
     display: 'flex',
     justifyContent: 'space-between',
     fontSize: '13px',
-    color: '#64748b',
+    color: 'var(--color-text-muted)',
     marginBottom: '8px'
   },
   progressBar: {
     height: '8px',
-    backgroundColor: '#e2e8f0',
+    backgroundColor: 'var(--color-border)',
     borderRadius: '12px',
     overflow: 'hidden'
   },
@@ -223,14 +223,14 @@ const styles = {
   emptyState: {
     textAlign: 'center',
     padding: '80px 40px',
-    backgroundColor: '#fff',
+    backgroundColor: 'var(--color-surface)',
     borderRadius: '16px'
   },
   emptyIcon: {
     width: '80px',
     height: '80px',
     borderRadius: '12px',
-    backgroundColor: '#f1f5f9',
+    backgroundColor: 'var(--color-background-secondary)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -239,12 +239,12 @@ const styles = {
   emptyTitle: {
     fontSize: '20px',
     fontWeight: '600',
-    color: '#1e293b',
+    color: 'var(--color-text-primary)',
     marginBottom: '8px'
   },
   emptyText: {
     fontSize: '14px',
-    color: '#64748b',
+    color: 'var(--color-text-muted)',
     marginBottom: '24px'
   },
   modal: {
@@ -260,22 +260,22 @@ const styles = {
     zIndex: 1000
   },
   modalContent: {
-    backgroundColor: '#fff',
+    backgroundColor: 'var(--color-surface)',
     borderRadius: '12px',
     padding: '32px',
     maxWidth: '400px',
     width: '90%',
-    border: '1px solid #e2e8f0'
+    border: '1px solid var(--color-border)'
   },
   modalTitle: {
     fontSize: '18px',
     fontWeight: '600',
-    color: '#1e293b',
+    color: 'var(--color-text-primary)',
     marginBottom: '12px'
   },
   modalText: {
     fontSize: '14px',
-    color: '#64748b',
+    color: 'var(--color-text-muted)',
     marginBottom: '24px'
   },
   modalActions: {
@@ -363,11 +363,11 @@ const ActiveExams = () => {
     const end = new Date(exam.endDate);
 
     if (start > now) {
-      return { label: 'Yaklaşan', color: '#f59e0b', bgColor: '#fffbeb' };
+      return { label: 'Yaklaşan', color: '#f59e0b', bgColor: 'var(--color-background-secondary)' };
     } else if (end < now || exam.status === 'completed') {
-      return { label: 'Tamamlandı', color: '#10b981', bgColor: '#ecfdf5' };
+      return { label: 'Tamamlandı', color: '#10b981', bgColor: 'var(--color-background-secondary)' };
     } else {
-      return { label: 'Aktif', color: '#3b82f6', bgColor: '#eff6ff' };
+      return { label: 'Aktif', color: '#3b82f6', bgColor: 'var(--color-background-secondary)' };
     }
   };
 
@@ -489,21 +489,21 @@ const ActiveExams = () => {
         {/* Stats */}
         <div style={styles.statsRow}>
           <div style={styles.statCard}>
-            <div style={{ ...styles.statIcon, backgroundColor: '#eff6ff' }}>
+            <div style={{ ...styles.statIcon, backgroundColor: 'var(--color-background-secondary)' }}>
               <FileText size={24} color="#3b82f6" />
             </div>
             <div style={styles.statValue}>{stats.total}</div>
             <div style={styles.statLabel}>Toplam Sınav</div>
           </div>
           <div style={styles.statCard}>
-            <div style={{ ...styles.statIcon, backgroundColor: '#ecfdf5' }}>
+            <div style={{ ...styles.statIcon, backgroundColor: 'var(--color-background-secondary)' }}>
               <Play size={24} color="#10b981" />
             </div>
             <div style={styles.statValue}>{stats.active}</div>
             <div style={styles.statLabel}>Aktif Sınav</div>
           </div>
           <div style={styles.statCard}>
-            <div style={{ ...styles.statIcon, backgroundColor: '#fffbeb' }}>
+            <div style={{ ...styles.statIcon, backgroundColor: 'var(--color-background-secondary)' }}>
               <Clock size={24} color="#f59e0b" />
             </div>
             <div style={styles.statValue}>{stats.upcoming}</div>
@@ -534,7 +534,7 @@ const ActiveExams = () => {
             style={{
               ...styles.filterBtn,
               backgroundColor: filter === 'all' ? '#3b82f6' : '#fff',
-              color: filter === 'all' ? '#fff' : '#64748b'
+              color: filter === 'all' ? '#fff' : 'var(--color-text-muted)'
             }}
             onClick={() => setFilter('all')}
           >
@@ -544,7 +544,7 @@ const ActiveExams = () => {
             style={{
               ...styles.filterBtn,
               backgroundColor: filter === 'active' ? '#10b981' : '#fff',
-              color: filter === 'active' ? '#fff' : '#64748b'
+              color: filter === 'active' ? '#fff' : 'var(--color-text-muted)'
             }}
             onClick={() => setFilter('active')}
           >
@@ -555,7 +555,7 @@ const ActiveExams = () => {
             style={{
               ...styles.filterBtn,
               backgroundColor: filter === 'upcoming' ? '#f59e0b' : '#fff',
-              color: filter === 'upcoming' ? '#fff' : '#64748b'
+              color: filter === 'upcoming' ? '#fff' : 'var(--color-text-muted)'
             }}
             onClick={() => setFilter('upcoming')}
           >
@@ -605,7 +605,7 @@ const ActiveExams = () => {
                         {exam.isQuiz && (
                           <span style={{
                             fontSize: '10px',
-                            backgroundColor: '#f0fdfa',
+                            backgroundColor: 'var(--color-background-secondary)',
                             color: '#0d9488',
                             padding: '2px 8px',
                             border: '1px solid #0d9488',
@@ -618,7 +618,7 @@ const ActiveExams = () => {
                         {exam.antiCheatEnabled && (
                           <span style={{
                             fontSize: '10px',
-                            backgroundColor: '#fef2f2',
+                            backgroundColor: 'var(--color-background-secondary)',
                             color: '#ef4444',
                             padding: '2px 8px',
                             border: '1px solid #ef4444',
@@ -684,7 +684,7 @@ const ActiveExams = () => {
                     <button
                       style={{
                         ...styles.actionBtn,
-                        backgroundColor: '#eff6ff',
+                        backgroundColor: 'var(--color-background-secondary)',
                         color: '#3b82f6'
                       }}
                       onClick={() => navigate(`/ogretmen/degerlendirme?exam=${exam.id}`)}
@@ -695,8 +695,8 @@ const ActiveExams = () => {
                     <button
                       style={{
                         ...styles.actionBtn,
-                        backgroundColor: '#f1f5f9',
-                        color: '#64748b'
+                        backgroundColor: 'var(--color-background-secondary)',
+                        color: 'var(--color-text-muted)'
                       }}
                       onClick={() => navigate(`/ogretmen/sinav-duzenle/${exam.id}`)}
                     >
@@ -708,7 +708,7 @@ const ActiveExams = () => {
                         <button
                           style={{
                             ...styles.actionBtn,
-                            backgroundColor: '#fffbeb',
+                            backgroundColor: 'var(--color-background-secondary)',
                             color: '#f59e0b'
                           }}
                           onClick={() => handleExtendTime(exam.id, 30)}
@@ -719,7 +719,7 @@ const ActiveExams = () => {
                         <button
                           style={{
                             ...styles.actionBtn,
-                            backgroundColor: '#fef2f2',
+                            backgroundColor: 'var(--color-background-secondary)',
                             color: '#ef4444'
                           }}
                           onClick={() => {
@@ -735,7 +735,7 @@ const ActiveExams = () => {
                     <button
                       style={{
                         ...styles.actionBtn,
-                        backgroundColor: '#fef2f2',
+                        backgroundColor: 'var(--color-background-secondary)',
                         color: '#ef4444',
                         marginLeft: 'auto'
                       }}
@@ -766,8 +766,8 @@ const ActiveExams = () => {
                 <button
                   style={{
                     ...styles.actionBtn,
-                    backgroundColor: '#f1f5f9',
-                    color: '#64748b'
+                    backgroundColor: 'var(--color-background-secondary)',
+                    color: 'var(--color-text-muted)'
                   }}
                   onClick={() => {
                     setShowDeleteModal(false);
@@ -780,7 +780,7 @@ const ActiveExams = () => {
                   style={{
                     ...styles.actionBtn,
                     backgroundColor: '#ef4444',
-                    color: '#fff'
+                    color: 'var(--color-text-inverse, #fff)'
                   }}
                   onClick={handleDeleteExam}
                 >
@@ -805,8 +805,8 @@ const ActiveExams = () => {
                 <button
                   style={{
                     ...styles.actionBtn,
-                    backgroundColor: '#f1f5f9',
-                    color: '#64748b'
+                    backgroundColor: 'var(--color-background-secondary)',
+                    color: 'var(--color-text-muted)'
                   }}
                   onClick={() => {
                     setShowEndModal(false);
@@ -819,7 +819,7 @@ const ActiveExams = () => {
                   style={{
                     ...styles.actionBtn,
                     backgroundColor: '#ef4444',
-                    color: '#fff'
+                    color: 'var(--color-text-inverse, #fff)'
                   }}
                   onClick={handleEndExam}
                 >

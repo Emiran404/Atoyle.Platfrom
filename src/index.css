@@ -52,6 +52,38 @@
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
+/* Dark Mode Variables */
+:root.dark {
+  --color-primary: #3b82f6;
+  --color-primary-hover: #60a5fa;
+  --color-primary-light: #93c5fd;
+  --color-primary-dark: #2563eb;
+
+  --color-background: #1e1e1e;
+  --color-background-secondary: #121212;
+  --color-foreground: #d4d4d4;
+  --color-foreground-secondary: #a3a3a3;
+  --color-muted: #858585;
+  --color-muted-foreground: #a3a3a3;
+
+  --color-surface: #252526;
+  --color-surface-hover: #2d2d30;
+  --color-border: #333333;
+  --color-border-dark: #454545;
+
+  --color-card: #252526;
+  --color-card-foreground: #d4d4d4;
+
+  --color-text-primary: #f8fafc;
+  --color-text-secondary: #cbd5e1;
+  --color-text-muted: #94a3b8;
+  --color-text-inverse: #1e1e1e;
+}
+
+:root:not(.dark) {
+  --color-text-inverse: #fff;
+}
+
 /* Base Styles */
 * {
   box-sizing: border-box;

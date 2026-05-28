@@ -787,7 +787,7 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
             <h2 style={styles.cardTitle}>Kayıt Açık Sınıflar</h2>
           </div>
 
-          <p style={{ fontSize: '14px', color: '#64748b', marginBottom: '16px' }}>
+          <p style={{ fontSize: '14px', color: 'var(--color-text-muted)', marginBottom: '16px' }}>
             Sadece seçili sınıflar kayıt olabilir. Diğer sınıflar kayıt ekranında görünmez.
           </p>
 
@@ -847,7 +847,7 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
       )}
 
       {/* Bilgi Kutusu */}
-      <div style={{ ...styles.card, backgroundColor: '#eff6ff', borderColor: '#bfdbfe' }}>
+      <div style={{ ...styles.card, backgroundColor: 'var(--color-background-secondary)', borderColor: '#bfdbfe' }}>
         <div style={{ display: 'flex', gap: '12px' }}>
           <Settings size={24} style={{ color: '#3b82f6', flexShrink: 0 }} />
           <div>
@@ -980,7 +980,7 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
               width: '100%',
               padding: '12px 16px',
               fontSize: '14px',
-              border: '2px solid #e2e8f0',
+              border: '2px solid var(--color-border)',
               borderRadius: '10px',
               outline: 'none'
             }}
@@ -1006,19 +1006,19 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
           </div>
 
           {filteredStudents.length === 0 ? (
-            <p style={{ textAlign: 'center', color: '#64748b', padding: '20px' }}>
+            <p style={{ textAlign: 'center', color: 'var(--color-text-muted)', padding: '20px' }}>
               Öğrenci bulunamadı
             </p>
           ) : (
             <div style={{ overflowX: 'auto' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                 <thead>
-                  <tr style={{ borderBottom: '2px solid #e2e8f0' }}>
-                    <th style={{ textAlign: 'left', padding: '12px', fontSize: '13px', color: '#64748b' }}>Ad Soyad</th>
-                    <th style={{ textAlign: 'left', padding: '12px', fontSize: '13px', color: '#64748b' }}>Okul No</th>
-                    <th style={{ textAlign: 'left', padding: '12px', fontSize: '13px', color: '#64748b' }}>Sınıf</th>
-                    <th style={{ textAlign: 'left', padding: '12px', fontSize: '13px', color: '#64748b' }}>Durum</th>
-                    <th style={{ textAlign: 'center', padding: '12px', fontSize: '13px', color: '#64748b' }}>İşlemler</th>
+                  <tr style={{ borderBottom: '2px solid var(--color-border)' }}>
+                    <th style={{ textAlign: 'left', padding: '12px', fontSize: '13px', color: 'var(--color-text-muted)' }}>Ad Soyad</th>
+                    <th style={{ textAlign: 'left', padding: '12px', fontSize: '13px', color: 'var(--color-text-muted)' }}>Okul No</th>
+                    <th style={{ textAlign: 'left', padding: '12px', fontSize: '13px', color: 'var(--color-text-muted)' }}>Sınıf</th>
+                    <th style={{ textAlign: 'left', padding: '12px', fontSize: '13px', color: 'var(--color-text-muted)' }}>Durum</th>
+                    <th style={{ textAlign: 'center', padding: '12px', fontSize: '13px', color: 'var(--color-text-muted)' }}>İşlemler</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -1097,19 +1097,19 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
           </div>
 
           {filteredTeachers.length === 0 ? (
-            <p style={{ textAlign: 'center', color: '#64748b', padding: '20px' }}>
+            <p style={{ textAlign: 'center', color: 'var(--color-text-muted)', padding: '20px' }}>
               Öğretmen bulunamadı
             </p>
           ) : (
             <div style={{ overflowX: 'auto' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                 <thead>
-                  <tr style={{ borderBottom: '2px solid #e2e8f0' }}>
-                    <th style={{ textAlign: 'left', padding: '12px', fontSize: '13px', color: '#64748b' }}>Ad Soyad</th>
-                    <th style={{ textAlign: 'left', padding: '12px', fontSize: '13px', color: '#64748b' }}>Kullanıcı Adı</th>
-                    <th style={{ textAlign: 'left', padding: '12px', fontSize: '13px', color: '#64748b' }}>Bölüm</th>
-                    <th style={{ textAlign: 'left', padding: '12px', fontSize: '13px', color: '#64748b' }}>Durum</th>
-                    <th style={{ textAlign: 'center', padding: '12px', fontSize: '13px', color: '#64748b' }}>İşlemler</th>
+                  <tr style={{ borderBottom: '2px solid var(--color-border)' }}>
+                    <th style={{ textAlign: 'left', padding: '12px', fontSize: '13px', color: 'var(--color-text-muted)' }}>Ad Soyad</th>
+                    <th style={{ textAlign: 'left', padding: '12px', fontSize: '13px', color: 'var(--color-text-muted)' }}>Kullanıcı Adı</th>
+                    <th style={{ textAlign: 'left', padding: '12px', fontSize: '13px', color: 'var(--color-text-muted)' }}>Bölüm</th>
+                    <th style={{ textAlign: 'left', padding: '12px', fontSize: '13px', color: 'var(--color-text-muted)' }}>Durum</th>
+                    <th style={{ textAlign: 'center', padding: '12px', fontSize: '13px', color: 'var(--color-text-muted)' }}>İşlemler</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -1208,7 +1208,7 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
           {/* Kime */}
           <div>
-            <label style={{ fontSize: '14px', fontWeight: '600', color: '#1e293b', marginBottom: '8px', display: 'block' }}>
+            <label style={{ fontSize: '14px', fontWeight: '600', color: 'var(--color-text-primary)', marginBottom: '8px', display: 'block' }}>
               Kime Gönderilsin?
             </label>
             <select
@@ -1218,7 +1218,7 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
                 width: '100%',
                 padding: '10px 12px',
                 fontSize: '14px',
-                border: '2px solid #e2e8f0',
+                border: '2px solid var(--color-border)',
                 borderRadius: '10px',
                 outline: 'none'
               }}
@@ -1232,7 +1232,7 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
           {/* Sınıf Seçimi */}
           {bulkTarget === 'class' && (
             <div>
-              <label style={{ fontSize: '14px', fontWeight: '600', color: '#1e293b', marginBottom: '8px', display: 'block' }}>
+              <label style={{ fontSize: '14px', fontWeight: '600', color: 'var(--color-text-primary)', marginBottom: '8px', display: 'block' }}>
                 Sınıf Seç
               </label>
               <select
@@ -1242,7 +1242,7 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
                   width: '100%',
                   padding: '10px 12px',
                   fontSize: '14px',
-                  border: '2px solid #e2e8f0',
+                  border: '2px solid var(--color-border)',
                   borderRadius: '10px',
                   outline: 'none'
                 }}
@@ -1256,7 +1256,7 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
 
           {/* Başlık */}
           <div>
-            <label style={{ fontSize: '14px', fontWeight: '600', color: '#1e293b', marginBottom: '8px', display: 'block' }}>
+            <label style={{ fontSize: '14px', fontWeight: '600', color: 'var(--color-text-primary)', marginBottom: '8px', display: 'block' }}>
               Bildirim Başlığı
             </label>
             <input
@@ -1268,7 +1268,7 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
                 width: '100%',
                 padding: '10px 12px',
                 fontSize: '14px',
-                border: '2px solid #e2e8f0',
+                border: '2px solid var(--color-border)',
                 borderRadius: '10px',
                 outline: 'none'
               }}
@@ -1277,7 +1277,7 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
 
           {/* Mesaj */}
           <div>
-            <label style={{ fontSize: '14px', fontWeight: '600', color: '#1e293b', marginBottom: '8px', display: 'block' }}>
+            <label style={{ fontSize: '14px', fontWeight: '600', color: 'var(--color-text-primary)', marginBottom: '8px', display: 'block' }}>
               Mesaj
             </label>
             <textarea
@@ -1289,7 +1289,7 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
                 width: '100%',
                 padding: '10px 12px',
                 fontSize: '14px',
-                border: '2px solid #e2e8f0',
+                border: '2px solid var(--color-border)',
                 borderRadius: '10px',
                 outline: 'none',
                 fontFamily: 'inherit',
@@ -1305,7 +1305,7 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
             style={{
               padding: '12px',
               backgroundColor: sending ? '#94a3b8' : '#10b981',
-              color: '#ffffff',
+              color: 'var(--color-text-inverse, #fff)',
               border: 'none',
               borderRadius: '10px',
               fontSize: '15px',
@@ -1329,7 +1329,7 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
     if (!stats) {
       return (
         <div style={styles.card}>
-          <p style={{ textAlign: 'center', color: '#64748b' }}>İstatistikler yükleniyor...</p>
+          <p style={{ textAlign: 'center', color: 'var(--color-text-muted)' }}>İstatistikler yükleniyor...</p>
         </div>
       );
     }
@@ -1393,8 +1393,8 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
               <stat.icon size={28} style={{ color: stat.color }} />
             </div>
             <div>
-              <p style={{ fontSize: '13px', color: '#64748b', marginBottom: '4px' }}>{stat.title}</p>
-              <p style={{ fontSize: '24px', fontWeight: '700', color: '#1e293b' }}>{stat.value}</p>
+              <p style={{ fontSize: '13px', color: 'var(--color-text-muted)', marginBottom: '4px' }}>{stat.title}</p>
+              <p style={{ fontSize: '24px', fontWeight: '700', color: 'var(--color-text-primary)' }}>{stat.value}</p>
               {stat.subtitle && <p style={{ fontSize: '11px', color: '#94a3b8', marginTop: '4px' }}>{stat.subtitle}</p>}
             </div>
           </div>
@@ -1406,7 +1406,7 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
   const renderBackupTab = () => (
     <>
       {/* Yedekleme Bilgisi */}
-      <div style={{ ...styles.card, backgroundColor: '#eff6ff', borderColor: '#bfdbfe' }}>
+      <div style={{ ...styles.card, backgroundColor: 'var(--color-background-secondary)', borderColor: '#bfdbfe' }}>
         <div style={{ display: 'flex', gap: '12px' }}>
           <Database size={24} style={{ color: '#3b82f6', flexShrink: 0 }} />
           <div>
@@ -1433,15 +1433,15 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
           <h2 style={styles.cardTitle}>Otomatik Yedekleme Ayarları</h2>
         </div>
 
-        <p style={{ fontSize: '14px', color: '#64748b', marginBottom: '20px' }}>
+        <p style={{ fontSize: '14px', color: 'var(--color-text-muted)', marginBottom: '20px' }}>
           Sistem verilerinin güvenliğini artırmak için arka planda çalışan otomatik yedekleme sistemini yapılandırın.
         </p>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
           {/* Aktif mi */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px', backgroundColor: '#f8fafc', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px', backgroundColor: 'var(--color-background)', borderRadius: '12px', border: '1px solid var(--color-border)' }}>
             <div>
-              <label style={{ fontSize: '14px', fontWeight: '600', color: '#334155' }}>
+              <label style={{ fontSize: '14px', fontWeight: '600', color: 'var(--color-foreground-secondary)' }}>
                 Otomatik Yedekleme Sistemi
               </label>
               <p style={{ margin: '4px 0 0 0', fontSize: '12px', color: '#94a3b8' }}>
@@ -1460,7 +1460,7 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
               {/* Sıklık */}
               <div>
-                <label style={{ fontSize: '13px', fontWeight: '600', color: '#475569', marginBottom: '6px', display: 'block' }}>
+                <label style={{ fontSize: '13px', fontWeight: '600', color: 'var(--color-text-secondary)', marginBottom: '6px', display: 'block' }}>
                   Yedekleme Sıklığı (Periyot)
                 </label>
                 <select
@@ -1470,11 +1470,11 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
                     width: '100%',
                     padding: '10px 12px',
                     fontSize: '14px',
-                    border: '2px solid #e2e8f0',
+                    border: '2px solid var(--color-border)',
                     borderRadius: '10px',
                     outline: 'none',
-                    backgroundColor: '#fff',
-                    color: '#334155'
+                    backgroundColor: 'var(--color-surface)',
+                    color: 'var(--color-foreground-secondary)'
                   }}
                 >
                   <option value={12}>12 Saatte Bir</option>
@@ -1496,7 +1496,7 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
                   />
                   <label htmlFor="autoBackupIncludePhotos" style={{
                     fontSize: '13px',
-                    color: '#475569',
+                    color: 'var(--color-text-secondary)',
                     cursor: 'pointer',
                     fontWeight: '600'
                   }}>
@@ -1547,12 +1547,12 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
             disabled={loadingLocalBackups}
             style={{
               padding: '6px 12px',
-              backgroundColor: '#f1f5f9',
-              border: '1px solid #e2e8f0',
+              backgroundColor: 'var(--color-background-secondary)',
+              border: '1px solid var(--color-border)',
               borderRadius: '8px',
               fontSize: '12px',
               fontWeight: '600',
-              color: '#475569',
+              color: 'var(--color-text-secondary)',
               cursor: 'pointer'
             }}
           >
@@ -1561,9 +1561,9 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
         </div>
 
         {loadingLocalBackups ? (
-          <p style={{ textAlign: 'center', color: '#64748b', padding: '24px' }}>Yedekler yükleniyor...</p>
+          <p style={{ textAlign: 'center', color: 'var(--color-text-muted)', padding: '24px' }}>Yedekler yükleniyor...</p>
         ) : localBackups.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '40px', color: '#64748b' }}>
+          <div style={{ textAlign: 'center', padding: '40px', color: 'var(--color-text-muted)' }}>
             <Database size={40} style={{ margin: '0 auto 12px', opacity: 0.3 }} />
             <p>Henüz yerel veya otomatik alınmış bir yedek yok.</p>
           </div>
@@ -1571,25 +1571,25 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
-                <tr style={{ borderBottom: '2px solid #e2e8f0' }}>
-                  <th style={{ textAlign: 'left', padding: '12px 16px', fontSize: '13px', color: '#64748b', fontWeight: '700' }}>Dosya Adı</th>
-                  <th style={{ textAlign: 'left', padding: '12px 16px', fontSize: '13px', color: '#64748b', fontWeight: '700' }}>Boyut</th>
-                  <th style={{ textAlign: 'left', padding: '12px 16px', fontSize: '13px', color: '#64748b', fontWeight: '700' }}>Tür / Tarih</th>
-                  <th style={{ textAlign: 'right', padding: '12px 16px', fontSize: '13px', color: '#64748b', fontWeight: '700' }}>İşlemler</th>
+                <tr style={{ borderBottom: '2px solid var(--color-border)' }}>
+                  <th style={{ textAlign: 'left', padding: '12px 16px', fontSize: '13px', color: 'var(--color-text-muted)', fontWeight: '700' }}>Dosya Adı</th>
+                  <th style={{ textAlign: 'left', padding: '12px 16px', fontSize: '13px', color: 'var(--color-text-muted)', fontWeight: '700' }}>Boyut</th>
+                  <th style={{ textAlign: 'left', padding: '12px 16px', fontSize: '13px', color: 'var(--color-text-muted)', fontWeight: '700' }}>Tür / Tarih</th>
+                  <th style={{ textAlign: 'right', padding: '12px 16px', fontSize: '13px', color: 'var(--color-text-muted)', fontWeight: '700' }}>İşlemler</th>
                 </tr>
               </thead>
               <tbody>
                 {localBackups.map((backup, idx) => (
                   <tr key={idx} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                    <td style={{ padding: '12px 16px', fontSize: '14px', fontWeight: '500', color: '#1e293b' }}>
+                    <td style={{ padding: '12px 16px', fontSize: '14px', fontWeight: '500', color: 'var(--color-text-primary)' }}>
                       {backup.name}
                     </td>
-                    <td style={{ padding: '12px 16px', fontSize: '13px', color: '#64748b' }}>
+                    <td style={{ padding: '12px 16px', fontSize: '13px', color: 'var(--color-text-muted)' }}>
                       {backup.size > 1024 * 1024 
                         ? `${(backup.size / (1024 * 1024)).toFixed(2)} MB` 
                         : `${(backup.size / 1024).toFixed(1)} KB`}
                     </td>
-                    <td style={{ padding: '12px 16px', fontSize: '13px', color: '#64748b' }}>
+                    <td style={{ padding: '12px 16px', fontSize: '13px', color: 'var(--color-text-muted)' }}>
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
                         <span style={{
                           alignSelf: 'flex-start',
@@ -1597,7 +1597,7 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
                           borderRadius: '12px',
                           fontSize: '10px',
                           fontWeight: '700',
-                          backgroundColor: backup.isAuto ? '#ecfdf5' : '#eff6ff',
+                          backgroundColor: backup.isAuto ? 'var(--color-background-secondary)' : 'var(--color-background-secondary)',
                           color: backup.isAuto ? '#15803d' : '#1d4ed8'
                         }}>
                           {backup.isAuto ? 'Otomatik' : 'Manuel'}
@@ -1628,7 +1628,7 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
                           onClick={() => handleDownloadLocalBackup(backup.name)}
                           style={{
                             padding: '6px 12px',
-                            backgroundColor: '#e0e7ff',
+                            backgroundColor: 'var(--color-primary-light)',
                             color: '#4338ca',
                             border: 'none',
                             borderRadius: '8px',
@@ -1671,7 +1671,7 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
           <h2 style={styles.cardTitle}>Manuel Veri Yedekleme</h2>
         </div>
 
-        <p style={{ fontSize: '14px', color: '#64748b', marginBottom: '20px' }}>
+        <p style={{ fontSize: '14px', color: 'var(--color-text-muted)', marginBottom: '20px' }}>
           Platform verilerini JSON formatında yedekleyin. Bu yedek dosyası ile tüm öğrenci, öğretmen, sınav ve not bilgilerini kaydedebilirsiniz.
         </p>
 
@@ -1679,17 +1679,17 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
           {/* Standart Yedek */}
           <div style={{
             padding: '20px',
-            border: '2px solid #e2e8f0',
+            border: '2px solid var(--color-border)',
             borderRadius: '12px',
-            backgroundColor: '#f8fafc'
+            backgroundColor: 'var(--color-background)'
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
               <Database size={20} style={{ color: '#10b981' }} />
-              <h3 style={{ fontSize: '15px', fontWeight: '600', color: '#1e293b' }}>
+              <h3 style={{ fontSize: '15px', fontWeight: '600', color: 'var(--color-text-primary)' }}>
                 Standart Yedekleme (JSON)
               </h3>
             </div>
-            <p style={{ fontSize: '13px', color: '#64748b', marginBottom: '16px', lineHeight: '1.6' }}>
+            <p style={{ fontSize: '13px', color: 'var(--color-text-muted)', marginBottom: '16px', lineHeight: '1.6' }}>
               Tüm platform verileri JSON dosyası olarak indirilir. Fotoğraflar dahil <strong>değildir</strong>.
               Dosya boyutu küçüktür ve hızlı indirilir.
             </p>
@@ -1710,17 +1710,17 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
           {/* Fotoğraflı Yedek */}
           <div style={{
             padding: '20px',
-            border: '2px solid #e2e8f0',
+            border: '2px solid var(--color-border)',
             borderRadius: '12px',
-            backgroundColor: '#f8fafc'
+            backgroundColor: 'var(--color-background)'
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
               <Download size={20} style={{ color: '#f59e0b' }} />
-              <h3 style={{ fontSize: '15px', fontWeight: '600', color: '#1e293b' }}>
+              <h3 style={{ fontSize: '15px', fontWeight: '600', color: 'var(--color-text-primary)' }}>
                 Fotoğraflı Yedekleme (ZIP)
               </h3>
             </div>
-            <p style={{ fontSize: '13px', color: '#64748b', marginBottom: '16px', lineHeight: '1.6' }}>
+            <p style={{ fontSize: '13px', color: 'var(--color-text-muted)', marginBottom: '16px', lineHeight: '1.6' }}>
               Tüm veriler + yüklenen fotoğraflar ZIP arşivi olarak indirilir.
               <strong> Dosya boyutu büyük olabilir.</strong> İndirme işlemi daha uzun sürebilir.
               ZIP içeriği: backup.json, uploads/ ve uploads_student/ klasörleri.
@@ -1760,8 +1760,8 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
                 ...styles.button('primary'),
                 width: '100%',
                 opacity: 1,
-                backgroundColor: !includePhotos ? '#64748b' : '#3b82f6',
-                color: '#ffffff',
+                backgroundColor: !includePhotos ? 'var(--color-text-muted)' : '#3b82f6',
+                color: 'var(--color-text-inverse, #fff)',
                 cursor: !includePhotos ? 'not-allowed' : 'pointer'
               }}
             >
@@ -1772,7 +1772,7 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
             {!includePhotos && (
               <p style={{
                 fontSize: '12px',
-                color: '#64748b',
+                color: 'var(--color-text-muted)',
                 marginTop: '8px',
                 fontStyle: 'italic',
                 textAlign: 'center'
@@ -1805,11 +1805,11 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
           <h2 style={styles.cardTitle}>Veri Geri Yükleme</h2>
         </div>
 
-        <p style={{ fontSize: '14px', color: '#64748b', marginBottom: '20px' }}>
+        <p style={{ fontSize: '14px', color: 'var(--color-text-muted)', marginBottom: '20px' }}>
           Daha önce aldığınız yedek dosyasından verileri geri yükleyin.
           <strong style={{ color: '#ef4444' }}> Bu işlem mevcut tüm verileri silecektir!</strong>
           <br />
-          <span style={{ fontSize: '13px', color: '#64748b', marginTop: '8px', display: 'block' }}>
+          <span style={{ fontSize: '13px', color: 'var(--color-text-muted)', marginTop: '8px', display: 'block' }}>
             Desteklenen formatlar: <strong>JSON</strong> (sadece veriler) veya <strong>ZIP</strong> (veriler + fotoğraflar)
           </span>
         </p>
@@ -1818,7 +1818,7 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
           padding: '20px',
           border: '2px dashed #fecaca',
           borderRadius: '12px',
-          backgroundColor: '#fef2f2',
+          backgroundColor: 'var(--color-background-secondary)',
           textAlign: 'center'
         }}>
           <Database size={48} style={{ color: '#ef4444', margin: '0 auto 16px' }} />
@@ -1871,7 +1871,7 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
             style={{
               flex: 1,
               padding: '12px 16px',
-              border: '2px solid #e2e8f0',
+              border: '2px solid var(--color-border)',
               borderRadius: '12px',
               outline: 'none',
               fontSize: '14px'
@@ -1894,11 +1894,11 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
             <Database size={24} style={{ color: '#10b981' }} />
             <h2 style={styles.cardTitle}>Mevcut Sınıflar ({classes.length})</h2>
           </div>
-          <span style={{ fontSize: '12px', color: '#64748b' }}>Alfabetik Siralı</span>
+          <span style={{ fontSize: '12px', color: 'var(--color-text-muted)' }}>Alfabetik Siralı</span>
         </div>
 
         {classes.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '40px', color: '#64748b' }}>
+          <div style={{ textAlign: 'center', padding: '40px', color: 'var(--color-text-muted)' }}>
             <Users size={40} style={{ margin: '0 auto 12px', opacity: 0.3 }} />
             <p>Henüz tanımlanmış bir sınıf yok.</p>
           </div>
@@ -1906,9 +1906,9 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
-                <tr style={{ borderBottom: '2px solid #e2e8f0' }}>
-                  <th style={{ textAlign: 'left', padding: '16px', fontSize: '13px', color: '#64748b', fontWeight: '700' }}>Sınıf Adı</th>
-                  <th style={{ textAlign: 'right', padding: '16px', fontSize: '13px', color: '#64748b', fontWeight: '700' }}>İşlemler</th>
+                <tr style={{ borderBottom: '2px solid var(--color-border)' }}>
+                  <th style={{ textAlign: 'left', padding: '16px', fontSize: '13px', color: 'var(--color-text-muted)', fontWeight: '700' }}>Sınıf Adı</th>
+                  <th style={{ textAlign: 'right', padding: '16px', fontSize: '13px', color: 'var(--color-text-muted)', fontWeight: '700' }}>İşlemler</th>
                 </tr>
               </thead>
               <tbody>
@@ -1940,13 +1940,13 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
                             </button>
                             <button
                               onClick={() => { setEditingClass(null); setNewNameForEdit(''); }}
-                              style={{ padding: '8px 12px', backgroundColor: '#f1f5f9', color: '#64748b', border: 'none', borderRadius: '8px', cursor: 'pointer' }}
+                              style={{ padding: '8px 12px', backgroundColor: 'var(--color-background-secondary)', color: 'var(--color-text-muted)', border: 'none', borderRadius: '8px', cursor: 'pointer' }}
                             >
                               İptal
                             </button>
                           </div>
                         ) : (
-                          <span style={{ fontWeight: '600', color: '#1e293b' }}>{className}</span>
+                          <span style={{ fontWeight: '600', color: 'var(--color-text-primary)' }}>{className}</span>
                         )}
                       </td>
                       <td style={{ padding: '16px', textAlign: 'right' }}>
@@ -1958,8 +1958,8 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
                                padding: '8px',
                                borderRadius: '8px',
                                border: 'none',
-                               backgroundColor: '#f1f5f9',
-                               color: '#64748b',
+                               backgroundColor: 'var(--color-background-secondary)',
+                               color: 'var(--color-text-muted)',
                                cursor: 'pointer',
                                transition: 'all 0.2s'
                             }}
@@ -2055,7 +2055,7 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
               width: '64px',
               height: '64px',
               borderRadius: '16px',
-              backgroundColor: '#eff6ff',
+              backgroundColor: 'var(--color-background-secondary)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -2087,10 +2087,10 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
             <div style={{ flex: 1 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
                 <div>
-                  <h3 style={{ fontSize: '18px', fontWeight: '700', color: '#1e293b' }}>
+                  <h3 style={{ fontSize: '18px', fontWeight: '700', color: 'var(--color-text-primary)' }}>
                     Yeni Sürüm Mevcut: v{availableUpdate.latestVersion}
                   </h3>
-                  <p style={{ fontSize: '13px', color: '#64748b', marginTop: '4px' }}>
+                  <p style={{ fontSize: '13px', color: 'var(--color-text-muted)', marginTop: '4px' }}>
                     Yayınlanma Tarihi: {new Date(availableUpdate.releaseDate).toLocaleDateString('tr-TR')}
                   </p>
                 </div>
@@ -2105,15 +2105,15 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
               </div>
 
               <div style={{
-                backgroundColor: '#f8fafc',
+                backgroundColor: 'var(--color-background)',
                 borderRadius: '12px',
                 padding: '16px',
                 marginBottom: '20px'
               }}>
-                <h4 style={{ fontSize: '14px', fontWeight: '600', color: '#475569', marginBottom: '8px' }}>Neler Değişti?</h4>
+                <h4 style={{ fontSize: '14px', fontWeight: '600', color: 'var(--color-text-secondary)', marginBottom: '8px' }}>Neler Değişti?</h4>
                 <div style={{
                   fontSize: '13px',
-                  color: '#64748b',
+                  color: 'var(--color-text-muted)',
                   lineHeight: '1.6',
                   overflowY: 'auto',
                   maxHeight: '300px'
@@ -2128,7 +2128,7 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
                     <span style={{ fontSize: '13px', fontWeight: '600', color: '#3b82f6' }}>Yükleniyor...</span>
                     <span style={{ fontSize: '13px', fontWeight: '700', color: '#3b82f6' }}>%{updateProgress}</span>
                   </div>
-                  <div style={{ height: '8px', backgroundColor: '#e2e8f0', borderRadius: '4px', overflow: 'hidden' }}>
+                  <div style={{ height: '8px', backgroundColor: 'var(--color-border)', borderRadius: '4px', overflow: 'hidden' }}>
                     <div style={{
                       height: '100%',
                       width: `${updateProgress}%`,
@@ -2158,7 +2158,7 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
       {/* Geçmiş */}
       <div style={styles.card}>
         <div style={styles.cardHeader}>
-          <Clock size={24} style={{ color: '#64748b' }} />
+          <Clock size={24} style={{ color: 'var(--color-text-muted)' }} />
           <h2 style={styles.cardTitle}>Güncelleme Geçmişi</h2>
         </div>
 
@@ -2171,8 +2171,8 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
                 alignItems: 'center',
                 gap: '16px',
                 padding: '16px',
-                backgroundColor: index === 0 ? '#f0f9ff' : 'white',
-                border: `1px solid ${index === 0 ? '#bae6fd' : '#f1f5f9'}`,
+                backgroundColor: index === 0 ? 'var(--color-background-secondary)' : 'white',
+                border: `1px solid ${index === 0 ? '#bae6fd' : 'var(--color-background-secondary)'}`,
                 borderRadius: '12px'
               }}
             >
@@ -2191,13 +2191,13 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
               </div>
               <div style={{ flex: 1 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <span style={{ fontSize: '14px', fontWeight: '700', color: '#1e293b' }}>v{update.version}</span>
+                  <span style={{ fontSize: '14px', fontWeight: '700', color: 'var(--color-text-primary)' }}>v{update.version}</span>
                   <span style={{ fontSize: '12px', color: '#94a3b8' }}>•</span>
                   <span style={{ fontSize: '12px', color: '#94a3b8' }}>
                     {new Date(update.date).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
                   </span>
                 </div>
-                <p style={{ fontSize: '13px', color: '#64748b', marginTop: '4px' }}>{update.description}</p>
+                <p style={{ fontSize: '13px', color: 'var(--color-text-muted)', marginTop: '4px' }}>{update.description}</p>
               </div>
               {index === 0 && (
                 <span style={{
@@ -2240,7 +2240,7 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
         <h2 style={styles.cardTitle}>DİKKAT: Sistemi Sıfırla</h2>
       </div>
 
-      <p style={{ fontSize: '14px', color: '#64748b', marginBottom: '20px' }}>
+      <p style={{ fontSize: '14px', color: 'var(--color-text-muted)', marginBottom: '20px' }}>
         Tüm platform verilerini kalıcı olarak silip sistemi başlangıç durumuna getirin.
       </p>
 
@@ -2259,7 +2259,7 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
       )}
 
       <div style={{
-        backgroundColor: '#fef2f2',
+        backgroundColor: 'var(--color-background-secondary)',
         border: '1px solid #fecaca',
         borderRadius: '12px',
         padding: '24px'
@@ -2328,19 +2328,19 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
       {/* Sistem Bilgileri */}
       <div style={{
         marginTop: '24px',
-        backgroundColor: '#f8fafc',
-        border: '1px solid #e2e8f0',
+        backgroundColor: 'var(--color-background)',
+        border: '1px solid var(--color-border)',
         borderRadius: '12px',
         padding: '24px'
       }}>
-        <h3 style={{ fontSize: '16px', fontWeight: '600', color: '#1e293b', marginBottom: '16px' }}>Platform Bilgileri</h3>
+        <h3 style={{ fontSize: '16px', fontWeight: '600', color: 'var(--color-text-primary)', marginBottom: '16px' }}>Platform Bilgileri</h3>
         <div style={{ display: 'grid', gap: '12px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid #e2e8f0' }}>
-            <span style={{ color: '#64748b' }}>Platform Versiyonu</span>
-            <span style={{ fontWeight: '500', color: '#1e293b' }}>v{currentVersion || '...'}</span>
+          <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid var(--color-border)' }}>
+            <span style={{ color: 'var(--color-text-muted)' }}>Platform Versiyonu</span>
+            <span style={{ fontWeight: '500', color: 'var(--color-text-primary)' }}>v{currentVersion || '...'}</span>
           </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid #e2e8f0' }}>
-            <span style={{ color: '#64748b' }}>Kullanılan Veritabanı</span>
+          <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid var(--color-border)' }}>
+            <span style={{ color: 'var(--color-text-muted)' }}>Kullanılan Veritabanı</span>
             <span style={{ 
               fontWeight: '600', 
               color: dbStatus.dbType === 'sqlite' ? '#10b981' : '#f59e0b' 
@@ -2348,17 +2348,17 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
               {dbStatus.dbType === 'sqlite' ? 'SQLite (Aktif / SQL Modu)' : 'JSON Modu (Kısıtlı)'}
             </span>
           </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid #e2e8f0' }}>
-            <span style={{ color: '#64748b' }}>Son Güncelleme</span>
-            <span style={{ fontWeight: '500', color: '#1e293b' }}>{updateHistory[0]?.date ? new Date(updateHistory[0].date).toLocaleDateString('tr-TR') : '15.03.2026'}</span>
+          <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid var(--color-border)' }}>
+            <span style={{ color: 'var(--color-text-muted)' }}>Son Güncelleme</span>
+            <span style={{ fontWeight: '500', color: 'var(--color-text-primary)' }}>{updateHistory[0]?.date ? new Date(updateHistory[0].date).toLocaleDateString('tr-TR') : '15.03.2026'}</span>
           </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid #e2e8f0' }}>
-            <span style={{ color: '#64748b' }}>Altyapı</span>
-            <span style={{ fontWeight: '500', color: '#1e293b' }}>PolyOS Engine</span>
+          <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid var(--color-border)' }}>
+            <span style={{ color: 'var(--color-text-muted)' }}>Altyapı</span>
+            <span style={{ fontWeight: '500', color: 'var(--color-text-primary)' }}>PolyOS Engine</span>
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0' }}>
-            <span style={{ color: '#64748b' }}>Geliştirici</span>
-            <span style={{ fontWeight: '500', color: '#1e293b' }}>Emirhan Gök</span>
+            <span style={{ color: 'var(--color-text-muted)' }}>Geliştirici</span>
+            <span style={{ fontWeight: '500', color: 'var(--color-text-primary)' }}>Emirhan Gök</span>
           </div>
         </div>
       </div>
@@ -2368,14 +2368,14 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
   const styles = {
     container: { maxWidth: '1200px', margin: '0 auto', padding: '32px' },
     header: { marginBottom: '32px' },
-    title: { fontSize: '28px', fontWeight: '700', color: '#1e293b', marginBottom: '8px' },
-    subtitle: { fontSize: '14px', color: '#64748b' },
+    title: { fontSize: '28px', fontWeight: '700', color: 'var(--color-text-primary)', marginBottom: '8px' },
+    subtitle: { fontSize: '14px', color: 'var(--color-text-muted)' },
 
     tabs: {
       display: 'flex',
       gap: '8px',
       marginBottom: '24px',
-      borderBottom: '2px solid #e2e8f0',
+      borderBottom: '2px solid var(--color-border)',
       overflowX: 'auto'
     },
 
@@ -2384,7 +2384,7 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
       backgroundColor: 'transparent',
       border: 'none',
       borderBottom: isActive ? '3px solid #3b82f6' : '3px solid transparent',
-      color: isActive ? '#3b82f6' : '#64748b',
+      color: isActive ? '#3b82f6' : 'var(--color-text-muted)',
       fontSize: '14px',
       fontWeight: isActive ? '600' : '500',
       cursor: 'pointer',
@@ -2396,11 +2396,11 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
     }),
 
     card: {
-      backgroundColor: '#ffffff',
+      backgroundColor: 'var(--color-surface)',
       borderRadius: '16px',
       padding: '24px',
       boxShadow: '0 1px 3px rgba(0,0,0,0.08)',
-      border: '1px solid #e2e8f0',
+      border: '1px solid var(--color-border)',
       marginBottom: '24px'
     },
 
@@ -2410,17 +2410,17 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
       gap: '12px',
       marginBottom: '20px',
       paddingBottom: '16px',
-      borderBottom: '1px solid #e2e8f0'
+      borderBottom: '1px solid var(--color-border)'
     },
 
-    cardTitle: { fontSize: '18px', fontWeight: '600', color: '#1e293b' },
+    cardTitle: { fontSize: '18px', fontWeight: '600', color: 'var(--color-text-primary)' },
 
     toggleSection: {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
       padding: '16px',
-      backgroundColor: '#f8fafc',
+      backgroundColor: 'var(--color-background)',
       borderRadius: '12px',
       marginBottom: '16px'
     },
@@ -2431,8 +2431,8 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
       gap: '4px'
     },
 
-    toggleTitle: { fontSize: '15px', fontWeight: '600', color: '#1e293b' },
-    toggleDesc: { fontSize: '13px', color: '#64748b' },
+    toggleTitle: { fontSize: '15px', fontWeight: '600', color: 'var(--color-text-primary)' },
+    toggleDesc: { fontSize: '13px', color: 'var(--color-text-muted)' },
 
     toggleButton: (enabled) => ({
       display: 'flex',
@@ -2460,7 +2460,7 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
       padding: '16px',
       borderRadius: '12px',
       border: isSelected ? '2px solid #3b82f6' : '2px solid #e2e8f0',
-      backgroundColor: isSelected ? '#eff6ff' : '#ffffff',
+      backgroundColor: isSelected ? 'var(--color-background-secondary)' : '#ffffff',
       cursor: 'pointer',
       transition: 'all 0.2s',
       textAlign: 'center'
@@ -2469,7 +2469,7 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
     className: (isSelected) => ({
       fontSize: '16px',
       fontWeight: '700',
-      color: isSelected ? '#3b82f6' : '#64748b',
+      color: isSelected ? '#3b82f6' : 'var(--color-text-muted)',
       marginBottom: '8px'
     }),
 
@@ -2491,8 +2491,8 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
 
     button: (variant = 'primary') => ({
       padding: '10px 20px',
-      backgroundColor: variant === 'primary' ? '#3b82f6' : variant === 'secondary' ? '#f1f5f9' : '#ef4444',
-      color: variant === 'primary' ? '#ffffff' : variant === 'secondary' ? '#475569' : '#ffffff',
+      backgroundColor: variant === 'primary' ? '#3b82f6' : variant === 'secondary' ? 'var(--color-background-secondary)' : '#ef4444',
+      color: variant === 'primary' ? '#ffffff' : variant === 'secondary' ? 'var(--color-text-secondary)' : '#ffffff',
       border: 'none',
       borderRadius: '10px',
       fontSize: '14px',
@@ -2508,7 +2508,7 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
       width: '100%',
       padding: '14px',
       backgroundColor: '#10b981',
-      color: '#ffffff',
+      color: 'var(--color-text-inverse, #fff)',
       border: 'none',
       borderRadius: '12px',
       fontSize: '15px',
@@ -2548,7 +2548,7 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
     return (
       <TeacherLayout>
         <div style={styles.container}>
-          <p style={{ textAlign: 'center', color: '#64748b' }}>Yükleniyor...</p>
+          <p style={{ textAlign: 'center', color: 'var(--color-text-muted)' }}>Yükleniyor...</p>
         </div>
       </TeacherLayout>
     );
@@ -2617,7 +2617,7 @@ HAZIR MISINIZ? Bu işlem tüm sistemi Fabrika Ayarlarına döndürecektir. 👋`
             Güncelleme Yönetimi
           </button>
           <button
-            style={{ ...styles.tab(activeTab === 'reset'), color: activeTab === 'reset' ? '#dc2626' : '#64748b', borderBottomColor: activeTab === 'reset' ? '#dc2626' : 'transparent' }}
+            style={{ ...styles.tab(activeTab === 'reset'), color: activeTab === 'reset' ? '#dc2626' : 'var(--color-text-muted)', borderBottomColor: activeTab === 'reset' ? '#dc2626' : 'transparent' }}
             onClick={() => setActiveTab('reset')}
           >
             <AlertTriangle size={18} />

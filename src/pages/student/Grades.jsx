@@ -98,20 +98,20 @@ const Grades = () => {
   const getStatusBadge = (submission) => {
     if (submission.grade !== null && submission.grade !== undefined) {
       const grade = submission.grade;
-      if (grade === 'K') return { text: 'Kopya (İptal)', color: '#ef4444', bg: '#fef2f2' };
-      if (grade >= 85) return { text: t('excellent'), color: '#10b981', bg: '#ecfdf5' };
-      if (grade >= 70) return { text: t('good'), color: '#3b82f6', bg: '#eff6ff' };
-      if (grade >= 50) return { text: t('pass'), color: '#f59e0b', bg: '#fffbeb' };
-      return { text: t('fail'), color: '#ef4444', bg: '#fef2f2' };
+      if (grade === 'K') return { text: 'Kopya (İptal)', color: '#ef4444', bg: 'var(--color-background-secondary)' };
+      if (grade >= 85) return { text: t('excellent'), color: '#10b981', bg: 'var(--color-background-secondary)' };
+      if (grade >= 70) return { text: t('good'), color: '#3b82f6', bg: 'var(--color-background-secondary)' };
+      if (grade >= 50) return { text: t('pass'), color: '#f59e0b', bg: 'var(--color-background-secondary)' };
+      return { text: t('fail'), color: '#ef4444', bg: 'var(--color-background-secondary)' };
     }
-    return { text: t('pending'), color: '#64748b', bg: '#f1f5f9' };
+    return { text: t('pending'), color: 'var(--color-text-muted)', bg: 'var(--color-background-secondary)' };
   };
 
   const styles = {
     container: { width: '1600px', margin: '40px auto' },
     header: { marginBottom: '32px' },
-    title: { fontSize: '28px', fontWeight: '700', color: '#1e293b', marginBottom: '8px' },
-    subtitle: { fontSize: '14px', color: '#64748b' },
+    title: { fontSize: '28px', fontWeight: '700', color: 'var(--color-text-primary)', marginBottom: '8px' },
+    subtitle: { fontSize: '14px', color: 'var(--color-text-muted)' },
     statsGrid: {
       display: 'grid',
       gridTemplateColumns: 'repeat(4, 1fr)',
@@ -119,21 +119,21 @@ const Grades = () => {
       marginBottom: '32px'
     },
     statCard: {
-      backgroundColor: '#fff',
+      backgroundColor: 'var(--color-surface)',
       borderRadius: '20px',
       padding: '24px',
-      border: '1px solid #e2e8f0',
+      border: '1px solid var(--color-border)',
       textAlign: 'center',
       boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05)',
       transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
     },
     statValue: { fontSize: '32px', fontWeight: '900', marginBottom: '6px' },
-    statLabel: { fontSize: '13px', color: '#64748b', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.05em' },
+    statLabel: { fontSize: '13px', color: 'var(--color-text-muted)', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.05em' },
     tabs: {
       display: 'flex',
       gap: '4px',
       marginBottom: '32px',
-      backgroundColor: '#f1f5f9',
+      backgroundColor: 'var(--color-background-secondary)',
       padding: '4px',
       borderRadius: '16px',
       width: 'fit-content'
@@ -146,14 +146,14 @@ const Grades = () => {
       border: 'none',
       cursor: 'pointer',
       backgroundColor: active ? '#fff' : 'transparent',
-      color: active ? '#2563eb' : '#64748b',
+      color: active ? '#2563eb' : 'var(--color-text-muted)',
       boxShadow: active ? '0 4px 6px -1px rgba(0, 0, 0, 0.1)' : 'none',
       transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
     }),
     card: {
-      backgroundColor: '#fff',
+      backgroundColor: 'var(--color-surface)',
       borderRadius: '20px',
-      border: '1px solid #e2e8f0',
+      border: '1px solid var(--color-border)',
       overflow: 'hidden',
       marginBottom: '20px',
       transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
@@ -166,8 +166,8 @@ const Grades = () => {
       padding: '28px 28px 20px',
       borderBottom: '1px solid #f1f5f9'
     },
-    examTitle: { fontSize: '19px', fontWeight: '800', color: '#1e293b', marginBottom: '6px' },
-    examDesc: { fontSize: '14px', color: '#64748b', fontWeight: '500' },
+    examTitle: { fontSize: '19px', fontWeight: '800', color: 'var(--color-text-primary)', marginBottom: '6px' },
+    examDesc: { fontSize: '14px', color: 'var(--color-text-muted)', fontWeight: '500' },
     badge: (status) => ({
       display: 'inline-flex',
       alignItems: 'center',
@@ -180,7 +180,7 @@ const Grades = () => {
       letterSpacing: '0.05em',
       backgroundColor: status.bg,
       color: status.color,
-      border: `1px solid ${status.bg === '#fef2f2' ? '#fee2e2' : status.bg === '#ecfdf5' ? '#dcfce7' : status.bg === '#eff6ff' ? '#dbeafe' : status.bg === '#fffbeb' ? '#fef3c7' : '#e2e8f0'}`
+      border: `1px solid ${status.bg === 'var(--color-background-secondary)' ? '#fee2e2' : status.bg === 'var(--color-background-secondary)' ? '#dcfce7' : status.bg === 'var(--color-background-secondary)' ? 'var(--color-border)' : status.bg === 'var(--color-background-secondary)' ? '#fef3c7' : 'var(--color-border)'}`
     }),
     cardBody: {
       padding: '24px 28px',
@@ -188,11 +188,11 @@ const Grades = () => {
       gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
       gap: '24px'
     },
-    infoItem: { display: 'flex', alignItems: 'center', gap: '10px', fontSize: '14.5px', color: '#475569', fontWeight: '500' },
+    infoItem: { display: 'flex', alignItems: 'center', gap: '10px', fontSize: '14.5px', color: 'var(--color-text-secondary)', fontWeight: '500' },
     gradeSection: {
       padding: '24px 28px',
-      backgroundColor: '#f8fafc',
-      borderTop: '1px solid #e2e8f0',
+      backgroundColor: 'var(--color-background)',
+      borderTop: '1px solid var(--color-border)',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between'
@@ -211,11 +211,11 @@ const Grades = () => {
     feedback: {
       flex: 1,
       padding: '16px 20px',
-      backgroundColor: '#fff',
+      backgroundColor: 'var(--color-surface)',
       borderRadius: '12px',
-      border: '1px solid #e2e8f0',
+      border: '1px solid var(--color-border)',
       fontSize: '14px',
-      color: '#64748b',
+      color: 'var(--color-text-muted)',
       marginLeft: '32px'
     },
     emptyState: {
@@ -225,9 +225,9 @@ const Grades = () => {
       justifyContent: 'center',
       textAlign: 'center',
       padding: '60px 20px',
-      backgroundColor: '#fff',
+      backgroundColor: 'var(--color-surface)',
       borderRadius: '16px',
-      border: '1px solid #e2e8f0',
+      border: '1px solid var(--color-border)',
       minHeight: '300px'
     }
   };
@@ -236,7 +236,7 @@ const Grades = () => {
     return (
       <StudentLayout>
         <div style={{ ...styles.container, textAlign: 'center', paddingTop: '100px' }}>
-          <p style={{ color: '#64748b' }}>{t('loading')}</p>
+          <p style={{ color: 'var(--color-text-muted)' }}>{t('loading')}</p>
         </div>
       </StudentLayout>
     );
@@ -287,13 +287,13 @@ const Grades = () => {
         {/* Submissions List */}
         {filteredSubmissions.length === 0 ? (
           <div style={styles.emptyState}>
-            <FileText size={48} color="#cbd5e1" style={{ marginBottom: '16px' }} />
-            <h3 style={{ fontSize: '18px', fontWeight: '600', color: '#1e293b', marginBottom: '8px' }}>
+            <FileText size={48} color='var(--color-border-dark)' style={{ marginBottom: '16px' }} />
+            <h3 style={{ fontSize: '18px', fontWeight: '600', color: 'var(--color-text-primary)', marginBottom: '8px' }}>
               {activeTab === 'all' ? t('noSubmissions') :
                 activeTab === 'graded' ? t('noGradedSubmissions') :
                   t('noPendingSubmissions')}
             </h3>
-            <p style={{ color: '#64748b', fontSize: '14px' }}>
+            <p style={{ color: 'var(--color-text-muted)', fontSize: '14px' }}>
               {activeTab === 'all' ? t('startByUploading') : ''}
             </p>
           </div>
@@ -312,7 +312,7 @@ const Grades = () => {
                 onMouseLeave={(e) => {
                   e.currentTarget.style.transform = 'translateY(0)';
                   e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05)';
-                  e.currentTarget.style.borderColor = '#e2e8f0';
+                  e.currentTarget.style.borderColor = 'var(--color-border)';
                 }}
               >
                 {/* Header */}
@@ -336,7 +336,7 @@ const Grades = () => {
                     <>
                       <div style={styles.infoItem}>
                         <CheckCircle size={16} color="#10b981" />
-                        <span>Quiz Sonucu</span>
+                        <span>{t('quizResult')}</span>
                       </div>
                       <div style={styles.infoItem}>
                         <Calendar size={16} color="#10b981" />
@@ -356,13 +356,13 @@ const Grades = () => {
                           }}
                           style={{
                             display: 'inline-flex', alignItems: 'center', gap: '8px',
-                            padding: '8px 16px', backgroundColor: '#f0fdfa', color: '#0d9488',
+                            padding: '8px 16px', backgroundColor: 'var(--color-background-secondary)', color: '#0d9488',
                             border: '1px solid #ccfbf1', borderRadius: '8px', cursor: 'pointer',
                             fontSize: '13px', fontWeight: '600', transition: 'all 0.2s'
                           }}
                         >
                           <FileText size={16} />
-                          Sınav Optiğimi Görüntüle
+                          {t('viewMyExamOptic')}
                         </button>
                       </div>
                     </>
@@ -371,13 +371,13 @@ const Grades = () => {
                       {/* Dosya Listesi - Birden fazla dosya varsa hepsini göster */}
                       {submission.files && submission.files.length > 1 ? (
                         <>
-                          <div style={{ ...styles.infoItem, gridColumn: '1 / -1', fontWeight: '600', color: '#1e293b' }}>
+                          <div style={{ ...styles.infoItem, gridColumn: '1 / -1', fontWeight: '600', color: 'var(--color-text-primary)' }}>
                             <FileText size={16} color="#3b82f6" />
                             <span>{submission.files.length} {t('filesUploaded')}</span>
                           </div>
                           {submission.files.map((file, idx) => (
                             <div key={idx} style={{ ...styles.infoItem, gridColumn: '1 / -1', paddingLeft: '32px', fontSize: '14px' }}>
-                              <span style={{ color: '#64748b' }}>📄 {file.fileName} ({formatFileSize(file.fileSize)})</span>
+                              <span style={{ color: 'var(--color-text-muted)' }}>📄 {file.fileName} ({formatFileSize(file.fileSize)})</span>
                             </div>
                           ))}
                         </>
@@ -405,7 +405,7 @@ const Grades = () => {
                     <div style={styles.gradeDisplay}>
                       <Award size={24} color={submission.grade === 'K' ? '#ef4444' : '#f59e0b'} />
                       <span style={styles.gradeNumber(submission.grade)}>{submission.grade}</span>
-                      {submission.grade !== 'K' && <span style={{ color: '#64748b', fontSize: '14px' }}>/ 100</span>}
+                      {submission.grade !== 'K' && <span style={{ color: 'var(--color-text-muted)', fontSize: '14px' }}>/ 100</span>}
                     </div>
                     {submission.feedback && (
                       <div style={styles.feedback}>
@@ -417,7 +417,7 @@ const Grades = () => {
 
                 {/* Pending Message */}
                 {(submission.grade === null || submission.grade === undefined) && (
-                  <div style={{ ...styles.gradeSection, backgroundColor: '#fffbeb' }}>
+                  <div style={{ ...styles.gradeSection, backgroundColor: 'var(--color-background-secondary)' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                       <AlertCircle size={20} color="#f59e0b" />
                       <span style={{ color: '#92400e', fontSize: '14px' }}>

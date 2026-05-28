@@ -292,13 +292,13 @@ const LabRules = () => {
 
   const colorClasses = {
     orange: { bg: '#fff7ed', text: '#ea580c' },
-    red: { bg: '#fef2f2', text: '#dc2626' },
-    blue: { bg: '#eff6ff', text: '#2563eb' },
-    teal: { bg: '#f0fdfa', text: '#0d9488' },
-    yellow: { bg: '#fefce8', text: '#ca8a04' },
-    indigo: { bg: '#eef2ff', text: '#4f46e5' },
+    red: { bg: 'var(--color-background-secondary)', text: '#dc2626' },
+    blue: { bg: 'var(--color-background-secondary)', text: '#2563eb' },
+    teal: { bg: 'var(--color-background-secondary)', text: '#0d9488' },
+    yellow: { bg: 'var(--color-background-secondary)', text: '#ca8a04' },
+    indigo: { bg: 'var(--color-background-secondary)', text: '#4f46e5' },
     purple: { bg: '#faf5ff', text: '#9333ea' },
-    pink: { bg: '#fdf2f8', text: '#db2777' }
+    pink: { bg: 'var(--color-background-secondary)', text: '#db2777' }
   };
 
   const filteredRules = activeFilter === 'all' 
@@ -306,7 +306,7 @@ const LabRules = () => {
     : rules.filter(rule => rule.category === activeFilter);
 
   return (
-    <div style={{ minHeight: '100vh', background: '#f8fafc', fontFamily: "'Lexend', sans-serif", color: '#1e293b' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--color-background)', fontFamily: "'Lexend', sans-serif", color: 'var(--color-text-primary)' }}>
       {isSetupRequired && <SystemSetupPopup />}
 
       <style>{`
@@ -331,19 +331,19 @@ const LabRules = () => {
               </div>
               <div style={{ display: 'flex', flexDirection: 'column' }}>
                 <span style={{ fontSize: '20px', fontWeight: '700', color: '#0f172a', letterSpacing: '-0.02em', lineHeight: 1 }}>Atölye<span style={{ color: '#2463eb' }}>.Platform</span></span>
-                <span style={{ fontSize: '10px', color: '#64748b', fontWeight: '500', letterSpacing: '0.05em', marginTop: '2px' }}>Developed by Emirhan Gök</span>
+                <span style={{ fontSize: '10px', color: 'var(--color-text-muted)', fontWeight: '500', letterSpacing: '0.05em', marginTop: '2px' }}>Developed by Emirhan Gök</span>
               </div>
             </div>
 
             <div className="hidden md:flex items-center gap-8">
-              <a onClick={() => navigate('/')} style={{ fontSize: '14px', fontWeight: '500', color: '#64748b', textDecoration: 'none', cursor: 'pointer' }}>{t.features}</a>
+              <a onClick={() => navigate('/')} style={{ fontSize: '14px', fontWeight: '500', color: 'var(--color-text-muted)', textDecoration: 'none', cursor: 'pointer' }}>{t.features}</a>
               <a style={{ fontSize: '14px', fontWeight: '600', color: '#2463eb', textDecoration: 'none', cursor: 'default' }}>{t.labRulesNav}</a>
-              <a onClick={() => navigate('/dokumantasyon')} style={{ fontSize: '14px', fontWeight: '500', color: '#64748b', textDecoration: 'none', cursor: 'pointer' }}>{t.documentation}</a>
+              <a onClick={() => navigate('/dokumantasyon')} style={{ fontSize: '14px', fontWeight: '500', color: 'var(--color-text-muted)', textDecoration: 'none', cursor: 'pointer' }}>{t.documentation}</a>
             </div>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
               <div style={{ position: 'relative' }}>
-                <button onClick={() => setShowLangMenu(!showLangMenu)} style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'rgba(255, 255, 255, 0.8)', color: '#64748b', padding: '8px 12px', borderRadius: '8px', fontSize: '14px', fontWeight: '600', border: '1px solid rgba(226, 232, 240, 0.8)', cursor: 'pointer' }}>
+                <button onClick={() => setShowLangMenu(!showLangMenu)} style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'rgba(255, 255, 255, 0.8)', color: 'var(--color-text-muted)', padding: '8px 12px', borderRadius: '8px', fontSize: '14px', fontWeight: '600', border: '1px solid rgba(226, 232, 240, 0.8)', cursor: 'pointer' }}>
                   <Globe style={{ width: '16px', height: '16px' }} />
                   <span>{currentLang}</span>
                   <ChevronDown style={{ width: '16px', height: '16px' }} />
@@ -351,7 +351,7 @@ const LabRules = () => {
                 {showLangMenu && (
                   <div onMouseLeave={() => setShowLangMenu(false)} style={{ position: 'absolute', top: 'calc(100% + 8px)', right: 0, background: 'rgba(255, 255, 255, 0.95)', backdropFilter: 'blur(12px)', borderRadius: '12px', border: '1px solid rgba(226, 232, 240, 0.8)', boxShadow: '0 8px 32px rgba(15, 23, 42, 0.12)', padding: '8px', minWidth: '160px', zIndex: 100 }}>
                     {languages.map(lang => (
-                      <button key={lang.code} onClick={() => { changeLanguage(lang.code.toLowerCase()); setCurrentLang(lang.code); setShowLangMenu(false); }} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', padding: '10px 12px', background: currentLang === lang.code ? 'rgba(36, 99, 235, 0.08)' : 'transparent', color: currentLang === lang.code ? '#2463eb' : '#64748b', border: 'none', borderRadius: '8px', fontSize: '14px', fontWeight: '500', cursor: 'pointer', textAlign: 'left' }}>
+                      <button key={lang.code} onClick={() => { changeLanguage(lang.code.toLowerCase()); setCurrentLang(lang.code); setShowLangMenu(false); }} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', padding: '10px 12px', background: currentLang === lang.code ? 'rgba(36, 99, 235, 0.08)' : 'transparent', color: currentLang === lang.code ? '#2463eb' : 'var(--color-text-muted)', border: 'none', borderRadius: '8px', fontSize: '14px', fontWeight: '500', cursor: 'pointer', textAlign: 'left' }}>
                         <span>{lang.name}</span>
                         {currentLang === lang.code && <CheckCircle style={{ width: '14px', height: '14px' }} />}
                       </button>
@@ -372,7 +372,7 @@ const LabRules = () => {
         <div className="animate-fade-in-up" style={{ maxWidth: '800px', margin: '0 auto' }}>
           <p style={{ fontSize: '12px', fontWeight: '700', color: '#2463eb', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '16px' }}>{t.guidelines}</p>
           <h1 style={{ fontSize: '56px', fontWeight: '800', marginBottom: '20px', letterSpacing: '-0.03em', color: '#0f172a' }}>{t.title}</h1>
-          <p style={{ fontSize: '18px', color: '#475569', lineHeight: '1.6', fontWeight: '500' }}>{t.subtitle}</p>
+          <p style={{ fontSize: '18px', color: 'var(--color-text-secondary)', lineHeight: '1.6', fontWeight: '500' }}>{t.subtitle}</p>
         </div>
       </div>
 
@@ -380,7 +380,7 @@ const LabRules = () => {
         {/* Filters */}
         <div style={{ display: 'flex', gap: '12px', marginBottom: '48px', justifyContent: 'center', overflowX: 'auto', paddingBottom: '8px' }}>
           {['all', 'general', 'safety', 'digital'].map(filter => (
-            <button key={filter} onClick={() => setActiveFilter(filter)} style={{ padding: '10px 24px', background: activeFilter === filter ? '#0f172a' : 'white', color: activeFilter === filter ? 'white' : '#64748b', border: '1px solid #e2e8f0', borderRadius: '12px', fontSize: '14px', fontWeight: '600', cursor: 'pointer', transition: 'all 0.2s', whiteSpace: 'nowrap' }}>
+            <button key={filter} onClick={() => setActiveFilter(filter)} style={{ padding: '10px 24px', background: activeFilter === filter ? '#0f172a' : 'white', color: activeFilter === filter ? 'white' : 'var(--color-text-muted)', border: '1px solid var(--color-border)', borderRadius: '12px', fontSize: '14px', fontWeight: '600', cursor: 'pointer', transition: 'all 0.2s', whiteSpace: 'nowrap' }}>
               {filter === 'all' ? t.allRules : filter === 'general' ? t.generalConduct : filter === 'safety' ? t.safetyProcedures : t.digitalEthics}
             </button>
           ))}
@@ -397,17 +397,17 @@ const LabRules = () => {
                   <Icon size={28} color={colors.text} />
                 </div>
                 <h3 style={{ fontSize: '20px', fontWeight: '800', color: '#0f172a', marginBottom: '12px' }}>{rule.title}</h3>
-                <p style={{ fontSize: '15px', color: '#64748b', lineHeight: '1.6' }}>{rule.description}</p>
+                <p style={{ fontSize: '15px', color: 'var(--color-text-muted)', lineHeight: '1.6' }}>{rule.description}</p>
               </div>
             );
           })}
 
-          <div className="glass-card" style={{ borderRadius: '24px', padding: '32px', border: '2px dashed #cbd5e1', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', background: 'rgba(36, 99, 235, 0.02)' }}>
-            <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
+          <div className="glass-card" style={{ borderRadius: '24px', padding: '32px', border: '2px dashed var(--color-border-dark)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', background: 'rgba(36, 99, 235, 0.02)' }}>
+            <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: 'var(--color-surface)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
               <HelpCircle size={28} color="#2463eb" />
             </div>
             <h3 style={{ fontSize: '18px', fontWeight: '800', color: '#0f172a', marginBottom: '8px' }}>{t.moreQuestions}</h3>
-            <p style={{ fontSize: '14px', color: '#64748b', marginBottom: '16px' }}>{t.moreQuestionsDesc}</p>
+            <p style={{ fontSize: '14px', color: 'var(--color-text-muted)', marginBottom: '16px' }}>{t.moreQuestionsDesc}</p>
             <button style={{ color: '#2463eb', fontWeight: '700', background: 'none', border: 'none', textDecoration: 'underline', cursor: 'pointer' }}>{t.contactInstructor}</button>
           </div>
         </div>
@@ -438,7 +438,7 @@ const LabRules = () => {
             <div className="flex flex-col items-center text-center col-span-1 lg:col-span-1">
               <div style={{ position: 'relative', marginBottom: '24px' }}>
                 <div style={{ position: 'absolute', inset: '-16px', background: 'rgba(255,255,255,0.2)', borderRadius: '50%', filter: 'blur(20px)', opacity: 0.3 }} />
-                <div style={{ width: '112px', height: '112px', borderRadius: '50%', overflow: 'hidden', border: '2px solid rgba(255,255,255,0.2)', boxShadow: '0 20px 40px rgba(0,0,0,0.3)', position: 'relative', background: '#1e293b' }}>
+                <div style={{ width: '112px', height: '112px', borderRadius: '50%', overflow: 'hidden', border: '2px solid rgba(255,255,255,0.2)', boxShadow: '0 20px 40px rgba(0,0,0,0.3)', position: 'relative', background: 'var(--color-text-primary)' }}>
                   <img src="/ataturk.png" alt="Mustafa Kemal Atatürk" style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'grayscale(1) contrast(1.25)' }} />
                 </div>
               </div>
@@ -447,7 +447,7 @@ const LabRules = () => {
                 <span style={{ color: '#fca5a5' }}>{t.ataturkQuote2}</span>"
               </h2>
               <div style={{ height: '1px', width: '48px', background: 'rgba(239,68,68,0.5)', marginBottom: '12px' }} />
-              <p style={{ color: '#cbd5e1', fontWeight: 500, letterSpacing: '0.1em', fontSize: '12px', textTransform: 'uppercase', opacity: 0.8 }}>{t.ataturk}</p>
+              <p style={{ color: 'var(--color-border-dark)', fontWeight: 500, letterSpacing: '0.1em', fontSize: '12px', textTransform: 'uppercase', opacity: 0.8 }}>{t.ataturk}</p>
             </div>
 
             {/* Other Columns */}
@@ -457,17 +457,17 @@ const LabRules = () => {
                   <h3 style={{ fontSize: '14px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#fca5a5', marginBottom: '16px' }}>{t.platform}</h3>
                   <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     <li>
-                      <a onClick={() => navigate('/ogrenci/giris')} style={{ color: '#cbd5e1', fontSize: '14px', textDecoration: 'none', transition: 'all 0.2s', display: 'inline-block', cursor: 'pointer' }}
+                      <a onClick={() => navigate('/ogrenci/giris')} style={{ color: 'var(--color-border-dark)', fontSize: '14px', textDecoration: 'none', transition: 'all 0.2s', display: 'inline-block', cursor: 'pointer' }}
                         onMouseEnter={(e) => { e.currentTarget.style.color = 'white'; e.currentTarget.style.textDecoration = 'underline'; e.currentTarget.style.textDecorationColor = '#ef4444'; }}
-                        onMouseLeave={(e) => { e.currentTarget.style.color = '#cbd5e1'; e.currentTarget.style.textDecoration = 'none'; }}
+                        onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--color-border-dark)'; e.currentTarget.style.textDecoration = 'none'; }}
                       >
                         {t.studentPortal}
                       </a>
                     </li>
                     <li>
-                      <a onClick={() => navigate('/ogretmen/giris')} style={{ color: '#cbd5e1', fontSize: '14px', textDecoration: 'none', transition: 'all 0.2s', display: 'inline-block', cursor: 'pointer' }}
+                      <a onClick={() => navigate('/ogretmen/giris')} style={{ color: 'var(--color-border-dark)', fontSize: '14px', textDecoration: 'none', transition: 'all 0.2s', display: 'inline-block', cursor: 'pointer' }}
                         onMouseEnter={(e) => { e.currentTarget.style.color = 'white'; e.currentTarget.style.textDecoration = 'underline'; e.currentTarget.style.textDecorationColor = '#ef4444'; }}
-                        onMouseLeave={(e) => { e.currentTarget.style.color = '#cbd5e1'; e.currentTarget.style.textDecoration = 'none'; }}
+                        onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--color-border-dark)'; e.currentTarget.style.textDecoration = 'none'; }}
                       >
                         {t.instructorPortal}
                       </a>
@@ -484,17 +484,17 @@ const LabRules = () => {
                       </a>
                     </li>
                     <li>
-                      <a onClick={() => navigate('/dokumantasyon')} style={{ color: '#cbd5e1', fontSize: '14px', textDecoration: 'none', transition: 'all 0.2s', display: 'inline-block', cursor: 'pointer' }}
+                      <a onClick={() => navigate('/dokumantasyon')} style={{ color: 'var(--color-border-dark)', fontSize: '14px', textDecoration: 'none', transition: 'all 0.2s', display: 'inline-block', cursor: 'pointer' }}
                         onMouseEnter={(e) => { e.currentTarget.style.color = 'white'; e.currentTarget.style.textDecoration = 'underline'; e.currentTarget.style.textDecorationColor = '#ef4444'; }}
-                        onMouseLeave={(e) => { e.currentTarget.style.color = '#cbd5e1'; e.currentTarget.style.textDecoration = 'none'; }}
+                        onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--color-border-dark)'; e.currentTarget.style.textDecoration = 'none'; }}
                       >
                         {t.documentationLink}
                       </a>
                     </li>
                     <li>
-                      <a onClick={() => navigate('/sistem-durumu')} style={{ color: '#cbd5e1', fontSize: '14px', textDecoration: 'none', transition: 'all 0.2s', display: 'inline-block', cursor: 'pointer' }}
+                      <a onClick={() => navigate('/sistem-durumu')} style={{ color: 'var(--color-border-dark)', fontSize: '14px', textDecoration: 'none', transition: 'all 0.2s', display: 'inline-block', cursor: 'pointer' }}
                         onMouseEnter={(e) => { e.currentTarget.style.color = 'white'; e.currentTarget.style.textDecoration = 'underline'; e.currentTarget.style.textDecorationColor = '#ef4444'; }}
-                        onMouseLeave={(e) => { e.currentTarget.style.color = '#cbd5e1'; e.currentTarget.style.textDecoration = 'none'; }}
+                        onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--color-border-dark)'; e.currentTarget.style.textDecoration = 'none'; }}
                       >
                         {t.systemStatus}
                       </a>
@@ -505,15 +505,15 @@ const LabRules = () => {
                 <div>
                   <h3 style={{ fontSize: '14px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#fca5a5', marginBottom: '16px' }}>{t.contact}</h3>
                   <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', fontSize: '14px', color: '#cbd5e1' }}>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', fontSize: '14px', color: 'var(--color-border-dark)' }}>
                       <MapPin style={{ width: '18px', height: '18px', marginTop: '2px', flexShrink: 0, color: '#fca5a5' }} />
                       <span>Alanya MTAL<br />Antalya, Turkey</span>
                     </li>
                     <li style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px' }}>
                       <Mail style={{ width: '18px', height: '18px', color: '#fca5a5' }} />
-                      <a href="https://alanyamtal.meb.k12.tr/tema/iletisim.php" style={{ color: '#cbd5e1', textDecoration: 'none', transition: 'color 0.2s' }}
+                      <a href="https://alanyamtal.meb.k12.tr/tema/iletisim.php" style={{ color: 'var(--color-border-dark)', textDecoration: 'none', transition: 'color 0.2s' }}
                         onMouseEnter={(e) => e.currentTarget.style.color = 'white'}
-                        onMouseLeave={(e) => e.currentTarget.style.color = '#cbd5e1'}
+                        onMouseLeave={(e) => e.currentTarget.style.color = 'var(--color-border-dark)'}
                       >
                         alanyamtal.meb.k12.tr
                       </a>

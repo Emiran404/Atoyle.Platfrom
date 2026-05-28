@@ -305,7 +305,7 @@ const Documentation = () => {
   ];
 
   return (
-    <div style={{ minHeight: '100vh', background: '#f8fafc', fontFamily: "'Lexend', sans-serif", color: '#1e293b' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--color-background)', fontFamily: "'Lexend', sans-serif", color: 'var(--color-text-primary)' }}>
       {/* Sistem Kurulum Popup */}
       {isSetupRequired && <SystemSetupPopup />}
 
@@ -387,7 +387,7 @@ const Documentation = () => {
                 <span style={{ fontSize: '20px', fontWeight: '700', color: '#0f172a', letterSpacing: '-0.02em', lineHeight: 1 }}>
                   Atölye<span style={{ color: '#2463eb' }}>.Platform</span>
                 </span>
-                <span style={{ fontSize: '10px', color: '#64748b', fontWeight: '500', letterSpacing: '0.05em', marginTop: '2px' }}>
+                <span style={{ fontSize: '10px', color: 'var(--color-text-muted)', fontWeight: '500', letterSpacing: '0.05em', marginTop: '2px' }}>
                   Developed by Emirhan Gök
                 </span>
               </div>
@@ -395,15 +395,15 @@ const Documentation = () => {
 
             {/* Center Links */}
             <div className="hidden md:flex items-center gap-8">
-              <a onClick={() => navigate('/')} style={{ fontSize: '14px', fontWeight: '500', color: '#64748b', textDecoration: 'none', transition: 'color 0.2s', cursor: 'pointer' }}
+              <a onClick={() => navigate('/')} style={{ fontSize: '14px', fontWeight: '500', color: 'var(--color-text-muted)', textDecoration: 'none', transition: 'color 0.2s', cursor: 'pointer' }}
                 onMouseEnter={(e) => e.currentTarget.style.color = '#2463eb'}
-                onMouseLeave={(e) => e.currentTarget.style.color = '#64748b'}
+                onMouseLeave={(e) => e.currentTarget.style.color = 'var(--color-text-muted)'}
               >
                 {t.features}
               </a>
-              <a onClick={() => navigate('/lab-rules')} style={{ fontSize: '14px', fontWeight: '500', color: '#64748b', textDecoration: 'none', transition: 'color 0.2s', cursor: 'pointer' }}
+              <a onClick={() => navigate('/lab-rules')} style={{ fontSize: '14px', fontWeight: '500', color: 'var(--color-text-muted)', textDecoration: 'none', transition: 'color 0.2s', cursor: 'pointer' }}
                 onMouseEnter={(e) => e.currentTarget.style.color = '#2463eb'}
-                onMouseLeave={(e) => e.currentTarget.style.color = '#64748b'}
+                onMouseLeave={(e) => e.currentTarget.style.color = 'var(--color-text-muted)'}
               >
                 {t.labRulesNav}
               </a>
@@ -424,7 +424,7 @@ const Documentation = () => {
                     gap: '8px',
                     background: 'rgba(255, 255, 255, 0.8)',
                     backdropFilter: 'blur(12px)',
-                    color: '#64748b',
+                    color: 'var(--color-text-muted)',
                     padding: '8px 12px',
                     borderRadius: '8px',
                     fontSize: '14px',
@@ -479,7 +479,7 @@ const Documentation = () => {
                           width: '100%',
                           padding: '10px 12px',
                           background: currentLang === lang.code ? 'rgba(36, 99, 235, 0.08)' : 'transparent',
-                          color: currentLang === lang.code ? '#2463eb' : '#64748b',
+                          color: currentLang === lang.code ? '#2463eb' : 'var(--color-text-muted)',
                           border: 'none',
                           borderRadius: '8px',
                           fontSize: '14px',
@@ -514,7 +514,7 @@ const Documentation = () => {
                     boxShadow: '0 8px 16px rgba(15, 23, 42, 0.2)',
                     transition: 'all 0.2s'
                   }}
-                  onMouseEnter={(e) => e.currentTarget.style.background = '#1e293b'}
+                  onMouseEnter={(e) => e.currentTarget.style.background = 'var(--color-text-primary)'}
                   onMouseLeave={(e) => e.currentTarget.style.background = '#0f172a'}
                 >
                   {t.dashboard}
@@ -534,7 +534,7 @@ const Documentation = () => {
                     boxShadow: '0 8px 16px rgba(15, 23, 42, 0.2)',
                     transition: 'all 0.2s'
                   }}
-                  onMouseEnter={(e) => e.currentTarget.style.background = '#1e293b'}
+                  onMouseEnter={(e) => e.currentTarget.style.background = 'var(--color-text-primary)'}
                   onMouseLeave={(e) => e.currentTarget.style.background = '#0f172a'}
                 >
                   {t.login}
@@ -552,7 +552,7 @@ const Documentation = () => {
       }}>
         <div className="animate-fade-in-up" style={{ maxWidth: '800px', margin: '0 auto' }}>
           <h1 style={{ fontSize: '56px', fontWeight: '800', marginBottom: '20px', letterSpacing: '-0.03em', color: '#0f172a' }}>{t.title}</h1>
-          <p style={{ fontSize: '20px', color: '#475569', lineHeight: '1.6', fontWeight: '500' }}>{t.subtitle}</p>
+          <p style={{ fontSize: '20px', color: 'var(--color-text-secondary)', lineHeight: '1.6', fontWeight: '500' }}>{t.subtitle}</p>
         </div>
       </div>
 
@@ -576,20 +576,20 @@ const Documentation = () => {
             <h2 style={{ fontSize: '32px', fontWeight: '800', color: '#0f172a', letterSpacing: '-0.02em', display: 'flex', alignItems: 'center', gap: '4px' }}>
               {t.polyosTitle.replace('PolyOS', '')} <PolyOSBadge />
             </h2>
-            <p style={{ fontSize: '14px', color: '#64748b', fontWeight: '600', marginBottom: '16px', marginTop: '-12px' }}>
+            <p style={{ fontSize: '14px', color: 'var(--color-text-muted)', fontWeight: '600', marginBottom: '16px', marginTop: '-12px' }}>
               ({t.polyosExpansion})
             </p>
-            <p style={{ fontSize: '18px', color: '#475569', lineHeight: '1.8', marginBottom: '32px' }}>
+            <p style={{ fontSize: '18px', color: 'var(--color-text-secondary)', lineHeight: '1.8', marginBottom: '32px' }}>
               {t.polyosDesc}
             </p>
             <div style={{ 
               display: 'flex', 
               alignItems: 'center', 
               gap: '12px',
-              background: 'white',
+              background: 'var(--color-surface)',
               padding: '20px 24px',
               borderRadius: '16px',
-              border: '1px solid #e2e8f0',
+              border: '1px solid var(--color-border)',
               boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)'
             }}>
               <CheckCircle size={24} color="#10b981" />
@@ -637,7 +637,7 @@ const Documentation = () => {
                       <Zap style={{ width: '16px', height: '16px', fill: '#2463eb' }} />
                       {item.name}
                     </h4>
-                    <p style={{ fontSize: '15px', color: '#64748b', lineHeight: '1.6' }}>{item.desc}</p>
+                    <p style={{ fontSize: '15px', color: 'var(--color-text-muted)', lineHeight: '1.6' }}>{item.desc}</p>
                   </div>
                 ))}
               </div>
@@ -674,7 +674,7 @@ const Documentation = () => {
               </h4>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                 {[t.reqNode, t.reqPardus, t.reqDocker].map((req, i) => (
-                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px', color: '#cbd5e1' }}>
+                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px', color: 'var(--color-border-dark)' }}>
                     <CheckCircle style={{ width: '18px', height: '18px', color: '#10b981' }} />
                     <span style={{ fontSize: '16px' }}>{req}</span>
                   </div>
@@ -710,7 +710,7 @@ const Documentation = () => {
             <div className="flex flex-col items-center text-center col-span-1 lg:col-span-1">
               <div style={{ position: 'relative', marginBottom: '24px' }}>
                 <div style={{ position: 'absolute', inset: '-16px', background: 'rgba(255,255,255,0.2)', borderRadius: '50%', filter: 'blur(20px)', opacity: 0.3 }} />
-                <div style={{ width: '112px', height: '112px', borderRadius: '50%', overflow: 'hidden', border: '2px solid rgba(255,255,255,0.2)', boxShadow: '0 20px 40px rgba(0,0,0,0.3)', position: 'relative', background: '#1e293b' }}>
+                <div style={{ width: '112px', height: '112px', borderRadius: '50%', overflow: 'hidden', border: '2px solid rgba(255,255,255,0.2)', boxShadow: '0 20px 40px rgba(0,0,0,0.3)', position: 'relative', background: 'var(--color-text-primary)' }}>
                   <img src="/ataturk.png" alt="Mustafa Kemal Atatürk" style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'grayscale(1) contrast(1.25)' }} />
                 </div>
               </div>
@@ -719,7 +719,7 @@ const Documentation = () => {
                 <span style={{ color: '#fca5a5' }}>{t.ataturkQuote2}</span>"
               </h2>
               <div style={{ height: '1px', width: '48px', background: 'rgba(239,68,68,0.5)', marginBottom: '12px' }} />
-              <p style={{ color: '#cbd5e1', fontWeight: 500, letterSpacing: '0.1em', fontSize: '12px', textTransform: 'uppercase', opacity: 0.8 }}>{t.ataturk}</p>
+              <p style={{ color: 'var(--color-border-dark)', fontWeight: 500, letterSpacing: '0.1em', fontSize: '12px', textTransform: 'uppercase', opacity: 0.8 }}>{t.ataturk}</p>
             </div>
 
             {/* Other Columns */}
@@ -729,17 +729,17 @@ const Documentation = () => {
                   <h3 style={{ fontSize: '14px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#fca5a5', marginBottom: '16px' }}>{t.platform}</h3>
                   <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     <li>
-                      <a onClick={() => navigate('/ogrenci/giris')} style={{ color: '#cbd5e1', fontSize: '14px', textDecoration: 'none', transition: 'all 0.2s', display: 'inline-block', cursor: 'pointer' }}
+                      <a onClick={() => navigate('/ogrenci/giris')} style={{ color: 'var(--color-border-dark)', fontSize: '14px', textDecoration: 'none', transition: 'all 0.2s', display: 'inline-block', cursor: 'pointer' }}
                         onMouseEnter={(e) => { e.currentTarget.style.color = 'white'; e.currentTarget.style.textDecoration = 'underline'; e.currentTarget.style.textDecorationColor = '#ef4444'; }}
-                        onMouseLeave={(e) => { e.currentTarget.style.color = '#cbd5e1'; e.currentTarget.style.textDecoration = 'none'; }}
+                        onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--color-border-dark)'; e.currentTarget.style.textDecoration = 'none'; }}
                       >
                         {t.studentPortal}
                       </a>
                     </li>
                     <li>
-                      <a onClick={() => navigate('/ogretmen/giris')} style={{ color: '#cbd5e1', fontSize: '14px', textDecoration: 'none', transition: 'all 0.2s', display: 'inline-block', cursor: 'pointer' }}
+                      <a onClick={() => navigate('/ogretmen/giris')} style={{ color: 'var(--color-border-dark)', fontSize: '14px', textDecoration: 'none', transition: 'all 0.2s', display: 'inline-block', cursor: 'pointer' }}
                         onMouseEnter={(e) => { e.currentTarget.style.color = 'white'; e.currentTarget.style.textDecoration = 'underline'; e.currentTarget.style.textDecorationColor = '#ef4444'; }}
-                        onMouseLeave={(e) => { e.currentTarget.style.color = '#cbd5e1'; e.currentTarget.style.textDecoration = 'none'; }}
+                        onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--color-border-dark)'; e.currentTarget.style.textDecoration = 'none'; }}
                       >
                         {t.instructorPortal}
                       </a>
@@ -751,9 +751,9 @@ const Documentation = () => {
                   <h3 style={{ fontSize: '14px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#fca5a5', marginBottom: '16px' }}>{t.resources}</h3>
                   <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     <li>
-                      <a onClick={() => navigate('/lab-rules')} style={{ color: '#cbd5e1', fontSize: '14px', textDecoration: 'none', transition: 'all 0.2s', display: 'inline-block', cursor: 'pointer' }}
+                      <a onClick={() => navigate('/lab-rules')} style={{ color: 'var(--color-border-dark)', fontSize: '14px', textDecoration: 'none', transition: 'all 0.2s', display: 'inline-block', cursor: 'pointer' }}
                         onMouseEnter={(e) => { e.currentTarget.style.color = 'white'; e.currentTarget.style.textDecoration = 'underline'; e.currentTarget.style.textDecorationColor = '#ef4444'; }}
-                        onMouseLeave={(e) => { e.currentTarget.style.color = '#cbd5e1'; e.currentTarget.style.textDecoration = 'none'; }}
+                        onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--color-border-dark)'; e.currentTarget.style.textDecoration = 'none'; }}
                       >
                         {t.labRules}
                       </a>
@@ -764,9 +764,9 @@ const Documentation = () => {
                       </a>
                     </li>
                     <li>
-                      <a onClick={() => navigate('/sistem-durumu')} style={{ color: '#cbd5e1', fontSize: '14px', textDecoration: 'none', transition: 'all 0.2s', display: 'inline-block', cursor: 'pointer' }}
+                      <a onClick={() => navigate('/sistem-durumu')} style={{ color: 'var(--color-border-dark)', fontSize: '14px', textDecoration: 'none', transition: 'all 0.2s', display: 'inline-block', cursor: 'pointer' }}
                         onMouseEnter={(e) => { e.currentTarget.style.color = 'white'; e.currentTarget.style.textDecoration = 'underline'; e.currentTarget.style.textDecorationColor = '#ef4444'; }}
-                        onMouseLeave={(e) => { e.currentTarget.style.color = '#cbd5e1'; e.currentTarget.style.textDecoration = 'none'; }}
+                        onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--color-border-dark)'; e.currentTarget.style.textDecoration = 'none'; }}
                       >
                         {t.systemStatus}
                       </a>
@@ -777,15 +777,15 @@ const Documentation = () => {
                 <div>
                   <h3 style={{ fontSize: '14px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#fca5a5', marginBottom: '16px' }}>{t.contact}</h3>
                   <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', fontSize: '14px', color: '#cbd5e1' }}>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', fontSize: '14px', color: 'var(--color-border-dark)' }}>
                       <MapPin style={{ width: '18px', height: '18px', marginTop: '2px', flexShrink: 0, color: '#fca5a5' }} />
                       <span>Alanya MTAL<br />Antalya, Turkey</span>
                     </li>
                     <li style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px' }}>
                       <Mail style={{ width: '18px', height: '18px', color: '#fca5a5' }} />
-                      <a href="https://alanyamtal.meb.k12.tr/tema/iletisim.php" style={{ color: '#cbd5e1', textDecoration: 'none', transition: 'color 0.2s' }}
+                      <a href="https://alanyamtal.meb.k12.tr/tema/iletisim.php" style={{ color: 'var(--color-border-dark)', textDecoration: 'none', transition: 'color 0.2s' }}
                         onMouseEnter={(e) => e.currentTarget.style.color = 'white'}
-                        onMouseLeave={(e) => e.currentTarget.style.color = '#cbd5e1'}
+                        onMouseLeave={(e) => e.currentTarget.style.color = 'var(--color-border-dark)'}
                       >
                         alanyamtal.meb.k12.tr
                       </a>

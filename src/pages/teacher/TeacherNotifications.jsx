@@ -14,11 +14,11 @@ import { t } from '../../utils/i18n';
 const styles = {
   container: { display: 'flex', flexDirection: 'column', gap: '24px' },
   header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' },
-  title: { fontSize: '24px', fontWeight: '700', color: '#1e293b', margin: 0 },
-  subtitle: { fontSize: '14px', color: '#64748b', marginTop: '4px' },
+  title: { fontSize: '24px', fontWeight: '700', color: 'var(--color-text-primary)', margin: 0 },
+  subtitle: { fontSize: '14px', color: 'var(--color-text-muted)', marginTop: '4px' },
   filterCard: {
-    backgroundColor: '#ffffff',
-    border: '1px solid #e2e8f0',
+    backgroundColor: 'var(--color-surface)',
+    border: '1px solid var(--color-border)',
     borderRadius: '12px',
     padding: '16px'
   },
@@ -35,35 +35,35 @@ const styles = {
     paddingRight: '16px',
     paddingTop: '10px',
     paddingBottom: '10px',
-    backgroundColor: '#f8fafc',
-    border: '1px solid #e2e8f0',
+    backgroundColor: 'var(--color-background)',
+    border: '1px solid var(--color-border)',
     borderRadius: '8px',
     fontSize: '14px',
-    color: '#1e293b',
+    color: 'var(--color-text-primary)',
     outline: 'none'
   },
-  searchIcon: { position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#64748b' },
+  searchIcon: { position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--color-text-muted)' },
   select: {
-    backgroundColor: '#f8fafc',
-    border: '1px solid #e2e8f0',
+    backgroundColor: 'var(--color-background)',
+    border: '1px solid var(--color-border)',
     borderRadius: '8px',
     padding: '10px 12px',
     fontSize: '14px',
-    color: '#1e293b',
+    color: 'var(--color-text-primary)',
     cursor: 'pointer'
   },
   emptyState: {
-    backgroundColor: '#ffffff',
-    border: '1px solid #e2e8f0',
+    backgroundColor: 'var(--color-surface)',
+    border: '1px solid var(--color-border)',
     borderRadius: '12px',
     padding: '48px',
     textAlign: 'center'
   },
   emptyIcon: { width: '48px', height: '48px', color: '#94a3b8', margin: '0 auto 16px' },
-  emptyTitle: { fontSize: '18px', fontWeight: '600', color: '#1e293b', marginBottom: '8px' },
-  emptyText: { color: '#64748b' },
+  emptyTitle: { fontSize: '18px', fontWeight: '600', color: 'var(--color-text-primary)', marginBottom: '8px' },
+  emptyText: { color: 'var(--color-text-muted)' },
   notificationCard: (isUnread) => ({
-    backgroundColor: isUnread ? '#f0fdfa' : '#ffffff',
+    backgroundColor: isUnread ? 'var(--color-background-secondary)' : '#ffffff',
     border: isUnread ? '1px solid #99f6e4' : '1px solid #e2e8f0',
     borderRadius: '12px',
     padding: '16px',
@@ -83,13 +83,13 @@ const styles = {
   }),
   notificationContent: { flex: '1', minWidth: 0 },
   notificationHeader: { display: 'flex', alignItems: 'center', gap: '8px' },
-  notificationTitle: { fontWeight: '600', color: '#1e293b' },
+  notificationTitle: { fontWeight: '600', color: 'var(--color-text-primary)' },
   unreadDot: { width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#0d9488' },
-  notificationMessage: { fontSize: '14px', color: '#64748b', marginTop: '4px' },
+  notificationMessage: { fontSize: '14px', color: 'var(--color-text-muted)', marginTop: '4px' },
   notificationTime: { fontSize: '12px', color: '#94a3b8', marginTop: '8px' },
   notificationActions: { display: 'flex', alignItems: 'center', gap: '4px' },
   infoCard: {
-    backgroundColor: '#f0f9ff',
+    backgroundColor: 'var(--color-background-secondary)',
     border: '1px solid #bae6fd',
     borderRadius: '12px',
     padding: '16px',
@@ -97,8 +97,8 @@ const styles = {
     alignItems: 'flex-start',
     gap: '12px'
   },
-  infoTitle: { fontWeight: '600', color: '#1e293b' },
-  infoText: { fontSize: '14px', color: '#64748b', marginTop: '4px' }
+  infoTitle: { fontWeight: '600', color: 'var(--color-text-primary)' },
+  infoText: { fontSize: '14px', color: 'var(--color-text-muted)', marginTop: '4px' }
 };
 
 const TeacherNotifications = () => {
@@ -135,15 +135,15 @@ const TeacherNotifications = () => {
   const getNotificationIcon = (type) => {
     switch (type) {
       case 'new_submission':
-        return { icon: FileText, color: '#0d9488', bg: '#f0fdfa' };
+        return { icon: FileText, color: '#0d9488', bg: 'var(--color-background-secondary)' };
       case 'edit_request':
-        return { icon: Edit, color: '#f59e0b', bg: '#fffbeb' };
+        return { icon: Edit, color: '#f59e0b', bg: 'var(--color-background-secondary)' };
       case 'late_submission':
-        return { icon: Clock, color: '#ef4444', bg: '#fef2f2' };
+        return { icon: Clock, color: '#ef4444', bg: 'var(--color-background-secondary)' };
       case 'system':
-        return { icon: AlertTriangle, color: '#3b82f6', bg: '#eff6ff' };
+        return { icon: AlertTriangle, color: '#3b82f6', bg: 'var(--color-background-secondary)' };
       default:
-        return { icon: Bell, color: '#64748b', bg: '#f8fafc' };
+        return { icon: Bell, color: 'var(--color-text-muted)', bg: 'var(--color-background)' };
     }
   };
 
@@ -182,7 +182,7 @@ const TeacherNotifications = () => {
               />
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Filter size={16} style={{ color: '#64748b' }} />
+              <Filter size={16} style={{ color: 'var(--color-text-muted)' }} />
               <select
                 style={styles.select}
                 value={filter}

@@ -122,7 +122,7 @@ const Toast = ({ id, type, message, duration = 5000 }) => {
         width: '42px',
         height: '42px',
         borderRadius: '12px',
-        backgroundColor: 'white',
+        backgroundColor: 'var(--color-surface)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -145,7 +145,7 @@ const Toast = ({ id, type, message, duration = 5000 }) => {
         </p>
         <p style={{ 
           fontSize: '14px', 
-          color: '#374151',
+          color: 'var(--color-text-secondary)',
           lineHeight: '1.5',
           wordBreak: 'break-word'
         }}>

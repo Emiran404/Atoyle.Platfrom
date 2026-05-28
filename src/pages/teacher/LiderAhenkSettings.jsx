@@ -37,20 +37,20 @@ const styles = {
   title: {
     fontSize: '28px',
     fontWeight: '700',
-    color: '#1e293b',
+    color: 'var(--color-text-primary)',
     display: 'flex',
     alignItems: 'center',
     gap: '12px'
   },
   subtitle: {
     fontSize: '15px',
-    color: '#64748b',
+    color: 'var(--color-text-muted)',
     marginTop: '8px'
   },
   card: {
-    backgroundColor: '#fff',
+    backgroundColor: 'var(--color-surface)',
     borderRadius: '16px',
-    border: '1px solid #e2e8f0',
+    border: '1px solid var(--color-border)',
     overflow: 'hidden',
     boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
     marginBottom: '24px'
@@ -66,7 +66,7 @@ const styles = {
   cardTitle: {
     fontSize: '18px',
     fontWeight: '600',
-    color: '#1e293b',
+    color: 'var(--color-text-primary)',
     display: 'flex',
     alignItems: 'center',
     gap: '8px'
@@ -81,18 +81,18 @@ const styles = {
     display: 'block',
     fontSize: '14px',
     fontWeight: '500',
-    color: '#475569',
+    color: 'var(--color-text-secondary)',
     marginBottom: '8px'
   },
   input: {
     width: '100%',
     padding: '12px 16px',
     borderRadius: '10px',
-    border: '1px solid #e2e8f0',
+    border: '1px solid var(--color-border)',
     fontSize: '14px',
     transition: 'all 0.2s',
     outline: 'none',
-    backgroundColor: '#fff'
+    backgroundColor: 'var(--color-surface)'
   },
   helperText: {
     fontSize: '12px',
@@ -102,10 +102,10 @@ const styles = {
   switchContainer: {
     display: 'flex',
     alignItems: 'center',
-    backgroundColor: '#f8fafc',
+    backgroundColor: 'var(--color-background)',
     padding: '16px 20px',
     borderRadius: '12px',
-    border: '1px solid #e2e8f0',
+    border: '1px solid var(--color-border)',
     cursor: 'pointer',
     transition: 'all 0.2s'
   },
@@ -113,13 +113,13 @@ const styles = {
     flex: 1,
     fontSize: '15px',
     fontWeight: '600',
-    color: '#1e293b'
+    color: 'var(--color-text-primary)'
   },
   switchToggle: (enabled) => ({
     width: '48px',
     height: '24px',
     borderRadius: '12px',
-    backgroundColor: enabled ? '#10b981' : '#cbd5e1',
+    backgroundColor: enabled ? '#10b981' : 'var(--color-border-dark)',
     position: 'relative',
     transition: 'all 0.3s'
   }),
@@ -127,7 +127,7 @@ const styles = {
     width: '20px',
     height: '20px',
     borderRadius: '50%',
-    backgroundColor: '#fff',
+    backgroundColor: 'var(--color-surface)',
     position: 'absolute',
     top: '2px',
     left: enabled ? '26px' : '2px',
@@ -143,7 +143,7 @@ const styles = {
     fontSize: '14px'
   },
   infoAlert: {
-    backgroundColor: '#eff6ff',
+    backgroundColor: 'var(--color-background-secondary)',
     border: '1px solid #bfdbfe',
     color: '#1e40af'
   },
@@ -380,15 +380,15 @@ const LiderAhenkSettings = () => {
         <div 
           style={{
             ...styles.switchContainer,
-            borderColor: settings.enabled ? '#10b981' : '#e2e8f0',
-            backgroundColor: settings.enabled ? '#f0fdf4' : '#f8fafc',
+            borderColor: settings.enabled ? '#10b981' : 'var(--color-border)',
+            backgroundColor: settings.enabled ? 'var(--color-background-secondary)' : 'var(--color-background)',
             marginBottom: '32px'
           }}
           onClick={() => setSettings({ ...settings, enabled: !settings.enabled })}
         >
           <div style={styles.switchLabel}>
             LiderAhenk Kimlik Doğrulama Servisi
-            <p style={{ fontWeight: '400', fontSize: '13px', color: '#64748b', marginTop: '4px' }}>
+            <p style={{ fontWeight: '400', fontSize: '13px', color: 'var(--color-text-muted)', marginTop: '4px' }}>
               {settings.enabled ? 'Aktif - Kullanıcılar LDAP üzerinden giriş yapabilir.' : 'Devre Dışı - Sadece yerel hesaplar kullanılabilir.'}
             </p>
           </div>
@@ -548,7 +548,7 @@ const LiderAhenkSettings = () => {
             </div>
 
             {/* Tabs */}
-            <div style={{ display: 'flex', gap: '8px', marginBottom: '16px', borderBottom: '1px solid #e2e8f0' }}>
+            <div style={{ display: 'flex', gap: '8px', marginBottom: '16px', borderBottom: '1px solid var(--color-border)' }}>
               <button
                 onClick={() => setActiveTab('import')}
                 style={{
@@ -559,7 +559,7 @@ const LiderAhenkSettings = () => {
                   marginBottom: '-1px',
                   borderRadius: '8px 8px 0 0',
                   fontWeight: '600',
-                  color: activeTab === 'import' ? '#2563eb' : '#64748b',
+                  color: activeTab === 'import' ? '#2563eb' : 'var(--color-text-muted)',
                   display: 'flex',
                   alignItems: 'center',
                   gap: '8px',
@@ -580,7 +580,7 @@ const LiderAhenkSettings = () => {
                   marginBottom: '-1px',
                   borderRadius: '8px 8px 0 0',
                   fontWeight: '600',
-                  color: activeTab === 'export' ? '#059669' : '#64748b',
+                  color: activeTab === 'export' ? '#059669' : 'var(--color-text-muted)',
                   display: 'flex',
                   alignItems: 'center',
                   gap: '8px',
@@ -596,7 +596,7 @@ const LiderAhenkSettings = () => {
             {/* IMPORT TAB */}
             {activeTab === 'import' && (
               <div style={styles.card}>
-                <div style={{ ...styles.cardHeader, padding: '20px 24px', backgroundColor: '#f8fafc', borderBottom: '1px solid #e2e8f0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div style={{ ...styles.cardHeader, padding: '20px 24px', backgroundColor: 'var(--color-background)', borderBottom: '1px solid var(--color-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <div style={styles.cardTitle}>
                     <Search size={18} className="text-slate-500" />
                     LiderAhenk Kullanıcıları ({ldapUsers.length})
@@ -611,7 +611,7 @@ const LiderAhenkSettings = () => {
                   {ldapUsers.length > 0 ? (
                     <div style={{ overflowX: 'auto' }}>
                       <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
-                        <thead style={{ backgroundColor: '#f1f5f9', borderBottom: '1px solid #e2e8f0' }}>
+                        <thead style={{ backgroundColor: 'var(--color-background-secondary)', borderBottom: '1px solid var(--color-border)' }}>
                           <tr>
                             <th style={{ padding: '12px 24px', width: '40px' }}>
                               <input 
@@ -624,18 +624,18 @@ const LiderAhenkSettings = () => {
                                 disabled={ldapUsers.filter(u => u.syncStatus === 'not_synced').length === 0}
                               />
                             </th>
-                            <th style={{ padding: '12px 24px', fontSize: '13px', fontWeight: '600', color: '#475569' }}>Kullanıcı Adı / UID</th>
-                            <th style={{ padding: '12px 24px', fontSize: '13px', fontWeight: '600', color: '#475569' }}>Ad Soyad</th>
-                            <th style={{ padding: '12px 24px', fontSize: '13px', fontWeight: '600', color: '#475569' }}>E-posta</th>
-                            <th style={{ padding: '12px 24px', fontSize: '13px', fontWeight: '600', color: '#475569' }}>Sınıf / Birim</th>
-                            <th style={{ padding: '12px 24px', fontSize: '13px', fontWeight: '600', color: '#475569' }}>Durum</th>
+                            <th style={{ padding: '12px 24px', fontSize: '13px', fontWeight: '600', color: 'var(--color-text-secondary)' }}>Kullanıcı Adı / UID</th>
+                            <th style={{ padding: '12px 24px', fontSize: '13px', fontWeight: '600', color: 'var(--color-text-secondary)' }}>Ad Soyad</th>
+                            <th style={{ padding: '12px 24px', fontSize: '13px', fontWeight: '600', color: 'var(--color-text-secondary)' }}>E-posta</th>
+                            <th style={{ padding: '12px 24px', fontSize: '13px', fontWeight: '600', color: 'var(--color-text-secondary)' }}>Sınıf / Birim</th>
+                            <th style={{ padding: '12px 24px', fontSize: '13px', fontWeight: '600', color: 'var(--color-text-secondary)' }}>Durum</th>
                           </tr>
                         </thead>
                         <tbody>
                           {ldapUsers.map((user) => {
                             const isSynced = user.syncStatus !== 'not_synced';
                             return (
-                              <tr key={user.uid} style={{ borderBottom: '1px solid #f1f5f9', backgroundColor: selectedUsers.includes(user.uid) ? '#f0f9ff' : 'transparent', opacity: isSynced ? 0.6 : 1 }}>
+                              <tr key={user.uid} style={{ borderBottom: '1px solid #f1f5f9', backgroundColor: selectedUsers.includes(user.uid) ? 'var(--color-background-secondary)' : 'transparent', opacity: isSynced ? 0.6 : 1 }}>
                                 <td style={{ padding: '12px 24px' }}>
                                   <input 
                                     type="checkbox" 
@@ -644,10 +644,10 @@ const LiderAhenkSettings = () => {
                                     disabled={isSynced}
                                   />
                                 </td>
-                                <td style={{ padding: '12px 24px', fontSize: '14px', color: '#1e293b', fontWeight: '500' }}>{user.uid}</td>
-                                <td style={{ padding: '12px 24px', fontSize: '14px', color: '#475569' }}>{user.fullName}</td>
-                                <td style={{ padding: '12px 24px', fontSize: '14px', color: '#64748b' }}>{user.email || '-'}</td>
-                                <td style={{ padding: '12px 24px', fontSize: '14px', color: '#64748b' }}>{user.ou || '-'}</td>
+                                <td style={{ padding: '12px 24px', fontSize: '14px', color: 'var(--color-text-primary)', fontWeight: '500' }}>{user.uid}</td>
+                                <td style={{ padding: '12px 24px', fontSize: '14px', color: 'var(--color-text-secondary)' }}>{user.fullName}</td>
+                                <td style={{ padding: '12px 24px', fontSize: '14px', color: 'var(--color-text-muted)' }}>{user.email || '-'}</td>
+                                <td style={{ padding: '12px 24px', fontSize: '14px', color: 'var(--color-text-muted)' }}>{user.ou || '-'}</td>
                                 <td style={{ padding: '12px 24px', fontSize: '14px' }}>
                                   {isSynced ? (
                                     <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '4px 8px', backgroundColor: '#dcfce7', color: '#166534', borderRadius: '4px', fontSize: '12px', fontWeight: '500' }}>
@@ -673,9 +673,9 @@ const LiderAhenkSettings = () => {
                 </div>
 
                 {ldapUsers.length > 0 && (
-                  <div style={{ padding: '24px', backgroundColor: '#f8fafc', borderTop: '1px solid #e2e8f0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div style={{ padding: '24px', backgroundColor: 'var(--color-background)', borderTop: '1px solid var(--color-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                      <label style={{ fontSize: '14px', fontWeight: '600', color: '#475569' }}>Hedef Rol:</label>
+                      <label style={{ fontSize: '14px', fontWeight: '600', color: 'var(--color-text-secondary)' }}>Hedef Rol:</label>
                       <select 
                         value={targetRole} 
                         onChange={(e) => setTargetRole(e.target.value)}
@@ -687,7 +687,7 @@ const LiderAhenkSettings = () => {
                     </div>
                     
                     <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                      <span style={{ fontSize: '14px', color: '#64748b' }}>
+                      <span style={{ fontSize: '14px', color: 'var(--color-text-muted)' }}>
                         {selectedUsers.length} kullanıcı seçildi
                       </span>
                       <Button 
@@ -707,7 +707,7 @@ const LiderAhenkSettings = () => {
             {/* EXPORT TAB */}
             {activeTab === 'export' && (
               <div style={styles.card}>
-                <div style={{ ...styles.cardHeader, padding: '20px 24px', backgroundColor: '#f8fafc', borderBottom: '1px solid #e2e8f0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div style={{ ...styles.cardHeader, padding: '20px 24px', backgroundColor: 'var(--color-background)', borderBottom: '1px solid var(--color-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <div style={styles.cardTitle}>
                     <Users size={18} className="text-slate-500" />
                     Platform Kullanıcıları ({localUsers.length})
@@ -722,7 +722,7 @@ const LiderAhenkSettings = () => {
                   {localUsers.length > 0 ? (
                     <div style={{ overflowX: 'auto', maxHeight: '500px', overflowY: 'auto' }}>
                       <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
-                        <thead style={{ backgroundColor: '#f1f5f9', borderBottom: '1px solid #e2e8f0', position: 'sticky', top: 0 }}>
+                        <thead style={{ backgroundColor: 'var(--color-background-secondary)', borderBottom: '1px solid var(--color-border)', position: 'sticky', top: 0 }}>
                           <tr>
                             <th style={{ padding: '12px 24px', width: '40px' }}>
                               <input 
@@ -735,18 +735,18 @@ const LiderAhenkSettings = () => {
                                 disabled={localUsers.length === 0}
                               />
                             </th>
-                            <th style={{ padding: '12px 24px', fontSize: '13px', fontWeight: '600', color: '#475569' }}>Kullanıcı Adı / No</th>
-                            <th style={{ padding: '12px 24px', fontSize: '13px', fontWeight: '600', color: '#475569' }}>Ad Soyad</th>
-                            <th style={{ padding: '12px 24px', fontSize: '13px', fontWeight: '600', color: '#475569' }}>Sistem Rolü</th>
-                            <th style={{ padding: '12px 24px', fontSize: '13px', fontWeight: '600', color: '#475569' }}>Sınıf / Birim</th>
-                            <th style={{ padding: '12px 24px', fontSize: '13px', fontWeight: '600', color: '#475569' }}>LDAP Durumu</th>
+                            <th style={{ padding: '12px 24px', fontSize: '13px', fontWeight: '600', color: 'var(--color-text-secondary)' }}>Kullanıcı Adı / No</th>
+                            <th style={{ padding: '12px 24px', fontSize: '13px', fontWeight: '600', color: 'var(--color-text-secondary)' }}>Ad Soyad</th>
+                            <th style={{ padding: '12px 24px', fontSize: '13px', fontWeight: '600', color: 'var(--color-text-secondary)' }}>Sistem Rolü</th>
+                            <th style={{ padding: '12px 24px', fontSize: '13px', fontWeight: '600', color: 'var(--color-text-secondary)' }}>Sınıf / Birim</th>
+                            <th style={{ padding: '12px 24px', fontSize: '13px', fontWeight: '600', color: 'var(--color-text-secondary)' }}>LDAP Durumu</th>
                           </tr>
                         </thead>
                         <tbody>
                           {localUsers.map((user) => {
                             const isSynced = user.syncStatus !== 'not_synced';
                             return (
-                              <tr key={user.uid} style={{ borderBottom: '1px solid #f1f5f9', backgroundColor: selectedLocalUsers.includes(user.uid) ? '#ecfdf5' : 'transparent', opacity: isSynced ? 0.8 : 1 }}>
+                              <tr key={user.uid} style={{ borderBottom: '1px solid #f1f5f9', backgroundColor: selectedLocalUsers.includes(user.uid) ? 'var(--color-background-secondary)' : 'transparent', opacity: isSynced ? 0.8 : 1 }}>
                                 <td style={{ padding: '12px 24px' }}>
                                   <input 
                                     type="checkbox" 
@@ -754,13 +754,13 @@ const LiderAhenkSettings = () => {
                                     onChange={() => toggleLocalUserSelection(user.uid)}
                                   />
                                 </td>
-                                <td style={{ padding: '12px 24px', fontSize: '14px', color: '#1e293b', fontWeight: '500' }}>{user.uid}</td>
-                                <td style={{ padding: '12px 24px', fontSize: '14px', color: '#475569' }}>{user.fullName}</td>
-                                <td style={{ padding: '12px 24px', fontSize: '14px', color: '#64748b' }}>{user.role}</td>
-                                <td style={{ padding: '12px 24px', fontSize: '14px', color: '#64748b' }}>{user.orgUnit || '-'}</td>
+                                <td style={{ padding: '12px 24px', fontSize: '14px', color: 'var(--color-text-primary)', fontWeight: '500' }}>{user.uid}</td>
+                                <td style={{ padding: '12px 24px', fontSize: '14px', color: 'var(--color-text-secondary)' }}>{user.fullName}</td>
+                                <td style={{ padding: '12px 24px', fontSize: '14px', color: 'var(--color-text-muted)' }}>{user.role}</td>
+                                <td style={{ padding: '12px 24px', fontSize: '14px', color: 'var(--color-text-muted)' }}>{user.orgUnit || '-'}</td>
                                 <td style={{ padding: '12px 24px', fontSize: '14px' }}>
                                   {isSynced ? (
-                                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '4px 8px', backgroundColor: '#e2e8f0', color: '#334155', borderRadius: '4px', fontSize: '12px', fontWeight: '500' }}>
+                                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '4px 8px', backgroundColor: 'var(--color-border)', color: 'var(--color-foreground-secondary)', borderRadius: '4px', fontSize: '12px', fontWeight: '500' }}>
                                       <RefreshCcw size={14} />
                                       LDAP'ta Kayıtlı (Güncelle)
                                     </span>
@@ -785,7 +785,7 @@ const LiderAhenkSettings = () => {
                 </div>
 
                 {localUsers.length > 0 && (
-                  <div style={{ padding: '24px', backgroundColor: '#ecfdf5', borderTop: '1px solid #a7f3d0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div style={{ padding: '24px', backgroundColor: 'var(--color-background-secondary)', borderTop: '1px solid #a7f3d0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px', color: '#065f46' }}>
                       <InfoIcon size={18} />
                       <span style={{ fontSize: '14px' }}>Seçilen platform kullanıcıları otomatik olarak LDAP dizinine <strong>inetOrgPerson</strong> sınıfıyla eklenir.</span>

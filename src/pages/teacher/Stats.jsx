@@ -18,19 +18,19 @@ import {
 const styles = {
   container: { display: 'flex', flexDirection: 'column', gap: '24px' },
   header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' },
-  title: { fontSize: '24px', fontWeight: '700', color: '#1e293b', margin: 0 },
-  subtitle: { fontSize: '14px', color: '#64748b', marginTop: '4px' },
+  title: { fontSize: '24px', fontWeight: '700', color: 'var(--color-text-primary)', margin: 0 },
+  subtitle: { fontSize: '14px', color: 'var(--color-text-muted)', marginTop: '4px' },
   headerActions: { display: 'flex', alignItems: 'center', gap: '16px' },
   statsGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px' },
   statCard: {
-    backgroundColor: '#ffffff',
-    border: '1px solid #e2e8f0',
+    backgroundColor: 'var(--color-surface)',
+    border: '1px solid var(--color-border)',
     borderRadius: '12px',
     padding: '20px'
   },
   statRow: { display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' },
-  statLabel: { fontSize: '14px', color: '#64748b', marginBottom: '4px' },
-  statValue: { fontSize: '32px', fontWeight: '700', color: '#1e293b' },
+  statLabel: { fontSize: '14px', color: 'var(--color-text-muted)', marginBottom: '4px' },
+  statValue: { fontSize: '32px', fontWeight: '700', color: 'var(--color-text-primary)' },
   statExtra: { display: 'flex', alignItems: 'center', gap: '4px', marginTop: '8px', fontSize: '14px' },
   iconBox: (bg) => ({
     width: '48px',
@@ -43,17 +43,17 @@ const styles = {
   }),
   chartGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '24px' },
   chartCard: {
-    backgroundColor: '#ffffff',
-    border: '1px solid #e2e8f0',
+    backgroundColor: 'var(--color-surface)',
+    border: '1px solid var(--color-border)',
     borderRadius: '12px',
     padding: '24px'
   },
-  chartTitle: { fontSize: '18px', fontWeight: '600', color: '#1e293b', marginBottom: '20px' },
+  chartTitle: { fontSize: '18px', fontWeight: '600', color: 'var(--color-text-primary)', marginBottom: '20px' },
   pieGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' },
   legendItem: { display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' },
   legendDot: (color) => ({ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: color }),
-  legendLabel: { fontSize: '14px', color: '#64748b' },
-  legendValue: { fontSize: '14px', fontWeight: '600', color: '#1e293b', marginLeft: 'auto' }
+  legendLabel: { fontSize: '14px', color: 'var(--color-text-muted)' },
+  legendValue: { fontSize: '14px', fontWeight: '600', color: 'var(--color-text-primary)', marginLeft: 'auto' }
 };
 
 const COLORS = ['#0d9488', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'];
@@ -417,8 +417,8 @@ const Stats = () => {
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
       return (
-        <div style={{ backgroundColor: '#fff', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '12px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }}>
-          <p style={{ fontWeight: '600', color: '#1e293b', marginBottom: '4px' }}>{label}</p>
+        <div style={{ backgroundColor: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: '8px', padding: '12px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }}>
+          <p style={{ fontWeight: '600', color: 'var(--color-text-primary)', marginBottom: '4px' }}>{label}</p>
           {payload.map((entry, index) => (
             <p key={index} style={{ color: entry.color, fontSize: '14px' }}>
               {entry.name}: {entry.value}
@@ -435,8 +435,8 @@ const Stats = () => {
       <TeacherLayout>
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '400px' }}>
           <div style={{ textAlign: 'center' }}>
-            <p style={{ fontSize: '18px', fontWeight: '500', color: '#1e293b', marginBottom: '8px' }}>Veriler Yükleniyor...</p>
-            <p style={{ fontSize: '14px', color: '#64748b' }}>İstatistikler hesaplanıyor, lütfen bekleyin.</p>
+            <p style={{ fontSize: '18px', fontWeight: '500', color: 'var(--color-text-primary)', marginBottom: '8px' }}>Veriler Yükleniyor...</p>
+            <p style={{ fontSize: '14px', color: 'var(--color-text-muted)' }}>İstatistikler hesaplanıyor, lütfen bekleyin.</p>
           </div>
         </div>
       </TeacherLayout>
@@ -471,7 +471,7 @@ const Stats = () => {
                   <Badge variant="success" size="sm">{generalStats.activeExams} Aktif</Badge>
                 </div>
               </div>
-              <div style={styles.iconBox('#f0fdfa')}>
+              <div style={styles.iconBox('var(--color-background-secondary)')}>
                 <FileText size={24} style={{ color: '#0d9488' }} />
               </div>
             </div>
@@ -484,7 +484,7 @@ const Stats = () => {
                 <p style={styles.statValue}>{generalStats.totalSubmissions}</p>
                 <div style={styles.statExtra}>
                   <CheckCircle size={16} style={{ color: '#10b981' }} />
-                  <span style={{ color: '#64748b' }}>{generalStats.gradedSubmissions} değerlendirildi</span>
+                  <span style={{ color: 'var(--color-text-muted)' }}>{generalStats.gradedSubmissions} değerlendirildi</span>
                 </div>
               </div>
               <div style={styles.iconBox('#dcfce7')}>
@@ -504,7 +504,7 @@ const Stats = () => {
                   ) : (
                     <TrendingDown size={16} style={{ color: '#ef4444' }} />
                   )}
-                  <span style={{ color: '#64748b' }}>%{generalStats.passRate} geçme oranı</span>
+                  <span style={{ color: 'var(--color-text-muted)' }}>%{generalStats.passRate} geçme oranı</span>
                 </div>
               </div>
               <div style={styles.iconBox('#fef3c7')}>
@@ -520,14 +520,14 @@ const Stats = () => {
                 <p style={styles.statValue}>{generalStats.lateSubmissions}</p>
                 <div style={styles.statExtra}>
                   <AlertTriangle size={16} style={{ color: '#ef4444' }} />
-                  <span style={{ color: '#64748b' }}>
+                  <span style={{ color: 'var(--color-text-muted)' }}>
                     %{generalStats.totalSubmissions > 0
                       ? Math.round((generalStats.lateSubmissions / generalStats.totalSubmissions) * 100)
                       : 0}
                   </span>
                 </div>
               </div>
-              <div style={styles.iconBox('#fef2f2')}>
+              <div style={styles.iconBox('var(--color-background-secondary)')}>
                 <Clock size={24} style={{ color: '#ef4444' }} />
               </div>
             </div>
@@ -539,10 +539,10 @@ const Stats = () => {
                 <p style={styles.statLabel}>Kayıtlı Öğrenciler</p>
                 <p style={styles.statValue}>{students.length}</p>
                 <div style={styles.statExtra}>
-                  <span style={{ color: '#64748b' }}>Sistemdeki toplam kayıt</span>
+                  <span style={{ color: 'var(--color-text-muted)' }}>Sistemdeki toplam kayıt</span>
                 </div>
               </div>
-              <div style={styles.iconBox('#e0f2fe')}>
+              <div style={styles.iconBox('var(--color-border)')}>
                 <Users size={24} style={{ color: '#0284c7' }} />
               </div>
             </div>
@@ -554,7 +554,7 @@ const Stats = () => {
                 <p style={styles.statLabel}>Okunacak Kağıtlar</p>
                 <p style={styles.statValue}>{generalStats.pendingGrades}</p>
                 <div style={styles.statExtra}>
-                  <span style={{ color: '#64748b' }}>Değerlendirme bekleyen</span>
+                  <span style={{ color: 'var(--color-text-muted)' }}>Değerlendirme bekleyen</span>
                 </div>
               </div>
               <div style={styles.iconBox('#fff7ed')}>
@@ -569,7 +569,7 @@ const Stats = () => {
                 <p style={styles.statLabel}>En Başarılı Sınıf</p>
                 <p style={styles.statValue}>{bestClass ? bestClass.name : '-'}</p>
                 <div style={styles.statExtra}>
-                  <span style={{ color: '#64748b' }}>Ortalama: {bestClass ? bestClass.average : 0} Puan</span>
+                  <span style={{ color: 'var(--color-text-muted)' }}>Ortalama: {bestClass ? bestClass.average : 0} Puan</span>
                 </div>
               </div>
               <div style={styles.iconBox('#faf5ff')}>
@@ -588,7 +588,7 @@ const Stats = () => {
                     : '%0'}
                 </p>
                 <div style={styles.statExtra}>
-                  <span style={{ color: '#64748b' }}>Sınav başına {generalStats.avgSubmissionsPerExam} teslim</span>
+                  <span style={{ color: 'var(--color-text-muted)' }}>Sınav başına {generalStats.avgSubmissionsPerExam} teslim</span>
                 </div>
               </div>
               <div style={styles.iconBox('#fcfdf2')}>
@@ -604,9 +604,9 @@ const Stats = () => {
             <div style={{ height: '280px' }}>
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={classStats}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-                  <XAxis dataKey="name" stroke="#64748b" fontSize={12} />
-                  <YAxis stroke="#64748b" fontSize={12} />
+                  <CartesianGrid strokeDasharray="3 3" stroke='var(--color-border)' />
+                  <XAxis dataKey="name" stroke='var(--color-text-muted)' fontSize={12} />
+                  <YAxis stroke='var(--color-text-muted)' fontSize={12} />
                   <Tooltip content={<CustomTooltip />} />
                   <Legend />
                   <Bar dataKey="submissions" name="Gönderim" fill="#0d9488" radius={[4, 4, 0, 0]} />
@@ -621,9 +621,9 @@ const Stats = () => {
             <div style={{ height: '280px' }}>
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={gradeDistribution}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-                  <XAxis dataKey="range" stroke="#64748b" fontSize={12} />
-                  <YAxis stroke="#64748b" fontSize={12} />
+                  <CartesianGrid strokeDasharray="3 3" stroke='var(--color-border)' />
+                  <XAxis dataKey="range" stroke='var(--color-text-muted)' fontSize={12} />
+                  <YAxis stroke='var(--color-text-muted)' fontSize={12} />
                   <Tooltip content={<CustomTooltip />} />
                   <Bar dataKey="count" name="Öğrenci Sayısı" radius={[4, 4, 0, 0]}>
                     {gradeDistribution.map((entry, index) => (
@@ -641,9 +641,9 @@ const Stats = () => {
               {examPerformanceStats.length > 0 ? (
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={examPerformanceStats}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-                    <XAxis dataKey="name" stroke="#64748b" fontSize={11} />
-                    <YAxis stroke="#64748b" fontSize={12} domain={[0, 100]} />
+                    <CartesianGrid strokeDasharray="3 3" stroke='var(--color-border)' />
+                    <XAxis dataKey="name" stroke='var(--color-text-muted)' fontSize={11} />
+                    <YAxis stroke='var(--color-text-muted)' fontSize={12} domain={[0, 100]} />
                     <Tooltip content={<CustomTooltip />} />
                     <Legend />
                     <Bar dataKey="Ortalama Not" name="Ortalama Not" fill="#8b5cf6" radius={[4, 4, 0, 0]} />
@@ -651,7 +651,7 @@ const Stats = () => {
                   </BarChart>
                 </ResponsiveContainer>
               ) : (
-                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', color: '#64748b', fontSize: '14px' }}>
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', color: 'var(--color-text-muted)', fontSize: '14px' }}>
                   Veri bulunamadı
                 </div>
               )}
@@ -664,16 +664,16 @@ const Stats = () => {
               {submissionTimelineStats.length > 0 ? (
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={submissionTimelineStats}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-                    <XAxis dataKey="Tarih" stroke="#64748b" fontSize={11} />
-                    <YAxis stroke="#64748b" fontSize={12} allowDecimals={false} />
+                    <CartesianGrid strokeDasharray="3 3" stroke='var(--color-border)' />
+                    <XAxis dataKey="Tarih" stroke='var(--color-text-muted)' fontSize={11} />
+                    <YAxis stroke='var(--color-text-muted)' fontSize={12} allowDecimals={false} />
                     <Tooltip content={<CustomTooltip />} />
                     <Legend />
                     <Line type="monotone" dataKey="Gönderim Adedi" name="Gönderim Adedi" stroke="#f59e0b" strokeWidth={3} activeDot={{ r: 8 }} />
                   </LineChart>
                 </ResponsiveContainer>
               ) : (
-                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', color: '#64748b', fontSize: '14px' }}>
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', color: 'var(--color-text-muted)', fontSize: '14px' }}>
                   Veri bulunamadı
                 </div>
               )}
@@ -716,7 +716,7 @@ const Stats = () => {
                 </div>
               </div>
             ) : (
-              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '180px', color: '#64748b', fontSize: '14px' }}>
+              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '180px', color: 'var(--color-text-muted)', fontSize: '14px' }}>
                 Veri bulunamadı
               </div>
             )}
@@ -756,7 +756,7 @@ const Stats = () => {
                 </div>
               </div>
             ) : (
-              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '180px', color: '#64748b', fontSize: '14px' }}>
+              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '180px', color: 'var(--color-text-muted)', fontSize: '14px' }}>
                 Veri bulunamadı
               </div>
             )}

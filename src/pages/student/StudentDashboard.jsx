@@ -18,7 +18,7 @@ import { getNotificationTranslation } from '../../utils/notificationHelpers';
 
 const StudentDashboard = () => {
   const navigate = useNavigate();
-  const { user, language, setLanguage, logout } = useAuthStore();
+  const { user, language, setLanguage, theme, setTheme, logout } = useAuthStore();
   const { loadExams, getExamsForStudent } = useExamStore();
   const { loadSubmissions, getStudentSubmissions } = useSubmissionStore();
   const { notifications, loadNotifications, markAsRead, unreadCount } = useNotificationStore();
@@ -194,7 +194,7 @@ const StudentDashboard = () => {
     const totalMinutes = countdown.days * 24 * 60 + countdown.hours * 60 + countdown.minutes;
     if (totalMinutes <= 5) return '#dc2626';
     if (totalMinutes <= 30) return '#d97706';
-    return '#111318';
+    return 'var(--color-text-primary)';
   };
 
   // Son 3 bildirimi göster (okunmuş veya okunmamış fark etmeksizin)
@@ -236,7 +236,7 @@ const StudentDashboard = () => {
         minHeight: '100vh',
         display: 'flex',
         flexDirection: 'column',
-        background: '#f6f6f8'
+        background: 'var(--color-background)'
       }}>
         {/* Top Navbar - HTML'deki header kısmı */}
         <header style={{
@@ -244,20 +244,20 @@ const StudentDashboard = () => {
           alignItems: 'center',
           justifyContent: 'space-between',
           padding: '20px 32px',
-          background: 'white',
-          borderBottom: '1px solid #f0f1f4',
+          background: 'var(--color-surface)',
+          borderBottom: '1px solid var(--color-border)',
           flexShrink: 0
         }}>
           <div id="student-welcome-header" style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
             <h2 style={{
               fontSize: '20px',
               fontWeight: '700',
-              color: '#111318',
+              color: 'var(--color-text-primary)',
               lineHeight: '1.2'
             }}>
               {t('welcomeBack')}, {user?.fullName}
             </h2>
-            <p style={{ fontSize: '14px', color: '#64748b' }}>
+            <p style={{ fontSize: '14px', color: 'var(--color-text-muted)' }}>
               {t('examStatusToday')}
             </p>
           </div>
@@ -274,18 +274,18 @@ const StudentDashboard = () => {
                 padding: '8px 14px',
                 height: '40px',
                 borderRadius: '12px',
-                background: '#f6f6f8',
-                border: '1px solid #e2e8f0',
-                color: '#475569',
+                background: 'var(--color-background)',
+                border: '1px solid var(--color-border)',
+                color: 'var(--color-text-secondary)',
                 fontSize: '13px',
                 fontWeight: '600',
                 cursor: 'pointer',
                 transition: 'all 0.2s'
               }}
               onMouseEnter={(e) => { e.currentTarget.style.background = '#2463eb'; e.currentTarget.style.color = 'white'; e.currentTarget.style.borderColor = '#2463eb'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.background = '#f6f6f8'; e.currentTarget.style.color = '#475569'; e.currentTarget.style.borderColor = '#e2e8f0'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--color-background)'; e.currentTarget.style.color = 'var(--color-text-secondary)'; e.currentTarget.style.borderColor = 'var(--color-border)'; }}
             >
-              ❓ Yardım
+              ❓ {t('help')}
             </button>
             {/* Search */}
             <div style={{ position: 'relative' }}>
@@ -294,7 +294,7 @@ const StudentDashboard = () => {
                 alignItems: 'center',
                 height: '40px',
                 width: '256px',
-                background: '#f6f6f8',
+                background: 'var(--color-background)',
                 borderRadius: '12px',
                 padding: '0 12px',
                 border: searchQuery ? '1px solid #2463eb' : '1px solid transparent',
@@ -318,7 +318,7 @@ const StudentDashboard = () => {
                     width: '100%',
                     paddingLeft: '8px',
                     outline: 'none',
-                    color: '#475569'
+                    color: 'var(--color-text-secondary)'
                   }}
                 />
               </div>
@@ -330,10 +330,10 @@ const StudentDashboard = () => {
                   top: '48px',
                   left: 0,
                   right: 0,
-                  background: 'white',
+                  background: 'var(--color-surface)',
                   borderRadius: '12px',
                   boxShadow: '0 10px 40px rgba(0, 0, 0, 0.15)',
-                  border: '1px solid #e2e8f0',
+                  border: '1px solid var(--color-border)',
                   maxHeight: '400px',
                   overflowY: 'auto',
                   zIndex: 1000
@@ -379,7 +379,7 @@ const StudentDashboard = () => {
                             alignItems: 'center',
                             gap: '12px'
                           }}
-                          onMouseEnter={(e) => e.currentTarget.style.background = '#f8fafc'}
+                          onMouseEnter={(e) => e.currentTarget.style.background = 'var(--color-background)'}
                           onMouseLeave={(e) => e.currentTarget.style.background = 'white'}
                         >
                           <div style={{
@@ -412,7 +412,7 @@ const StudentDashboard = () => {
                               <h6 style={{
                                 fontSize: '14px',
                                 fontWeight: '600',
-                                color: '#111318',
+                                color: 'var(--color-text-primary)',
                                 margin: 0,
                                 overflow: 'hidden',
                                 textOverflow: 'ellipsis',
@@ -432,12 +432,12 @@ const StudentDashboard = () => {
                                   ? '#d1fae5'
                                   : isUpcoming
                                     ? '#fef3c7'
-                                    : '#f1f5f9',
+                                    : 'var(--color-background-secondary)',
                                 color: isActive
                                   ? '#065f46'
                                   : isUpcoming
                                     ? '#92400e'
-                                    : '#475569'
+                                    : 'var(--color-text-secondary)'
                               }}>
                                 {isActive ? t('active') : isUpcoming ? t('upcoming') : t('ended')}
                               </span>
@@ -445,7 +445,7 @@ const StudentDashboard = () => {
                             {(exam.description || exam.className) && (
                               <p style={{
                                 fontSize: '12px',
-                                color: '#64748b',
+                                color: 'var(--color-text-muted)',
                                 margin: 0,
                                 overflow: 'hidden',
                                 textOverflow: 'ellipsis',
@@ -480,7 +480,7 @@ const StudentDashboard = () => {
                   width: '40px',
                   height: '40px',
                   borderRadius: '50%',
-                  background: isProfileOpen ? '#2463eb' : '#cbd5e1',
+                  background: isProfileOpen ? '#2463eb' : 'var(--color-border-dark)',
                   border: '2px solid white',
                   overflow: 'hidden',
                   cursor: 'pointer',
@@ -489,7 +489,7 @@ const StudentDashboard = () => {
                   justifyContent: 'center',
                   fontSize: '16px',
                   fontWeight: '700',
-                  color: isProfileOpen ? 'white' : '#475569',
+                  color: isProfileOpen ? 'white' : 'var(--color-text-secondary)',
                   boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
                   transition: 'all 0.2s',
                   position: 'relative',
@@ -506,10 +506,10 @@ const StudentDashboard = () => {
                   top: '52px',
                   right: 0,
                   width: '280px',
-                  background: 'white',
+                  background: 'var(--color-surface)',
                   borderRadius: '16px',
                   boxShadow: '0 10px 40px rgba(0, 0, 0, 0.15)',
-                  border: '1px solid #e2e8f0',
+                  border: '1px solid var(--color-border)',
                   padding: '16px',
                   zIndex: 1000,
                   animation: 'in-expo 0.3s cubic-bezier(0.19, 1, 0.22, 1)'
@@ -531,11 +531,11 @@ const StudentDashboard = () => {
                       {user?.fullName?.charAt(0).toUpperCase()}
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontSize: '15px', fontWeight: '700', color: '#111318', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                      <div style={{ fontSize: '15px', fontWeight: '700', color: 'var(--color-text-primary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                         {user?.fullName}
                       </div>
-                      <div style={{ fontSize: '13px', color: '#64748b' }}>
-                        Öğrenci Hesabı
+                      <div style={{ fontSize: '13px', color: 'var(--color-text-muted)' }}>
+                        {t('studentAccount')}
                       </div>
                     </div>
                   </div>
@@ -544,22 +544,22 @@ const StudentDashboard = () => {
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '20px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                       <div style={{ color: '#94a3b8' }}><GraduationCap size={16} /></div>
-                      <div style={{ fontSize: '14px', color: '#475569' }}>
-                        <span style={{ color: '#94a3b8', marginRight: '4px' }}>Sınıf:</span>
-                        <span style={{ fontWeight: '600' }}>{user?.className || 'Belirtilmedi'}</span>
+                      <div style={{ fontSize: '14px', color: 'var(--color-text-secondary)' }}>
+                        <span style={{ color: '#94a3b8', marginRight: '4px' }}>{t('className')}:</span>
+                        <span style={{ fontWeight: '600' }}>{user?.className || t('notSpecified')}</span>
                       </div>
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                       <div style={{ color: '#94a3b8' }}><Hash size={16} /></div>
-                      <div style={{ fontSize: '14px', color: '#475569' }}>
-                        <span style={{ color: '#94a3b8', marginRight: '4px' }}>Okul No:</span>
-                        <span style={{ fontWeight: '600' }}>{user?.studentNumber || '---'}</span>
+                      <div style={{ fontSize: '14px', color: 'var(--color-text-secondary)' }}>
+                        <span style={{ color: '#94a3b8', marginRight: '4px' }}>{t('studentNumber')}:</span>
+                        <span style={{ fontWeight: '600' }}>{user?.studentNumber || t('notSpecified')}</span>
                       </div>
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                       <div style={{ color: '#94a3b8' }}><TrendingUp size={16} /></div>
-                      <div style={{ fontSize: '14px', color: '#475569' }}>
-                        <span style={{ color: '#94a3b8', marginRight: '4px' }}>Ortalama Not:</span>
+                      <div style={{ fontSize: '14px', color: 'var(--color-text-secondary)' }}>
+                        <span style={{ color: '#94a3b8', marginRight: '4px' }}>{t('averageGrade')}:</span>
                         <span style={{ 
                           fontWeight: '700', 
                           color: averageGrade >= 70 ? '#10b981' : averageGrade >= 50 ? '#f59e0b' : '#ef4444' 
@@ -570,6 +570,27 @@ const StudentDashboard = () => {
                     </div>
                   </div>
 
+                  {/* Theme Toggle */}
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 10px', borderBottom: '1px solid var(--color-border)', marginBottom: '8px' }}>
+                    <span style={{ fontSize: '14px', color: 'var(--color-text-secondary)', fontWeight: '500' }}>
+                      {theme === 'dark' ? t('darkTheme', 'Koyu Tema') : t('lightTheme', 'Açık Tema')}
+                    </span>
+                    <button
+                      onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                      style={{
+                        width: '40px', height: '22px', borderRadius: '12px',
+                        background: theme === 'dark' ? 'var(--color-primary)' : 'var(--color-border)',
+                        position: 'relative', cursor: 'pointer', border: 'none', transition: 'background 0.3s'
+                      }}
+                    >
+                      <div style={{
+                        width: '18px', height: '18px', borderRadius: '50%', background: 'var(--color-surface)',
+                        position: 'absolute', top: '2px', left: theme === 'dark' ? '20px' : '2px',
+                        transition: 'left 0.3s'
+                      }} />
+                    </button>
+                  </div>
+
                   {/* Logout Button */}
                   <button 
                     onClick={() => {
@@ -577,20 +598,20 @@ const StudentDashboard = () => {
                       navigate('/');
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.background = '#fef2f2';
+                      e.currentTarget.style.background = 'var(--color-background-secondary)';
                       e.currentTarget.style.color = '#dc2626';
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.background = '#f8fafc';
-                      e.currentTarget.style.color = '#64748b';
+                      e.currentTarget.style.background = 'var(--color-background)';
+                      e.currentTarget.style.color = 'var(--color-text-muted)';
                     }}
                     style={{
                       width: '100%',
                       padding: '10px',
-                      background: '#f8fafc',
-                      border: '1px solid #e2e8f0',
+                      background: 'var(--color-background)',
+                      border: '1px solid var(--color-border)',
                       borderRadius: '10px',
-                      color: '#64748b',
+                      color: 'var(--color-text-muted)',
                       fontSize: '14px',
                       fontWeight: '600',
                       cursor: 'pointer',
@@ -602,7 +623,7 @@ const StudentDashboard = () => {
                     }}
                   >
                     <LogOut size={16} />
-                    Oturumu Kapat
+                    {t('logout')}
                   </button>
                 </div>
               )}
@@ -616,7 +637,7 @@ const StudentDashboard = () => {
           padding: '32px',
           paddingBottom: '80px',
           fontFamily: 'Lexend, sans-serif',
-          background: '#f6f6f8'
+          background: 'var(--color-background)'
         }}>
           <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '32px' }}>
 
@@ -631,9 +652,9 @@ const StudentDashboard = () => {
                 display: 'flex',
                 flexDirection: 'column',
                 padding: '20px',
-                background: 'white',
+                background: 'var(--color-surface)',
                 borderRadius: '12px',
-                border: '1px solid #e2e8f0',
+                border: '1px solid var(--color-border)',
                 boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05)',
                 transition: 'all 0.2s',
                 cursor: 'pointer'
@@ -645,7 +666,7 @@ const StudentDashboard = () => {
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
                   <div style={{
                     padding: '12px',
-                    background: '#eff6ff',
+                    background: 'var(--color-background-secondary)',
                     color: '#3b82f6',
                     borderRadius: '8px'
                   }}>
@@ -658,7 +679,7 @@ const StudentDashboard = () => {
                       fontSize: '12px',
                       fontWeight: '700',
                       color: '#16a34a',
-                      background: '#f0fdf4',
+                      background: 'var(--color-background-secondary)',
                       padding: '4px 8px',
                       borderRadius: '6px'
                     }}>
@@ -666,10 +687,10 @@ const StudentDashboard = () => {
                     </span>
                   )}
                 </div>
-                <p style={{ color: '#64748b', fontSize: '14px', fontWeight: '500', marginBottom: '4px' }}>
+                <p style={{ color: 'var(--color-text-muted)', fontSize: '14px', fontWeight: '500', marginBottom: '4px' }}>
                   {t('activeExams')}
                 </p>
-                <h3 style={{ fontSize: '30px', fontWeight: '700', color: '#111318', marginTop: '4px' }}>
+                <h3 style={{ fontSize: '30px', fontWeight: '700', color: 'var(--color-text-primary)', marginTop: '4px' }}>
                   {activeExams.length}
                 </h3>
               </div>
@@ -679,9 +700,9 @@ const StudentDashboard = () => {
                 display: 'flex',
                 flexDirection: 'column',
                 padding: '20px',
-                background: 'white',
+                background: 'var(--color-surface)',
                 borderRadius: '12px',
-                border: '1px solid #e2e8f0',
+                border: '1px solid var(--color-border)',
                 boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05)',
                 transition: 'all 0.2s',
                 cursor: 'pointer'
@@ -693,17 +714,17 @@ const StudentDashboard = () => {
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
                   <div style={{
                     padding: '12px',
-                    background: '#faf5ff',
+                    background: 'var(--color-background-secondary)',
                     color: '#a855f7',
                     borderRadius: '8px'
                   }}>
                     <Upload size={24} />
                   </div>
                 </div>
-                <p style={{ color: '#64748b', fontSize: '14px', fontWeight: '500', marginBottom: '4px' }}>
+                <p style={{ color: 'var(--color-text-muted)', fontSize: '14px', fontWeight: '500', marginBottom: '4px' }}>
                   {t('totalSubmissions')}
                 </p>
-                <h3 style={{ fontSize: '30px', fontWeight: '700', color: '#111318', marginTop: '4px' }}>
+                <h3 style={{ fontSize: '30px', fontWeight: '700', color: 'var(--color-text-primary)', marginTop: '4px' }}>
                   {activeSubmissions.length}
                 </h3>
               </div>
@@ -713,9 +734,9 @@ const StudentDashboard = () => {
                 display: 'flex',
                 flexDirection: 'column',
                 padding: '20px',
-                background: 'white',
+                background: 'var(--color-surface)',
                 borderRadius: '12px',
-                border: '1px solid #e2e8f0',
+                border: '1px solid var(--color-border)',
                 boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05)',
                 transition: 'all 0.2s',
                 cursor: 'pointer'
@@ -727,17 +748,17 @@ const StudentDashboard = () => {
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
                   <div style={{
                     padding: '12px',
-                    background: '#fff7ed',
+                    background: 'var(--color-background-secondary)',
                     color: '#f97316',
                     borderRadius: '8px'
                   }}>
                     <CalendarClock size={24} />
                   </div>
                 </div>
-                <p style={{ color: '#64748b', fontSize: '14px', fontWeight: '500', marginBottom: '4px' }}>
+                <p style={{ color: 'var(--color-text-muted)', fontSize: '14px', fontWeight: '500', marginBottom: '4px' }}>
                   {t('upcomingExams')}
                 </p>
-                <h3 style={{ fontSize: '30px', fontWeight: '700', color: '#111318', marginTop: '4px' }}>
+                <h3 style={{ fontSize: '30px', fontWeight: '700', color: 'var(--color-text-primary)', marginTop: '4px' }}>
                   {upcomingExams.length}
                 </h3>
               </div>
@@ -747,9 +768,9 @@ const StudentDashboard = () => {
                 display: 'flex',
                 flexDirection: 'column',
                 padding: '20px',
-                background: 'white',
+                background: 'var(--color-surface)',
                 borderRadius: '12px',
-                border: '1px solid #e2e8f0',
+                border: '1px solid var(--color-border)',
                 boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05)',
                 transition: 'all 0.2s',
                 cursor: 'pointer'
@@ -761,7 +782,7 @@ const StudentDashboard = () => {
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
                   <div style={{
                     padding: '12px',
-                    background: '#fef2f2',
+                    background: 'var(--color-background-secondary)',
                     color: '#ef4444',
                     borderRadius: '8px'
                   }}>
@@ -784,10 +805,10 @@ const StudentDashboard = () => {
                     </span>
                   )}
                 </div>
-                <p style={{ color: '#64748b', fontSize: '14px', fontWeight: '500', marginBottom: '4px' }}>
+                <p style={{ color: 'var(--color-text-muted)', fontSize: '14px', fontWeight: '500', marginBottom: '4px' }}>
                   {t('unreadNotifications')}
                 </p>
-                <h3 style={{ fontSize: '30px', fontWeight: '700', color: '#111318', marginTop: '4px' }}>
+                <h3 style={{ fontSize: '30px', fontWeight: '700', color: 'var(--color-text-primary)', marginTop: '4px' }}>
                   {unreadCount}
                 </h3>
               </div>
@@ -796,7 +817,7 @@ const StudentDashboard = () => {
             {/* Active Exams List */}
             <section id="student-active-exams" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <h3 style={{ fontSize: '20px', fontWeight: '700', color: '#111318' }}>
+                <h3 style={{ fontSize: '20px', fontWeight: '700', color: 'var(--color-text-primary)' }}>
                   {t('activeExams')}
                 </h3>
                 <a
@@ -823,10 +844,10 @@ const StudentDashboard = () => {
               }}>
                 {activeExams.length === 0 ? (
                   <div style={{
-                    background: 'white',
+                    background: 'var(--color-surface)',
                     borderRadius: '16px',
                     padding: '48px',
-                    border: '1px solid #e2e8f0',
+                    border: '1px solid var(--color-border)',
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
@@ -835,8 +856,8 @@ const StudentDashboard = () => {
                     gridColumn: '1 / -1',
                     minHeight: '200px'
                   }}>
-                    <FileText size={48} color="#cbd5e1" style={{ marginBottom: '16px' }} />
-                    <p style={{ color: '#64748b', fontSize: '15px' }}>
+                    <FileText size={48} color='var(--color-border-dark)' style={{ marginBottom: '16px' }} />
+                    <p style={{ color: 'var(--color-text-muted)', fontSize: '15px' }}>
                       {t('noActiveExams')}
                     </p>
                   </div>
@@ -845,11 +866,11 @@ const StudentDashboard = () => {
                     .filter(exam => exam.title.toLowerCase().includes(searchQuery.toLowerCase()))
                     .map((exam, idx) => (
                       <div key={exam.id} style={{
-                        background: 'white',
+                        background: 'var(--color-surface)',
                         borderRadius: '16px',
                         padding: '24px',
                         boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05)',
-                        border: '1px solid #e2e8f0',
+                        border: '1px solid var(--color-border)',
                         display: 'flex',
                         flexDirection: 'row',
                         gap: '24px',
@@ -904,14 +925,14 @@ const StudentDashboard = () => {
                                 fontWeight: '700',
                                 textTransform: 'uppercase',
                                 letterSpacing: '0.05em',
-                                color: '#64748b'
+                                color: 'var(--color-text-muted)'
                               }}>
                                 {exam.className || 'All Classes'}
                               </span>
                               {countdowns[exam.id] && !countdowns[exam.id].isExpired &&
                                 (countdowns[exam.id].days * 24 * 60 + countdowns[exam.id].hours * 60 + countdowns[exam.id].minutes <= 30) && (
                                   <>
-                                    <span style={{ width: '4px', height: '4px', background: '#cbd5e1', borderRadius: '50%' }}></span>
+                                    <span style={{ width: '4px', height: '4px', background: 'var(--color-border-dark)', borderRadius: '50%' }}></span>
                                     <span style={{
                                       fontSize: '10px',
                                       fontWeight: '700',
@@ -928,14 +949,14 @@ const StudentDashboard = () => {
                             <h4 style={{
                               fontSize: '18px',
                               fontWeight: '700',
-                              color: '#111318',
+                              color: 'var(--color-text-primary)',
                               marginBottom: '12px',
                               lineHeight: '1.3'
                             }}>
                               {exam.title}
                             </h4>
 
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#64748b' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--color-text-muted)' }}>
                               <Timer size={18} />
                               <span style={{
                                 fontFamily: 'JetBrains Mono, monospace',
@@ -953,20 +974,20 @@ const StudentDashboard = () => {
                               <span style={{
                                 padding: '4px 8px',
                                 borderRadius: '6px',
-                                background: '#f8fafc',
+                                background: 'var(--color-background)',
                                 fontSize: '12px',
                                 fontWeight: '500',
-                                color: '#475569'
+                                color: 'var(--color-text-secondary)'
                               }}>
                                 {exam.fileTypes?.join(' / ').toUpperCase() || 'PDF Only'}
                               </span>
                               <span style={{
                                 padding: '4px 8px',
                                 borderRadius: '6px',
-                                background: '#f8fafc',
+                                background: 'var(--color-background)',
                                 fontSize: '12px',
                                 fontWeight: '500',
-                                color: '#475569'
+                                color: 'var(--color-text-secondary)'
                               }}>
                                 Max {exam.maxFileSize ? Math.round(exam.maxFileSize / (1024 * 1024)) : 10}MB
                               </span>
@@ -989,14 +1010,14 @@ const StudentDashboard = () => {
                                 width: '100%',
                                 height: '44px',
                                 background: hasSubmitted(exam.id)
-                                  ? 'white'
-                                  : (idx === 0 ? '#2463eb' : 'white'),
+                                  ? 'var(--color-background-secondary)'
+                                  : (idx === 0 ? '#2463eb' : 'var(--color-background-secondary)'),
                                 color: hasSubmitted(exam.id)
-                                  ? '#64748b'
-                                  : (idx === 0 ? 'white' : '#475569'),
+                                  ? 'var(--color-text-muted)'
+                                  : (idx === 0 ? 'white' : 'var(--color-text-secondary)'),
                                 border: hasSubmitted(exam.id)
-                                  ? '2px solid #e2e8f0'
-                                  : (idx === 0 ? 'none' : '2px solid #e2e8f0'),
+                                  ? '2px solid var(--color-border)'
+                                  : (idx === 0 ? 'none' : '2px solid var(--color-border)'),
                                 borderRadius: '12px',
                                 fontWeight: '700',
                                 fontSize: '14px',
@@ -1020,7 +1041,7 @@ const StudentDashboard = () => {
                                   if (idx === 0) {
                                     e.currentTarget.style.background = '#2463eb';
                                   } else {
-                                    e.currentTarget.style.borderColor = '#e2e8f0';
+                                    e.currentTarget.style.borderColor = 'var(--color-border)';
                                   }
                                 }
                               }}
@@ -1044,14 +1065,14 @@ const StudentDashboard = () => {
             }}>
               {/* Notifications - 2/3 width */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                <h3 style={{ fontSize: '18px', fontWeight: '700', color: '#111318' }}>
+                <h3 style={{ fontSize: '18px', fontWeight: '700', color: 'var(--color-text-primary)' }}>
                   {t('recentNotifications')}
                 </h3>
                 <div style={{
-                  background: 'white',
+                  background: 'var(--color-surface)',
                   borderRadius: '12px',
                   boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05)',
-                  border: '1px solid #e2e8f0',
+                  border: '1px solid var(--color-border)',
                   overflow: 'hidden'
                 }}>
                   {recentNotifications.length === 0 ? (
@@ -1063,8 +1084,8 @@ const StudentDashboard = () => {
                       justifyContent: 'center',
                       textAlign: 'center'
                     }}>
-                      <Info size={40} color="#cbd5e1" style={{ marginBottom: '12px' }} />
-                      <p style={{ color: '#64748b', fontSize: '14px' }}>
+                      <Info size={40} color='var(--color-border-dark)' style={{ marginBottom: '12px' }} />
+                      <p style={{ color: 'var(--color-text-muted)', fontSize: '14px' }}>
                         {t('noNotifications')}
                       </p>
                     </div>
@@ -1080,7 +1101,7 @@ const StudentDashboard = () => {
                             gap: '16px',
                             padding: '16px',
                             borderBottom: index < recentNotifications.length - 1 ? '1px solid #f8fafc' : 'none',
-                            borderLeft: `4px solid ${notif.isRead ? '#e2e8f0' : (
+                            borderLeft: `4px solid ${notif.isRead ? 'var(--color-border)' : (
                               notif.type === 'success' ? '#10b981' :
                                 notif.type === 'warning' ? '#f59e0b' :
                                   notif.type === 'error' ? '#ef4444' : '#2463eb'
@@ -1090,7 +1111,7 @@ const StudentDashboard = () => {
                             backgroundColor: notif.isRead ? 'transparent' : 'rgba(36, 99, 235, 0.02)',
                             opacity: notif.isRead ? 0.7 : 1
                           }}
-                          onMouseEnter={(e) => e.currentTarget.style.background = '#f8fafc'}
+                          onMouseEnter={(e) => e.currentTarget.style.background = 'var(--color-background)'}
                           onMouseLeave={(e) => e.currentTarget.style.background = notif.isRead ? 'transparent' : 'rgba(36, 99, 235, 0.02)'}
                         >
                           <div style={{
@@ -1104,10 +1125,10 @@ const StudentDashboard = () => {
                                 <Info size={20} />}
                           </div>
                           <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', flex: 1 }}>
-                            <h5 style={{ fontSize: '14px', fontWeight: '700', color: '#111318' }}>
+                            <h5 style={{ fontSize: '14px', fontWeight: '700', color: 'var(--color-text-primary)' }}>
                               {translatedNotif.title}
                             </h5>
-                            <p style={{ fontSize: '14px', color: '#64748b', lineHeight: '1.5' }}>
+                            <p style={{ fontSize: '14px', color: 'var(--color-text-muted)', lineHeight: '1.5' }}>
                               {translatedNotif.message}
                             </p>
                             <span style={{ fontSize: '12px', color: '#94a3b8', marginTop: '4px' }}>
@@ -1123,14 +1144,14 @@ const StudentDashboard = () => {
 
               {/* Upcoming Schedule - 1/3 width */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                <h3 style={{ fontSize: '18px', fontWeight: '700', color: '#111318' }}>
+                <h3 style={{ fontSize: '18px', fontWeight: '700', color: 'var(--color-text-primary)' }}>
                   {t('upcomingExams')}
                 </h3>
                 <div style={{
-                  background: 'white',
+                  background: 'var(--color-surface)',
                   borderRadius: '12px',
                   boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05)',
-                  border: '1px solid #e2e8f0',
+                  border: '1px solid var(--color-border)',
                   padding: '16px'
                 }}>
                   {(() => {
@@ -1148,8 +1169,8 @@ const StudentDashboard = () => {
                           justifyContent: 'center',
                           textAlign: 'center'
                         }}>
-                          <Calendar size={32} color="#cbd5e1" style={{ marginBottom: '12px' }} />
-                          <p style={{ color: '#64748b', fontSize: '14px' }}>
+                          <Calendar size={32} color='var(--color-border-dark)' style={{ marginBottom: '12px' }} />
+                          <p style={{ color: 'var(--color-text-muted)', fontSize: '14px' }}>
                             {t('noUpcomingExams')}
                           </p>
                         </div>
@@ -1166,8 +1187,8 @@ const StudentDashboard = () => {
                           justifyContent: 'center',
                           textAlign: 'center'
                         }}>
-                          <Info size={32} color="#cbd5e1" style={{ marginBottom: '12px' }} />
-                          <p style={{ color: '#64748b', fontSize: '14px' }}>
+                          <Info size={32} color='var(--color-border-dark)' style={{ marginBottom: '12px' }} />
+                          <p style={{ color: 'var(--color-text-muted)', fontSize: '14px' }}>
                             {t('noSearchResults')}
                           </p>
                         </div>
@@ -1190,7 +1211,7 @@ const StudentDashboard = () => {
                                   justifyContent: 'center',
                                   width: '48px',
                                   height: '56px',
-                                  background: '#f8fafc',
+                                  background: 'var(--color-background)',
                                   borderRadius: '8px',
                                   flexShrink: 0
                                 }}>
@@ -1202,7 +1223,7 @@ const StudentDashboard = () => {
                                   }}>
                                     {monthNames[startDate.getMonth()]}
                                   </span>
-                                  <span style={{ fontSize: '18px', fontWeight: '700', color: '#111318' }}>
+                                  <span style={{ fontSize: '18px', fontWeight: '700', color: 'var(--color-text-primary)' }}>
                                     {startDate.getDate()}
                                   </span>
                                 </div>
@@ -1210,7 +1231,7 @@ const StudentDashboard = () => {
                                   <h6 style={{
                                     fontSize: '14px',
                                     fontWeight: '700',
-                                    color: '#111318',
+                                    color: 'var(--color-text-primary)',
                                     marginBottom: '4px',
                                     overflow: 'hidden',
                                     textOverflow: 'ellipsis',
@@ -1218,7 +1239,7 @@ const StudentDashboard = () => {
                                   }}>
                                     {exam.title}
                                   </h6>
-                                  <p style={{ fontSize: '12px', color: '#64748b' }}>
+                                  <p style={{ fontSize: '12px', color: 'var(--color-text-muted)' }}>
                                     {startDate.toLocaleTimeString('en-US', {
                                       hour: '2-digit',
                                       minute: '2-digit',
@@ -1228,7 +1249,7 @@ const StudentDashboard = () => {
                                 </div>
                               </div>
                               {index < upcomingExams.length - 1 && (
-                                <div style={{ height: '1px', background: '#f8fafc', width: '100%' }}></div>
+                                <div style={{ height: '1px', background: 'var(--color-background)', width: '100%' }}></div>
                               )}
                             </React.Fragment>
                           );
@@ -1249,7 +1270,7 @@ const StudentDashboard = () => {
                             cursor: 'pointer',
                             transition: 'background 0.2s'
                           }}
-                          onMouseEnter={(e) => e.currentTarget.style.background = '#f8fafc'}
+                          onMouseEnter={(e) => e.currentTarget.style.background = 'var(--color-background)'}
                           onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
                         >
                           {t('viewFullCalendar')}
@@ -1280,7 +1301,7 @@ const StudentDashboard = () => {
                     <h2 style={{
                       fontSize: '24px',
                       fontWeight: '800',
-                      color: '#111318',
+                      color: 'var(--color-text-primary)',
                       display: 'flex',
                       alignItems: 'center',
                       gap: '8px'
@@ -1290,7 +1311,7 @@ const StudentDashboard = () => {
                         fontSize: '14px',
                         fontWeight: '600',
                         color: '#94a3b8',
-                        background: '#f8fafc',
+                        background: 'var(--color-background)',
                         padding: '4px 12px',
                         borderRadius: '12px'
                       }}>
@@ -1306,14 +1327,14 @@ const StudentDashboard = () => {
                   }}>
                     {filteredEndedExams.length === 0 ? (
                       <div style={{
-                        background: 'white',
+                        background: 'var(--color-surface)',
                         borderRadius: '16px',
                         padding: '48px',
-                        border: '1px solid #e2e8f0',
+                        border: '1px solid var(--color-border)',
                         textAlign: 'center',
                         gridColumn: '1 / -1'
                       }}>
-                        <p style={{ color: '#64748b', fontSize: '15px' }}>
+                        <p style={{ color: 'var(--color-text-muted)', fontSize: '15px' }}>
                           {t('noSearchResults')}
                         </p>
                       </div>
@@ -1324,11 +1345,11 @@ const StudentDashboard = () => {
 
                         return (
                           <div key={exam.id} style={{
-                            background: 'white',
+                            background: 'var(--color-surface)',
                             borderRadius: '16px',
                             padding: '24px',
                             boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05)',
-                            border: '1px solid #e2e8f0',
+                            border: '1px solid var(--color-border)',
                             display: 'flex',
                             flexDirection: 'row',
                             gap: '24px',
@@ -1382,16 +1403,16 @@ const StudentDashboard = () => {
                                     fontWeight: '700',
                                     textTransform: 'uppercase',
                                     letterSpacing: '0.05em',
-                                    color: '#64748b'
+                                    color: 'var(--color-text-muted)'
                                   }}>
                                     {exam.className || 'All Classes'}
                                   </span>
-                                  <span style={{ width: '4px', height: '4px', background: '#cbd5e1', borderRadius: '50%' }}></span>
+                                  <span style={{ width: '4px', height: '4px', background: 'var(--color-border-dark)', borderRadius: '50%' }}></span>
                                   <span style={{
                                     fontSize: '11px',
                                     fontWeight: '700',
                                     color: '#94a3b8',
-                                    background: '#f8fafc',
+                                    background: 'var(--color-background)',
                                     padding: '4px 8px',
                                     borderRadius: '6px',
                                     textTransform: 'uppercase',
@@ -1404,7 +1425,7 @@ const StudentDashboard = () => {
                                 <h4 style={{
                                   fontSize: '18px',
                                   fontWeight: '800',
-                                  color: '#111318',
+                                  color: 'var(--color-text-primary)',
                                   marginBottom: '8px',
                                   overflow: 'hidden',
                                   textOverflow: 'ellipsis',
@@ -1418,7 +1439,7 @@ const StudentDashboard = () => {
                                 {exam.description && (
                                   <p style={{
                                     fontSize: '14px',
-                                    color: '#64748b',
+                                    color: 'var(--color-text-muted)',
                                     lineHeight: '1.5',
                                     margin: '0',
                                     display: '-webkit-box',
@@ -1430,7 +1451,7 @@ const StudentDashboard = () => {
                                   </p>
                                 )}
                                 {exam.teacherName && (
-                                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: '#64748b' }}>
+                                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: 'var(--color-text-muted)' }}>
                                     <span style={{ fontWeight: '600', color: '#2463eb' }}>👨‍🏫 {exam.teacherName}</span>
                                   </div>
                                 )}
@@ -1442,7 +1463,7 @@ const StudentDashboard = () => {
                                 justifyContent: 'space-between',
                                 gap: '16px'
                               }}>
-                                <div style={{ display: 'flex', gap: '16px', fontSize: '13px', color: '#64748b' }}>
+                                <div style={{ display: 'flex', gap: '16px', fontSize: '13px', color: 'var(--color-text-muted)' }}>
                                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                                     <Calendar size={14} />
                                     <span>
@@ -1479,14 +1500,14 @@ const StudentDashboard = () => {
             <div style={{ marginTop: '48px' }}>
               <div style={{
                 width: '100%',
-                background: '#f8fafc',
-                border: '1px solid #e2e8f0',
+                background: 'var(--color-background)',
+                border: '1px solid var(--color-border)',
                 borderRadius: '8px',
                 padding: '8px 16px',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '8px',
-                color: '#64748b'
+                color: 'var(--color-text-muted)'
               }}>
                 <FolderOpen size={16} />
                 <span style={{

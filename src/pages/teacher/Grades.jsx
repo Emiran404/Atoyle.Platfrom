@@ -76,15 +76,15 @@ const Grades = () => {
     padding: '16px 24px',
     fontSize: '12px',
     fontWeight: '600',
-    color: '#64748b',
+    color: 'var(--color-text-muted)',
     textTransform: 'uppercase',
     letterSpacing: '0.05em',
     textAlign: 'left',
-    borderBottom: '1px solid #e2e8f0'
+    borderBottom: '1px solid var(--color-border)'
   };
 
   const studentRowStyle = (isExpanded) => ({
-    backgroundColor: isExpanded ? '#f8fafc' : '#ffffff',
+    backgroundColor: isExpanded ? 'var(--color-background)' : '#ffffff',
     transition: 'all 0.2s ease',
     cursor: 'pointer',
     borderBottom: '1px solid #f1f5f9'
@@ -92,11 +92,11 @@ const Grades = () => {
 
   const badgeStyle = (grade) => {
     const g = Number(grade);
-    let colors = { bg: '#f1f5f9', text: '#64748b', border: '#e2e8f0' };
-    if (g >= 85) colors = { bg: '#ecfdf5', text: '#059669', border: '#10b981' };
-    else if (g >= 70) colors = { bg: '#eff6ff', text: '#2563eb', border: '#3b82f6' };
-    else if (g >= 50) colors = { bg: '#fffbeb', text: '#d97706', border: '#f59e0b' };
-    else if (g > 0) colors = { bg: '#fef2f2', text: '#dc2626', border: '#ef4444' };
+    let colors = { bg: 'var(--color-background-secondary)', text: 'var(--color-text-muted)', border: ' var(--color-border)' };
+    if (g >= 85) colors = { bg: 'var(--color-background-secondary)', text: '#059669', border: '#10b981' };
+    else if (g >= 70) colors = { bg: 'var(--color-background-secondary)', text: '#2563eb', border: '#3b82f6' };
+    else if (g >= 50) colors = { bg: 'var(--color-background-secondary)', text: '#d97706', border: '#f59e0b' };
+    else if (g > 0) colors = { bg: 'var(--color-background-secondary)', text: '#dc2626', border: '#ef4444' };
     
     return {
       padding: '4px 10px',
@@ -159,16 +159,16 @@ const Grades = () => {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: '#fff',
+              color: 'var(--color-text-inverse, #fff)',
               boxShadow: '0 4px 12px rgba(79, 70, 229, 0.2)'
             }}>
               <Award size={22} />
             </div>
-            <h1 style={{ fontSize: '28px', fontWeight: '800', color: '#1e293b', margin: 0 }}>
+            <h1 style={{ fontSize: '28px', fontWeight: '800', color: 'var(--color-text-primary)', margin: 0 }}>
               Öğrenci Notları
             </h1>
           </div>
-          <p style={{ color: '#64748b', fontSize: '16px' }}>
+          <p style={{ color: 'var(--color-text-muted)', fontSize: '16px' }}>
             Tüm sınıflardaki öğrencilerin başarı durumlarını ve sınav sonuçlarını inceleyin.
           </p>
         </div>
@@ -180,9 +180,9 @@ const Grades = () => {
           gap: '16px', 
           marginBottom: '24px',
           padding: '20px',
-          backgroundColor: '#ffffff',
+          backgroundColor: 'var(--color-surface)',
           borderRadius: '16px',
-          border: '1px solid #e2e8f0',
+          border: '1px solid var(--color-border)',
           boxShadow: '0 1px 3px rgba(0,0,0,0.02)'
         }}>
           {/* Search */}
@@ -200,20 +200,20 @@ const Grades = () => {
                 width: '100%',
                 padding: '12px 12px 12px 42px',
                 borderRadius: '12px',
-                border: '1px solid #e2e8f0',
+                border: '1px solid var(--color-border)',
                 fontSize: '14px',
                 outline: 'none',
                 transition: 'border-color 0.2s',
-                backgroundColor: '#f8fafc'
+                backgroundColor: 'var(--color-background)'
               }}
               onFocus={(e) => e.target.style.borderColor = '#6366f1'}
-              onBlur={(e) => e.target.style.borderColor = '#e2e8f0'}
+              onBlur={(e) => e.target.style.borderColor = 'var(--color-border)'}
             />
           </div>
 
           {/* Class Filter */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: '200px' }}>
-            <div style={{ color: '#64748b', fontSize: '14px', fontWeight: '500', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <div style={{ color: 'var(--color-text-muted)', fontSize: '14px', fontWeight: '500', display: 'flex', alignItems: 'center', gap: '6px' }}>
               <Layers size={16} /> Sınıf:
             </div>
             <select
@@ -222,10 +222,10 @@ const Grades = () => {
               style={{
                 padding: '10px 16px',
                 borderRadius: '12px',
-                border: '1px solid #e2e8f0',
+                border: '1px solid var(--color-border)',
                 fontSize: '14px',
                 outline: 'none',
-                backgroundColor: '#ffffff',
+                backgroundColor: 'var(--color-surface)',
                 cursor: 'pointer',
                 flex: 1
               }}
@@ -245,16 +245,16 @@ const Grades = () => {
               alignItems: 'center',
               gap: '8px',
               padding: '10px 20px',
-              backgroundColor: '#ffffff',
-              color: '#1e293b',
-              border: '1px solid #e2e8f0',
+              backgroundColor: 'var(--color-surface)',
+              color: 'var(--color-text-primary)',
+              border: '1px solid var(--color-border)',
               borderRadius: '12px',
               fontSize: '14px',
               fontWeight: '600',
               cursor: 'pointer',
               transition: 'all 0.2s'
             }}
-            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f8fafc'}
+            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--color-background)'}
             onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#ffffff'}
           >
             <Download size={18} />
@@ -264,15 +264,15 @@ const Grades = () => {
 
         {/* Students Table */}
         <div style={{ 
-          backgroundColor: '#ffffff', 
+          backgroundColor: 'var(--color-surface)', 
           borderRadius: '16px', 
-          border: '1px solid #e2e8f0',
+          border: '1px solid var(--color-border)',
           overflow: 'hidden',
           boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)'
         }}>
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
             <thead>
-              <tr style={{ backgroundColor: '#f8fafc' }}>
+              <tr style={{ backgroundColor: 'var(--color-background)' }}>
                 <th style={tableHeaderStyle}>Öğrenci Bilgileri</th>
                 <th style={tableHeaderStyle}>Sınıf</th>
                 <th style={tableHeaderStyle}>Sınav Sayısı</th>
@@ -285,8 +285,8 @@ const Grades = () => {
               {loading ? (
                 <tr>
                   <td colSpan="6" style={{ padding: '48px', textAlign: 'center' }}>
-                    <div style={{ color: '#64748b', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
-                      <div className="animate-spin" style={{ width: '24px', height: '24px', border: '3px solid #e2e8f0', borderTopColor: '#6366f1', borderRadius: '50%' }}></div>
+                    <div style={{ color: 'var(--color-text-muted)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
+                      <div className="animate-spin" style={{ width: '24px', height: '24px', border: '3px solid var(--color-border)', borderTopColor: '#6366f1', borderRadius: '50%' }}></div>
                       Veriler yükleniyor...
                     </div>
                   </td>
@@ -307,7 +307,7 @@ const Grades = () => {
                       <tr 
                         style={studentRowStyle(isExpanded)}
                         onClick={() => setExpandedStudent(isExpanded ? null : student.id)}
-                        onMouseEnter={(e) => { if(!isExpanded) e.currentTarget.style.backgroundColor = '#f1f5f9'; }}
+                        onMouseEnter={(e) => { if(!isExpanded) e.currentTarget.style.backgroundColor = 'var(--color-background-secondary)'; }}
                         onMouseLeave={(e) => { if(!isExpanded) e.currentTarget.style.backgroundColor = '#ffffff'; }}
                       >
                         <td style={{ padding: '16px 24px' }}>
@@ -316,33 +316,33 @@ const Grades = () => {
                               width: '40px', 
                               height: '40px', 
                               borderRadius: '10px', 
-                              backgroundColor: '#f1f5f9',
+                              backgroundColor: 'var(--color-background-secondary)',
                               display: 'flex',
                               alignItems: 'center',
                               justifyContent: 'center',
-                              color: '#64748b'
+                              color: 'var(--color-text-muted)'
                             }}>
                               <User size={20} />
                             </div>
                             <div>
-                              <div style={{ fontSize: '15px', fontWeight: '600', color: '#1e293b' }}>{student.fullName}</div>
-                              <div style={{ fontSize: '13px', color: '#64748b' }}>#{student.studentNumber}</div>
+                              <div style={{ fontSize: '15px', fontWeight: '600', color: 'var(--color-text-primary)' }}>{student.fullName}</div>
+                              <div style={{ fontSize: '13px', color: 'var(--color-text-muted)' }}>#{student.studentNumber}</div>
                             </div>
                           </div>
                         </td>
                         <td style={{ padding: '16px 24px' }}>
                           <span style={{ 
                             padding: '4px 10px', 
-                            backgroundColor: '#f1f5f9', 
+                            backgroundColor: 'var(--color-background-secondary)', 
                             borderRadius: '6px',
                             fontSize: '13px',
                             fontWeight: '500',
-                            color: '#475569'
+                            color: 'var(--color-text-secondary)'
                           }}>
                             {student.className}
                           </span>
                         </td>
-                        <td style={{ padding: '16px 24px', color: '#475569', fontSize: '14px' }}>
+                        <td style={{ padding: '16px 24px', color: 'var(--color-text-secondary)', fontSize: '14px' }}>
                           {stats.count} Sınav
                         </td>
                         <td style={{ padding: '16px 24px' }}>
@@ -358,10 +358,10 @@ const Grades = () => {
                         <td style={{ padding: '16px 24px' }}>
                           {stats.latest ? (
                             <div>
-                              <div style={{ fontSize: '13px', color: '#1e293b', fontWeight: '600' }}>
+                              <div style={{ fontSize: '13px', color: 'var(--color-text-primary)', fontWeight: '600' }}>
                                 {(exams || []).find(e => e.id === stats.latest.examId)?.title || 'Bilinmeyen Sınav'}
                               </div>
-                              <div style={{ fontSize: '11px', color: '#64748b' }}>
+                              <div style={{ fontSize: '11px', color: 'var(--color-text-muted)' }}>
                                 {(exams || []).find(e => e.id === stats.latest.examId)?.department || 'Genel'} • {formatDateTime(stats.latest.submittedAt)}
                               </div>
                             </div>
@@ -377,7 +377,7 @@ const Grades = () => {
                       {/* Expanded View */}
                       {isExpanded && (
                         <tr>
-                          <td colSpan="6" style={{ padding: '24px', backgroundColor: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
+                          <td colSpan="6" style={{ padding: '24px', backgroundColor: 'var(--color-background)', borderBottom: '1px solid var(--color-border)' }}>
                             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px' }}>
                               {(submissions || [])
                                 .filter(s => s.studentId === student.id && s.grade !== null)
@@ -386,10 +386,10 @@ const Grades = () => {
                                   const exam = (exams || []).find(e => e.id === sub.examId);
                                   return (
                                     <div key={sub.id} style={{
-                                      backgroundColor: '#ffffff',
+                                      backgroundColor: 'var(--color-surface)',
                                       padding: '16px',
                                       borderRadius: '12px',
-                                      border: '1px solid #e2e8f0',
+                                      border: '1px solid var(--color-border)',
                                       display: 'flex',
                                       flexDirection: 'column',
                                       gap: '12px',
@@ -406,13 +406,13 @@ const Grades = () => {
                                             <FileText size={16} />
                                           </div>
                                           <div>
-                                            <div style={{ fontSize: '14px', fontWeight: '700', color: '#1e293b' }}>
+                                            <div style={{ fontSize: '14px', fontWeight: '700', color: 'var(--color-text-primary)' }}>
                                               {exam?.title || 'Bilinmeyen Sınav'}
                                             </div>
                                             <div style={{ fontSize: '12px', color: '#7c3aed', fontWeight: '500', marginBottom: '2px' }}>
                                               {exam?.department || 'Genel Ders'}
                                             </div>
-                                            <div style={{ fontSize: '11px', color: '#64748b', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                            <div style={{ fontSize: '11px', color: 'var(--color-text-muted)', display: 'flex', alignItems: 'center', gap: '4px' }}>
                                               <Calendar size={10} /> {formatDateTime(sub.submittedAt)}
                                             </div>
                                           </div>
@@ -423,9 +423,9 @@ const Grades = () => {
                                       {sub.feedback && (
                                         <div style={{ 
                                           fontSize: '12px', 
-                                          color: '#475569', 
+                                          color: 'var(--color-text-secondary)', 
                                           padding: '8px', 
-                                          backgroundColor: '#f1f5f9', 
+                                          backgroundColor: 'var(--color-background-secondary)', 
                                           borderRadius: '8px',
                                           lineHeight: '1.5'
                                         }}>
@@ -435,7 +435,7 @@ const Grades = () => {
                                       
                                       <div style={{ 
                                         paddingTop: '8px', 
-                                        borderTop: '1px dashed #e2e8f0',
+                                        borderTop: '1px dashed var(--color-border)',
                                         fontSize: '11px',
                                         color: '#94a3b8',
                                         display: 'flex',

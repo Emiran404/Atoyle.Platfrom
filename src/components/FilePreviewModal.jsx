@@ -143,25 +143,25 @@ const FilePreviewModal = ({ isOpen, onClose, file, fileUrl }) => {
               </span>
             </div>
             
-            <h3 style={{ fontSize: '20px', fontWeight: '700', color: '#1e293b', marginBottom: '8px' }}>
+            <h3 style={{ fontSize: '20px', fontWeight: '700', color: 'var(--color-text-primary)', marginBottom: '8px' }}>
               {file.name}
             </h3>
             
             <div style={{ 
               display: 'inline-block',
               padding: '4px 12px', 
-              backgroundColor: '#f1f5f9', 
+              backgroundColor: 'var(--color-background-secondary)', 
               borderRadius: '6px',
               marginBottom: '16px'
             }}>
-              <p style={{ color: '#64748b', fontSize: '13px', fontWeight: '500' }}>
+              <p style={{ color: 'var(--color-text-muted)', fontSize: '13px', fontWeight: '500' }}>
                 {config.name} • {fileSize}
               </p>
             </div>
             
             {fileType === 'packet_tracer' && (
               <div style={{
-                backgroundColor: '#eff6ff',
+                backgroundColor: 'var(--color-background-secondary)',
                 border: '1px solid #bfdbfe',
                 borderRadius: '12px',
                 padding: '16px 20px',
@@ -177,7 +177,7 @@ const FilePreviewModal = ({ isOpen, onClose, file, fileUrl }) => {
               </div>
             )}
             
-            <p style={{ color: '#64748b', marginBottom: '24px', fontSize: '14px' }}>
+            <p style={{ color: 'var(--color-text-muted)', marginBottom: '24px', fontSize: '14px' }}>
               {fileType === 'packet_tracer' 
                 ? 'Ağ simülasyon dosyası - Tarayıcıda görüntülenemez' 
                 : 'Bu dosya türü tarayıcıda önizlenemiyor'}
@@ -221,7 +221,7 @@ const FilePreviewModal = ({ isOpen, onClose, file, fileUrl }) => {
             padding: '40px',
             textAlign: 'center'
           }}>
-            <p style={{ color: '#64748b' }}>Bu dosya önizlenemiyor</p>
+            <p style={{ color: 'var(--color-text-muted)' }}>Bu dosya önizlenemiyor</p>
             <a
               href={fileUrl}
               download={file.name}
@@ -255,7 +255,7 @@ const FilePreviewModal = ({ isOpen, onClose, file, fileUrl }) => {
             alignItems: 'center',
             gap: '12px',
             padding: '12px',
-            backgroundColor: '#f8fafc',
+            backgroundColor: 'var(--color-background)',
             borderRadius: '8px',
             marginBottom: '16px',
             justifyContent: 'center'
@@ -264,8 +264,8 @@ const FilePreviewModal = ({ isOpen, onClose, file, fileUrl }) => {
               onClick={() => setZoom(Math.max(50, zoom - 25))}
               style={{
                 padding: '8px 12px',
-                backgroundColor: 'white',
-                border: '1px solid #e2e8f0',
+                backgroundColor: 'var(--color-surface)',
+                border: '1px solid var(--color-border)',
                 borderRadius: '6px',
                 cursor: 'pointer',
                 display: 'flex',
@@ -283,8 +283,8 @@ const FilePreviewModal = ({ isOpen, onClose, file, fileUrl }) => {
               onClick={() => setZoom(Math.min(200, zoom + 25))}
               style={{
                 padding: '8px 12px',
-                backgroundColor: 'white',
-                border: '1px solid #e2e8f0',
+                backgroundColor: 'var(--color-surface)',
+                border: '1px solid var(--color-border)',
                 borderRadius: '6px',
                 cursor: 'pointer',
                 display: 'flex',
@@ -299,8 +299,8 @@ const FilePreviewModal = ({ isOpen, onClose, file, fileUrl }) => {
               onClick={() => setRotation((rotation + 90) % 360)}
               style={{
                 padding: '8px 12px',
-                backgroundColor: 'white',
-                border: '1px solid #e2e8f0',
+                backgroundColor: 'var(--color-surface)',
+                border: '1px solid var(--color-border)',
                 borderRadius: '6px',
                 cursor: 'pointer',
                 display: 'flex',
@@ -317,7 +317,7 @@ const FilePreviewModal = ({ isOpen, onClose, file, fileUrl }) => {
 
         {/* Preview Content */}
         <div style={{
-          backgroundColor: fileType === 'video' ? '#000' : '#f8fafc',
+          backgroundColor: fileType === 'video' ? '#000' : 'var(--color-background)',
           borderRadius: '12px',
           overflow: 'hidden'
         }}>

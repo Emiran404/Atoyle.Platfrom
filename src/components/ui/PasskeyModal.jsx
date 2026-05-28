@@ -48,7 +48,7 @@ const PasskeyModal = ({ isOpen, onClose, userName, onGoToSettings }) => {
       padding: '20px'
     },
     modal: {
-      backgroundColor: '#ffffff',
+      backgroundColor: 'var(--color-surface)',
       borderRadius: '24px',
       maxWidth: '480px',
       width: '100%',
@@ -82,7 +82,7 @@ const PasskeyModal = ({ isOpen, onClose, userName, onGoToSettings }) => {
       borderRadius: '10px',
       border: 'none',
       backgroundColor: 'rgba(255, 255, 255, 0.15)',
-      color: '#ffffff',
+      color: 'var(--color-text-inverse, #fff)',
       cursor: 'pointer',
       display: 'flex',
       alignItems: 'center',
@@ -104,7 +104,7 @@ const PasskeyModal = ({ isOpen, onClose, userName, onGoToSettings }) => {
     title: {
       fontSize: '24px',
       fontWeight: '700',
-      color: '#ffffff',
+      color: 'var(--color-text-inverse, #fff)',
       marginBottom: '8px',
       position: 'relative',
       zIndex: 1
@@ -120,7 +120,7 @@ const PasskeyModal = ({ isOpen, onClose, userName, onGoToSettings }) => {
     },
     welcomeText: {
       fontSize: '15px',
-      color: '#475569',
+      color: 'var(--color-text-secondary)',
       lineHeight: '1.7',
       marginBottom: '24px'
     },
@@ -135,9 +135,9 @@ const PasskeyModal = ({ isOpen, onClose, userName, onGoToSettings }) => {
       alignItems: 'flex-start',
       gap: '14px',
       padding: '16px',
-      backgroundColor: '#f8fafc',
+      backgroundColor: 'var(--color-background)',
       borderRadius: '14px',
-      border: '1px solid #e2e8f0',
+      border: '1px solid var(--color-border)',
       transition: 'all 0.2s'
     },
     featureIcon: {
@@ -152,12 +152,12 @@ const PasskeyModal = ({ isOpen, onClose, userName, onGoToSettings }) => {
     featureTitle: {
       fontSize: '14px',
       fontWeight: '600',
-      color: '#1e293b',
+      color: 'var(--color-text-primary)',
       marginBottom: '4px'
     },
     featureDesc: {
       fontSize: '13px',
-      color: '#64748b',
+      color: 'var(--color-text-muted)',
       lineHeight: '1.5'
     },
     buttonGroup: {
@@ -170,7 +170,7 @@ const PasskeyModal = ({ isOpen, onClose, userName, onGoToSettings }) => {
       borderRadius: '12px',
       border: 'none',
       background: 'linear-gradient(135deg, #0d9488 0%, #0f766e 100%)',
-      color: '#ffffff',
+      color: 'var(--color-text-inverse, #fff)',
       fontSize: '15px',
       fontWeight: '700',
       cursor: 'pointer',
@@ -184,9 +184,9 @@ const PasskeyModal = ({ isOpen, onClose, userName, onGoToSettings }) => {
     secondaryBtn: {
       padding: '14px 24px',
       borderRadius: '12px',
-      border: '2px solid #e2e8f0',
-      backgroundColor: '#ffffff',
-      color: '#64748b',
+      border: '2px solid var(--color-border)',
+      backgroundColor: 'var(--color-surface)',
+      color: 'var(--color-text-muted)',
       fontSize: '15px',
       fontWeight: '600',
       cursor: 'pointer',
@@ -209,7 +209,7 @@ const PasskeyModal = ({ isOpen, onClose, userName, onGoToSettings }) => {
             <X size={18} />
           </button>
           <div style={modalStyles.iconContainer}>
-            <Shield size={36} style={{ color: '#ffffff' }} />
+            <Shield size={36} style={{ color: 'var(--color-text-inverse, #fff)' }} />
           </div>
           <h2 style={modalStyles.title}>Hesabınızı Güvende Tutun</h2>
           <p style={modalStyles.subtitle}>Passkey ile şifresiz, güvenli giriş deneyimi</p>
@@ -260,8 +260,8 @@ const PasskeyModal = ({ isOpen, onClose, userName, onGoToSettings }) => {
             <button
               style={modalStyles.secondaryBtn}
               onClick={handleClose}
-              onMouseEnter={(e) => e.currentTarget.style.borderColor = '#cbd5e1'}
-              onMouseLeave={(e) => e.currentTarget.style.borderColor = '#e2e8f0'}
+              onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--color-border-dark)'}
+              onMouseLeave={(e) => e.currentTarget.style.borderColor = 'var(--color-border)'}
             >
               Daha Sonra
             </button>
