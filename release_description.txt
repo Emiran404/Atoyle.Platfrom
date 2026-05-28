@@ -1,13 +1,6 @@
-# Sürüm v4.0.2 - Hata Düzeltmeleri & İyileştirmeler 🚀
-
-## 🐞 Hata Düzeltmeleri (Bug Fixes)
-- Öğrenci tarafında karanlık tema kullanımındaki çeşitli arayüz bugları düzeltildi.
-- Bildirimlerde ve soru detaylarında görünürlüğü engelleyen arkaplan renk sorunları tamamen giderildi.
-- "Optik Formu Görüntüle" sayfasında optik alanının tamamen beyaz kalması sağlandı.
-- Öğrenci paneli "Ayarlar" sekmesindeki karanlık/aydınlık tema çevirilerinde yaşanan çoklu dil (Rusça, İngilizce vb.) desteği hatası düzeltildi.
+# Sürüm v4.0.3 - Dağıtım ve Dökümantasyon Güncellemesi 📦
 
 ## ✨ İyileştirmeler (Enhancements)
-- Karanlık mod renk paleti Visual Studio Code Dark Mode'un saf karanlık (Dark) tonlarına güncellenerek okunabilirlik artırıldı.
-- Sınav gönderim sistemi ana panel kartlarındaki ikonların ve tasarımların kontrastı yeni karanlık moda uygun hale getirildi.
-- **Sorun Bildir (Report Issue)** sayfasının maksimum boyutu (1600px'e) artırıldı ve detaylı sorun açıklaması (textarea) yüksekliği büyütüldü.
-- Dil değiştirici ikonlarının arkaplan uyumluluğu sağlandı.
+- Github Actions CI/CD sürecindeki kafa karıştırıcı boş `atolye-docker-setup.zip` dosyası üretimden kaldırıldı.
+- `README.md` dökümantasyonuna detaylı Docker ile Production kurulum rehberi eklendi.
+- Bir önceki sürümde (`v4.0.2`) gelen tüm Karanlık Tema arayüz (UI) düzeltmelerini ve dil paketi güncellemelerini içerir.
