@@ -20,9 +20,8 @@ RUN npm run build
 FROM node:20-slim
 WORKDIR /app
 
-# Gerekli sistem paketleri (Eğer better-sqlite3 vb. native paketler derleme isterse diye)
-# node:20-slim Debian tabanlı olduğu için çoğu prebuilt binary'i (glibc) sorunsuz çalıştırır.
-# Yine de güvenlik için en temel build araçlarını ekleyebiliriz, ancak slim imajında genellikle gerekmez.
+# Gerekli sistem paketleri (better-sqlite3 derlemesi için python ve build araçları şarttır)
+RUN apt-get update && apt-get install -y python3 make g++ && rm -rf /var/lib/apt/lists/*
 
 # Server bağımlılıklarını kopyala ve kur
 COPY server/package*.json ./server/
