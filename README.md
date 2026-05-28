@@ -237,8 +237,22 @@ npm run dev
 npm run build
 ```
 
-> [!WARNING]
 > **Windows kullanıcıları:** `kurulum.sh` yerine doğrudan `npm run install:all` ve `npm run dev` komutlarını kullanın.
+
+### 🐳 Docker ile Kurulum (Önerilen Production Kurulumu)
+
+Uygulamayı bir sunucuda 7/24 kesintisiz (production) çalıştırmak için en kolay yöntem Docker kullanmaktır.
+
+```bash
+# 1. Projenin ana (Source Code) kaynak kodlarını indirin veya klonlayın
+git clone https://github.com/Emiran404/Atolye.Platform.git
+cd Atolye.Platform
+
+# 2. Docker kullanarak sistemi izole ortamda ayağa kaldırın
+docker-compose up -d --build
+```
+> [!NOTE]
+> Bu komut, gerekli `Dockerfile` yönergelerini takip ederek frontend ve backend'i derler, ve varsayılan olarak **80** ile **3001** portlarından yayına alır. Sistemin tamamen başlaması derleme sürecine bağlı olarak birkaç dakika sürebilir.
 
 ---
 
