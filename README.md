@@ -89,6 +89,8 @@ Derleme yapmadan, aşağıdaki hazır paketlerle saniyeler içinde kurulum yapı
 
 > [!IMPORTANT]
 > **🎉 v4.2.0 İle Gelen Dev Yenilikler**
+> - 📱 **PWA (Progressive Web App) Desteği**: Platform artık telefon, tablet ve masaüstüne yerel uygulama gibi çevrimdışı önbellekleme desteği ile yüklenebilir.
+> - 💎 **TypeScript Mimarisi**: Güvenilirlik ve performans için tüm altyapı JavaScript'ten TypeScript'e geçirildi.
 > - 🕒 **İşlem Geçmişi (Operation History)**: Platform üzerindeki kritik işlemler geriye dönük izlenebilir.
 > - 🛡️ **Anti-Cheat & Kiosk Modu**: Öğrenci sınav sırasında odak kaybettiğinde, başka bir pencereye geçtiğinde otomatik olarak güvenliği devreye alır.
 > - 👨‍🏫 **Bağımsız Öğretmen Değerlendirme Sistemi**: Her öğretmen, aynı sınavdaki değerlendirmelerini kendi arayüzünde tamamen izole yönetebilir.
