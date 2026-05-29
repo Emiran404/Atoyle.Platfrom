@@ -74,3 +74,12 @@ Thumbs.db
 vite.config.js.timestamp-*
 *.mjs.timestamp-*
 *.js.timestamp-*
+
+# Vite PWA
+dev-dist/
+sw.js
+workbox-*.js
+
+# AI Scratch files
+scratch/
+
