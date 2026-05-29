@@ -1,6 +1,14 @@
-# Sürüm v4.0.3 - Dağıtım ve Dökümantasyon Güncellemesi 📦
+# Sürüm v4.2.0 - İşlem Geçmişi, Anti-Cheat Kiosk Modu ve Bağımsız Öğretmen Değerlendirme Sistemi 🚀
 
-## ✨ İyileştirmeler (Enhancements)
-- Github Actions CI/CD sürecindeki kafa karıştırıcı boş `atolye-docker-setup.zip` dosyası üretimden kaldırıldı.
-- `README.md` dökümantasyonuna detaylı Docker ile Production kurulum rehberi eklendi.
-- Bir önceki sürümde (`v4.0.2`) gelen tüm Karanlık Tema arayüz (UI) düzeltmelerini ve dil paketi güncellemelerini içerir.
+## ✨ Yeni Özellikler ve İyileştirmeler
+- **İşlem Geçmişi (Operation History)**: Platform üzerindeki kritik işlemlerin (login, sınav oluşturma, vb.) loglanarak geriye dönük izlenebilmesi sağlandı.
+- **Anti-Cheat & Kiosk Modu**: Sınav sırasında arka planda çalışan ve öğrencinin sınav dışına çıkmasını engelleyen, güvenliği en üst düzeye çıkaran Electron tabanlı Anti-Cheat Kiosk Modu entegre edildi.
+- **Bağımsız Öğretmen Değerlendirme Modülü**: Her öğretmenin aynı sınıf veya sınavı değerlendirirken bir diğerinin notlarını/rozetlerini/sayaçlarını ezmemesini sağlayan "izole değerlendirme altyapısı" eklendi.
+- **GitHub Actions Entegrasyonu**: Tüm Linux/Windows derlemelerinin ve CI/CD süreçlerinin otomatik olarak GitHub Actions üzerinden sorunsuz derlenip dağıtılması ayarlandı.
+
+## 🛠️ Düzeltmeler (Bug Fixes)
+- Arayüzdeki renk, buton (Filtreleri Temizle) ve görsel hatalar giderildi.
+- Telemetri ve sistem analiz modüllerindeki performans sorunları iyileştirildi.
+- "Değerlendirme" sekmesinde farklı öğretmenlerin birbirlerinin oluşturduğu sınavları ve notlandırma verilerini görerek karışıklık yaşatması engellendi.
+
+🚀 Tüm sistem Atölye ve okul laboratuvarı şartlarına uygun stabil sürümdedir.

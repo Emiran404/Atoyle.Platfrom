@@ -302,12 +302,20 @@ Atölye.Platform/
 | **Backend** | Node.js + Express.js | 18+ / 4.x |
 | **Gerçek Zamanlı** | Socket.io | 4.x |
 | **Masaüstü** | Electron + Electron-Builder | 30.x |
+| **Güncelleme** | Electron Updater + GitHub Actions | 6.x |
 | **Keşif** | Bonjour (mDNS) | 1.x |
 | **Auth** | JSON Web Token + WebAuthn | — |
 | **Veri** | Yerleşik SQLite (`node:sqlite`) / JSON Fallback | — |
 | **Grafikler** | Recharts | 3.x |
 
 </div>
+
+### 🔄 Akıllı Güncelleme Mimarisi (2-Tier Auto Update)
+
+Okul laboratuvarlarında kısıtlı internet bant genişliğini korumak için tasarlanmış yerel ağ öncelikli otomatik güncelleme sistemi:
+
+1. **Öğretmen Sunucusu (Ana Makine):** GitHub Actions üzerinden yeni bir sürüm yayınlandığında bunu otomatik tespit eder. Kurulum dosyalarını (.exe ve .deb) dış internetten **sadece 1 kez** indirerek yerel ağa sunar.
+2. **Öğrenci Cihazları (İstemciler):** İnternete çıkmak yerine doğrudan öğretmen sunucusu ile iletişime geçer. Yeni sürümü tespit ettiği an **Gigabit LAN hızında (saniyede 100+ MB)** kurulum dosyasını çeker, arka planda kendini günceller ve yeniden başlatır. Böylece 40 bilgisayarlı bir laboratuvarın interneti çökertmesi tamamen engellenir.
 
 ---
 
@@ -318,12 +326,39 @@ Atölye.Platform/
 - [x] ~~4 dilli arayüz (TR/EN/DE/RU)~~
 - [x] ~~mDNS otomatik sunucu keşfi~~
 - [x] ~~Windows (.exe) ve Linux (.deb) paketleri~~
+- [x] ~~Akıllı 2-Aşamalı Otomatik Güncelleme Sistemi (Electron Updater)~~
 - [x] ~~Cinematic UI ve Glassmorphism tasarım~~
 - [x] ~~Çoklu öğretmen desteği ve rol yönetimi~~
-- [ ] LiderAhenk tam entegrasyon (LDAP kullanıcı senkronizasyonu)
-- [ ] Otomatik sınav değerlendirme (OGA modülü)
-- [ ] Docker konteyner desteği
+- [x] ~~Otomatik sınav değerlendirme (OGA modülü)~~
+- [x] ~~Docker konteyner desteği~~
+- [x] ~~LiderAhenk tam entegrasyon (LDAP kullanıcı senkronizasyonu)~~
 - [ ] Progressive Web App (PWA) desteği
+
+---
+
+## 🧪 Testler (Testing)
+
+Platform kod kalitesini artırmak için Vitest ve Playwright ile kapsamlı testlere sahiptir:
+
+```bash
+# Tüm birim testlerini (Unit Tests) çalıştır
+npm run test:unit
+
+# Sunucu (API) testlerini çalıştır
+npm run test:api
+
+# Uçtan uca (E2E) tarayıcı testlerini çalıştır
+npm run test:e2e
+```
+
+---
+
+## 🎉 v4.2.0 Sürüm Yenilikleri
+Bu sürümle birlikte platforma eklenen devasa güvenlik ve yönetim araçları:
+- 🕒 **İşlem Geçmişi (Operation History)**: Platform üzerindeki kritik işlemler geriye dönük izlenebilir.
+- 🛡️ **Anti-Cheat & Kiosk Modu**: Öğrenci sınav sırasında odak kaybettiğinde, başka bir pencereye geçtiğinde veya tarayıcı özelliklerini zorladığında otomatik olarak güvenliği devreye alır.
+- 👨‍🏫 **Bağımsız Öğretmen Değerlendirme Sistemi**: Her öğretmen, aynı sınavdaki değerlendirmelerini kendi arayüzünde tamamen izole (bağımsız) bir şekilde yönetebilir. Diğer öğretmenlerle veriler veya sayaçlar karışmaz.
+- ⚙️ **GitHub Actions Sürekli Entegrasyon (CI/CD)**: Tüm projenin derlenmesi ve yayınlanması tamamen otomatikleştirilmiştir.
 
 ---
 
