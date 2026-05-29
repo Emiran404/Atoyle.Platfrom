@@ -2,10 +2,11 @@
   "name": "sinav-platformu-backend",
   "version": "4.2.0",
   "type": "module",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "node --watch index.js"
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsx watch index.ts"
   },
   "dependencies": {
     "adm-zip": "^0.5.16",
@@ -28,7 +29,13 @@
     "socket.io-client": "^4.8.3"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/multer": "^2.1.0",
+    "@types/node": "^25.9.1",
     "supertest": "^7.2.2",
+    "tsx": "^4.22.3",
+    "typescript": "^6.0.3",
     "vitest": "^4.1.7"
   }
 }

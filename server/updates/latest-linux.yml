@@ -1,0 +1,8 @@
+version: 4.1.0
+files:
+  - url: atolye-platform-client_4.1.0_amd64.deb
+    sha512: 1I8wMxuMUfN89G4TqqXWCg9jIWizFGd8vGkrH36HSxv3AQqsdC0N0UjA8DBsiJ43DSvitnW3hJf2EnJV98yXZA==
+    size: 106325364
+path: atolye-platform-client_4.1.0_amd64.deb
+sha512: 1I8wMxuMUfN89G4TqqXWCg9jIWizFGd8vGkrH36HSxv3AQqsdC0N0UjA8DBsiJ43DSvitnW3hJf2EnJV98yXZA==
+releaseDate: '2026-05-28T23:02:05.743Z'

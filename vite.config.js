@@ -3,11 +3,38 @@ import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import obfuscator from 'rollup-plugin-javascript-obfuscator'
 
+import { VitePWA } from 'vite-plugin-pwa'
+
 // https://vite.dev/config/
 export default defineConfig(({ command }) => ({
   plugins: [
     react(),
     tailwindcss(),
+    VitePWA({
+      registerType: 'autoUpdate',
+      devOptions: {
+        enabled: true
+      },
+      manifest: {
+        name: 'Sınav Gönderme Platformu',
+        short_name: 'Sınav Platformu',
+        description: 'Öğrenci sınav yönetim ve değerlendirme platformu',
+        theme_color: '#0ea5e9',
+        icons: [
+          {
+            src: '/pwa-192x192.png',
+            sizes: '192x192',
+            type: 'image/png'
+          },
+          {
+            src: '/pwa-512x512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'any maskable'
+          }
+        ]
+      }
+    }),
     // Sadece build aşamasında çalışan kod karıştırıcı (obfuscator)
     command === 'build' && obfuscator({
       compact: true,

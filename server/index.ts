@@ -1,0 +1,387 @@
+// @ts-nocheck
+/**
+ * Sınav Gönderme Platformu - Backend Server
+ * 
+ * Copyright (c) 2026-2027 Emirhan Gök (@Emiran404)
+ * Alanya Mesleki ve Teknik Anadolu Lisesi
+ * 
+ * Licensed under the MIT License
+ */
+
+import 'dotenv/config';
+import express from 'express';
+import cors from 'cors';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
+import fs from 'fs';
+import http from 'http';
+import os from 'os';
+import { apiLimiter } from './middleware/rateLimit.js';
+import { authenticateToken, authorizeRole } from './middleware/auth.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// Load .env from root directory (Already handled by import 'dotenv/config' at top) - Trigger Reload v2
+// dotenv.config({ path: join(__dirname, '../.env') });
+
+// Routes
+import authRoutes from './routes/auth.js';
+import examRoutes from './routes/exams.js';
+import submissionRoutes from './routes/submissions.js';
+import uploadRoutes from './routes/uploads.js';
+import notificationRoutes from './routes/notifications.js';
+import scheduleRoutes from './routes/schedules.js';
+import fileManagerRoutes from './routes/fileManager.js';
+import settingsRoutes from './routes/settings.js';
+import usersRoutes from './routes/users.js';
+import statsRoutes from './routes/stats.js';
+import backupRoutes from './routes/backup.js';
+import liveSessionsRoutes from './routes/liveSessions.js';
+import systemRoutes from './routes/system.js';
+import liderAhenkRoutes from './routes/liderahenk.js';
+import classesRoutes from './routes/classes.js';
+import logsRoutes from './routes/logs.js';
+import telemetryRoutes from './routes/telemetry.js';
+
+import { startNotificationWorker } from './workers/notificationWorker.js';
+import { startBackupWorker } from './workers/backupWorker.js';
+import { startDiscovery } from './utils/discovery.js';
+import { getDbStatus, setData } from './utils/storage.js';
+import { updateManager } from './utils/updateManager.js';
+
+export const app = express();
+const server = http.createServer(app);
+const PORT = process.env.PORT || 3002;
+
+// Middleware
+app.use(cors({
+  origin: function(origin, callback) {
+    // Electron istemcisi (origin yok), localhost dev, ve ağ IP'lerini kabul et
+    if (!origin || origin.startsWith('http://localhost') || origin.startsWith('http://192.168.') || origin.startsWith('http://10.')) {
+      callback(null, true);
+    } else {
+      callback(new Error('CORS policy: Origin not allowed'));
+    }
+  },
+  credentials: true
+}));
+app.use(express.json({ limit: '1024mb' }));
+app.use(express.urlencoded({ extended: true, limit: '1024mb' }));
+
+// Global Rate Limiter
+app.use('/api/', apiLimiter);
+
+// Uploads klasörü için static serve
+const uploadsPath = join(__dirname, '../src/uploads_student');
+
+// uploads klasörünü oluştur
+if (!fs.existsSync(uploadsPath)) {
+  fs.mkdirSync(uploadsPath, { recursive: true });
+}
+
+// Static file serving with proper URL decoding for Turkish characters
+app.use('/uploads', (req, res, next) => {
+  try {
+    // URL decode the path to handle Turkish characters and spaces
+    const decodedPath = decodeURIComponent(req.path);
+    const filePath = join(uploadsPath, decodedPath);
+
+    // Check if file exists
+    if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
+      return res.sendFile(filePath);
+    }
+
+    // If not found, let next middleware handle it
+    next();
+  } catch (error) {
+    console.error('Static file error:', error);
+    next();
+  }
+});
+
+// Setup updates path for Electron auto-updater
+const updatesPath = join(__dirname, 'updates');
+if (!fs.existsSync(updatesPath)) {
+  fs.mkdirSync(updatesPath, { recursive: true });
+}
+
+// Fallback to express.static for non-problematic files
+app.use('/uploads', express.static(uploadsPath));
+app.use('/updates', express.static(updatesPath));
+
+console.log('📁 Uploads dizini:', uploadsPath);
+
+// Frontend Dist klasörü için static serve (Üretim modu için)
+const distPath = join(__dirname, '../dist');
+if (fs.existsSync(distPath)) {
+  app.use(express.static(distPath));
+  console.log('🌐 Frontend dist dizini yükleniyor:', distPath);
+}
+
+// Data klasörü oluştur
+const dataPath = join(__dirname, 'data');
+if (!fs.existsSync(dataPath)) {
+  fs.mkdirSync(dataPath, { recursive: true });
+}
+
+// Backups klasörü oluştur
+const backupsPath = join(__dirname, 'backups');
+if (!fs.existsSync(backupsPath)) {
+  fs.mkdirSync(backupsPath, { recursive: true });
+}
+
+const initializeDataFiles = () => {
+  // SQLite veritabanı aktif ve göç tamamlanmışsa JSON dosyalarının oluşturulmasını atla
+  try {
+    const dbStatus = getDbStatus();
+    if (dbStatus.dbType === 'sqlite' && dbStatus.isMigrated) {
+      console.log('💾 SQLite veritabanı aktif ve göç tamamlanmış. JSON dosyalarının oluşturulması atlanıyor.');
+      return;
+    }
+  } catch (err) {
+    // Hata durumunda devam et
+  }
+
+  const dataFiles = [
+    'students.json',
+    'teachers.json',
+    'exams.json',
+    'submissions.json',
+    'notifications.json',
+    'schedules.json',
+    'classes.json',
+    'settings.json',
+    'reports.json',
+    'updates.json'
+  ];
+
+  dataFiles.forEach(file => {
+    const filePath = join(dataPath, file);
+    if (!fs.existsSync(filePath)) {
+      let content = [];
+      
+      if (file === 'classes.json') {
+        content = [
+          "9-A", "9-B", "9-C", "9-D", "9-E", "9-F",
+          "10-A", "10-B", "10-C", "10-D", "10-E", "10-F",
+          "11-A", "11-B", "11-C", "11-D", "11-E", "11-F",
+          "12-A", "12-B", "12-C", "12-D", "12-E", "12-F"
+        ];
+      } else if (file === 'settings.json') {
+        content = {
+          registrationEnabled: true,
+          teacherRegistrationEnabled: true,
+          allowedClasses: [
+            "9-A", "9-B", "9-C", "9-D", "9-E", "9-F",
+            "10-A", "10-B", "10-C", "10-D", "10-E", "10-F",
+            "11-A", "11-B", "11-C", "11-D", "11-E", "11-F",
+            "12-A", "12-B", "12-C", "12-D", "12-E", "12-F"
+          ],
+          autoBackupEnabled: false,
+          autoBackupInterval: 24,
+          autoBackupIncludePhotos: false,
+          autoBackupWizardConfigured: false,
+          lastAutoBackupTime: null,
+          liderAhenk: {
+            enabled: false,
+            url: "ldap://localhost:389",
+            baseDN: "dc=example,dc=com",
+            bindDN: "cn=admin,dc=example,dc=com",
+            bindPassword: "",
+            userDNPattern: "uid={{username}},ou=users,dc=example,dc=com",
+            searchFilter: "(uid={{username}})",
+            syncInterval: 0
+          }
+        };
+      } else if (file === 'reports.json' || file === 'updates.json') {
+        content = [];
+      } else {
+        content = [];
+      }
+      
+      fs.writeFileSync(filePath, JSON.stringify(content, null, 2), 'utf-8');
+      console.log(`📄 ${file} oluşturuldu`);
+    }
+  });
+};
+
+initializeDataFiles();
+
+// Bildirim servisini baslat
+startNotificationWorker();
+
+// Yedekleme servisini baslat
+startBackupWorker();
+
+// API Routes
+app.use('/api/auth', authRoutes); // Public (login/register)
+app.use('/api/exams', examRoutes); // Per-route auth (exams.js içinde)
+app.use('/api/submissions', authenticateToken, submissionRoutes);
+app.use('/api/uploads', authenticateToken, uploadRoutes);
+app.use('/api/notifications', authenticateToken, notificationRoutes);
+app.use('/api/schedules', authenticateToken, scheduleRoutes);
+app.use('/api/file-manager', authenticateToken, authorizeRole('teacher'), fileManagerRoutes);
+app.use('/api/settings', settingsRoutes);
+app.use('/api/users', authenticateToken, authorizeRole('teacher'), usersRoutes);
+app.use('/api/stats', authenticateToken, statsRoutes);
+app.use('/api/backup', authenticateToken, authorizeRole('teacher'), backupRoutes);
+app.use('/api/live-sessions', authenticateToken, liveSessionsRoutes);
+app.use('/api/system', systemRoutes); // Heartbeat/logout public kalacak
+app.use('/api/liderahenk', liderAhenkRoutes);
+app.use('/api/classes', classesRoutes);
+app.use('/api/logs', logsRoutes);
+app.use('/api/telemetry', telemetryRoutes);
+
+
+// Health check
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
+// Reset all data endpoint (Sadece öğretmenler)
+app.post('/api/reset-all-data', authenticateToken, authorizeRole('teacher'), (req, res) => {
+  try {
+    const defaultClasses = [
+      "9-A", "9-B", "9-C", "9-D", "9-E", "9-F",
+      "10-A", "10-B", "10-C", "10-D", "10-E", "10-F",
+      "11-A", "11-B", "11-C", "11-D", "11-E", "11-F",
+      "12-A", "12-B", "12-C", "12-D", "12-E", "12-F"
+    ];
+
+    // Veritabanını/dosyaları sıfırla
+    setData('students', []);
+    setData('teachers', []);
+    setData('exams', []);
+    setData('submissions', []);
+    setData('notifications', []);
+    setData('schedules', []);
+    setData('classes', defaultClasses);
+
+    // ayarları da sıfırla
+    const defaultSettings = {
+      registrationEnabled: true,
+      teacherRegistrationEnabled: true,
+      allowedClasses: defaultClasses,
+      autoBackupEnabled: false,
+      autoBackupInterval: 24,
+      autoBackupIncludePhotos: false,
+      autoBackupWizardConfigured: false,
+      lastAutoBackupTime: null
+    };
+    setData('settings', defaultSettings);
+
+    // uploads klasörlerini temizle - Klasörü silmek yerine içini boşalt (EBUSY hatasını önlemek için)
+    const emptyDir = (dirPath) => {
+      try {
+        if (fs.existsSync(dirPath)) {
+          const realDirPath = fs.realpathSync(dirPath);
+          console.log(`🧹 Temizleniyor: ${realDirPath}`);
+          const files = fs.readdirSync(realDirPath);
+          
+          for (const file of files) {
+            if (file === '.gitkeep') continue;
+            const curPath = join(realDirPath, file);
+            try {
+              const stats = fs.lstatSync(curPath);
+              if (stats.isDirectory()) {
+                console.log(`📁 Dizin siliniyor: ${curPath}`);
+                // recursive rm with retries for Windows locks (OneDrive/Vite)
+                fs.rmSync(curPath, { 
+                  recursive: true, 
+                  force: true, 
+                  maxRetries: 20, 
+                  retryDelay: 1000 
+                });
+              } else {
+                console.log(`📄 Dosya siliniyor: ${curPath}`);
+                fs.unlinkSync(curPath);
+              }
+              
+              // Windows'ta bazen silindi dese de silinmiyor, kısa bir gecikme sonrası kontrol edelim
+              if (fs.existsSync(curPath)) {
+                console.warn(`⚠️ UYARI: ${file} hala mevcut! Kilitlenmiş olabilir (Vite veya Windows Gezgini açık mı?)`);
+              } else {
+                console.log(`✅ Silindi: ${file}`);
+              }
+            } catch (e) {
+              console.warn(`❌ Silinemedi: ${file} - ${e.code || e.message}`);
+              if (e.code === 'EBUSY' || e.code === 'EPERM') {
+                console.warn(`💡 İpucu: Bu dosya/klasör başka bir program tarafından kullanılıyor olabilir.`);
+              }
+            }
+          }
+          return true;
+        } else {
+          console.log(`ℹ️ Dizin bulunamadı, atlanıyor: ${dirPath}`);
+          return false;
+        }
+      } catch (err) {
+        console.error(`❌ Dizin temizleme hatası (${dirPath}):`, err);
+        return false;
+      }
+    };
+
+    const uploadsStudentDir = join(__dirname, '../src/uploads_student');
+    const serverUploadsDir = join(__dirname, 'uploads');
+    const tempDir = join(__dirname, 'temp');
+    const backupsDir = join(__dirname, 'backups');
+
+    emptyDir(uploadsStudentDir);
+    emptyDir(serverUploadsDir);
+    emptyDir(tempDir);
+    emptyDir(backupsDir);
+
+    console.log('✅ Tüm veriler ve dosyalar sıfırlandı');
+    res.json({ success: true, message: 'Tüm veriler ve dosyalar başarıyla sıfırlandı' });
+  } catch (error) {
+    console.error('Veri sıfırlama hatası:', error);
+    res.status(500).json({ success: false, error: 'Veri sıfırlama sırasında hata oluştu' });
+  }
+});
+
+// Bilinmeyen tüm rotaları frontend'e (index.html) yönlendir (SPA desteği)
+const distPath2 = join(__dirname, '../dist');
+if (fs.existsSync(distPath2)) {
+  app.get('*', (req, res) => {
+    // Eğer istek bir API isteği değilse index.html gönder
+    if (!req.path.startsWith('/api')) {
+      res.sendFile(join(distPath2, 'index.html'));
+    } else {
+      res.status(404).json({ error: 'API endpoint not found' });
+    }
+  });
+}
+
+// Error handler
+app.use((err, req, res, next) => {
+  console.error('Server Error:', err);
+  res.status(500).json({
+    success: false,
+    error: err.message || 'Sunucu hatası oluştu'
+  });
+});
+
+
+// Sunucuyu başlat (sadece test ortamında değilken)
+if (process.env.NODE_ENV !== 'test') {
+  server.listen(PORT, '0.0.0.0', () => {
+    console.log(`✅ Backend sunucusu http://0.0.0.0:${PORT} adresinde çalışıyor`);
+
+    // Yerel IP'yi göster
+    const nets = os.networkInterfaces();
+    for (const name of Object.keys(nets)) {
+      for (const net of nets[name]) {
+        if (net.family === 'IPv4' && !net.internal) {
+          console.log(`🌐 Ağ IP adresi: http://${net.address}:${PORT}`);
+        }
+      }
+    }
+    
+    // mDNS Keşif servisini başlat
+    startDiscovery(PORT);
+    
+    // Otomatik İndirme servisini başlat
+    updateManager.start();
+  });
+}
