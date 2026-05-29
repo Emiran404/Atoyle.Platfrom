@@ -87,6 +87,13 @@ Derleme yapmadan, aşağıdaki hazır paketlerle saniyeler içinde kurulum yapı
 
 ## ✨ Temel Özellikler
 
+> [!IMPORTANT]
+> **🎉 v4.2.0 İle Gelen Dev Yenilikler**
+> - 🕒 **İşlem Geçmişi (Operation History)**: Platform üzerindeki kritik işlemler geriye dönük izlenebilir.
+> - 🛡️ **Anti-Cheat & Kiosk Modu**: Öğrenci sınav sırasında odak kaybettiğinde, başka bir pencereye geçtiğinde otomatik olarak güvenliği devreye alır.
+> - 👨‍🏫 **Bağımsız Öğretmen Değerlendirme Sistemi**: Her öğretmen, aynı sınavdaki değerlendirmelerini kendi arayüzünde tamamen izole yönetebilir.
+> - ⚙️ **GitHub Actions Sürekli Entegrasyon (CI/CD)**: Tüm projenin derlenmesi otomatikleştirilmiştir.
+
 <table>
 <tr>
 <td width="50%">
@@ -353,14 +360,6 @@ npm run test:e2e
 
 ---
 
-## 🎉 v4.2.0 Sürüm Yenilikleri
-Bu sürümle birlikte platforma eklenen devasa güvenlik ve yönetim araçları:
-- 🕒 **İşlem Geçmişi (Operation History)**: Platform üzerindeki kritik işlemler geriye dönük izlenebilir.
-- 🛡️ **Anti-Cheat & Kiosk Modu**: Öğrenci sınav sırasında odak kaybettiğinde, başka bir pencereye geçtiğinde veya tarayıcı özelliklerini zorladığında otomatik olarak güvenliği devreye alır.
-- 👨‍🏫 **Bağımsız Öğretmen Değerlendirme Sistemi**: Her öğretmen, aynı sınavdaki değerlendirmelerini kendi arayüzünde tamamen izole (bağımsız) bir şekilde yönetebilir. Diğer öğretmenlerle veriler veya sayaçlar karışmaz.
-- ⚙️ **GitHub Actions Sürekli Entegrasyon (CI/CD)**: Tüm projenin derlenmesi ve yayınlanması tamamen otomatikleştirilmiştir.
-
----
 
 ## 🧹 Bakım
 
