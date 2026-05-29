@@ -15,6 +15,9 @@ export default defineConfig(({ command }) => ({
       devOptions: {
         enabled: true
       },
+      workbox: {
+        maximumFileSizeToCacheInBytes: 10000000 // 10MB
+      },
       manifest: {
         name: 'Sınav Gönderme Platformu',
         short_name: 'Sınav Platformu',
